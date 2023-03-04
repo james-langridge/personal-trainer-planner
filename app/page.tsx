@@ -3,7 +3,7 @@ import styles from './page.module.css'
 export default function Home() {
   return (
     <main className={styles.main}>
-      <h1>Fit For Life Trainer</h1>
+      <h1>Homepage: Fit For Life Trainer</h1>
     </main>
   )
 }
