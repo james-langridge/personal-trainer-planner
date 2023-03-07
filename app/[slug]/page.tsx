@@ -1,27 +1,18 @@
-import * as contentful from "contentful"
-import "server-only"
+import {ComponentResolver} from '@/components/ComponentResolver'
+import {getContentfulData} from '@/lib/getContentfulData'
 
-// FIXME: avoid type assertion
-const client = contentful.createClient({
-    space: process.env.CONTENTFUL_SPACE_ID as string,
-    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN as string,
-});
-
-const getData = async (slug: string) => {
-    return await client.getEntries({
-        content_type: "page",
-        "fields.slug": slug,
-    });
-}
-
-export default async function Home({params}: any) {
-    const { slug } = params;
-    const page = await getData(slug);
-    console.dir(page, {depth: null})
+export default async function Page({params}: {params: {slug: string}}) {
+  const {slug} = params
+  const contentfulData = await getContentfulData(slug)
+  const heading = contentfulData.items[0].fields.pageTitle
+  const pageContent = contentfulData.items[0].fields.content
 
   return (
     <main>
-      <h1>{slug}</h1>
+      <>
+        <h1>{heading}</h1>
+        {pageContent && pageContent?.map(entry => ComponentResolver(entry))}
+      </>
     </main>
   )
 }
