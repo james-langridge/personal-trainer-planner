@@ -3,6 +3,7 @@ import {getContentfulData} from '@/lib/getContentfulData'
 
 export default async function Page({params}: {params: {slug: string}}) {
   const {slug} = params
+  // TODO: put this http request into a useEffect properly
   const contentfulData = await getContentfulData(slug)
   const heading = contentfulData.items[0].fields.pageTitle
   const pageContent = contentfulData.items[0].fields.content
