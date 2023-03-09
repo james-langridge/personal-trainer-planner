@@ -3,18 +3,20 @@
 import {Asset, Entry} from 'contentful'
 import {Document} from '@contentful/rich-text-types'
 
-export interface IPageTestFields {
-  /** Page Title */
-  pageTitle: string
+export interface IPageFields {
+  /** Page name */
+  pageName: string
 
   /** Slug */
   slug: string
 
-  /** Content */
-  content?: Entry<{[fieldId: string]: unknown}>[] | undefined
+  /** Page content */
+  pageContent?: Entry<{[fieldId: string]: unknown}>[] | undefined
 }
 
-export interface IPageTest extends Entry<IPageTestFields> {
+/** This will create a new empty page accessible at the slug you choose.  Eg: www.fitforlifetrainer.co.uk/slug.  You can add new or existing content entries to this page. */
+
+export interface IPage extends Entry<IPageFields> {
   sys: {
     id: string
     type: string
@@ -23,7 +25,7 @@ export interface IPageTest extends Entry<IPageTestFields> {
     locale: string
     contentType: {
       sys: {
-        id: 'pageTest'
+        id: 'page'
         linkType: 'ContentType'
         type: 'Link'
       }
@@ -87,9 +89,9 @@ export interface IProgramAdBanner extends Entry<IProgramAdBannerFields> {
   }
 }
 
-export type CONTENT_TYPE = 'pageTest' | 'programAd' | 'programAdBanner'
+export type CONTENT_TYPE = 'page' | 'programAd' | 'programAdBanner'
 
-export type IEntry = IPageTest | IProgramAd | IProgramAdBanner
+export type IEntry = IPage | IProgramAd | IProgramAdBanner
 
 export type LOCALE_CODE = 'de-DE' | 'en-US'
 
