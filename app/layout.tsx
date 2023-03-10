@@ -15,8 +15,8 @@ export default async function RootLayout({
   const navbar = await getNavbar()
 
   return (
-    <html lang="en">
-      <body className="pt-20">
+    <html lang="en" className="h-full">
+      <body className="h-full pt-20">
         <Navbar entry={navbar} />
         <div className="">{children}</div>
       </body>
