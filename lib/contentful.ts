@@ -16,5 +16,7 @@ export const getPageData = async (slug: string) => {
 }
 
 export const getNavbar = async () => {
-  return await client.getEntry<INavbarFields>('6l1AUeoJ1e4ACuMgevIiXK')
+  return await client.getEntry<INavbarFields>(
+    process.env.CONTENTFUL_NAVBAR_ENTRY_ID || '',
+  )
 }
