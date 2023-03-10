@@ -10,10 +10,16 @@ export default async function Page({params}: {params: {slug: string}}) {
     notFound()
   }
 
+  const heading = pageData.items[0].fields.pageHeading
   const pageContent = pageData.items[0].fields.pageContent
 
   return (
     <main className="relative">
+      {heading && (
+        <h1 className="weight mt-10 text-center text-5xl font-bold">
+          {heading}
+        </h1>
+      )}
       {pageContent && pageContent?.map(entry => ComponentResolver(entry))}
     </main>
   )

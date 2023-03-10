@@ -67,6 +67,9 @@ export interface IPageFields {
   /** Slug */
   slug: string
 
+  /** Page heading */
+  pageHeading?: string | undefined
+
   /** Page content */
   pageContent?: Entry<{[fieldId: string]: unknown}>[] | undefined
 }
