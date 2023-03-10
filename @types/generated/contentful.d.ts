@@ -146,12 +146,46 @@ export interface IProgramAdBanner extends Entry<IProgramAdBannerFields> {
   }
 }
 
+export interface ITestimonialFields {
+  /** Name */
+  name: string
+
+  /** Testimonial Text */
+  testimonialText: string
+
+  /** Client description */
+  clientDescription?: string | undefined
+
+  /** Photo */
+  photo?: Asset | undefined
+}
+
+/** Client testimonial. */
+
+export interface ITestimonial extends Entry<ITestimonialFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'testimonial'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export type CONTENT_TYPE =
   | 'navbar'
   | 'navbarItem'
   | 'page'
   | 'programAd'
   | 'programAdBanner'
+  | 'testimonial'
 
 export type IEntry =
   | INavbar
@@ -159,6 +193,7 @@ export type IEntry =
   | IPage
   | IProgramAd
   | IProgramAdBanner
+  | ITestimonial
 
 export type LOCALE_CODE = 'de-DE' | 'en-US'
 
