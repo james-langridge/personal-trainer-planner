@@ -1,13 +1,12 @@
 import Image from 'next/image'
-import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
 import {CtfRichtext} from '@/components/RichText'
 
 function ProgramAd({entry}: any) {
   const {name, image, content, ctaText} = entry.fields
 
   return (
-    <div className="mb-4 bg-[#2c4243] p-2.5 mr-[3%] flex flex-col items-center font-sans md:w-1/3 ">
-      <div className="text-center text-white text-xl font-bold mb-5">
+    <div className="mb-4 mr-[3%] flex flex-col items-center bg-[#2c4243] p-2.5 font-sans md:w-1/3">
+      <div className="mb-5 text-center text-xl font-bold text-white">
         {name}
       </div>
       <Image
@@ -15,12 +14,12 @@ function ProgramAd({entry}: any) {
         alt={image.fields.title}
         width={image.fields.file.details.image.width}
         height={image.fields.file.details.image.height}
-        className="max-w-full h-auto mb-5"
+        className="mb-5 h-auto max-w-full"
       />
-      <div className="max-w-full text-white text-left mb-5">
+      <div className="mb-5 max-w-full text-left text-white">
         <CtfRichtext document={content} />
       </div>
-      <button className="rounded text-white border-solid border-2 border-white font-sans bg-[#00a4e3] text-xl font-medium py-1.5 px-5 mb-5">
+      <button className="mb-5 rounded border-2 border-solid border-white bg-[#00a4e3] py-1.5 px-5 font-sans text-xl font-medium text-white">
         {ctaText}
       </button>
     </div>
