@@ -16,7 +16,7 @@ export default async function Page({params}: {params: {slug: string}}) {
   return (
     <main className="relative">
       {heading && (
-        <h1 className="weight mt-10 text-center text-5xl font-bold">
+        <h1 className="weight my-10 text-center text-5xl font-bold">
           {heading}
         </h1>
       )}
