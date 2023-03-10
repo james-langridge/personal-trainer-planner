@@ -3,6 +3,63 @@
 import {Asset, Entry} from 'contentful'
 import {Document} from '@contentful/rich-text-types'
 
+export interface INavbarFields {
+  /** Navbar name */
+  navbarName: string
+
+  /** Logo */
+  logo: Asset
+
+  /** Navbar items */
+  navbarItems?: INavbarItem[] | undefined
+}
+
+/** This is the navbar that is automatically displayed on the website.  You don't need to add it to any page. */
+
+export interface INavbar extends Entry<INavbarFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'navbar'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
+export interface INavbarItemFields {
+  /** Label */
+  label: string
+
+  /** Link */
+  link: string
+}
+
+/** This is a navbar item that can be added to the navbar.  It just needs a label and a link. */
+
+export interface INavbarItem extends Entry<INavbarItemFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'navbarItem'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface IPageFields {
   /** Page name */
   pageName: string
@@ -89,9 +146,19 @@ export interface IProgramAdBanner extends Entry<IProgramAdBannerFields> {
   }
 }
 
-export type CONTENT_TYPE = 'page' | 'programAd' | 'programAdBanner'
+export type CONTENT_TYPE =
+  | 'navbar'
+  | 'navbarItem'
+  | 'page'
+  | 'programAd'
+  | 'programAdBanner'
 
-export type IEntry = IPage | IProgramAd | IProgramAdBanner
+export type IEntry =
+  | INavbar
+  | INavbarItem
+  | IPage
+  | IProgramAd
+  | IProgramAdBanner
 
 export type LOCALE_CODE = 'de-DE' | 'en-US'
 
