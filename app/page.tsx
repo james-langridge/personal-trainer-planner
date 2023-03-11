@@ -1,5 +1,6 @@
 import {getPageData} from '@/lib/contentful'
 import {ComponentResolver} from '@/components/ComponentResolver'
+import Heading from '@/components/Heading'
 
 export default async function Home() {
   const pageData = await getPageData('home')
@@ -9,11 +10,7 @@ export default async function Home() {
 
   return (
     <main className="relative">
-      {heading && (
-        <h1 className="weight my-10 text-center text-5xl font-bold">
-          {heading}
-        </h1>
-      )}
+      {heading && <Heading heading={heading} />}
       {pageContent && pageContent?.map(entry => ComponentResolver(entry))}
     </main>
   )

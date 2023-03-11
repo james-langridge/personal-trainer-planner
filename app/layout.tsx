@@ -16,9 +16,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className="h-full">
-      <body className="h-full pt-20">
+      <body className="h-full pt-28">
         <Navbar entry={navbar} />
-        <div className="">{children}</div>
+        <div>{children}</div>
       </body>
     </html>
   )

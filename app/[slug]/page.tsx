@@ -1,6 +1,7 @@
 import {ComponentResolver} from '@/components/ComponentResolver'
 import {getPageData} from '@/lib/contentful'
 import {notFound} from 'next/navigation'
+import Heading from '@/components/Heading'
 
 export default async function Page({params}: {params: {slug: string}}) {
   const {slug} = params
@@ -14,12 +15,8 @@ export default async function Page({params}: {params: {slug: string}}) {
   const pageContent = pageData.items[0].fields.pageContent
 
   return (
-    <main className="relative">
-      {heading && (
-        <h1 className="weight my-10 text-center text-5xl font-bold">
-          {heading}
-        </h1>
-      )}
+    <main>
+      {heading && <Heading heading={heading} />}
       {pageContent && pageContent?.map(entry => ComponentResolver(entry))}
     </main>
   )
