@@ -1,6 +1,6 @@
 import {CtfPage} from '@/@types/contentful'
 import * as contentful from 'contentful'
-import {INavbarFields} from '@/@types/generated/contentful'
+import {IFooterFields, INavbarFields} from '@/@types/generated/contentful'
 
 export const client = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE_ID || '',
@@ -18,5 +18,11 @@ export const getPageData = async (slug: string) => {
 export const getNavbar = async () => {
   return await client.getEntry<INavbarFields>(
     process.env.CONTENTFUL_NAVBAR_ENTRY_ID || '',
+  )
+}
+
+export const getFooter = async () => {
+  return await client.getEntry<IFooterFields>(
+    process.env.CONTENTFUL_FOOTER_ENTRY_ID || '',
   )
 }

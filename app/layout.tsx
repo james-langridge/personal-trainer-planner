@@ -1,6 +1,8 @@
 import '../styles/globals.css'
 import Navbar from '@/components/Navbar'
-import {getNavbar} from '@/lib/contentful'
+import {getFooter, getNavbar} from '@/lib/contentful'
+import React from 'react'
+import Footer from '@/components/Footer'
 
 export const metadata = {
   title: 'Fit For Life Trainer',
@@ -13,12 +15,18 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const navbar = await getNavbar()
+  const footer = await getFooter()
 
   return (
-    <html lang="en" className="h-full">
-      <body className="h-full pt-28">
-        <Navbar entry={navbar} />
-        <div>{children}</div>
+    <html lang="en">
+      <body>
+        <div className="relative min-h-screen pt-28">
+          <div className="pb-80">
+            <Navbar entry={navbar} />
+            <div>{children}</div>
+          </div>
+          <Footer entry={footer} />
+        </div>
       </body>
     </html>
   )

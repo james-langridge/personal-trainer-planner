@@ -3,6 +3,30 @@
 import {Asset, Entry} from 'contentful'
 import {Document} from '@contentful/rich-text-types'
 
+export interface IFooterFields {
+  /** Left text */
+  leftText?: Document | undefined
+}
+
+/** The footer that will appear at the bottom of each page. */
+
+export interface IFooter extends Entry<IFooterFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'footer'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface INavbarFields {
   /** Navbar name */
   navbarName: string
@@ -183,6 +207,7 @@ export interface ITestimonial extends Entry<ITestimonialFields> {
 }
 
 export type CONTENT_TYPE =
+  | 'footer'
   | 'navbar'
   | 'navbarItem'
   | 'page'
@@ -191,6 +216,7 @@ export type CONTENT_TYPE =
   | 'testimonial'
 
 export type IEntry =
+  | IFooter
   | INavbar
   | INavbarItem
   | IPage
