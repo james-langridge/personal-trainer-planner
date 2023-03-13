@@ -1,7 +1,13 @@
 import Image from 'next/image'
-import {CtfRichtext} from '@/components/RichText'
+import CtfRichtext from '@/components/RichText'
+import {Entry} from 'contentful'
+import {IProgramAdFields} from '@/@types/generated/contentful'
 
-function ProgramAd({entry}: any) {
+interface Props {
+  entry: Entry<IProgramAdFields>
+}
+
+function ProgramAd({entry}: Props) {
   const {name, image, content, ctaText} = entry.fields
 
   return (
@@ -12,8 +18,8 @@ function ProgramAd({entry}: any) {
       <Image
         src={`https:${image.fields.file.url}`}
         alt={image.fields.title}
-        width={image.fields.file.details.image.width}
-        height={image.fields.file.details.image.height}
+        width={image.fields.file.details.image?.width}
+        height={image.fields.file.details.image?.height}
         className="mb-5 h-auto max-w-full"
       />
       <div className="mb-5 max-w-full text-left text-white">

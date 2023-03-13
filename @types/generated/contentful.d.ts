@@ -4,6 +4,9 @@ import {Asset, Entry} from 'contentful'
 import {Document} from '@contentful/rich-text-types'
 
 export interface IFooterFields {
+  /** Name */
+  name?: string | undefined
+
   /** Left text */
   leftText?: Document | undefined
 }

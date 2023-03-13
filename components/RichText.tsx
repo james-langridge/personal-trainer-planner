@@ -3,11 +3,7 @@ import {
   documentToReactComponents,
   Options,
 } from '@contentful/rich-text-react-renderer'
-import React, {ReactNode} from 'react'
-
-interface RichtextPropsInterface {
-  document: Document
-}
+import React from 'react'
 
 interface ParagraphProps {
   // The children prop now needs to be listed explicitly when defining props
@@ -19,7 +15,11 @@ const Paragraph = ({children}: ParagraphProps) => (
   <p className="pb-4">{children}</p>
 )
 
-export const CtfRichtext = ({document}: RichtextPropsInterface) => {
+interface RichtextPropsInterface {
+  document: Document
+}
+
+const CtfRichtext = ({document}: RichtextPropsInterface) => {
   const options: Options = {
     renderNode: {
       [BLOCKS.LIST_ITEM]: (node, children) => {
@@ -40,7 +40,7 @@ export const CtfRichtext = ({document}: RichtextPropsInterface) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6 inline-flex text-[#00a4e3]"
+              className="inline-flex h-6 w-6 text-[#00a4e3]"
             >
               <path
                 strokeLinecap="round"
@@ -58,3 +58,5 @@ export const CtfRichtext = ({document}: RichtextPropsInterface) => {
 
   return <>{documentToReactComponents(document, options)}</>
 }
+
+export default CtfRichtext
