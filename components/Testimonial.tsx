@@ -1,6 +1,12 @@
 import Image from 'next/image'
+import {Entry} from 'contentful'
+import {ITestimonialFields} from '@/@types/generated/contentful'
 
-export default function Testimonial({entry}: any) {
+interface Props {
+  entry: Entry<ITestimonialFields>
+}
+
+export default function Testimonial({entry}: Props) {
   const {clientDescription, name, photo, testimonialText} = entry.fields
 
   return (

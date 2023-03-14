@@ -1,4 +1,13 @@
-function ProgramAdBanner({entry, children}: any) {
+import {Entry} from 'contentful'
+import {IProgramAdBannerFields} from '@/@types/generated/contentful'
+import React from 'react'
+
+interface Props {
+  children: React.ReactNode
+  entry: Entry<IProgramAdBannerFields>
+}
+
+function ProgramAdBanner({children, entry}: Props) {
   return (
     <div className="my-10 bg-[#90d6da] py-14">
       <h1 className="text-center font-sans text-4xl font-bold text-white">

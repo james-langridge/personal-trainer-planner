@@ -3,7 +3,11 @@ import {INavbarFields} from '@/@types/generated/contentful'
 import Image from 'next/image'
 import Link from 'next/link'
 
-function Navbar({entry}: {entry: Entry<INavbarFields>}) {
+interface Props {
+  entry: Entry<INavbarFields>
+}
+
+function Navbar({entry}: Props) {
   const {navbarItems, logo} = entry.fields
 
   return (
