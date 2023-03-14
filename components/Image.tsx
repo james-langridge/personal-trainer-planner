@@ -17,7 +17,7 @@ function ImageComponent({entry}: Props) {
       alt={fields.title}
       width={fields.file.details.image?.width}
       height={fields.file.details.image?.height}
-      className="m-auto mb-5 rounded"
+      className="m-auto my-5 rounded"
     />
   )
 }
