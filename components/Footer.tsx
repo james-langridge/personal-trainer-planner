@@ -67,22 +67,22 @@ function Footer({entry}: Props) {
                   Blog
                 </h3>
                 <Link
-                  href="#"
+                  href="/12-weeks-to-christmas"
                   className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
                 >
-                  Todo
+                  12 weeks to Christmas!
                 </Link>
                 <Link
-                  href="#"
+                  href="/national-fitness-day"
                   className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
                 >
-                  Todo
+                  National Fitness day
                 </Link>
                 <Link
-                  href="#"
+                  href="/what-is-abdominal-separation"
                   className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
                 >
-                  Todo
+                  What is Abdominal Separation?
                 </Link>
               </div>
 
@@ -101,6 +101,12 @@ function Footer({entry}: Props) {
                   className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
                 >
                   Terms & Conditions
+                </Link>
+                <Link
+                  href="/cookie-policy"
+                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
+                >
+                  Cookie Policy
                 </Link>
               </div>
 
