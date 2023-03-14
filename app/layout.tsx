@@ -21,7 +21,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <div className="relative min-h-screen pt-28">
-          <div className="pb-80">
+          <div className="pb-[893px] sm:pb-[565px] md:pb-[489px] lg:pb-[373px] xl:pb-[301px] 2xl:pb-[277px]">
             <Navbar entry={navbar} />
             <div>{children}</div>
           </div>
