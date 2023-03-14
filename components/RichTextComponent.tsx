@@ -7,11 +7,17 @@ interface Props {
 }
 
 function RichTextComponent({entry}: Props) {
-  const {richText} = entry.fields
+  const {richText, backgroundColour} = entry.fields
 
   return (
-    <div className="m-auto max-w-prose">
-      <CtfRichtext document={richText} />
+    <div
+      className={
+        'w-full ' + backgroundColour ? `bg-[${backgroundColour?.value}]` : ''
+      }
+    >
+      <div className="m-auto my-5 max-w-prose py-10">
+        <CtfRichtext document={richText} />
+      </div>
     </div>
   )
 }

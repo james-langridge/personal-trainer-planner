@@ -207,6 +207,9 @@ export interface IRichTextFields {
 
   /** Rich Text */
   richText: Document
+
+  /** Background colour */
+  backgroundColour?: Record<string, any> | undefined
 }
 
 /** A stand-alone block of rich text. */
