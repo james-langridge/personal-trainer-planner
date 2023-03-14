@@ -267,6 +267,69 @@ export interface ITestimonial extends Entry<ITestimonialFields> {
   }
 }
 
+export interface IVideoHeroFeatureFields {
+  /** Name */
+  name?: string | undefined
+
+  /** Tagline 1st line */
+  tagline1stLine?: string | undefined
+
+  /** Tagline 2nd line */
+  tagline2ndLine?: string | undefined
+
+  /** Video url */
+  videoUrl: string
+
+  /** Program cards */
+  programCards?: IVideoHeroProgramCard[] | undefined
+}
+
+export interface IVideoHeroFeature extends Entry<IVideoHeroFeatureFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'videoHeroFeature'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
+export interface IVideoHeroProgramCardFields {
+  /** Name */
+  name: string
+
+  /** Program summary */
+  programSummary: Document
+
+  /** Slug */
+  slug: string
+}
+
+export interface IVideoHeroProgramCard
+  extends Entry<IVideoHeroProgramCardFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'videoHeroProgramCard'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export type CONTENT_TYPE =
   | 'footer'
   | 'image'
@@ -277,6 +340,8 @@ export type CONTENT_TYPE =
   | 'programAdBanner'
   | 'richText'
   | 'testimonial'
+  | 'videoHeroFeature'
+  | 'videoHeroProgramCard'
 
 export type IEntry =
   | IFooter
@@ -288,6 +353,8 @@ export type IEntry =
   | IProgramAdBanner
   | IRichText
   | ITestimonial
+  | IVideoHeroFeature
+  | IVideoHeroProgramCard
 
 export type LOCALE_CODE = 'de-DE' | 'en-US'
 

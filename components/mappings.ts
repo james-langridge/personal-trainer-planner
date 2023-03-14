@@ -6,4 +6,5 @@ export const componentMap = {
   programAdBanner: lazy(() => import('@/components/ProgramAdBanner')),
   richText: lazy(() => import('@/components/RichTextComponent')),
   testimonial: lazy(() => import('@/components/Testimonial')),
+  videoHeroFeature: lazy(() => import('@/components/VideoHero')),
 }

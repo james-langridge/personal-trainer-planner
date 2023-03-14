@@ -1,6 +1,7 @@
 import {getPageData} from '@/lib/contentful'
 import {ComponentResolver} from '@/components/ComponentResolver'
 import Heading from '@/components/Heading'
+import VideoHero from '@/components/VideoHero'
 
 export default async function Home() {
   const pageData = await getPageData('home')
