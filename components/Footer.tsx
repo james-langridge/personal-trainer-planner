@@ -88,25 +88,19 @@ function Footer({entry}: Props) {
 
               <div>
                 <h3 className="uppercase text-gray-700 dark:text-white">
-                  Programs
+                  Legal
                 </h3>
                 <Link
-                  href="#"
+                  href="/privacy-policy"
                   className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
                 >
-                  Todo
+                  Privacy policy
                 </Link>
                 <Link
-                  href="#"
+                  href="/terms-conditions"
                   className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
                 >
-                  Todo
-                </Link>
-                <Link
-                  href="#"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  Todo
+                  Terms & Conditions
                 </Link>
               </div>
 
