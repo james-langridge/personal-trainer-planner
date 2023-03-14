@@ -30,6 +30,31 @@ export interface IFooter extends Entry<IFooterFields> {
   }
 }
 
+export interface IImageFields {
+  /** Name */
+  name?: string | undefined
+
+  /** Image */
+  image: Asset
+}
+
+export interface IImage extends Entry<IImageFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'image'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface INavbarFields {
   /** Navbar name */
   navbarName: string
@@ -238,6 +263,7 @@ export interface ITestimonial extends Entry<ITestimonialFields> {
 
 export type CONTENT_TYPE =
   | 'footer'
+  | 'image'
   | 'navbar'
   | 'navbarItem'
   | 'page'
@@ -248,6 +274,7 @@ export type CONTENT_TYPE =
 
 export type IEntry =
   | IFooter
+  | IImage
   | INavbar
   | INavbarItem
   | IPage
