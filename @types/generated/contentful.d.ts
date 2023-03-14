@@ -176,6 +176,33 @@ export interface IProgramAdBanner extends Entry<IProgramAdBannerFields> {
   }
 }
 
+export interface IRichTextFields {
+  /** Name */
+  name?: string | undefined
+
+  /** Rich Text */
+  richText: Document
+}
+
+/** A stand-alone block of rich text. */
+
+export interface IRichText extends Entry<IRichTextFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'richText'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface ITestimonialFields {
   /** Name */
   name: string
@@ -216,6 +243,7 @@ export type CONTENT_TYPE =
   | 'page'
   | 'programAd'
   | 'programAdBanner'
+  | 'richText'
   | 'testimonial'
 
 export type IEntry =
@@ -225,6 +253,7 @@ export type IEntry =
   | IPage
   | IProgramAd
   | IProgramAdBanner
+  | IRichText
   | ITestimonial
 
 export type LOCALE_CODE = 'de-DE' | 'en-US'
