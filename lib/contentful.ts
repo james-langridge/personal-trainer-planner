@@ -15,6 +15,14 @@ export const getPageData = async (slug: string) => {
   })
 }
 
+export const getBlogPosts = async () => {
+  return await client.getEntries<CtfPage>({
+    content_type: 'page',
+    'fields.isBlogPost': true,
+    include: 10,
+  })
+}
+
 export const getNavbar = async () => {
   return await client.getEntry<INavbarFields>(
     process.env.CONTENTFUL_NAVBAR_ENTRY_ID || '',

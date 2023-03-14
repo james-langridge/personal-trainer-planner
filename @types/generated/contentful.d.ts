@@ -122,6 +122,9 @@ export interface IPageFields {
   /** Page heading */
   pageHeading?: string | undefined
 
+  /** Blog post? */
+  isBlogPost?: boolean | undefined
+
   /** Page content */
   pageContent?: Entry<{[fieldId: string]: unknown}>[] | undefined
 }
