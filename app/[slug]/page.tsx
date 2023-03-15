@@ -22,14 +22,14 @@ export async function generateStaticParams() {
 
 export default async function Page({params}: {params: {slug: string}}) {
   const {slug} = params
-  const pageData = await getPageData(slug)
+  const {items} = await getPageData(slug)
 
-  if (!pageData.items.length) {
+  if (!items.length) {
     notFound()
   }
 
-  const heading = pageData.items[0].fields.pageHeading
-  const pageContent = pageData.items[0].fields.pageContent
+  const heading = items[0].fields.pageHeading
+  const pageContent = items[0].fields.pageContent
 
   return (
     <main>
