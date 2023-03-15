@@ -1,6 +1,10 @@
 import {CtfPage} from '@/@types/contentful'
 import * as contentful from 'contentful'
-import {IFooterFields, INavbarFields} from '@/@types/generated/contentful'
+import {
+  IFooterFields,
+  INavbarFields,
+  IPageFields,
+} from '@/@types/generated/contentful'
 
 export const client = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE_ID || '',
@@ -12,6 +16,13 @@ export const getPageData = async (slug: string) => {
     content_type: 'page',
     'fields.slug': slug,
     include: 10,
+  })
+}
+
+export const getAllPageSlugs = async () => {
+  return await client.getEntries<IPageFields>({
+    content_type: 'page',
+    select: 'fields.slug',
   })
 }
 
