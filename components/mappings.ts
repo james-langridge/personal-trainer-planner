@@ -1,6 +1,6 @@
-import {lazy} from 'react'
+import React, {lazy} from 'react'
 
-export const componentMap = {
+export const componentMap: {[key: string]: React.ComponentType<any>} = {
   image: lazy(() => import('@/components/Image')),
   programAd: lazy(() => import('@/components/ProgramAd')),
   programAdBanner: lazy(() => import('@/components/ProgramAdBanner')),

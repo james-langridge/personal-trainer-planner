@@ -1,5 +1,5 @@
 import {getPageData} from '@/lib/contentful'
-import {ComponentResolver} from '@/components/ComponentResolver'
+import {ComponentRenderer} from '@/components/ComponentRenderer'
 import Heading from '@/components/Heading'
 
 export default async function Home() {
@@ -10,7 +10,10 @@ export default async function Home() {
   return (
     <main className="relative">
       {heading && <Heading heading={heading} />}
-      {pageContent && pageContent?.map(entry => ComponentResolver(entry))}
+      {pageContent &&
+        pageContent?.map(entry => (
+          <ComponentRenderer key={entry.sys.id} entry={entry} />
+        ))}
     </main>
   )
 }

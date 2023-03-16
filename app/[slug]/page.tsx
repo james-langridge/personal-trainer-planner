@@ -1,4 +1,4 @@
-import {ComponentResolver} from '@/components/ComponentResolver'
+import {ComponentRenderer} from '@/components/ComponentRenderer'
 import {getAllPageSlugs, getPageData} from '@/lib/contentful'
 import {notFound} from 'next/navigation'
 import Heading from '@/components/Heading'
@@ -34,7 +34,10 @@ export default async function Page({params}: {params: {slug: string}}) {
   return (
     <main>
       {heading && <Heading heading={heading} />}
-      {pageContent && pageContent?.map(entry => ComponentResolver(entry))}
+      {pageContent &&
+        pageContent?.map(entry => (
+          <ComponentRenderer key={entry.sys.id} entry={entry} />
+        ))}
     </main>
   )
 }
