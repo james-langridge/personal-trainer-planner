@@ -1,16 +1,11 @@
-import {Entry} from 'contentful'
 import {IFooterFields} from '@/@types/generated/contentful'
 import CtfRichtext from '@/components/RichText'
 import Link from 'next/link'
 import React from 'react'
 
-interface Props {
-  entry: Entry<IFooterFields>
-}
+type Props = Pick<IFooterFields, 'leftText'>
 
-function Footer({entry}: Props) {
-  const {leftText} = entry.fields
-
+function Footer({leftText}: Props) {
   return (
     <footer className="absolute bottom-0 w-full bg-white dark:bg-gray-900">
       <div className="container mx-auto p-6">

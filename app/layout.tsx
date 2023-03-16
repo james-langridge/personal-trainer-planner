@@ -15,7 +15,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const navbar = await getNavbar()
-  const footer = await getFooter()
+  const {fields} = await getFooter()
 
   return (
     <html lang="en">
@@ -25,7 +25,7 @@ export default async function RootLayout({
             <Navbar entry={navbar} />
             <div>{children}</div>
           </div>
-          <Footer entry={footer} />
+          <Footer leftText={fields.leftText} />
         </div>
       </body>
     </html>
