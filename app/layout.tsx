@@ -15,17 +15,30 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const navbar = await getNavbar()
-  const {fields} = await getFooter()
+  const footer = await getFooter()
+  const navbarFields = navbar.fields
+  const logoFields = navbarFields.logo.fields
+
+  const navbarLogo = {
+    src: `https:${logoFields.file.url}`,
+    alt: logoFields.title,
+    width: logoFields.file.details.image?.width,
+    height: logoFields.file.details.image?.height,
+  }
+
+  const navigation = navbarFields.navbarItems?.map(item => {
+    return {name: item.fields.label, href: item.fields.link, current: false}
+  })
 
   return (
     <html lang="en">
       <body>
-        <div className="relative min-h-screen pt-28">
+        <div className="relative min-h-screen pt-16">
           <div className="pb-[893px] sm:pb-[565px] md:pb-[489px] lg:pb-[373px] xl:pb-[301px] 2xl:pb-[277px]">
-            <Navbar entry={navbar} />
+            <Navbar navigation={navigation} logo={navbarLogo} />
             <div>{children}</div>
           </div>
-          <Footer leftText={fields.leftText} />
+          <Footer leftText={footer.fields.leftText} />
         </div>
       </body>
     </html>
