@@ -4,4 +4,5 @@ This is a marketing website for a personal trainer (PT) made in TypeScript with 
 
 ## TODO
 - [ ] Add tests
+- [ ] Generate footer links programatically
 - [ ] Create login area where site owner can assign training programs to clients
