@@ -2,7 +2,7 @@
   "name": "fit-for-life-trainer",
   "author": "James Langridge <l@ngridge.com> (https://github.com/james-langridge)",
   "description": "Marketing website for a personal trainer made with Next.js v13 and React v18, with Contentful (CMS) integration.",
-  "homepage": "https://github.com/james-langridge/fit-for-life-trainer",
+  "homepage": "https://fit-for-life-trainer.vercel.app/",
   "repository": {
     "type": "git",
     "url": "https://github.com/james-langridge/fit-for-life-trainer.git"
