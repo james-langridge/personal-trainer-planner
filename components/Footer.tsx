@@ -1,11 +1,42 @@
 import {IFooterFields} from '@/@types/generated/contentful'
-import CtfRichtext from '@/components/RichText'
 import Link from 'next/link'
 import React from 'react'
+import {getBlogPosts} from '@/lib/contentful'
 
-type Props = Pick<IFooterFields, 'leftText'>
+export interface Props {
+  props: IFooterFields
+}
 
-function Footer({leftText}: Props) {
+async function Footer({props}: Props) {
+  const {
+    leftText,
+    withBlogPosts,
+    numberOfBlogPostLinks = 3,
+    footerLinkSections,
+    contactSectionHeading,
+    contactEmail,
+    contactPhone,
+  } = props
+
+  let blogPostLinksToRender = null
+
+  if (withBlogPosts) {
+    const {items} = await getBlogPosts()
+
+    const blogLinks = items.map(post => {
+      return {
+        href: post.fields.slug,
+        label: post.fields.pageName,
+        createdAt: post.sys.createdAt,
+      }
+    })
+
+    const sortedBlogLinks = blogLinks.sort(
+      (a, b) => parseInt(a.createdAt) - parseInt(b.createdAt),
+    )
+    blogPostLinksToRender = sortedBlogLinks.slice(0, numberOfBlogPostLinks)
+  }
+
   return (
     <footer className="absolute bottom-0 w-full bg-white dark:bg-gray-900">
       <div className="container mx-auto p-6">
@@ -13,9 +44,7 @@ function Footer({leftText}: Props) {
           <div className="-mx-6 w-full lg:w-2/5">
             <div className="px-6">
               {leftText && (
-                <div className="pr-20 dark:text-gray-300">
-                  <CtfRichtext document={leftText} />
-                </div>
+                <div className="pr-20 dark:text-gray-300">{leftText}</div>
               )}
 
               <div className="-mx-2 mt-6 flex">
@@ -39,81 +68,56 @@ function Footer({leftText}: Props) {
 
           <div className="mt-6 lg:mt-0 lg:flex-1">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              <div>
-                <h3 className="uppercase text-gray-700 dark:text-white">
-                  About
-                </h3>
-                <Link
-                  href="/about"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  My Story
-                </Link>
-                <Link
-                  href="/client-stories"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  Testimonials
-                </Link>
-              </div>
+              {blogPostLinksToRender && (
+                <div>
+                  <h3 className="uppercase text-gray-700 dark:text-white">
+                    Blog
+                  </h3>
+                  {blogPostLinksToRender.map(link => {
+                    return (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
+                      >
+                        {link.label}
+                      </Link>
+                    )
+                  })}
+                </div>
+              )}
+
+              {footerLinkSections &&
+                footerLinkSections.map(section => {
+                  return (
+                    <div key={section.sys.id}>
+                      <h3 className="uppercase text-gray-700 dark:text-white">
+                        {section.fields.heading}
+                      </h3>
+                      {section.fields.links.map(link => {
+                        return (
+                          <Link
+                            key={link.sys.id}
+                            href={link.fields.href}
+                            className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
+                          >
+                            {link.fields.label}
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )
+                })}
 
               <div>
                 <h3 className="uppercase text-gray-700 dark:text-white">
-                  Blog
-                </h3>
-                <Link
-                  href="/12-weeks-to-christmas"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  12 weeks to Christmas!
-                </Link>
-                <Link
-                  href="/national-fitness-day"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  National Fitness day
-                </Link>
-                <Link
-                  href="/what-is-abdominal-separation"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  What is Abdominal Separation?
-                </Link>
-              </div>
-
-              <div>
-                <h3 className="uppercase text-gray-700 dark:text-white">
-                  Legal
-                </h3>
-                <Link
-                  href="/privacy-policy"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  Privacy policy
-                </Link>
-                <Link
-                  href="/terms-conditions"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  Terms & Conditions
-                </Link>
-                <Link
-                  href="/cookie-policy"
-                  className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
-                >
-                  Cookie Policy
-                </Link>
-              </div>
-
-              <div>
-                <h3 className="uppercase text-gray-700 dark:text-white">
-                  Contact
+                  {contactSectionHeading?.toUpperCase()}
                 </h3>
                 <span className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400">
-                  07980 929 757
+                  {contactPhone}
                 </span>
                 <span className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400">
-                  fitforlifetrainersarah@gmail.com
+                  {contactEmail}
                 </span>
               </div>
             </div>

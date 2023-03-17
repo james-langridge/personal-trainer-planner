@@ -8,7 +8,25 @@ export interface IFooterFields {
   name?: string | undefined
 
   /** Left text */
-  leftText?: Document | undefined
+  leftText?: string | undefined
+
+  /** With blog posts? */
+  withBlogPosts?: boolean | undefined
+
+  /** Number of blog post links */
+  numberOfBlogPostLinks?: number | undefined
+
+  /** Footer link sections */
+  footerLinkSections?: IFooterLinkSection[] | undefined
+
+  /** Contact section heading */
+  contactSectionHeading?: string | undefined
+
+  /** Contact phone */
+  contactPhone?: string | undefined
+
+  /** Contact email */
+  contactEmail?: string | undefined
 }
 
 /** The footer that will appear at the bottom of each page. */
@@ -23,6 +41,58 @@ export interface IFooter extends Entry<IFooterFields> {
     contentType: {
       sys: {
         id: 'footer'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
+export interface IFooterLinkFields {
+  /** Label */
+  label: string
+
+  /** Href */
+  href: string
+}
+
+export interface IFooterLink extends Entry<IFooterLinkFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'footerLink'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
+export interface IFooterLinkSectionFields {
+  /** Heading */
+  heading: string
+
+  /** Links */
+  links: IFooterLink[]
+}
+
+/** A section of links in the footer. */
+
+export interface IFooterLinkSection extends Entry<IFooterLinkSectionFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'footerLinkSection'
         linkType: 'ContentType'
         type: 'Link'
       }
@@ -332,6 +402,8 @@ export interface IVideoHeroProgramCard
 
 export type CONTENT_TYPE =
   | 'footer'
+  | 'footerLink'
+  | 'footerLinkSection'
   | 'image'
   | 'navbar'
   | 'navbarItem'
@@ -345,6 +417,8 @@ export type CONTENT_TYPE =
 
 export type IEntry =
   | IFooter
+  | IFooterLink
+  | IFooterLinkSection
   | IImage
   | INavbar
   | INavbarItem

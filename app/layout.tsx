@@ -14,10 +14,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const navbar = await getNavbar()
-  const footer = await getFooter()
-  const navbarFields = navbar.fields
-  const logoFields = navbarFields.logo.fields
+  const {fields} = await getNavbar()
+  const {items} = await getFooter()
+
+  const footerProps = items[0].fields
+  const logoFields = fields.logo.fields
 
   const navbarLogo = {
     src: `https:${logoFields.file.url}`,
@@ -26,8 +27,13 @@ export default async function RootLayout({
     height: logoFields.file.details.image?.height,
   }
 
-  const navigation = navbarFields.navbarItems?.map(item => {
+  const navigation = fields.navbarItems?.map(item => {
     return {name: item.fields.label, href: item.fields.link, current: false}
+  })
+
+  // https://github.com/vercel/next.js/issues/42292#issuecomment-1464048350
+  const footer: JSX.Element = await Footer({
+    props: footerProps,
   })
 
   return (
@@ -38,7 +44,7 @@ export default async function RootLayout({
             <Navbar navigation={navigation} logo={navbarLogo} />
             <div>{children}</div>
           </div>
-          <Footer leftText={footer.fields.leftText} />
+          {footer}
         </div>
       </body>
     </html>
