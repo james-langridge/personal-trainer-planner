@@ -4,7 +4,7 @@ import {Entry} from 'contentful'
 import Image from '@/components/Image'
 import ProgramAd from '@/components/ProgramAd'
 import ProgramAdBanner from '@/components/ProgramAdBanner'
-import RichTextComponent from '@/components/RichTextComponent'
+import RichText from '@/components/RichText'
 import Testimonial from '@/components/Testimonial'
 import VideoHero from '@/components/VideoHero'
 
@@ -12,7 +12,7 @@ const componentMap: {[key: string]: React.ComponentType<any>} = {
   image: Image,
   programAd: ProgramAd,
   programAdBanner: ProgramAdBanner,
-  richText: RichTextComponent,
+  richText: RichText,
   testimonial: Testimonial,
   videoHeroFeature: VideoHero,
 }

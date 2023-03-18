@@ -4,7 +4,7 @@ import {
   IVideoHeroFeatureFields,
   IVideoHeroProgramCard,
 } from '@/@types/generated/contentful'
-import CtfRichtext from '@/components/RichText'
+import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
 
 interface VideoCardProps {
   program: IVideoHeroProgramCard
@@ -17,8 +17,8 @@ function VideoCard({program}: VideoCardProps) {
         {program.fields.name}
       </h1>
 
-      <div className="text-gray-500 dark:text-gray-300">
-        <CtfRichtext document={program.fields.programSummary} />
+      <div className="prose text-gray-500 dark:text-gray-300">
+        {documentToReactComponents(program.fields.programSummary)}
       </div>
 
       <Link

@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import CtfRichtext from '@/components/RichText'
 import {Entry} from 'contentful'
 import {IProgramAdFields} from '@/@types/generated/contentful'
+import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
 
 interface Props {
   entry: Entry<IProgramAdFields>
@@ -22,8 +22,8 @@ function ProgramAd({entry}: Props) {
         height={image.fields.file.details.image?.height}
         className="mb-5 h-auto max-w-full"
       />
-      <div className="mb-5 max-w-full text-left text-white">
-        <CtfRichtext document={content} />
+      <div className="prose mb-5 max-w-full text-left text-white">
+        {documentToReactComponents(content)}
       </div>
       <button className="mb-5 rounded border-2 border-solid border-white bg-[#00a4e3] py-1.5 px-5 font-sans text-xl font-medium text-white">
         {ctaText}

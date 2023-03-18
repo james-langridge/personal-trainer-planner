@@ -1,62 +1,24 @@
-import {BLOCKS, Document} from '@contentful/rich-text-types'
-import {
-  documentToReactComponents,
-  Options,
-} from '@contentful/rich-text-react-renderer'
-import React from 'react'
+import {Entry} from 'contentful'
+import {IRichTextFields} from '@/@types/generated/contentful'
+import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
 
-interface ParagraphProps {
-  // The children prop now needs to be listed explicitly when defining props
-  // https://reactjs.org/blog/2022/03/08/react-18-upgrade-guide.html#updates-to-typescript-definitions
-  children: React.ReactNode
+interface Props {
+  entry: Entry<IRichTextFields>
 }
 
-const Paragraph = ({children}: ParagraphProps) => (
-  <p className="pb-4">{children}</p>
-)
+function RichText({entry}: Props) {
+  const {richText, backgroundColour} = entry.fields
 
-interface RichtextPropsInterface {
-  document: Document
+  return (
+    <div
+      className={
+        'prose m-auto w-full p-6' +
+        (backgroundColour ? ` bg-[${backgroundColour?.value}]` : '')
+      }
+    >
+      {documentToReactComponents(richText)}
+    </div>
+  )
 }
 
-const CtfRichtext = ({document}: RichtextPropsInterface) => {
-  const options: Options = {
-    renderNode: {
-      [BLOCKS.LIST_ITEM]: (node, children) => {
-        // This removes paragraphs inserted by Contentful into lists
-        // https://github.com/contentful/rich-text/issues/126#issuecomment-636926522
-        const UnTaggedChildren = documentToReactComponents(node as Document, {
-          renderNode: {
-            [BLOCKS.PARAGRAPH]: (node, children) => children,
-            [BLOCKS.LIST_ITEM]: (node, children) => children,
-          },
-        })
-
-        return (
-          <li>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="inline-flex h-6 w-6 text-[#00a4e3]"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            {UnTaggedChildren}
-          </li>
-        )
-      },
-      [BLOCKS.PARAGRAPH]: (node, children) => <Paragraph>{children}</Paragraph>,
-    },
-  }
-
-  return <>{documentToReactComponents(document, options)}</>
-}
-
-export default CtfRichtext
+export default RichText
