@@ -8,8 +8,10 @@ import RichText from '@/components/RichText'
 import Testimonial from '@/components/Testimonial'
 import VideoHero from '@/components/VideoHero'
 import Heading from '@/components/Heading'
+import Contact from '@/components/Contact'
 
 const componentMap: {[key: string]: React.ComponentType<any>} = {
+  contact: Contact,
   heroImageHeading: Heading,
   image: Image,
   programAd: ProgramAd,

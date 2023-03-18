@@ -3,6 +3,46 @@
 import {Asset, Entry} from 'contentful'
 import {Document} from '@contentful/rich-text-types'
 
+export interface IContactFields {
+  /** Headline */
+  headline: string
+
+  /** Subheading */
+  subheading?: string | undefined
+
+  /** Address */
+  address?: string | undefined
+
+  /** Phone */
+  phone?: string | undefined
+
+  /** Email */
+  email?: string | undefined
+
+  /** Facebook */
+  facebook?: string | undefined
+
+  /** Image */
+  image?: Asset | undefined
+}
+
+export interface IContact extends Entry<IContactFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'contact'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface IFooterFields {
   /** Name */
   name?: string | undefined
@@ -429,6 +469,7 @@ export interface IVideoHeroProgramCard
 }
 
 export type CONTENT_TYPE =
+  | 'contact'
   | 'footer'
   | 'footerLink'
   | 'footerLinkSection'
@@ -445,6 +486,7 @@ export type CONTENT_TYPE =
   | 'videoHeroProgramCard'
 
 export type IEntry =
+  | IContact
   | IFooter
   | IFooterLink
   | IFooterLinkSection
