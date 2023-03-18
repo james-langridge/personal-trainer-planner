@@ -44,7 +44,7 @@ async function Footer({props}: Props) {
           <div className="-mx-6 w-full lg:w-2/5">
             <div className="px-6">
               {leftText && (
-                <div className="pr-20 dark:text-gray-300">{leftText}</div>
+                <p className="prose dark:text-gray-300 sm:pr-20">{leftText}</p>
               )}
 
               <div className="-mx-2 mt-6 flex">
