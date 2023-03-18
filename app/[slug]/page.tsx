@@ -1,7 +1,6 @@
 import {ComponentRenderer} from '@/components/ComponentRenderer'
 import {getAllPageSlugs, getPageData} from '@/lib/contentful'
 import {notFound} from 'next/navigation'
-import Heading from '@/components/Heading'
 
 // Using the Contentful SDK instead of the Fetch API, for dynamic segments,
 // the output of the request will not be cached and will be re-fetched on
@@ -28,12 +27,10 @@ export default async function Page({params}: {params: {slug: string}}) {
     notFound()
   }
 
-  const heading = items[0].fields.pageHeading
   const pageContent = items[0].fields.pageContent
 
   return (
     <main>
-      {heading && <Heading heading={heading} />}
       {pageContent &&
         pageContent?.map(entry => (
           <ComponentRenderer key={entry.sys.id} entry={entry} />

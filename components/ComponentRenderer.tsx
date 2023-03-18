@@ -7,8 +7,10 @@ import ProgramAdBanner from '@/components/ProgramAdBanner'
 import RichText from '@/components/RichText'
 import Testimonial from '@/components/Testimonial'
 import VideoHero from '@/components/VideoHero'
+import Heading from '@/components/Heading'
 
 const componentMap: {[key: string]: React.ComponentType<any>} = {
+  heroImageHeading: Heading,
   image: Image,
   programAd: ProgramAd,
   programAdBanner: ProgramAdBanner,
@@ -31,9 +33,9 @@ export const ComponentRenderer: React.FC<{entry: Entry<IEntry>}> = ({
   const {fields} = entry
   let childrenEntries: Entry<IEntry>[] = []
 
-  for (const field of Object.values(fields)) {
-    if (Array.isArray(field)) {
-      childrenEntries = field
+  for (const [key, value] of Object.entries(fields)) {
+    if (Array.isArray(value) && key !== 'programBenefits') {
+      childrenEntries = value
       break
     }
   }

@@ -100,6 +100,37 @@ export interface IFooterLinkSection extends Entry<IFooterLinkSectionFields> {
   }
 }
 
+export interface IHeroImageHeadingFields {
+  /** Heading */
+  heading: string
+
+  /** Sub-heading */
+  subHeading?: string | undefined
+
+  /** Image */
+  image: Asset
+
+  /** Program benefits */
+  programBenefits?: string[] | undefined
+}
+
+export interface IHeroImageHeading extends Entry<IHeroImageHeadingFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'heroImageHeading'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface IImageFields {
   /** Name */
   name?: string | undefined
@@ -188,9 +219,6 @@ export interface IPageFields {
 
   /** Slug */
   slug: string
-
-  /** Page heading */
-  pageHeading?: string | undefined
 
   /** Blog post? */
   isBlogPost?: boolean | undefined
@@ -404,6 +432,7 @@ export type CONTENT_TYPE =
   | 'footer'
   | 'footerLink'
   | 'footerLinkSection'
+  | 'heroImageHeading'
   | 'image'
   | 'navbar'
   | 'navbarItem'
@@ -419,6 +448,7 @@ export type IEntry =
   | IFooter
   | IFooterLink
   | IFooterLinkSection
+  | IHeroImageHeading
   | IImage
   | INavbar
   | INavbarItem
