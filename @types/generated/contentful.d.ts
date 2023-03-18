@@ -308,8 +308,8 @@ export interface ITestimonialFields {
   /** Name */
   name: string
 
-  /** Testimonial Text */
-  testimonialText: string
+  /** Testimonial text */
+  testimonialText: Document
 
   /** Client description */
   clientDescription?: string | undefined
