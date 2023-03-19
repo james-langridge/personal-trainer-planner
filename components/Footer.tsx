@@ -39,6 +39,7 @@ async function Footer({props}: Props) {
 
   return (
     <footer className="absolute bottom-0 w-full bg-white dark:bg-gray-900">
+      <hr className="my-6 h-px border-none bg-gray-200 dark:bg-gray-700" />
       <div className="container mx-auto p-6">
         <div className="lg:flex">
           <div className="-mx-6 w-full lg:w-2/5">
