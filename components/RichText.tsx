@@ -16,7 +16,16 @@ function RichText({entry}: Props) {
         (backgroundColour ? ` bg-[${backgroundColour?.value}]` : '')
       }
     >
-      <div className="prose p-6">{documentToReactComponents(richText)}</div>
+      <div
+        className={
+          'prose p-6' +
+          (backgroundColour
+            ? ` text-white prose-headings:text-white prose-blockquote:text-white`
+            : '')
+        }
+      >
+        {documentToReactComponents(richText)}
+      </div>
     </div>
   )
 }
