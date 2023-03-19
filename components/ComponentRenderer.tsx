@@ -10,9 +10,13 @@ import VideoHero from '@/components/VideoHero'
 import Heading from '@/components/Heading'
 import Contact from '@/components/Contact'
 import HeroSideImage from '@/components/HeroSideImage'
+import CtaForm from '@/components/CtaForm'
+import CtaSimple from '@/components/CtaSimple'
 
 const componentMap: {[key: string]: React.ComponentType<any>} = {
   contact: Contact,
+  ctaForm: CtaForm,
+  ctaSimple: CtaSimple,
   heroImageHeading: Heading,
   heroSideImage: HeroSideImage,
   image: Image,

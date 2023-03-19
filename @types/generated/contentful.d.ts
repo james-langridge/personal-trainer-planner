@@ -43,6 +43,65 @@ export interface IContact extends Entry<IContactFields> {
   }
 }
 
+export interface ICtaFormFields {
+  /** Main text */
+  mainText: string
+
+  /** Sub text */
+  subText?: string | undefined
+
+  /** Button text */
+  buttonText: string
+}
+
+export interface ICtaForm extends Entry<ICtaFormFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'ctaForm'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
+export interface ICtaSimpleFields {
+  /** Main text */
+  mainText: string
+
+  /** Sub text */
+  subText?: string | undefined
+
+  /** Button text */
+  buttonText: string
+
+  /** Button link */
+  buttonLink: string
+}
+
+export interface ICtaSimple extends Entry<ICtaSimpleFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'ctaSimple'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface IFooterFields {
   /** Name */
   name?: string | undefined
@@ -510,6 +569,8 @@ export interface IVideoHeroProgramCard
 
 export type CONTENT_TYPE =
   | 'contact'
+  | 'ctaForm'
+  | 'ctaSimple'
   | 'footer'
   | 'footerLink'
   | 'footerLinkSection'
@@ -528,6 +589,8 @@ export type CONTENT_TYPE =
 
 export type IEntry =
   | IContact
+  | ICtaForm
+  | ICtaSimple
   | IFooter
   | IFooterLink
   | IFooterLinkSection
