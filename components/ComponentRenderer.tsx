@@ -9,10 +9,12 @@ import Testimonial from '@/components/Testimonial'
 import VideoHero from '@/components/VideoHero'
 import Heading from '@/components/Heading'
 import Contact from '@/components/Contact'
+import HeroSideImage from '@/components/HeroSideImage'
 
 const componentMap: {[key: string]: React.ComponentType<any>} = {
   contact: Contact,
   heroImageHeading: Heading,
+  heroSideImage: HeroSideImage,
   image: Image,
   programAd: ProgramAd,
   programAdBanner: ProgramAdBanner,
