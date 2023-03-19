@@ -6,7 +6,7 @@ interface Props {
   entry: Entry<IHeroImageHeadingFields>
 }
 
-function Heading({entry}: Props) {
+function HeroImageHeading({entry}: Props) {
   const {heading, subHeading, programBenefits, image} = entry.fields
 
   return (
@@ -54,7 +54,7 @@ function Heading({entry}: Props) {
 
         <div className="flex h-96 w-full items-center justify-center lg:w-1/2">
           <Image
-            className="h-full w-full max-w-2xl rounded-md object-cover"
+            className="h-max w-full max-w-2xl rounded-md object-scale-down"
             src={`https:${image.fields.file.url}`}
             alt={image.fields.title}
             width={image.fields.file.details.image?.width}
@@ -66,4 +66,4 @@ function Heading({entry}: Props) {
   )
 }
 
-export default Heading
+export default HeroImageHeading

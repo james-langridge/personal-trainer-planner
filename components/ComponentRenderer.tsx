@@ -7,7 +7,7 @@ import ProgramAdBanner from '@/components/ProgramAdBanner'
 import RichText from '@/components/RichText'
 import Testimonial from '@/components/Testimonial'
 import VideoHero from '@/components/VideoHero'
-import Heading from '@/components/Heading'
+import HeroImageHeading from '@/components/HeroImageHeading'
 import Contact from '@/components/Contact'
 import HeroSideImage from '@/components/HeroSideImage'
 import CtaForm from '@/components/CtaForm'
@@ -19,7 +19,7 @@ const componentMap: {[key: string]: React.ComponentType<any>} = {
   ctaForm: CtaForm,
   ctaSimple: CtaSimple,
   heroBackgroundImage: HeroBackgroundImage,
-  heroImageHeading: Heading,
+  heroImageHeading: HeroImageHeading,
   heroSideImage: HeroSideImage,
   image: Image,
   programAd: ProgramAd,
