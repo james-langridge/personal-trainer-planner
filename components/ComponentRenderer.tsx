@@ -12,11 +12,13 @@ import Contact from '@/components/Contact'
 import HeroSideImage from '@/components/HeroSideImage'
 import CtaForm from '@/components/CtaForm'
 import CtaSimple from '@/components/CtaSimple'
+import HeroBackgroundImage from '@/components/HeroBackgroundImage'
 
 const componentMap: {[key: string]: React.ComponentType<any>} = {
   contact: Contact,
   ctaForm: CtaForm,
   ctaSimple: CtaSimple,
+  heroBackgroundImage: HeroBackgroundImage,
   heroImageHeading: Heading,
   heroSideImage: HeroSideImage,
   image: Image,

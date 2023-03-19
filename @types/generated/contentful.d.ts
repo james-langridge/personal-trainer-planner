@@ -199,6 +199,38 @@ export interface IFooterLinkSection extends Entry<IFooterLinkSectionFields> {
   }
 }
 
+export interface IHeroBackgroundImageFields {
+  /** Heading */
+  heading: string
+
+  /** Image */
+  image: Asset
+
+  /** Button text */
+  buttonText: string
+
+  /** Button link */
+  buttonLink: string
+}
+
+export interface IHeroBackgroundImage
+  extends Entry<IHeroBackgroundImageFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'heroBackgroundImage'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface IHeroImageHeadingFields {
   /** Heading */
   heading: string
@@ -574,6 +606,7 @@ export type CONTENT_TYPE =
   | 'footer'
   | 'footerLink'
   | 'footerLinkSection'
+  | 'heroBackgroundImage'
   | 'heroImageHeading'
   | 'heroSideImage'
   | 'image'
@@ -594,6 +627,7 @@ export type IEntry =
   | IFooter
   | IFooterLink
   | IFooterLinkSection
+  | IHeroBackgroundImage
   | IHeroImageHeading
   | IHeroSideImage
   | IImage
