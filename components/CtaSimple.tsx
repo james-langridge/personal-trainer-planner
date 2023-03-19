@@ -1,6 +1,7 @@
 import {Entry} from 'contentful'
 import {ICtaSimpleFields} from '@/@types/generated/contentful'
 import Link from 'next/link'
+import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
 
 interface Props {
   entry: Entry<ICtaSimpleFields>
@@ -16,9 +17,11 @@ export default function CtaSimple({entry}: Props) {
           {mainText}
         </h2>
 
-        <p className="mt-6 max-w-4xl text-center text-gray-500 dark:text-gray-300">
-          {subText}
-        </p>
+        {subText && (
+          <p className="prose mt-6 max-w-4xl text-center text-gray-500 dark:text-gray-300">
+            {documentToReactComponents(subText)}
+          </p>
+        )}
 
         <div className="mt-6 inline-flex w-full sm:w-auto">
           <Link

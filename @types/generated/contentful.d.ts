@@ -76,7 +76,7 @@ export interface ICtaSimpleFields {
   mainText: string
 
   /** Sub text */
-  subText?: string | undefined
+  subText?: Document | undefined
 
   /** Button text */
   buttonText: string
