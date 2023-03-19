@@ -40,7 +40,8 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <div className="relative min-h-screen pt-16">
-          <div className="pb-[893px] sm:pb-[565px] md:pb-[489px] lg:pb-[373px] xl:pb-[301px] 2xl:pb-[277px]">
+          {/*https://tailwindcss.com/docs/responsive-design#using-custom-breakpoints*/}
+          <div className="pb-[906px] sm:pb-[614px] md:pb-[534px] lg:pb-[438px] xl:pb-[354px] 2xl:pb-[326px]">
             <Navbar navigation={navigation} logo={navbarLogo} />
             <div>{children}</div>
           </div>
