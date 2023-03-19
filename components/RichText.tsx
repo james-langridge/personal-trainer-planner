@@ -12,11 +12,11 @@ function RichText({entry}: Props) {
   return (
     <div
       className={
-        'prose m-auto w-full p-6' +
+        'flex justify-center' +
         (backgroundColour ? ` bg-[${backgroundColour?.value}]` : '')
       }
     >
-      {documentToReactComponents(richText)}
+      <div className="prose p-6">{documentToReactComponents(richText)}</div>
     </div>
   )
 }
