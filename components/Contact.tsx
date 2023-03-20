@@ -5,32 +5,32 @@ import Link from 'next/link'
 import {Entry} from 'contentful'
 import {IContactFields} from '@/@types/generated/contentful'
 import React, {useState} from 'react'
+import {submitContactForm} from '@/lib/api'
 
 interface Props {
   entry: Entry<IContactFields>
 }
 
+const initialState = {name: '', email: '', message: ''}
+
 export default function Contact({entry}: Props) {
-  const [state, setState] = useState({name: '', email: '', message: ''})
+  const [state, setState] = useState(initialState)
   const {headline, subheading, email, address, phone, facebook, image} =
     entry.fields
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    // TODO: Set up database and use mutations instead of API route to update
-    // "Previously, API Routes could have been used for use cases like handling
-    // form submissions. Route Handlers are likely not the solution for these uses
-    // cases. We will be recommending the use of mutations for this when ready."
+    // Previously, API Routes could have been used for use cases like
+    // handling form submissions. Route Handlers are likely not the solution
+    // for these uses cases. We will be recommending the use of mutations for
+    // this when ready.
+    // https://beta.nextjs.org/docs/routing/route-handlers#dynamic-route-handlers
     // https://beta.nextjs.org/docs/data-fetching/mutating
-    await fetch('/api/contact', {
-      method: 'POST',
-      body: JSON.stringify({state}),
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
+    await submitContactForm(state).then(
+      () => setState(initialState),
+      error => console.error(error),
+    )
   }
 
   return (
