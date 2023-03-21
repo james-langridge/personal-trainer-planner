@@ -71,9 +71,9 @@ async function Footer({props}: Props) {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {blogPostLinksToRender && (
                 <div>
-                  <h3 className="uppercase text-gray-700 dark:text-white">
+                  <div className="uppercase text-gray-700 dark:text-white">
                     Blog
-                  </h3>
+                  </div>
                   {blogPostLinksToRender.map(link => {
                     return (
                       <div
@@ -96,9 +96,9 @@ async function Footer({props}: Props) {
                 footerLinkSections.map(section => {
                   return (
                     <div key={section.sys.id}>
-                      <h3 className="uppercase text-gray-700 dark:text-white">
+                      <div className="uppercase text-gray-700 dark:text-white">
                         {section.fields.heading}
-                      </h3>
+                      </div>
                       {section.fields.links.map(link => {
                         return (
                           <div
@@ -120,9 +120,9 @@ async function Footer({props}: Props) {
                 })}
 
               <div>
-                <h3 className="uppercase text-gray-700 dark:text-white">
+                <div className="uppercase text-gray-700 dark:text-white">
                   {contactSectionHeading?.toUpperCase()}
-                </h3>
+                </div>
                 <span className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400">
                   {contactPhone}
                 </span>
