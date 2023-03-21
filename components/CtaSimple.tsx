@@ -18,9 +18,9 @@ export default function CtaSimple({entry}: Props) {
         </h2>
 
         {subText && (
-          <p className="prose mt-6 max-w-4xl text-center text-gray-500 dark:text-gray-300">
+          <div className="prose mt-6 max-w-4xl text-center text-gray-500 dark:text-gray-300">
             {documentToReactComponents(subText)}
-          </p>
+          </div>
         )}
 
         <div className="mt-6 inline-flex w-full sm:w-auto">
