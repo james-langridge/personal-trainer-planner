@@ -76,13 +76,17 @@ async function Footer({props}: Props) {
                   </h3>
                   {blogPostLinksToRender.map(link => {
                     return (
-                      <Link
+                      <div
                         key={link.label}
-                        href={link.href}
-                        className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
+                        className="flex h-12 items-center sm:h-[unset]"
                       >
-                        {link.label}
-                      </Link>
+                        <Link
+                          href={link.href}
+                          className="mt-2 block text-base text-gray-600 hover:underline dark:text-gray-400 sm:text-sm"
+                        >
+                          {link.label}
+                        </Link>
+                      </div>
                     )
                   })}
                 </div>
@@ -97,13 +101,18 @@ async function Footer({props}: Props) {
                       </h3>
                       {section.fields.links.map(link => {
                         return (
-                          <Link
+                          <div
                             key={link.sys.id}
-                            href={link.fields.href}
-                            className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400"
+                            className="flex h-12 items-center sm:h-[unset]"
                           >
-                            {link.fields.label}
-                          </Link>
+                            <Link
+                              key={link.sys.id}
+                              href={link.fields.href}
+                              className="mt-2 block text-base text-gray-600 hover:underline dark:text-gray-400 sm:text-sm"
+                            >
+                              {link.fields.label}
+                            </Link>
+                          </div>
                         )
                       })}
                     </div>
