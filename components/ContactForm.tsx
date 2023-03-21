@@ -97,7 +97,7 @@ export default function ContactForm() {
               required
               value={form.name}
               type="text"
-              placeholder="John Doe"
+              placeholder="Steph Cook"
               className="mt-2 block w-full rounded-md border border-gray-200 bg-white px-5 py-3 text-gray-700 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:placeholder-gray-600 dark:focus:border-blue-400"
             />
           </label>
@@ -114,7 +114,7 @@ export default function ContactForm() {
                 })
               }
               type="email"
-              placeholder="johndoe@example.com"
+              placeholder="modern@pentathlon.com"
               required
               value={form.email}
               className="mt-2 block w-full rounded-md border border-gray-200 bg-white px-5 py-3 text-gray-700 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:placeholder-gray-600 dark:focus:border-blue-400"
