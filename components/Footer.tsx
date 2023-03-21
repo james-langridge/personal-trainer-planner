@@ -123,10 +123,10 @@ async function Footer({props}: Props) {
                 <div className="uppercase text-gray-700 dark:text-white">
                   {contactSectionHeading?.toUpperCase()}
                 </div>
-                <span className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400">
+                <span className="mt-2 block text-sm text-gray-600 dark:text-gray-400">
                   {contactPhone}
                 </span>
-                <span className="mt-2 block text-sm text-gray-600 hover:underline dark:text-gray-400">
+                <span className="mt-2 block text-sm text-gray-600 dark:text-gray-400">
                   {contactEmail}
                 </span>
               </div>
