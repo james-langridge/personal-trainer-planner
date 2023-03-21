@@ -17,3 +17,40 @@ model ContactForm {
   message   String
   createdAt DateTime @default(now())
 }
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email     String    @unique
+  password  String
+  admin     Boolean   @default(false)
+  firstName String?
+  lastName  String?
+  sessions  Session[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  status      SESSION_STATUS @default(NOT_STARTED)
+  name        String
+  date        DateTime
+  description String?
+  videoUrl    String?
+
+  deleted Boolean @default(false)
+
+  @@index([ownerId, id])
+}
+
+enum SESSION_STATUS {
+  NOT_STARTED
+  COMPLETED
+}
