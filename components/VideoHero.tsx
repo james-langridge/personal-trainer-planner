@@ -23,6 +23,7 @@ function VideoCard({program}: VideoCardProps) {
 
       <Link
         href={program.fields.slug}
+        aria-label={program.fields.name}
         className="inline-flex transform rounded-full bg-blue-100 p-2 capitalize text-blue-500 transition-colors duration-300 hover:text-blue-600 hover:underline rtl:-scale-x-100 dark:bg-blue-500 dark:text-white dark:hover:text-blue-500"
       >
         <svg
