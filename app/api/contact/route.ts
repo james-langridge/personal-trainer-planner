@@ -1,5 +1,4 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {db} from '@/lib/db'
 import nodemailer from 'nodemailer'
 
 export const sendEmail = async ({
@@ -46,13 +45,5 @@ export async function POST(req: NextRequest) {
 
   await sendEmail(body)
 
-  const submission = await db.contactForm.create({
-    data: {
-      name: body.name,
-      email: body.email,
-      message: body.message,
-    },
-  })
-
-  return NextResponse.json({submission})
+  return NextResponse.json(body)
 }
