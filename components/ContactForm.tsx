@@ -2,48 +2,7 @@
 
 import React, {useState} from 'react'
 import {submitContactForm} from '@/lib/api'
-
-function Info({status, error}: {status: string; error: Error | null}) {
-  if (status === 'idle') {
-    return null
-  }
-
-  if (status === 'pending') {
-    return (
-      <div
-        role="alert"
-        className="mt-4 rounded bg-yellow-600 p-2.5 text-center text-white"
-      >
-        Sending message...
-      </div>
-    )
-  }
-
-  if (status === 'rejected') {
-    return (
-      <div
-        role="alert"
-        className="mt-4 rounded bg-red-700 p-2.5 text-center text-white"
-      >
-        Error sending message:{' '}
-        <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
-      </div>
-    )
-  }
-
-  if (status === 'resolved') {
-    return (
-      <div
-        role="alert"
-        className="mt-4 rounded bg-green-700 p-2.5 text-center text-white"
-      >
-        Thank you for your message. I&apos;ll get back to you in a jiffy!
-      </div>
-    )
-  }
-
-  return null
-}
+import Info from '@/components/Info'
 
 const initialState = {
   status: 'idle',
@@ -141,7 +100,7 @@ export default function ContactForm() {
         </label>
       </div>
 
-      <Info status={status} error={error} />
+      <Info status={status} error={error} mode="contact" />
 
       <button
         type="submit"
