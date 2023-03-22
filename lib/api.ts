@@ -39,3 +39,12 @@ export const submitContactForm = (body: {
     body,
   })
 }
+
+export const signin = async (user: {email: string; password: string}) => {
+  return fetcher({
+    url: '/api/signin',
+    method: 'POST',
+    body: user,
+    json: false,
+  })
+}
