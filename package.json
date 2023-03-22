@@ -11,6 +11,9 @@
   "license": "AGPL-3.0-only",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node -P tsconfig-seed.json -r tsconfig-paths/register --transpileOnly prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -59,6 +62,8 @@
     "prettier": "2.8.4",
     "prettier-plugin-tailwindcss": "^0.2.4",
     "prisma": "^4.11.0",
-    "tailwindcss": "^3.2.7"
+    "tailwindcss": "^3.2.7",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2"
   }
 }
