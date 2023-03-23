@@ -10,20 +10,38 @@ const loginContent = {
   resolved: 'Welcome Back',
 }
 
+const registerContent = {
+  pending: 'Creating new user...',
+  error: 'Error creating user:',
+  resolved: 'User created successfully',
+}
+
 export default function Info({
   status,
   error,
   mode,
 }: {
   status: string
-  error: Error | null
-  mode: 'login' | 'contact'
+  error: null | Error
+  mode: 'login' | 'contact' | 'register'
 }) {
   if (status === 'idle') {
     return null
   }
 
-  const content = mode === 'login' ? loginContent : contactContent
+  let content
+
+  switch (mode) {
+    case 'contact':
+      content = contactContent
+      break
+    case 'login':
+      content = loginContent
+      break
+    case 'register':
+      content = registerContent
+      break
+  }
 
   if (status === 'pending') {
     return (

@@ -48,10 +48,10 @@ export default function ContactForm() {
             Full Name
             <input
               onChange={e =>
-                setState({
+                setState(state => ({
                   ...state,
                   form: {...state.form, name: e.target.value},
-                })
+                }))
               }
               required
               value={form.name}
@@ -67,10 +67,10 @@ export default function ContactForm() {
             Email address
             <input
               onChange={e =>
-                setState({
+                setState(state => ({
                   ...state,
                   form: {...state.form, email: e.target.value},
-                })
+                }))
               }
               type="email"
               placeholder="modern@pentathlon.com"
@@ -89,10 +89,10 @@ export default function ContactForm() {
             required
             value={form.message}
             onChange={e =>
-              setState({
+              setState(state => ({
                 ...state,
                 form: {...state.form, message: e.target.value},
-              })
+              }))
             }
             className="mt-2 block h-32 w-full rounded-md border border-gray-200 bg-white px-5 py-3 text-gray-700 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:placeholder-gray-600 dark:focus:border-blue-400 md:h-56"
             placeholder="Message"

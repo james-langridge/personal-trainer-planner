@@ -1,5 +1,6 @@
 import {db} from '@/lib/db'
 import {SESSION_STATUS} from '@prisma/client'
+import {hashPassword} from '@/lib/auth'
 
 const getRandomSessionStatus = () => {
   const statuses = [SESSION_STATUS.COMPLETED, SESSION_STATUS.NOT_STARTED]
@@ -7,6 +8,9 @@ const getRandomSessionStatus = () => {
 }
 
 async function main() {
+  const passwordUser = await hashPassword('password')
+  const passwordAdmin = await hashPassword('password')
+
   const user = await db.user.upsert({
     where: {email: 'user@email.com'},
     update: {},
@@ -14,7 +18,7 @@ async function main() {
       email: 'user@email.com',
       firstName: 'User',
       lastName: 'Person',
-      password: 'password',
+      password: passwordUser,
       sessions: {
         create: new Array(5).fill(1).map((_, i) => ({
           name: `Session ${i}`,
@@ -36,7 +40,7 @@ async function main() {
       email: 'admin@email.com',
       firstName: 'Admin',
       lastName: 'Person',
-      password: 'password',
+      password: passwordAdmin,
       admin: true,
     },
   })

@@ -18,12 +18,13 @@ const fetcher = async ({
     },
   })
 
+  const data = await res.json()
+
   if (!res.ok) {
-    throw new Error('API error')
+    throw new Error(data.error)
   }
 
   if (json) {
-    const data = await res.json()
     return data.data
   }
 }
@@ -40,11 +41,25 @@ export const submitContactForm = (body: {
   })
 }
 
-export const signin = async (user: {email: string; password: string}) => {
+export const login = async (body: {email: string; password: string}) => {
   return fetcher({
-    url: '/api/signin',
-    method: 'POST',
-    body: user,
+    url: '/api/login',
+    method: 'post',
+    body,
+    json: false,
+  })
+}
+
+export const register = async (body: {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+}) => {
+  return fetcher({
+    url: '/api/register',
+    method: 'post',
+    body,
     json: false,
   })
 }
