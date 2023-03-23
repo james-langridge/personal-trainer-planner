@@ -15,7 +15,9 @@ export const createJWT = (user: User) => {
   const iat = Math.floor(Date.now() / 1000)
   const exp = iat + 60 * 60 * 24 * 7
 
-  return new SignJWT({payload: {id: user.id, email: user.email}})
+  return new SignJWT({
+    payload: {id: user.id, email: user.email, admin: user.admin},
+  })
     .setProtectedHeader({alg: 'HS256', typ: 'JWT'})
     .setExpirationTime(exp)
     .setIssuedAt(iat)
