@@ -18,7 +18,7 @@ function RichText({entry}: Props) {
     >
       <div
         className={
-          'prose p-6' +
+          'prose p-6 dark:prose-invert' +
           (backgroundColour
             ? ` text-white prose-headings:text-white prose-blockquote:text-white`
             : '')
