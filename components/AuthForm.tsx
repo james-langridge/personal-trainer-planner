@@ -148,7 +148,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
                   }
                   type="text"
                   className="block w-full rounded-lg border bg-white py-3 px-11 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-                  placeholder="First name"
+                  placeholder="Last name"
                 />
               </div>
             </>
