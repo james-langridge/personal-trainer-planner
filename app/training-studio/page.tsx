@@ -1,7 +1,10 @@
 import GridSquare from '@/components/GridSquare'
 import {generateCalendarMonth} from '@/lib/calendar'
+import CalendarDropdown from '@/components/CalendarDropdown'
 
-const RenderGrid = () => {
+// TODO: Fetch client calendar data
+// Client the logged in client, or is set by admin
+export default function TrainingStudio() {
   const now = new Date()
   const year = now.getFullYear()
   const month = now.getMonth()
@@ -13,10 +16,14 @@ const RenderGrid = () => {
 
   return (
     <>
-      <div className="prose prose-xl p-5">
-        <h1>
-          {monthName} {year}
-        </h1>
+      <div className="flex justify-between p-5">
+        <div className="prose prose-xl">
+          <h1>
+            {monthName} {year}
+          </h1>
+        </div>
+        {/*TODO: Only load this dropdown for admin user*/}
+        <CalendarDropdown />
       </div>
       <div className="m-5 grid grid-cols-7 grid-rows-5 divide-x divide-y">
         {emptyDays &&
@@ -58,8 +65,4 @@ const RenderGrid = () => {
       </div>
     </>
   )
-}
-
-export default function TrainingStudio() {
-  return <RenderGrid />
 }
