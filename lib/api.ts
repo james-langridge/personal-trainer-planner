@@ -6,7 +6,7 @@ const fetcher = async ({
 }: {
   url: string
   method: string
-  body: {[key: string]: string}
+  body?: {[key: string]: string}
   json?: boolean
 }) => {
   const res = await fetch(url, {
@@ -61,5 +61,19 @@ export const register = async (body: {
     method: 'post',
     body,
     json: false,
+  })
+}
+
+export const fetchUsers = async () => {
+  return fetcher({
+    url: '/api/users',
+    method: 'get',
+  })
+}
+
+export const fetchUser = async (id: string) => {
+  return fetcher({
+    url: `/api/user/${id}`,
+    method: 'get',
   })
 }

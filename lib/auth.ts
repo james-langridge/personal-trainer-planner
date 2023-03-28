@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt'
 import {jwtVerify, SignJWT} from 'jose'
 import {db} from './db'
 import {User} from '@prisma/client'
+import {RequestCookies} from 'next/dist/compiled/@edge-runtime/cookies'
+import {ReadonlyRequestCookies} from 'next/dist/server/app-render'
 
 export const hashPassword = (password: string) => bcrypt.hash(password, 10)
 
@@ -34,16 +36,18 @@ export const validateJWT = async (jwt: string | Uint8Array) => {
   return payload.payload as any
 }
 
-export const getUserFromCookie = async (cookies: {
-  get: (arg0: string | undefined) => any
-}) => {
-  const jwt = cookies.get(process.env.COOKIE_NAME)
+export const getUserFromCookie = async (
+  cookies: RequestCookies | ReadonlyRequestCookies,
+) => {
+  const jwt = cookies.get(process.env.COOKIE_NAME || '')
 
-  const {id} = await validateJWT(jwt.value)
+  if (jwt) {
+    const {id} = await validateJWT(jwt.value)
 
-  return db.user.findUnique({
-    where: {
-      id: id as string,
-    },
-  })
+    return db.user.findUnique({
+      where: {
+        id: id as string,
+      },
+    })
+  }
 }

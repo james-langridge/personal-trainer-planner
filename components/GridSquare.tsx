@@ -6,13 +6,19 @@ import React from 'react'
 export default function GridSquare({
   children,
   day,
+  isAdmin = false,
 }: {
   children?: React.ReactNode
   day?: {day: number; weekDay: number; month: number; year: number}
+  isAdmin?: boolean
 }) {
   const squareDay = day ? new Date(day.year, day.month, day.day) : null
 
   function clickHandler() {
+    if (!isAdmin) {
+      return
+    }
+
     alert(`Clicked: ${squareDay}`)
   }
 

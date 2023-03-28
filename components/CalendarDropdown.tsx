@@ -1,16 +1,35 @@
-'use client'
-
-import {Fragment} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
+import {fetchUsers} from '@/lib/api'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-// TODO: Fetch client names to generate dropdown and load their data onClick
-// Parent component needs to know which client to load
-export default function CalendarDropdown() {
+export interface User {
+  firstName: string
+  lastName: string
+  id: string
+}
+
+export default function CalendarDropdown({
+  setUser,
+}: {
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>
+}) {
+  const [users, setUsers] = useState<User[]>()
+
+  const getUsers = async () => {
+    const users = await fetchUsers()
+
+    setUsers(users)
+  }
+
+  useEffect(() => {
+    void getUsers()
+  }, [])
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -32,34 +51,28 @@ export default function CalendarDropdown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="w-50 absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            <Menu.Item>
-              {({active}) => (
-                <button
-                  onClick={() => alert('Loading client...')}
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block w-full px-4 py-2 text-sm',
-                  )}
-                >
-                  Alice
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({active}) => (
-                <button
-                  onClick={() => alert('Loading client...')}
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block w-full px-4 py-2 text-sm',
-                  )}
-                >
-                  Bob
-                </button>
-              )}
-            </Menu.Item>
+            {users &&
+              users.map(user => {
+                return (
+                  <Menu.Item key={user.lastName}>
+                    {({active}) => (
+                      <button
+                        onClick={() => setUser(user)}
+                        className={classNames(
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block w-44 px-4 py-2 text-sm',
+                        )}
+                      >
+                        {user.firstName} {user.lastName}
+                      </button>
+                    )}
+                  </Menu.Item>
+                )
+              })}
           </div>
         </Menu.Items>
       </Transition>

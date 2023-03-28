@@ -55,6 +55,14 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(req.nextUrl)
     }
 
+    const isAdmin = await getAdminRightsFromCookie(req.cookies)
+
+    if (isAdmin) {
+      req.nextUrl.pathname = '/training-planner'
+
+      return NextResponse.redirect(req.nextUrl)
+    }
+
     try {
       await verifyJWT(jwt.value)
 
