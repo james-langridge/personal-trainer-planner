@@ -75,6 +75,35 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
+  if (pathname.startsWith('/training-planner')) {
+    const jwt = req.cookies.get(process.env.COOKIE_NAME || '')
+
+    if (!jwt) {
+      req.nextUrl.pathname = '/login'
+
+      return NextResponse.redirect(req.nextUrl)
+    }
+
+    const isAdmin = await getAdminRightsFromCookie(req.cookies)
+
+    if (!isAdmin) {
+      req.nextUrl.pathname = '/training-studio'
+
+      return NextResponse.redirect(req.nextUrl)
+    }
+
+    try {
+      await verifyJWT(jwt.value)
+
+      return NextResponse.next()
+    } catch (e) {
+      console.error(e)
+      req.nextUrl.pathname = '/login'
+
+      return NextResponse.redirect(req.nextUrl)
+    }
+  }
+
   if (pathname.startsWith('/login')) {
     const jwt = req.cookies.get(process.env.COOKIE_NAME || '')
 
