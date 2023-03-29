@@ -1,24 +1,13 @@
-'use client'
-
-import React from 'react'
 import {Session} from '@prisma/client'
+import Link from 'next/link'
 
 export default function SessionItem({session}: {session?: Session}) {
-  function clickHandler(event: React.SyntheticEvent) {
-    event.stopPropagation()
-
-    alert('Opening session...')
-  }
-
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      onKeyDown={clickHandler}
-      onClick={clickHandler}
+    <Link
+      href={`/session/${session?.id}`}
       className="w-full rounded bg-emerald-400 font-bold text-white"
     >
       {session?.name}
-    </div>
+    </Link>
   )
 }

@@ -35,7 +35,7 @@ export default function Calendar({
         {emptyDays &&
           emptyDays.map((day, i) => {
             return (
-              <GridSquare key={i} isAdmin={isAdmin}>
+              <GridSquare key={i}>
                 <div>{dayNames[i]}</div>
               </GridSquare>
             )
@@ -59,7 +59,7 @@ export default function Calendar({
             day.year === year
 
           return (
-            <GridSquare key={day.day} day={day} isAdmin={isAdmin}>
+            <GridSquare key={day.day}>
               {index + firstDayOfMonth < 7 && <div>{weekday}</div>}
               <div
                 className={
