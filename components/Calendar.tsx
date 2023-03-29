@@ -1,14 +1,15 @@
 import GridSquare from '@/components/GridSquare'
 import {generateCalendarMonth} from '@/lib/calendar'
+import Session from '@/components/Session'
 
 export default function Calendar({
   isAdmin = false,
   sessions,
-  user,
+  username,
 }: {
   isAdmin?: boolean
   sessions: any
-  user: any
+  username?: string
 }) {
   const now = new Date()
   const year = now.getFullYear()
@@ -22,16 +23,16 @@ export default function Calendar({
   console.log(sessions)
 
   return (
-    <>
-      <div className="flex justify-between p-5">
+    <div className="flex flex-wrap">
+      <div className="w-full p-5">
         <div className="prose prose-xl">
-          {!isAdmin && <h2>Welcome back, {user}</h2>}
+          {!isAdmin && <h2>Welcome back, {username}</h2>}
           <h3>
             {monthName} {year}
           </h3>
         </div>
       </div>
-      <div className="m-5 grid grid-cols-7 grid-rows-5 divide-x divide-y">
+      <div className="grid w-full grid-cols-7 grid-rows-5 divide-x divide-y">
         {emptyDays &&
           emptyDays.map((day, i) => {
             return (
@@ -65,10 +66,11 @@ export default function Calendar({
               >
                 {day.day}
               </div>
+              <Session />
             </GridSquare>
           )
         })}
       </div>
-    </>
+    </div>
   )
 }

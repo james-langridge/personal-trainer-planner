@@ -1,9 +1,10 @@
 'use client'
 
-import CalendarDropdown, {User} from '@/components/CalendarDropdown'
+import {User} from '@/components/CalendarDropdown'
 import {useEffect, useState} from 'react'
 import {fetchUser} from '@/lib/api'
 import Calendar from '@/components/Calendar'
+import Sidebar from '@/components/Sidebar'
 
 export default function TrainingPlanner() {
   const [user, setUser] = useState<User>()
@@ -22,14 +23,9 @@ export default function TrainingPlanner() {
   }, [user])
 
   return (
-    <>
-      <div className="flex justify-end gap-x-2 p-5">
-        <div className="self-center">
-          {user?.firstName} {user?.lastName}
-        </div>
-        <CalendarDropdown setUser={setUser} />
-      </div>
-      <Calendar sessions={sessions} isAdmin user={user?.firstName} />
-    </>
+    <div className="flex">
+      <Sidebar setUser={setUser} user={user} />
+      <Calendar sessions={sessions} isAdmin />
+    </div>
   )
 }

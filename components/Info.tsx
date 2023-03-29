@@ -16,6 +16,12 @@ const registerContent = {
   resolved: 'User created successfully',
 }
 
+const createSessionContent = {
+  pending: 'Creating new session...',
+  error: 'Error creating session:',
+  resolved: 'Session created successfully',
+}
+
 export default function Info({
   status,
   error,
@@ -23,7 +29,7 @@ export default function Info({
 }: {
   status: string
   error: null | Error
-  mode: 'login' | 'contact' | 'register'
+  mode: 'login' | 'contact' | 'register' | 'createSession'
 }) {
   if (status === 'idle') {
     return null
@@ -40,6 +46,9 @@ export default function Info({
       break
     case 'register':
       content = registerContent
+      break
+    case 'createSession':
+      content = createSessionContent
       break
   }
 

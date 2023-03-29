@@ -77,3 +77,18 @@ export const fetchUser = async (id: string) => {
     method: 'get',
   })
 }
+
+export const createSession = async (body: {
+  ownerId: string
+  date: string
+  name: string
+  description?: string
+  videoUrl?: string
+}) => {
+  return fetcher({
+    url: '/api/session',
+    method: 'post',
+    body,
+    json: false,
+  })
+}

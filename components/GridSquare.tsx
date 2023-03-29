@@ -24,7 +24,7 @@ export default function GridSquare({
 
   return (
     <div
-      className="h-40 text-center"
+      className="h-40 w-40 text-center"
       onClick={clickHandler}
       onKeyDown={clickHandler}
       role="button"
