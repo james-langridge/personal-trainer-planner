@@ -5,17 +5,18 @@ import {useEffect, useState} from 'react'
 import {fetchUser} from '@/lib/api'
 import Calendar from '@/components/Calendar'
 import Sidebar from '@/components/Sidebar'
+import {Session} from '@prisma/client'
 
 export default function TrainingPlanner() {
   const [user, setUser] = useState<User>()
-  const [sessions, setSessions] = useState()
+  const [sessions, setSessions] = useState<Session[]>()
 
   useEffect(() => {
     const getUserSessions = async () => {
       if (user) {
-        const userSessions = await fetchUser(user.id)
+        const {sessions} = await fetchUser(user.id)
 
-        setSessions(userSessions)
+        setSessions(sessions)
       }
     }
 

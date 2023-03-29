@@ -1,3 +1,5 @@
+import {Session} from '@prisma/client'
+
 function getDaysInMonth(month: number, year: number) {
   return new Date(year, month + 1, 0).getDate()
 }
@@ -13,4 +15,46 @@ export function generateCalendarMonth(month: number, year: number) {
   }
 
   return monthData
+}
+
+function areDatesEqual(calendarDate: Date, sessionDate: Date) {
+  const sessionYear = sessionDate.getFullYear()
+  const sessionMonth = sessionDate.getMonth()
+  const sessionDay = sessionDate.getDate()
+
+  const calendarYear = calendarDate.getFullYear()
+  const calendarMonth = calendarDate.getMonth()
+  const calendarDay = calendarDate.getDate()
+
+  return (
+    sessionYear === calendarYear &&
+    sessionMonth === calendarMonth &&
+    sessionDay === calendarDay
+  )
+}
+
+export function getSessionsToday(
+  sessions: Session[],
+  calendarDay: {
+    day: number
+    weekDay: number
+    month: number
+    year: number
+  },
+) {
+  if (!sessions) {
+    return
+  }
+
+  const calendarDate = new Date(
+    `${calendarDay.year}-${calendarDay.month + 1}-${calendarDay.day}`,
+  )
+
+  return sessions.map(session => {
+    const sessionDate = new Date(session.date)
+
+    if (areDatesEqual(calendarDate, sessionDate)) {
+      return session
+    }
+  })
 }

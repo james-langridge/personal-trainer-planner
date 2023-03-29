@@ -2,7 +2,6 @@
 
 import React from 'react'
 
-// TODO: Admin can add training sessions to the day by clicking the day
 export default function GridSquare({
   children,
   day,

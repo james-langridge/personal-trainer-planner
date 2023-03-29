@@ -1,6 +1,7 @@
 import GridSquare from '@/components/GridSquare'
-import {generateCalendarMonth} from '@/lib/calendar'
-import Session from '@/components/Session'
+import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
+import {Session} from '@prisma/client'
+import SessionItem from '@/components/SessionItem'
 
 export default function Calendar({
   isAdmin = false,
@@ -8,7 +9,7 @@ export default function Calendar({
   username,
 }: {
   isAdmin?: boolean
-  sessions: any
+  sessions?: Session[]
   username?: string
 }) {
   const now = new Date()
@@ -19,8 +20,6 @@ export default function Calendar({
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDays = Array(firstDayOfMonth).fill(null)
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-
-  console.log(sessions)
 
   return (
     <div className="flex flex-wrap">
@@ -50,13 +49,17 @@ export default function Calendar({
             },
           )
 
+          const sessionsToday = sessions
+            ? getSessionsToday(sessions, day)
+            : null
+
           const isToday =
             day.day === now.getDate() &&
             day.month === month &&
             day.year === year
 
           return (
-            <GridSquare key={index} day={day} isAdmin={isAdmin}>
+            <GridSquare key={day.day} day={day} isAdmin={isAdmin}>
               {index + firstDayOfMonth < 7 && <div>{weekday}</div>}
               <div
                 className={
@@ -66,7 +69,10 @@ export default function Calendar({
               >
                 {day.day}
               </div>
-              <Session />
+              {sessionsToday &&
+                sessionsToday.map((session, i) => {
+                  return <SessionItem key={i} session={session} />
+                })}
             </GridSquare>
           )
         })}

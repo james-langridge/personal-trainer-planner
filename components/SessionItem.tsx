@@ -1,8 +1,9 @@
 'use client'
 
 import React from 'react'
+import {Session} from '@prisma/client'
 
-export default function Session() {
+export default function SessionItem({session}: {session?: Session}) {
   function clickHandler(event: React.SyntheticEvent) {
     event.stopPropagation()
 
@@ -17,7 +18,7 @@ export default function Session() {
       onClick={clickHandler}
       className="w-full rounded bg-emerald-400 font-bold text-white"
     >
-      {/*Session name*/}
+      {session?.name}
     </div>
   )
 }
