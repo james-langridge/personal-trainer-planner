@@ -1,7 +1,7 @@
-import GridSquare from '@/components/GridSquare'
+import GridSquare from '@/components/calendar/GridSquare'
 import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
 import {Session} from '@prisma/client'
-import SessionItem from '@/components/SessionItem'
+import SessionItem from '@/components/calendar/SessionItem'
 
 export default function Calendar({
   isAdmin = false,

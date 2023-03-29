@@ -1,10 +1,10 @@
 'use client'
 
-import {User} from '@/components/CalendarDropdown'
+import {User} from '@/components/calendar/CalendarDropdown'
 import {useEffect, useState} from 'react'
 import {fetchUser} from '@/lib/api'
-import Calendar from '@/components/Calendar'
-import Sidebar from '@/components/Sidebar'
+import Calendar from '@/components/calendar/Calendar'
+import Sidebar from '@/components/calendar/Sidebar'
 import {Session} from '@prisma/client'
 
 export default function TrainingPlanner() {

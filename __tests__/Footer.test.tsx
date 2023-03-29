@@ -1,6 +1,6 @@
 import React from 'react'
 import {render} from '@testing-library/react'
-import Footer from '../components/Footer'
+import Footer from '../components/contentful/Footer'
 import '@testing-library/jest-dom'
 describe('Footer', () => {
   const leftText = {

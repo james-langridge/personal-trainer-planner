@@ -1,8 +1,8 @@
 import '../styles/globals.css'
-import Navbar from '@/components/Navbar'
+import Navbar from '@/components/contentful/Navbar'
 import {getFooter, getNavbar} from '@/lib/contentful'
 import React from 'react'
-import Footer from '@/components/Footer'
+import Footer from '@/components/contentful/Footer'
 
 export const metadata = {
   title: 'Fit For Life Trainer',

@@ -1,5 +1,5 @@
-import CalendarForm from '@/components/CalendarForm'
-import CalendarDropdown, {User} from '@/components/CalendarDropdown'
+import CalendarForm from '@/components/calendar/CalendarForm'
+import CalendarDropdown, {User} from '@/components/calendar/CalendarDropdown'
 import React from 'react'
 
 export default function Sidebar({
