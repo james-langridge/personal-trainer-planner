@@ -50,11 +50,17 @@ export function getSessionsToday(
     `${calendarDay.year}-${calendarDay.month + 1}-${calendarDay.day}`,
   )
 
-  return sessions.map(session => {
+  const sessionsMap = sessions.map(session => {
+    if (session.deleted) {
+      return
+    }
+
     const sessionDate = new Date(session.date)
 
     if (areDatesEqual(calendarDate, sessionDate)) {
       return session
     }
   })
+
+  return sessionsMap.filter(Boolean)
 }

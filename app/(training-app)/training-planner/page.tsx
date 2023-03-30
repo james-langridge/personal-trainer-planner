@@ -10,6 +10,7 @@ import {Session} from '@prisma/client'
 export default function TrainingPlanner() {
   const [user, setUser] = useState<User>()
   const [sessions, setSessions] = useState<Session[]>()
+  const [sessionId, setSessionId] = useState('')
 
   useEffect(() => {
     const getUserSessions = async () => {
@@ -25,8 +26,8 @@ export default function TrainingPlanner() {
 
   return (
     <div className="flex">
-      <Sidebar setUser={setUser} user={user} />
-      <Calendar sessions={sessions} isAdmin />
+      <Sidebar setUser={setUser} user={user} sessionId={sessionId} />
+      <Calendar sessions={sessions} isAdmin setSessionId={setSessionId} />
     </div>
   )
 }

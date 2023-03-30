@@ -2,15 +2,18 @@ import GridSquare from '@/components/calendar/GridSquare'
 import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
 import {Session} from '@prisma/client'
 import SessionItem from '@/components/calendar/SessionItem'
+import React from 'react'
 
 export default function Calendar({
   isAdmin = false,
   sessions,
   username,
+  setSessionId,
 }: {
   isAdmin?: boolean
   sessions?: Session[]
   username?: string
+  setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
   const now = new Date()
   const year = now.getFullYear()
@@ -71,7 +74,14 @@ export default function Calendar({
               </div>
               {sessionsToday &&
                 sessionsToday.map((session, i) => {
-                  return <SessionItem key={i} session={session} />
+                  return (
+                    <SessionItem
+                      key={i}
+                      session={session}
+                      isAdmin={isAdmin}
+                      setSessionId={setSessionId}
+                    />
+                  )
                 })}
             </GridSquare>
           )

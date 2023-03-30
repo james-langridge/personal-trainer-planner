@@ -22,6 +22,18 @@ const createSessionContent = {
   resolved: 'Session created successfully',
 }
 
+const updateSessionContent = {
+  pending: 'Updating session...',
+  error: 'Error updating session:',
+  resolved: 'Session updated successfully',
+}
+
+const deleteSessionContent = {
+  pending: 'Deleting session...',
+  error: 'Error deleting session:',
+  resolved: 'Session deleted successfully',
+}
+
 export default function Info({
   status,
   error,
@@ -29,7 +41,13 @@ export default function Info({
 }: {
   status: string
   error: null | Error
-  mode: 'login' | 'contact' | 'register' | 'createSession'
+  mode:
+    | 'login'
+    | 'contact'
+    | 'register'
+    | 'createSession'
+    | 'updateSession'
+    | 'deleteSession'
 }) {
   if (status === 'idle') {
     return null
@@ -49,6 +67,12 @@ export default function Info({
       break
     case 'createSession':
       content = createSessionContent
+      break
+    case 'updateSession':
+      content = updateSessionContent
+      break
+    case 'deleteSession':
+      content = deleteSessionContent
       break
   }
 
