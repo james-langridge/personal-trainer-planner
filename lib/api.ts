@@ -87,6 +87,13 @@ export const fetchSession = async (id: string): Promise<Session> => {
   })
 }
 
+export const fetchSessions = async (id: string): Promise<Session[]> => {
+  return fetcher({
+    url: `/api/sessions/${id}`,
+    method: 'get',
+  })
+}
+
 export const createSession = async (body: {
   ownerId: string
   date: string
