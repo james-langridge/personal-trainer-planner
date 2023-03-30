@@ -9,6 +9,9 @@ const getSessions = async () => {
   const sessions = await db.session.findMany({
     where: {
       ownerId: user?.id,
+      NOT: {
+        deleted: true,
+      },
     },
   })
 
