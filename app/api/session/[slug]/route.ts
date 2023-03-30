@@ -4,7 +4,6 @@ import {NextRequest, NextResponse} from 'next/server'
 export async function GET(
   req: NextRequest,
   {params}: {params: {slug: string}},
-  res: NextResponse,
 ) {
   const id = params.slug
   const session = await db.session.findUnique({

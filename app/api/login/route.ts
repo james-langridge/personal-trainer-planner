@@ -1,10 +1,9 @@
-import {NextApiResponse} from 'next'
 import {db} from '@/lib/db'
 import {comparePasswords, createJWT} from '@/lib/auth'
 import {serialize} from 'cookie'
 import {NextRequest, NextResponse} from 'next/server'
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   const body = await req.json()
 
   const user = await db.user.findUnique({
