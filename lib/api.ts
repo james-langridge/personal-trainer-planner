@@ -52,6 +52,14 @@ export const login = async (body: {email: string; password: string}) => {
   })
 }
 
+export const logout = async () => {
+  return fetcher({
+    url: '/api/logout',
+    method: 'get',
+    json: false,
+  })
+}
+
 export const register = async (body: {
   firstName: string
   lastName: string

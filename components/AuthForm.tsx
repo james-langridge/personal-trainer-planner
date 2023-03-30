@@ -52,6 +52,8 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             ...initialState,
             status: 'resolved',
           })
+
+          router.refresh()
         } else {
           await login(form)
 
@@ -60,7 +62,8 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             status: 'resolved',
           })
 
-          router.replace('/training-studio')
+          router.refresh()
+          router.push('/training-studio')
         }
       } catch (error) {
         setState({
