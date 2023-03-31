@@ -1,3 +1,5 @@
+import {useState} from 'react'
+
 const contactContent = {
   pending: 'Sending message...',
   error: 'Error sending message:',
@@ -49,9 +51,8 @@ export default function Info({
     | 'updateSession'
     | 'deleteSession'
 }) {
-  if (status === 'idle') {
-    return null
-  }
+  const [visible, setVisible] = useState(true)
+  const toggleVisible = () => setVisible(visible => !visible)
 
   let content
 
@@ -76,39 +77,52 @@ export default function Info({
       break
   }
 
-  if (status === 'pending') {
-    return (
-      <div
-        role="alert"
-        className="mt-4 rounded bg-yellow-600 p-2.5 text-center text-white"
-      >
-        {content.pending}
-      </div>
-    )
+  let element = null
+
+  switch (status) {
+    case 'pending':
+      if (!visible) toggleVisible()
+
+      element = (
+        <div
+          role="alert"
+          className="mt-4 rounded bg-yellow-600 p-2.5 text-center text-white"
+        >
+          {content.pending}
+        </div>
+      )
+      break
+    case 'rejected':
+      element = (
+        <div
+          role="alert"
+          className="mt-4 rounded bg-red-700 p-2.5 text-center text-white"
+        >
+          {content.error}{' '}
+          <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
+        </div>
+      )
+      break
+    case 'resolved':
+      element = (
+        <div
+          role="alert"
+          className="mt-4 rounded bg-green-700 p-2.5 text-center text-white"
+        >
+          {content.resolved}
+        </div>
+      )
+      break
   }
 
-  if (status === 'rejected') {
-    return (
-      <div
-        role="alert"
-        className="mt-4 rounded bg-red-700 p-2.5 text-center text-white"
-      >
-        {content.error}{' '}
-        <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
-      </div>
-    )
-  }
-
-  if (status === 'resolved') {
-    return (
-      <div
-        role="alert"
-        className="mt-4 rounded bg-green-700 p-2.5 text-center text-white"
-      >
-        {content.resolved}
-      </div>
-    )
-  }
-
-  return null
+  return visible ? (
+    <div
+      role="button"
+      onKeyDown={toggleVisible}
+      tabIndex={0}
+      onClick={toggleVisible}
+    >
+      {element}
+    </div>
+  ) : null
 }
