@@ -40,7 +40,7 @@ export default function CalendarGrid({
         emptyDays.map((day, i) => {
           return (
             <div className="text-center" key={i}>
-              <div>{dayNames[i]}</div>
+              <div className="text-xs lg:text-base">{dayNames[i]}</div>
             </div>
           )
         })}
@@ -62,10 +62,12 @@ export default function CalendarGrid({
 
         return (
           <div className="text-center" key={day.day}>
-            {index + firstDayOfMonth < 7 && <div>{weekday}</div>}
+            {index + firstDayOfMonth < 7 && (
+              <div className="text-xs lg:text-base">{weekday}</div>
+            )}
             <div
               className={
-                'mx-auto w-8 rounded-full p-1' +
+                'mx-auto w-6 rounded-full p-1 text-xs lg:w-8 lg:text-base' +
                 (isToday ? ` bg-blue-900 text-white` : '')
               }
             >

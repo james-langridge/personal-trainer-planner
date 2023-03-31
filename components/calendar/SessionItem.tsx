@@ -32,7 +32,7 @@ export default function SessionItem({
           tabIndex={0}
           onKeyDown={onClick}
           onClick={onClick}
-          className="my-1 mr-2 rounded bg-emerald-400 font-bold text-white"
+          className="my-1 mr-2 rounded bg-emerald-400 text-xs font-bold text-white lg:text-base"
           id={session?.id}
         >
           {session?.name}
@@ -42,7 +42,7 @@ export default function SessionItem({
       {!isAdmin && (
         <Link
           href={`/session/${session?.id}`}
-          className="my-1 mr-2 block rounded bg-emerald-400 font-bold text-white"
+          className="my-1 mr-2 block rounded bg-emerald-400 text-xs font-bold text-white lg:text-base"
         >
           {session?.name}
         </Link>
