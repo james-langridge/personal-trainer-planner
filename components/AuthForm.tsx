@@ -60,7 +60,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             status: 'resolved',
           })
 
-          router.push('/training-studio')
+          router.refresh()
         }
       } catch (error) {
         setState({
