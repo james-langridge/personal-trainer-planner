@@ -6,6 +6,12 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)'],
       },
+      gridTemplateRows: {
+        calendar: 'repeat(5, 1fr)',
+      },
+      gridTemplateColumns: {
+        calendar: 'repeat(7, 1fr)',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],

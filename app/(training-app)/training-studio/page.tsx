@@ -15,12 +15,11 @@ const getSessions = async () => {
     },
   })
 
-  return {sessions, user}
+  return {sessions}
 }
 
 export default async function TrainingStudio() {
-  const {sessions, user} = await getSessions()
-  const username = `${user?.firstName || ''} ${user?.lastName || ''}`
+  const {sessions} = await getSessions()
 
-  return <Calendar username={username} sessions={sessions} />
+  return <Calendar sessions={sessions} />
 }

@@ -1,92 +1,38 @@
-import GridSquare from '@/components/calendar/GridSquare'
-import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
+'use client'
+
 import {Session} from '@prisma/client'
-import SessionItem from '@/components/calendar/SessionItem'
-import React from 'react'
+import React, {useState} from 'react'
+import CalendarHeading from '@/components/calendar/CalendarHeading'
+import CalendarGrid from '@/components/calendar/CalendarGrid'
 
 export default function Calendar({
   isAdmin = false,
   sessions,
-  username,
   setSessionId,
 }: {
   isAdmin?: boolean
   sessions?: Session[]
-  username?: string
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
   const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth()
-  const monthData = generateCalendarMonth(month, year)
-  const monthName = now.toLocaleString('default', {month: 'long'})
-  const firstDayOfMonth = monthData[0].weekDay
-  const emptyDays = Array(firstDayOfMonth).fill(null)
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const [year, setYear] = useState(() => now.getFullYear())
+  const [month, setMonth] = useState(() => now.getMonth())
 
   return (
-    <div className="flex flex-wrap">
-      <div className="w-full p-5">
-        <div className="prose prose-xl">
-          {!isAdmin && <h2>Welcome back, {username}</h2>}
-          <h3>
-            {monthName} {year}
-          </h3>
-        </div>
-      </div>
-      <div className="grid w-full grid-cols-7 grid-rows-5 divide-x divide-y">
-        {emptyDays &&
-          emptyDays.map((day, i) => {
-            return (
-              <GridSquare key={i}>
-                <div>{dayNames[i]}</div>
-              </GridSquare>
-            )
-          })}
-
-        {monthData.map((day, index) => {
-          const weekday = new Date(year, month, day.day).toLocaleString(
-            'default',
-            {
-              weekday: 'short',
-            },
-          )
-
-          const sessionsToday = sessions
-            ? getSessionsToday(sessions, day)
-            : null
-
-          const isToday =
-            day.day === now.getDate() &&
-            day.month === month &&
-            day.year === year
-
-          return (
-            <GridSquare key={day.day}>
-              {index + firstDayOfMonth < 7 && <div>{weekday}</div>}
-              <div
-                className={
-                  'mx-auto w-8 rounded-full p-1' +
-                  (isToday ? ` bg-blue-900 text-white` : '')
-                }
-              >
-                {day.day}
-              </div>
-              {sessionsToday &&
-                sessionsToday.map((session, i) => {
-                  return (
-                    <SessionItem
-                      key={i}
-                      session={session}
-                      isAdmin={isAdmin}
-                      setSessionId={setSessionId}
-                    />
-                  )
-                })}
-            </GridSquare>
-          )
-        })}
-      </div>
+    <div className="flex w-full flex-col items-center">
+      <CalendarHeading
+        year={year}
+        setYear={setYear}
+        month={month}
+        setMonth={setMonth}
+      />
+      <CalendarGrid
+        year={year}
+        month={month}
+        sessions={sessions}
+        isAdmin={isAdmin}
+        setSessionId={setSessionId}
+      />
     </div>
   )
 }
