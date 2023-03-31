@@ -158,6 +158,21 @@ export default function Navbar({navigation, logo, isAdmin, isLoggedIn}: Props) {
                           )}
                         </Menu.Item>
                       )}
+                      {isAdmin && (
+                        <Menu.Item>
+                          {({active}) => (
+                            <Link
+                              href="/register"
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700',
+                              )}
+                            >
+                              Register client
+                            </Link>
+                          )}
+                        </Menu.Item>
+                      )}
                       {isLoggedIn && (
                         <Menu.Item>
                           {({active}) => (
