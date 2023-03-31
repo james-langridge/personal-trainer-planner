@@ -142,8 +142,9 @@ export default function CalendarForm({
     <>
       <form onSubmit={handleSubmit}>
         <input type="hidden" value={sessionId} />
-        <input type="hidden" value={userId} />
+        <input required type="hidden" value={userId} />
         <input
+          required
           onChange={e =>
             setState(state => ({
               ...state,
@@ -156,6 +157,7 @@ export default function CalendarForm({
           value={form.date}
         />
         <input
+          required
           onChange={e =>
             setState(state => ({
               ...state,
@@ -193,8 +195,9 @@ export default function CalendarForm({
         />
         <Info status={status} error={error} mode={mode} />
         <button
+          disabled={!userId}
           type="submit"
-          className="mt-4 w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+          className="mt-4 w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 enabled:hover:bg-blue-400"
         >
           {state.form.sessionId ? 'Update' : 'Create'}
         </button>
