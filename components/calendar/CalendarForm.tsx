@@ -98,10 +98,14 @@ export default function CalendarForm({
         status: 'resolved',
       })
 
+      // FIXME: make page fetch updated sessions in calendar
+      // router.refresh() should refresh (fetch updated data and re-render on the server)
+      // the current route from the root layout down?
+      // https://beta.nextjs.org/docs/data-fetching/mutating
       router.refresh()
     } catch (error) {
       setState({
-        ...initialState,
+        ...state,
         status: 'rejected',
         error: error as Error,
       })
@@ -124,10 +128,14 @@ export default function CalendarForm({
         status: 'resolved',
       })
 
+      // FIXME: make page fetch updated sessions in calendar
+      // router.refresh() should refresh (fetch updated data and re-render on the server)
+      // the current route from the root layout down?
+      // https://beta.nextjs.org/docs/data-fetching/mutating
       router.refresh()
     } catch (error) {
       setState({
-        ...initialState,
+        ...state,
         status: 'rejected',
         error: error as Error,
       })
