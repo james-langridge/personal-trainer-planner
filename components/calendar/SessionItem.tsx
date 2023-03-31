@@ -31,7 +31,7 @@ export default function SessionItem({
           tabIndex={0}
           onKeyDown={onClick}
           onClick={onClick}
-          className="m-1 w-5/6 rounded bg-emerald-400 font-bold text-white"
+          className="my-1 mr-2 rounded bg-emerald-400 font-bold text-white"
           id={session?.id}
         >
           {session?.name}
