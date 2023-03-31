@@ -42,7 +42,7 @@ export default function SessionItem({
       {!isAdmin && (
         <Link
           href={`/session/${session?.id}`}
-          className="m-1 w-5/6 rounded bg-emerald-400 font-bold text-white"
+          className="my-1 mr-2 block rounded bg-emerald-400 font-bold text-white"
         >
           {session?.name}
         </Link>
