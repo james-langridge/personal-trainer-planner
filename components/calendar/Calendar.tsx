@@ -4,6 +4,7 @@ import {Session} from '@prisma/client'
 import React, {useState} from 'react'
 import CalendarHeading from '@/components/calendar/CalendarHeading'
 import CalendarGrid from '@/components/calendar/CalendarGrid'
+import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 
 export default function Calendar({
   isAdmin = false,
@@ -11,7 +12,7 @@ export default function Calendar({
   setSessionId,
 }: {
   isAdmin?: boolean
-  sessions?: Session[]
+  sessions?: Session[] | SessionSerialisedDate[]
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
   const now = new Date()

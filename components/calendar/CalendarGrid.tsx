@@ -2,6 +2,7 @@ import React from 'react'
 import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
 import SessionItem from '@/components/calendar/SessionItem'
 import {Session} from '@prisma/client'
+import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -18,7 +19,7 @@ export default function CalendarGrid({
 }: {
   year: number
   month: number
-  sessions?: Session[]
+  sessions?: Session[] | SessionSerialisedDate[]
   isAdmin: boolean
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {

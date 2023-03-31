@@ -1,13 +1,14 @@
 import {Session} from '@prisma/client'
 import Link from 'next/link'
 import React from 'react'
+import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 
 export default function SessionItem({
   session,
   isAdmin,
   setSessionId,
 }: {
-  session?: Session
+  session?: Session | SessionSerialisedDate
   isAdmin: boolean
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
