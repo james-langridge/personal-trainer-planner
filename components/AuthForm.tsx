@@ -52,22 +52,19 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             ...initialState,
             status: 'resolved',
           })
-
-          router.refresh()
         } else {
           await login(form)
 
           setState({
-            ...initialState,
+            ...state,
             status: 'resolved',
           })
 
-          router.refresh()
           router.push('/training-studio')
         }
       } catch (error) {
         setState({
-          ...initialState,
+          ...state,
           status: 'rejected',
           error: error as Error,
         })
@@ -112,6 +109,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
                 </span>
 
                 <input
+                  required
                   onChange={e =>
                     setState(state => ({
                       ...state,
@@ -121,6 +119,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
                   type="text"
                   className="block w-full rounded-lg border bg-white py-3 px-11 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
                   placeholder="First name"
+                  value={form.firstName}
                 />
               </div>
 
@@ -143,6 +142,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
                 </span>
 
                 <input
+                  required
                   onChange={e =>
                     setState(state => ({
                       ...state,
@@ -152,6 +152,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
                   type="text"
                   className="block w-full rounded-lg border bg-white py-3 px-11 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
                   placeholder="Last name"
+                  value={form.lastName}
                 />
               </div>
             </>
@@ -176,6 +177,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             </span>
 
             <input
+              required
               onChange={e =>
                 setState(state => ({
                   ...state,
@@ -185,6 +187,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
               type="email"
               className="block w-full rounded-lg border bg-white py-3 px-11 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
               placeholder="Email address"
+              value={form.email}
             />
           </div>
 
@@ -207,6 +210,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             </span>
 
             <input
+              required
               onChange={e =>
                 setState(state => ({
                   ...state,
@@ -216,6 +220,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
               type="password"
               className="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
               placeholder="Password"
+              value={form.password}
             />
           </div>
 
