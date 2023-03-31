@@ -3,6 +3,10 @@ import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
 import SessionItem from '@/components/calendar/SessionItem'
 import {Session} from '@prisma/client'
 
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
+
 const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export default function CalendarGrid({
@@ -22,9 +26,15 @@ export default function CalendarGrid({
   const monthData = generateCalendarMonth(month, year)
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDays = Array(firstDayOfMonth).fill(null)
+  const calendarSquares = firstDayOfMonth + monthData.length
 
   return (
-    <div className="grid h-full w-full grid-cols-calendar grid-rows-calendar divide-x divide-y">
+    <div
+      className={classNames(
+        calendarSquares > 35 ? 'grid-rows-calendar-6' : 'grid-rows-calendar-5',
+        'grid h-full w-full grid-cols-calendar  divide-x divide-y',
+      )}
+    >
       {emptyDays &&
         emptyDays.map((day, i) => {
           return (

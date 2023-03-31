@@ -7,7 +7,8 @@ module.exports = {
         sans: ['var(--font-inter)'],
       },
       gridTemplateRows: {
-        calendar: 'repeat(5, 1fr)',
+        'calendar-5': 'repeat(5, 1fr)',
+        'calendar-6': 'repeat(6, 1fr)',
       },
       gridTemplateColumns: {
         calendar: 'repeat(7, 1fr)',
