@@ -131,21 +131,4 @@ export default async function middleware(req: NextRequest) {
       }
     }
   }
-
-  if (pathname.startsWith('/logout')) {
-    const response = NextResponse.next()
-
-    if (!process.env.COOKIE_NAME) {
-      throw new Error('COOKIE_NAME environment variable is not defined')
-    }
-
-    response.cookies.set({
-      name: process.env.COOKIE_NAME,
-      value: '',
-      maxAge: -1,
-      path: '/',
-    })
-
-    return response
-  }
 }

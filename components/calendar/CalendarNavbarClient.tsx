@@ -1,10 +1,11 @@
 'use client'
 
-import {Disclosure, Menu} from '@headlessui/react'
+import {Disclosure} from '@headlessui/react'
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import Image from 'next/image'
 import {useRouter} from 'next/navigation'
+import {logout} from '@/lib/api'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -31,7 +32,7 @@ export default function CalendarNavbarClient({logo, isAdmin}: Props) {
   const navigation = isAdmin ? adminNavigation : []
 
   async function handleLogOut() {
-    await fetch('/logout')
+    await logout({key: 'static_key'})
 
     router.push('/')
   }

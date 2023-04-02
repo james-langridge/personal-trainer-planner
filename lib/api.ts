@@ -52,10 +52,11 @@ export const login = async (body: {email: string; password: string}) => {
   })
 }
 
-export const logout = async () => {
+export const logout = async (body: {key: string}) => {
   return fetcher({
     url: '/api/logout',
-    method: 'get',
+    method: 'post',
+    body,
     json: false,
   })
 }

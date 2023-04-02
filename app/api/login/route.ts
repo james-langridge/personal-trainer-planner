@@ -27,8 +27,10 @@ export async function POST(req: NextRequest) {
     const jwt = await createJWT(user)
     const cookie = serialize(process.env.COOKIE_NAME || '', jwt, {
       httpOnly: true,
-      path: '/',
       maxAge: 60 * 60 * 24 * 7,
+      path: '/',
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV !== 'development',
     })
 
     return NextResponse.json(
