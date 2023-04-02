@@ -87,9 +87,18 @@ export default async function middleware(req: NextRequest) {
     const isAdmin = await getAdminRightsFromCookie(req.cookies)
 
     if (!isAdmin) {
-      req.nextUrl.pathname = '/training-studio'
+      try {
+        await verifyJWT(jwt.value)
 
-      return NextResponse.redirect(req.nextUrl)
+        req.nextUrl.pathname = '/training-studio'
+
+        return NextResponse.redirect(req.nextUrl)
+      } catch (e) {
+        console.error(e)
+        req.nextUrl.pathname = '/login'
+
+        return NextResponse.redirect(req.nextUrl)
+      }
     }
 
     try {
@@ -110,9 +119,33 @@ export default async function middleware(req: NextRequest) {
     if (!jwt) {
       return NextResponse.next()
     } else {
-      req.nextUrl.pathname = '/training-studio'
+      try {
+        await verifyJWT(jwt.value)
 
-      return NextResponse.redirect(req.nextUrl)
+        req.nextUrl.pathname = '/training-studio'
+
+        return NextResponse.redirect(req.nextUrl)
+      } catch (e) {
+        console.error(e)
+        return NextResponse.next()
+      }
     }
+  }
+
+  if (pathname.startsWith('/logout')) {
+    const response = NextResponse.next()
+
+    if (!process.env.COOKIE_NAME) {
+      throw new Error('COOKIE_NAME environment variable is not defined')
+    }
+
+    response.cookies.set({
+      name: process.env.COOKIE_NAME,
+      value: '',
+      maxAge: -1,
+      path: '/',
+    })
+
+    return response
   }
 }

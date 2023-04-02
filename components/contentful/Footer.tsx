@@ -1,13 +1,10 @@
-import {IFooterFields} from '@/@types/generated/contentful'
 import Link from 'next/link'
 import React from 'react'
-import {getBlogPosts} from '@/lib/contentful'
+import {getBlogPosts, getFooter} from '@/lib/contentful'
 
-export interface Props {
-  props: IFooterFields
-}
+async function Footer() {
+  const {items} = await getFooter()
 
-async function Footer({props}: Props) {
   const {
     leftText,
     withBlogPosts,
@@ -16,7 +13,7 @@ async function Footer({props}: Props) {
     contactSectionHeading,
     contactEmail,
     contactPhone,
-  } = props
+  } = items[0].fields
 
   let blogPostLinksToRender = null
 

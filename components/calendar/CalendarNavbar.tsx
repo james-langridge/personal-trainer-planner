@@ -1,7 +1,7 @@
-import NavbarClient from '@/components/contentful/NavbarClient'
+import CalendarNavbarClient from '@/components/calendar/CalendarNavbarClient'
 import {getNavbar} from '@/lib/contentful'
 
-export default async function Navbar() {
+export default async function CalendarNavbar({isAdmin}: {isAdmin: boolean}) {
   const {fields} = await getNavbar()
   const logoFields = fields.logo.fields
   const navbarLogo = {
@@ -10,9 +10,6 @@ export default async function Navbar() {
     width: logoFields.file.details.image?.width,
     height: logoFields.file.details.image?.height,
   }
-  const navigation = fields.navbarItems?.map(item => {
-    return {name: item.fields.label, href: item.fields.link, current: false}
-  })
 
-  return <NavbarClient navigation={navigation} logo={navbarLogo} />
+  return <CalendarNavbarClient logo={navbarLogo} isAdmin={isAdmin} />
 }

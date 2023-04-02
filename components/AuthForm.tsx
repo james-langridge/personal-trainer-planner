@@ -60,7 +60,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             status: 'resolved',
           })
 
-          router.refresh()
+          router.push('/training-studio')
         }
       } catch (error) {
         setState({
@@ -77,13 +77,15 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
     <section className="bg-white dark:bg-gray-900">
       <div className="container mx-auto mt-5 flex items-center justify-center px-6 sm:mt-20 ">
         <form className="w-full max-w-md" onSubmit={handleSubmit}>
-          <Image
-            className="h-7 w-auto sm:h-8"
-            src="https://images.ctfassets.net/5ct6f2q9wwt3/2dQg3rHxURIhQCjK3Oxds2/10460c53028ab886bd8a1c925459cf53/FFLTrainer-logo-V1.png"
-            alt=""
-            width={300}
-            height={138}
-          />
+          <Link href="/">
+            <Image
+              className="h-7 w-auto sm:h-8"
+              src="https://images.ctfassets.net/5ct6f2q9wwt3/2dQg3rHxURIhQCjK3Oxds2/10460c53028ab886bd8a1c925459cf53/FFLTrainer-logo-V1.png"
+              alt=""
+              width={300}
+              height={138}
+            />
+          </Link>
 
           <h1 className="mt-3 text-2xl font-semibold capitalize text-gray-800 dark:text-white sm:text-3xl">
             {content.header}

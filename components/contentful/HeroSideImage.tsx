@@ -38,6 +38,9 @@ export default function HeroSideImage({entry}: Props) {
                 {leftButtonCta}
               </Link>
               <Link
+                // TODO: move prefetch and target options to contentful
+                target="_blank"
+                prefetch={false}
                 href={rightButtonLink}
                 className="block transform rounded-md bg-gray-200 px-5 py-2 text-center text-sm font-medium tracking-wider text-gray-700 transition-colors duration-300 hover:bg-gray-300 lg:mx-4"
               >
