@@ -33,13 +33,13 @@ export default function CalendarGrid({
     <div
       className={classNames(
         calendarSquares > 35 ? 'grid-rows-calendar-6' : 'grid-rows-calendar-5',
-        'grid h-full w-full grid-cols-calendar  divide-x divide-y',
+        'grid h-full w-full grid-cols-calendar ring-offset-1',
       )}
     >
       {emptyDays &&
         emptyDays.map((day, i) => {
           return (
-            <div className="text-center" key={i}>
+            <div className="border text-center ring-1 ring-gray-400/25" key={i}>
               <div className="text-xs lg:text-base">{dayNames[i]}</div>
             </div>
           )
@@ -61,7 +61,10 @@ export default function CalendarGrid({
           day.year === now.getFullYear()
 
         return (
-          <div className="text-center" key={day.day}>
+          <div
+            className="border text-center ring-1 ring-gray-400/25"
+            key={day.day}
+          >
             {index + firstDayOfMonth < 7 && (
               <div className="text-xs lg:text-base">{weekday}</div>
             )}
