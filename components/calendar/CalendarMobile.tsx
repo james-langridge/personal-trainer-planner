@@ -1,89 +1,96 @@
+import React, {useState, useEffect, useCallback, useRef} from 'react'
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
-import React, {useEffect, useRef} from 'react'
 import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
-import Link from 'next/link'
+import DayMobile from '@/components/calendar/DayMobile'
+import useIntersectionObserver from '@/lib/useIntersectionObserver'
 
-export default function CalendarMobile({
+const InfiniteScrollCalendar = ({
   sessions,
 }: {
   sessions?: Session[] | SessionSerialisedDate[]
-}) {
+}) => {
   const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth()
-  const monthData = generateCalendarMonth(month, year)
-  const myRef = useRef<HTMLDivElement>(null)
+  const [startYear, setStartYear] = useState(() => now.getFullYear())
+  const [endYear, setEndYear] = useState(startYear)
+  const [startMonth, setStartMonth] = useState(() => now.getMonth())
+  const [endMonth, setEndMonth] = useState(startMonth)
+  const [data, setData] = useState(() =>
+    generateCalendarMonth(startMonth, startYear),
+  )
+  const startElementRef = useRef(null)
+  const endElementRef = useRef(null)
+  const startEntry = useIntersectionObserver(startElementRef, {})
+  const endEntry = useIntersectionObserver(endElementRef, {})
+  const isStartVisible = !!startEntry?.isIntersecting
+  const isEndVisible = !!endEntry?.isIntersecting
+
+  const loadNextMonth = useCallback(() => {
+    if (endMonth === 11) {
+      const newMonth = 0
+      const newYear = endYear + 1
+
+      setData(prevData => [
+        ...prevData,
+        ...generateCalendarMonth(newMonth, newYear),
+      ])
+      setEndMonth(newMonth)
+      setEndYear(newYear)
+    } else {
+      const newMonth = endMonth + 1
+
+      setData(prevData => [
+        ...prevData,
+        ...generateCalendarMonth(newMonth, endYear),
+      ])
+      setEndMonth(newMonth)
+    }
+  }, [endMonth, endYear])
+
+  const loadPreviousMonth = useCallback(() => {
+    if (startMonth === 0) {
+      const newMonth = 11
+      const newYear = startYear - 1
+
+      setData(prevData => [
+        ...generateCalendarMonth(newMonth, newYear),
+        ...prevData,
+      ])
+      setStartMonth(newMonth)
+      setStartYear(newYear)
+    } else {
+      const newMonth = startMonth - 1
+
+      setData(prevData => [
+        ...generateCalendarMonth(newMonth, startYear),
+        ...prevData,
+      ])
+      setStartMonth(newMonth)
+    }
+  }, [startMonth, startYear])
 
   useEffect(() => {
-    myRef.current?.scrollIntoView()
-  }, [])
+    if (isEndVisible) loadNextMonth()
+    if (isStartVisible) loadPreviousMonth()
+  }, [isStartVisible, isEndVisible, loadNextMonth, loadPreviousMonth])
 
   return (
     <div className="p-5">
-      {monthData.map(day => {
-        const weekday = new Date(year, month, day.day).toLocaleString(
-          'default',
-          {
-            weekday: 'long',
-          },
-        )
-
-        const monthname = new Date(year, month, day.day).toLocaleString(
-          'default',
-          {
-            month: 'short',
-          },
-        )
-
+      <div ref={startElementRef}></div>
+      {data.map(day => {
         const sessionsToday = sessions ? getSessionsToday(sessions, day) : null
 
-        const isToday =
-          day.day === now.getDate() &&
-          day.month === now.getMonth() &&
-          day.year === now.getFullYear()
-
-        const isTomorrow =
-          day.day === now.getDate() + 1 &&
-          day.month === now.getMonth() &&
-          day.year === now.getFullYear()
-
         return (
-          <div
-            key={day.day}
-            ref={isToday ? myRef : null}
-            className={isToday ? 'scroll-mt-16' : ''}
-          >
-            <hr className="my-6 h-px border-none bg-gray-900 dark:bg-gray-700" />
-            <div className="mb-2 flex justify-between text-sm text-gray-500">
-              <div className="font-bold">{weekday}</div>
-              <div>
-                {isToday
-                  ? 'Today'
-                  : isTomorrow
-                  ? 'Tomorrow'
-                  : day.day + ' ' + monthname}
-              </div>
-            </div>
-            {sessionsToday &&
-              sessionsToday.map((session, i) => {
-                return (
-                  <div key={session?.id}>
-                    <Link
-                      href={`/session/${session?.id}`}
-                      className="my-1 block"
-                    >
-                      {session?.name}
-                    </Link>
-                    {i < sessionsToday.length - 1 && (
-                      <hr className="my-4 h-px border-none bg-gray-200 dark:bg-gray-700" />
-                    )}
-                  </div>
-                )
-              })}
-          </div>
+          <DayMobile
+            key={`${day.day}-${day.month}-${day.year}`}
+            dayData={day}
+            sessionsToday={sessionsToday}
+          />
         )
       })}
+      <div ref={endElementRef}></div>
     </div>
   )
 }
+
+export default InfiniteScrollCalendar

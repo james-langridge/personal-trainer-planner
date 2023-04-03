@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
 import SessionItem from '@/components/calendar/SessionItem'
 import {Session} from '@prisma/client'
@@ -24,7 +24,10 @@ export default function CalendarGrid({
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
   const now = new Date()
-  const monthData = generateCalendarMonth(month, year)
+  const monthData = useMemo(
+    () => generateCalendarMonth(month, year),
+    [month, year],
+  )
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDays = Array(firstDayOfMonth).fill(null)
   const calendarSquares = firstDayOfMonth + monthData.length
