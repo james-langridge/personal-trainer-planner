@@ -78,10 +78,10 @@ export default function CalendarGrid({
               {day.day}
             </div>
             {sessionsToday &&
-              sessionsToday.map((session, i) => {
+              sessionsToday.map(session => {
                 return (
                   <SessionItem
-                    key={i}
+                    key={session?.id}
                     session={session}
                     isAdmin={isAdmin}
                     setSessionId={setSessionId}
