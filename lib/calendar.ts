@@ -48,7 +48,10 @@ export function getSessionsToday(
   }
 
   const calendarDate = new Date(
-    `${calendarDay.year}-${calendarDay.month + 1}-${calendarDay.day}`,
+    `${calendarDay.year}-${String(calendarDay.month + 1).padStart(
+      2,
+      '0',
+    )}-${String(calendarDay.day).padStart(2, '0')}`,
   )
 
   const sessionsMap = sessions.map(session => {
