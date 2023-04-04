@@ -1,6 +1,5 @@
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
-import {Day} from '@/components/calendar/CalendarMobile'
 
 function getDaysInMonth(month: number, year: number) {
   return new Date(year, month + 1, 0).getDate()
@@ -70,6 +69,13 @@ export function getSessionsToday(
   return sessionsMap.filter(Boolean)
 }
 
+export type Day = {
+  day: number
+  weekDay: number
+  month: number
+  year: number
+}
+
 export function shouldScrollToThisDay(thisDay: Day, scrollToThisDay: Day) {
   const {day, month, year} = thisDay
 
@@ -78,4 +84,50 @@ export function shouldScrollToThisDay(thisDay: Day, scrollToThisDay: Day) {
     scrollToThisDay.year === year &&
     scrollToThisDay.day === day
   )
+}
+
+export function isDayToday(dayData: Day) {
+  const now = new Date()
+  const {day, month, year} = dayData
+
+  return (
+    day === now.getDate() &&
+    month === now.getMonth() &&
+    year === now.getFullYear()
+  )
+}
+
+export function isDayTomorrow(dayData: Day) {
+  const now = new Date()
+  const {day, month, year} = dayData
+
+  return (
+    day === now.getDate() + 1 &&
+    month === now.getMonth() &&
+    year === now.getFullYear()
+  )
+}
+
+export function getLongWeekday(dayData: Day) {
+  const {day, month, year} = dayData
+
+  return new Date(year, month, day).toLocaleString('default', {
+    weekday: 'long',
+  })
+}
+
+export function getShortWeekday(dayData: Day) {
+  const {day, month, year} = dayData
+
+  return new Date(year, month, day).toLocaleString('default', {
+    weekday: 'short',
+  })
+}
+
+export function getMonthName(dayData: Day) {
+  const {day, month, year} = dayData
+
+  return new Date(year, month, day).toLocaleString('default', {
+    month: 'short',
+  })
 }

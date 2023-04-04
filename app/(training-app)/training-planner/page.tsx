@@ -25,7 +25,7 @@ export default function TrainingPlanner() {
   }, [user])
 
   return (
-    <div className="flex h-[70vh]">
+    <div className="flex h-[90vh]">
       <Sidebar setUser={setUser} user={user} sessionId={sessionId} />
       <Calendar sessions={sessions} isAdmin setSessionId={setSessionId} />
     </div>

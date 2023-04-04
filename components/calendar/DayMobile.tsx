@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
-import {Day} from '@/components/calendar/CalendarMobile'
-
-const now = new Date()
-const today = now.getDate()
-const thisMonth = now.getMonth()
-const thisYear = now.getFullYear()
+import {
+  Day,
+  getMonthName,
+  getLongWeekday,
+  isDayToday,
+  isDayTomorrow,
+} from '@/lib/calendar'
 
 export default function DayMobile({
   dayData,
@@ -20,7 +21,7 @@ export default function DayMobile({
 }) {
   const isToday = isDayToday(dayData)
   const isTomorrow = isDayTomorrow(dayData)
-  const weekday = getWeekday(dayData)
+  const weekday = getLongWeekday(dayData)
   const monthName = getMonthName(dayData)
 
   return (
@@ -51,32 +52,4 @@ export default function DayMobile({
         })}
     </div>
   )
-}
-
-export function isDayToday(dayData: Day) {
-  const {day, month, year} = dayData
-
-  return day === today && month === thisMonth && year === thisYear
-}
-
-function isDayTomorrow(dayData: Day) {
-  const {day, month, year} = dayData
-
-  return day === today + 1 && month === thisMonth && year === thisYear
-}
-
-function getWeekday(dayData: Day) {
-  const {day, month, year} = dayData
-
-  return new Date(year, month, day).toLocaleString('default', {
-    weekday: 'long',
-  })
-}
-
-function getMonthName(dayData: Day) {
-  const {day, month, year} = dayData
-
-  return new Date(year, month, day).toLocaleString('default', {
-    month: 'short',
-  })
 }

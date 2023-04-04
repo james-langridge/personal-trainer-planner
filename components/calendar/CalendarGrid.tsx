@@ -1,5 +1,10 @@
 import React, {useMemo} from 'react'
-import {generateCalendarMonth, getSessionsToday} from '@/lib/calendar'
+import {
+  generateCalendarMonth,
+  getSessionsToday,
+  getShortWeekday,
+  isDayToday,
+} from '@/lib/calendar'
 import SessionItem from '@/components/calendar/SessionItem'
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
@@ -23,7 +28,6 @@ export default function CalendarGrid({
   isAdmin: boolean
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
-  const now = new Date()
   const monthData = useMemo(
     () => generateCalendarMonth(month, year),
     [month, year],
@@ -50,19 +54,9 @@ export default function CalendarGrid({
         })}
 
       {monthData.map((day, index) => {
-        const weekday = new Date(year, month, day.day).toLocaleString(
-          'default',
-          {
-            weekday: 'short',
-          },
-        )
-
+        const weekday = getShortWeekday(day)
         const sessionsToday = sessions ? getSessionsToday(sessions, day) : null
-
-        const isToday =
-          day.day === now.getDate() &&
-          day.month === now.getMonth() &&
-          day.year === now.getFullYear()
+        const isToday = isDayToday(day)
 
         return (
           <div

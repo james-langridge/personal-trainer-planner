@@ -1,24 +1,22 @@
 import {useCallback, useState} from 'react'
-import {generateCalendarMonth} from '@/lib/calendar'
-import {Day} from '@/components/calendar/CalendarMobile'
+import {Day, generateCalendarMonth} from '@/lib/calendar'
 
 const now = new Date()
 const today = now.getDate()
+const thisMonth = now.getMonth()
+const thisYear = now.getFullYear()
 
-export default function useCalendarData(
-  initialMonth: number,
-  initialYear: number,
-) {
+export default function useCalendarData() {
   const startDay = {
     day: today,
     weekDay: 0,
-    month: initialMonth,
-    year: initialYear,
+    month: thisMonth,
+    year: thisYear,
   }
-  const [startYear, setStartYear] = useState(() => initialYear)
-  const [endYear, setEndYear] = useState(startYear)
-  const [startMonth, setStartMonth] = useState(() => initialMonth)
-  const [endMonth, setEndMonth] = useState(startMonth)
+  const [startYear, setStartYear] = useState(() => thisYear)
+  const [endYear, setEndYear] = useState(() => thisYear)
+  const [startMonth, setStartMonth] = useState(() => thisMonth)
+  const [endMonth, setEndMonth] = useState(() => thisMonth)
   const [data, setData] = useState<Day[]>(() =>
     generateCalendarMonth(startMonth, startYear),
   )

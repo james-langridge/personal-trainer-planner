@@ -1,19 +1,10 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 import {getSessionsToday, shouldScrollToThisDay} from '@/lib/calendar'
 import DayMobile from '@/components/calendar/DayMobile'
 import useCalendarData from '@/lib/useCalendarData'
 import useCalendarIntersectionObserver from '@/lib/useCalendarIntersectionObserver'
-
-export type Day = {
-  day: number
-  weekDay: number
-  month: number
-  year: number
-}
-
-const now = new Date()
 
 export default function CalendarMobile({
   sessions,
@@ -22,7 +13,7 @@ export default function CalendarMobile({
 }) {
   const [isFrozen, setIsFrozen] = useState(false)
   const {data, scrollToThisDay, loadNextMonth, loadPreviousMonth} =
-    useCalendarData(now.getMonth(), now.getFullYear())
+    useCalendarData()
   const startElementRef = useRef<HTMLDivElement>(null)
   const endElementRef = useRef(null)
   const scrollToRef = useRef<HTMLDivElement>(null)
@@ -52,7 +43,7 @@ export default function CalendarMobile({
   }, [scrollToThisDay])
 
   return (
-    <div className="p-5">
+    <div className="py-5">
       <div ref={startElementRef}></div>
       {data.map(day => {
         const sessionsToday = sessions ? getSessionsToday(sessions, day) : null
