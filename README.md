@@ -4,16 +4,21 @@ Full stack web app for a personal trainer made with Typescript, Next.js v13, Rea
 
 Site owner has complete flexibility to create and add content to new pages via Contentful, which are then statically generated (Static Site Generation), and revalidated on-demand when updated (Incremental Static Regeneration).
 
-Features include calendar app behind login. Admin can create, update, and delete training sessions in each client's calendar.  Clients can log in to follow the assigned training sessions.
+Features include calendar app behind login. Admin can create, update, and delete training sessions in each client's calendar.  Clients can log in to follow the assigned training sessions on mobile or larger screens.  Calendar is optimised for mobile with infinite scroll.
 
 ## Trainer view
-
-![trainerView.png](docs/trainerView.png)
+![trainerViewLarge.png](docs/trainerViewLarge.png)
 
 ## Client view
+### Mobile
+![clientViewCalendarMobile.png](docs/clientViewCalendarMobile.png)
 
-![clientView.png](docs/clientView.png)
+![clientViewSessionMobile.png](docs/clientViewSessionMobile.png)
 
-## Session page view
+### Large screen
+![clientViewCalendarLarge.png](docs/clientViewCalendarLarge.png)
 
-![sessionView.png](docs/sessionView.png)
+![clientViewSessionLarge.png](docs/clientViewSessionLarge.png)
+
+
+
