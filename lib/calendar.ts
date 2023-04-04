@@ -1,5 +1,6 @@
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
+import {Day} from '@/components/calendar/CalendarMobile'
 
 function getDaysInMonth(month: number, year: number) {
   return new Date(year, month + 1, 0).getDate()
@@ -67,4 +68,14 @@ export function getSessionsToday(
   })
 
   return sessionsMap.filter(Boolean)
+}
+
+export function shouldScrollToThisDay(thisDay: Day, scrollToThisDay: Day) {
+  const {day, month, year} = thisDay
+
+  return (
+    scrollToThisDay?.month === month &&
+    scrollToThisDay.year === year &&
+    scrollToThisDay.day === day
+  )
 }
