@@ -31,7 +31,7 @@ export async function PUT(req: NextRequest) {
     },
     data: {
       ...(body.date !== undefined && {date: new Date(body.date)}),
-      ...(body.deleted !== undefined && {deleted: body.deleted}),
+      ...(body.deleted === 'true' && {deleted: true}),
       ...(body.description !== undefined && {description: body.description}),
       ...(body.name !== undefined && {name: body.name}),
       ...(body.status !== undefined && {status: body.status}),
