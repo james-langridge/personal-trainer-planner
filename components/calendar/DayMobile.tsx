@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 import {
@@ -8,6 +7,7 @@ import {
   isDayToday,
   isDayTomorrow,
 } from '@/lib/calendar'
+import SessionItemMobile from '@/components/calendar/SessionItemMobile'
 
 export default function DayMobile({
   dayData,
@@ -41,9 +41,7 @@ export default function DayMobile({
         sessionsToday.map((session, i) => {
           return (
             <div key={session?.id}>
-              <Link href={`/session/${session?.id}`} className="my-1 block">
-                {session?.name}
-              </Link>
+              {session && <SessionItemMobile session={session} />}
               {i < sessionsToday.length - 1 && (
                 <hr className="my-4 h-px border-none bg-gray-200 dark:bg-gray-700" />
               )}
