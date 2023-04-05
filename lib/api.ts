@@ -120,26 +120,12 @@ export const createSession = async (body: {
 
 export const updateSession = async (body: {
   sessionId: string
-  date: string
-  name: string
+  date?: string
+  deleted?: string
   description?: string
+  name?: string
+  status?: string
   videoUrl?: string
-}) => {
-  return fetcher({
-    url: '/api/session',
-    method: 'put',
-    body,
-    json: false,
-  })
-}
-
-export const deleteSession = async (body: {
-  sessionId: string
-  date: string
-  name: string
-  description?: string
-  videoUrl?: string
-  delete: string
 }) => {
   return fetcher({
     url: '/api/session',

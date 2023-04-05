@@ -24,30 +24,20 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   const body = await req.json()
-  let session
 
-  if (body.delete === 'true') {
-    session = await db.session.update({
-      where: {
-        id: body.sessionId,
-      },
-      data: {
-        deleted: true,
-      },
-    })
-  } else {
-    session = await db.session.update({
-      where: {
-        id: body.sessionId,
-      },
-      data: {
-        name: body.name,
-        date: new Date(body.date),
-        description: body.description,
-        videoUrl: body.videoUrl,
-      },
-    })
-  }
+  const session = await db.session.update({
+    where: {
+      id: body.sessionId,
+    },
+    data: {
+      ...(body.date !== undefined && {date: new Date(body.date)}),
+      ...(body.deleted !== undefined && {deleted: body.deleted}),
+      ...(body.description !== undefined && {description: body.description}),
+      ...(body.name !== undefined && {name: body.name}),
+      ...(body.status !== undefined && {status: body.status}),
+      ...(body.videoUrl !== undefined && {videoUrl: body.videoUrl}),
+    },
+  })
 
   return NextResponse.json(
     {session},

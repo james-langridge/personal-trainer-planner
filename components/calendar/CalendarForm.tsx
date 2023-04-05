@@ -1,14 +1,8 @@
 'use client'
 
 import React, {useEffect, useState} from 'react'
-import {
-  createSession,
-  deleteSession,
-  fetchSession,
-  updateSession,
-} from '@/lib/api'
+import {createSession, fetchSession, updateSession} from '@/lib/api'
 import Info from '@/components/Info'
-import {useRouter} from 'next/navigation'
 
 export default function CalendarForm({
   sessionId,
@@ -47,7 +41,6 @@ export default function CalendarForm({
   const [mode, setMode] = useState<
     'updateSession' | 'createSession' | 'deleteSession'
   >('createSession')
-  const router = useRouter()
 
   useEffect(() => {
     const getSession = async () => {
@@ -123,7 +116,7 @@ export default function CalendarForm({
         return
       }
 
-      await deleteSession({...form, delete: 'true'})
+      await updateSession({...form, deleted: 'true'})
 
       setState({
         ...initialState,
