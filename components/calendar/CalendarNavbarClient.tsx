@@ -6,10 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {useRouter} from 'next/navigation'
 import {logout} from '@/lib/api'
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
+import {classNames} from '@/lib/misc'
 
 interface Props {
   logo: {

@@ -4,10 +4,7 @@ import {Disclosure} from '@headlessui/react'
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import Image from 'next/image'
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
+import {classNames} from '@/lib/misc'
 
 interface Props {
   navigation: {name: string; href: string; current: boolean}[] | undefined

@@ -2,10 +2,7 @@ import React, {Fragment, useEffect, useState} from 'react'
 import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {fetchUsers} from '@/lib/api'
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
+import {classNames} from '@/lib/misc'
 
 export interface User {
   firstName: string

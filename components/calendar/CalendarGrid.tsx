@@ -8,10 +8,7 @@ import {
 import SessionItem from '@/components/calendar/SessionItem'
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
+import {classNames} from '@/lib/misc'
 
 const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
