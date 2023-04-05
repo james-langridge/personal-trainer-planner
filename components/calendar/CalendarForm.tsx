@@ -13,9 +13,11 @@ import {useRouter} from 'next/navigation'
 export default function CalendarForm({
   sessionId,
   userId = '',
+  getUserSessions,
 }: {
   sessionId?: string
   userId?: string
+  getUserSessions: () => Promise<void>
 }) {
   const initialState: {
     error: null | Error
@@ -98,11 +100,11 @@ export default function CalendarForm({
         status: 'resolved',
       })
 
-      // FIXME: make page fetch updated sessions in calendar
       // router.refresh() should refresh (fetch updated data and re-render on the server)
-      // the current route from the root layout down?
+      // the current route from the root layout down?  Doesn't seem to work currently.
       // https://beta.nextjs.org/docs/data-fetching/mutating
-      router.refresh()
+      // Temporary workaround:
+      void getUserSessions()
     } catch (error) {
       setState({
         ...state,
@@ -128,11 +130,11 @@ export default function CalendarForm({
         status: 'resolved',
       })
 
-      // FIXME: make page fetch updated sessions in calendar
       // router.refresh() should refresh (fetch updated data and re-render on the server)
-      // the current route from the root layout down?
+      // the current route from the root layout down?  Doesn't seem to work currently.
       // https://beta.nextjs.org/docs/data-fetching/mutating
-      router.refresh()
+      // Temporary workaround:
+      void getUserSessions()
     } catch (error) {
       setState({
         ...state,

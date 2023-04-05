@@ -6,10 +6,12 @@ export default function Sidebar({
   setUser,
   user,
   sessionId,
+  getUserSessions,
 }: {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>
   user?: User
   sessionId: string
+  getUserSessions: () => Promise<void>
 }) {
   return (
     <aside className="flex w-72 flex-col overflow-y-auto border-r bg-white px-4 py-8 rtl:border-r-0 rtl:border-l dark:border-gray-700 dark:bg-gray-900">
@@ -17,7 +19,11 @@ export default function Sidebar({
         {user && `${user.firstName} ${user.lastName}`}
       </span>
       <CalendarDropdown setUser={setUser} />
-      <CalendarForm userId={user?.id} sessionId={sessionId} />
+      <CalendarForm
+        userId={user?.id}
+        sessionId={sessionId}
+        getUserSessions={getUserSessions}
+      />
     </aside>
   )
 }

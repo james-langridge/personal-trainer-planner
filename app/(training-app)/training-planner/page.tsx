@@ -1,7 +1,7 @@
 'use client'
 
 import {User} from '@/components/calendar/CalendarDropdown'
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {fetchSessions} from '@/lib/api'
 import Calendar from '@/components/calendar/Calendar'
 import Sidebar from '@/components/calendar/Sidebar'
@@ -12,21 +12,26 @@ export default function TrainingPlanner() {
   const [sessions, setSessions] = useState<Session[]>()
   const [sessionId, setSessionId] = useState('')
 
-  useEffect(() => {
-    const getUserSessions = async () => {
-      if (user) {
-        const sessions = await fetchSessions(user.id)
+  const getUserSessions = useCallback(async () => {
+    if (user) {
+      const sessions = await fetchSessions(user.id)
 
-        setSessions(sessions)
-      }
+      setSessions(sessions)
     }
-
-    void getUserSessions()
   }, [user])
+
+  useEffect(() => {
+    void getUserSessions()
+  }, [getUserSessions, user])
 
   return (
     <div className="flex h-[90vh]">
-      <Sidebar setUser={setUser} user={user} sessionId={sessionId} />
+      <Sidebar
+        setUser={setUser}
+        user={user}
+        sessionId={sessionId}
+        getUserSessions={getUserSessions}
+      />
       <Calendar sessions={sessions} isAdmin setSessionId={setSessionId} />
     </div>
   )
