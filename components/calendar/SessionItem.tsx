@@ -35,7 +35,7 @@ export default function SessionItem({
         type="checkbox"
         checked={status === SESSION_STATUS.COMPLETED}
         className="h-7 w-7 rounded"
-        onClick={toggleStatus}
+        onChange={toggleStatus}
       />
 
       {isAdmin && (

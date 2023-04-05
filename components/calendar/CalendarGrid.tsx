@@ -41,7 +41,7 @@ export default function CalendarGrid({
       )}
     >
       {emptyDays &&
-        emptyDays.map((day, i) => {
+        emptyDays.map((_day, i) => {
           return (
             <div className="border text-center ring-1 ring-gray-400/25" key={i}>
               {/*TODO: localise empty day  names?*/}
@@ -58,7 +58,7 @@ export default function CalendarGrid({
         return (
           <div
             className="border text-center ring-1 ring-gray-400/25"
-            key={day.day}
+            key={day.day + day.year + day.month}
           >
             {index + firstDayOfMonth < 7 && (
               <div className="text-xs lg:text-base">{weekday}</div>
@@ -72,18 +72,17 @@ export default function CalendarGrid({
               {day.day}
             </div>
             {sessionsToday &&
-              sessionsToday.map(session => {
+              sessionsToday.map((session, i) => {
                 return (
-                  <>
+                  <div key={day.day * day.year * day.month * i}>
                     {session && (
                       <SessionItem
-                        key={session?.id}
                         session={session}
                         isAdmin={isAdmin}
                         setSessionId={setSessionId}
                       />
                     )}
-                  </>
+                  </div>
                 )
               })}
           </div>

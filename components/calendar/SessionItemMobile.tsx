@@ -19,7 +19,7 @@ export default function SessionItemMobile({
         type="checkbox"
         checked={status === SESSION_STATUS.COMPLETED}
         className="h-7 w-7 rounded"
-        onClick={toggleStatus}
+        onChange={toggleStatus}
       />
       <Link
         href={`/session/${session?.id}`}
