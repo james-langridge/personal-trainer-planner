@@ -21,12 +21,18 @@ interface Props {
 const adminNavigation = [
   {href: '/training-planner', name: 'Training planner'},
   {href: '/register', name: 'Create client'},
+  {href: '/profile', name: 'Profile'},
+]
+
+const clientNavigation = [
+  {href: '/training-studio', name: 'Training studio'},
+  {href: '/profile', name: 'Profile'},
 ]
 
 export default function CalendarNavbarClient({logo, isAdmin}: Props) {
   const {src, alt, width, height} = logo
   const router = useRouter()
-  const navigation = isAdmin ? adminNavigation : []
+  const navigation = isAdmin ? adminNavigation : clientNavigation
 
   async function handleLogOut() {
     await logout({key: 'static_key'})

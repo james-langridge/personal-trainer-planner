@@ -36,6 +36,12 @@ const deleteSessionContent = {
   resolved: 'Session deleted successfully',
 }
 
+const changePasswordContent = {
+  pending: 'Changing password...',
+  error: 'Error changing password:',
+  resolved: 'Password changed successfully',
+}
+
 export default function Info({
   status,
   error,
@@ -50,6 +56,7 @@ export default function Info({
     | 'createSession'
     | 'updateSession'
     | 'deleteSession'
+    | 'changePassword'
 }) {
   const [visible, setVisible] = useState(true)
   const toggleVisible = () => setVisible(visible => !visible)
@@ -74,6 +81,9 @@ export default function Info({
       break
     case 'deleteSession':
       content = deleteSessionContent
+      break
+    case 'changePassword':
+      content = changePasswordContent
       break
   }
 

@@ -89,6 +89,20 @@ export const fetchUser = async (id: string) => {
   })
 }
 
+export const updatePassword = async (body: {
+  id: string
+  oldPassword: string
+  newPassword: string
+  confirmNewPassword: string
+}) => {
+  return fetcher({
+    url: '/api/password',
+    method: 'put',
+    body,
+    json: false,
+  })
+}
+
 export const fetchSession = async (id: string): Promise<Session> => {
   return fetcher({
     url: `/api/session/${id}`,
