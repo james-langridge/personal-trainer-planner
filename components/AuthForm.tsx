@@ -6,6 +6,7 @@ import Link from 'next/link'
 import {useRouter} from 'next/navigation'
 import Image from 'next/image'
 import Info from '@/components/Info'
+import {LOGO_URL} from '@/lib/constants'
 
 const initialState: {
   status: 'idle' | 'pending' | 'resolved' | 'rejected'
@@ -80,7 +81,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
           <Link href="/">
             <Image
               className="h-7 w-auto sm:h-8"
-              src="https://images.ctfassets.net/5ct6f2q9wwt3/2dQg3rHxURIhQCjK3Oxds2/10460c53028ab886bd8a1c925459cf53/FFLTrainer-logo-V1.png"
+              src={LOGO_URL}
               alt=""
               width={300}
               height={138}

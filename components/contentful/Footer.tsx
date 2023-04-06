@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import {getBlogPosts, getFooter} from '@/lib/contentful'
+import {FACEBOOK_URL, GITHUB_URL} from '@/lib/constants'
 
 async function Footer() {
   const {items} = await getFooter()
@@ -47,7 +48,7 @@ async function Footer() {
 
               <div className="-mx-2 mt-6 flex">
                 <Link
-                  href="https://www.facebook.com/fitforlifetrainer.co.uk"
+                  href={FACEBOOK_URL}
                   className="mx-2 text-gray-600 transition-colors duration-300 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400"
                   aria-label="Facebook"
                 >
@@ -136,7 +137,7 @@ async function Footer() {
         <div>
           <p className="text-center text-gray-500 dark:text-gray-400">
             © Copyright 2023 - All rights reserved. Site made by&nbsp;
-            <Link href="https://github.com/james-langridge" target="_blank">
+            <Link href={GITHUB_URL} target="_blank">
               James Langridge{' '}
               <svg
                 className="inline h-5 w-5 fill-current"

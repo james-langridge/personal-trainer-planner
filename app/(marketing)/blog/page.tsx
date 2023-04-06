@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {getBlogPosts} from '@/lib/contentful'
 import {IEntry, IImageFields} from '@/@types/generated/contentful'
+import {RANDOM_IMG_URL} from '@/lib/constants'
 
 interface Props {
   blogPost: Entry<IEntry>[]
@@ -16,14 +17,13 @@ function BlogCard({blogPost, createdAt, pageName, slug}: Props) {
     item => item.sys.contentType.sys.id === 'image',
   ) as unknown as Entry<IImageFields>
   const imageSrc = `https:${image.fields.image.fields.file.url}`
-  const randomPic = 'https://source.unsplash.com/random/300×300/?sport'
   const date = new Date(createdAt)
 
   return (
     <div className="lg:flex">
       <Image
         className="h-56 w-full rounded-lg object-cover lg:w-64"
-        src={imageSrc || randomPic}
+        src={imageSrc || RANDOM_IMG_URL}
         alt=""
         width={image.fields.image.fields.file.details.image?.width || 300}
         height={image.fields.image.fields.file.details.image?.height || 300}
