@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import React from 'react'
-import {getBlogPosts, getFooter} from '@/lib/contentful'
+import {getByContentTypeId} from '@/lib/contentful'
 import {FACEBOOK_URL, GITHUB_URL} from '@/lib/constants'
 
-async function Footer() {
-  const {items} = await getFooter()
+export default async function CtfFooter() {
+  const {items} = await getByContentTypeId('footer', {
+    include: 3,
+  })
 
   const {
     leftText,
@@ -19,7 +21,10 @@ async function Footer() {
   let blogPostLinksToRender = null
 
   if (withBlogPosts) {
-    const {items} = await getBlogPosts()
+    const {items} = await getByContentTypeId('page', {
+      'fields.isBlogPost': true,
+      include: 10,
+    })
 
     const blogLinks = items.map(post => {
       return {
@@ -154,5 +159,3 @@ async function Footer() {
     </footer>
   )
 }
-
-export default Footer

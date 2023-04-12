@@ -1,19 +1,19 @@
 import {Entry} from 'contentful'
 import Image from 'next/image'
 import Link from 'next/link'
-import {getBlogPosts} from '@/lib/contentful'
-import {IEntry, IImageFields} from '@/@types/generated/contentful'
+import {getByContentTypeId} from '@/lib/contentful'
+import {IImageFields} from '@/@types/generated/contentful'
 import {RANDOM_IMG_URL} from '@/lib/constants'
 
 interface Props {
-  blogPost: Entry<IEntry>[]
+  blogPost: Entry<{[p: string]: unknown}>[] | undefined
   slug: string
   pageName: string
   createdAt: string
 }
 
 function BlogCard({blogPost, createdAt, pageName, slug}: Props) {
-  const image = blogPost.find(
+  const image = blogPost?.find(
     item => item.sys.contentType.sys.id === 'image',
   ) as unknown as Entry<IImageFields>
   const imageSrc = `https:${image.fields.image.fields.file.url}`
@@ -44,7 +44,10 @@ function BlogCard({blogPost, createdAt, pageName, slug}: Props) {
 }
 
 export default async function Blog() {
-  const {items} = await getBlogPosts()
+  const {items} = await getByContentTypeId('page', {
+    'fields.isBlogPost': true,
+    include: 10,
+  })
 
   return (
     <section className="bg-white dark:bg-gray-900">

@@ -6,7 +6,7 @@ interface Props {
   entry: Entry<IRichTextFields>
 }
 
-function RichText({entry}: Props) {
+export function CtfRichText({entry}: Props) {
   const {richText, backgroundColour} = entry.fields
 
   return (
@@ -29,5 +29,3 @@ function RichText({entry}: Props) {
     </div>
   )
 }
-
-export default RichText

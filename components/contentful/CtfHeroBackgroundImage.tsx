@@ -6,7 +6,7 @@ interface Props {
   entry: Entry<IHeroBackgroundImageFields>
 }
 
-export default function HeroBackgroundImage({entry}: Props) {
+export function CtfHeroBackgroundImage({entry}: Props) {
   const {heading, image, buttonText, buttonLink} = entry.fields
 
   return (

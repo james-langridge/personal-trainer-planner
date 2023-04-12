@@ -1,6 +1,6 @@
 import React from 'react'
-import Navbar from '@/components/contentful/Navbar'
-import Footer from '@/components/contentful/Footer'
+import CtfNavbar from '@/components/contentful/CtfNavbar'
+import CtfFooter from '@/components/contentful/CtfFooter'
 
 export const metadata = {
   title: 'Fit For Life Trainer',
@@ -15,10 +15,10 @@ export default async function MarketingLayout({
   return (
     <div className="relative min-h-screen pt-16 dark:bg-gray-900">
       <div className="pb-[1066px] sm:pb-[614px] md:pb-[534px] lg:pb-[438px] xl:pb-[354px] 2xl:pb-[326px]">
-        {await Navbar()}
+        {await CtfNavbar()}
         <div>{children}</div>
       </div>
-      {await Footer()}
+      {await CtfFooter()}
     </div>
   )
 }

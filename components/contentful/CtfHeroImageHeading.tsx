@@ -6,7 +6,7 @@ interface Props {
   entry: Entry<IHeroImageHeadingFields>
 }
 
-function HeroImageHeading({entry}: Props) {
+export function CtfHeroImageHeading({entry}: Props) {
   const {heading, subHeading, programBenefits, image} = entry.fields
 
   return (
@@ -65,5 +65,3 @@ function HeroImageHeading({entry}: Props) {
     </header>
   )
 }
-
-export default HeroImageHeading

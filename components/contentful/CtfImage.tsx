@@ -6,7 +6,7 @@ interface Props {
   entry: Entry<IImageFields>
 }
 
-function ImageComponent({entry}: Props) {
+export function CtfImage({entry}: Props) {
   const {
     image: {fields},
   } = entry.fields
@@ -21,5 +21,3 @@ function ImageComponent({entry}: Props) {
     />
   )
 }
-
-export default ImageComponent

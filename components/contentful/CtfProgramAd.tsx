@@ -7,7 +7,7 @@ interface Props {
   entry: Entry<IProgramAdFields>
 }
 
-function ProgramAd({entry}: Props) {
+export function CtfProgramAd({entry}: Props) {
   const {name, image, content, ctaText} = entry.fields
 
   return (
@@ -31,5 +31,3 @@ function ProgramAd({entry}: Props) {
     </div>
   )
 }
-
-export default ProgramAd

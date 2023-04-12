@@ -16,7 +16,7 @@ interface Props {
   }
 }
 
-export default function NavbarClient({navigation, logo}: Props) {
+export default function CtfNavbarClient({navigation, logo}: Props) {
   const {src, alt, width, height} = logo
 
   return (

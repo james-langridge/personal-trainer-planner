@@ -7,7 +7,7 @@ interface Props {
   entry: Entry<IProgramAdBannerFields>
 }
 
-function ProgramAdBanner({children, entry}: Props) {
+export function CtfProgramAdBanner({children, entry}: Props) {
   return (
     <div className="my-10 bg-[#90d6da] py-14">
       <h1 className="text-center font-sans text-4xl font-bold text-white">
@@ -19,5 +19,3 @@ function ProgramAdBanner({children, entry}: Props) {
     </div>
   )
 }
-
-export default ProgramAdBanner

@@ -1,15 +1,18 @@
-import {getPageData} from '@/lib/contentful'
-import {ComponentRenderer} from '@/components/ComponentRenderer'
+import {getByContentTypeId} from '@/lib/contentful'
+import {CtfComponentRenderer} from '@/components/contentful/CtfComponentRenderer'
 
 export default async function Home() {
-  const {items} = await getPageData('home')
+  const {items} = await getByContentTypeId('page', {
+    'fields.slug': 'home',
+    include: 10,
+  })
   const pageContent = items[0].fields.pageContent
 
   return (
     <main className="relative">
       {pageContent &&
         pageContent?.map(entry => (
-          <ComponentRenderer key={entry.sys.id} entry={entry} />
+          <CtfComponentRenderer key={entry.sys.id} entry={entry} />
         ))}
     </main>
   )

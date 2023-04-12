@@ -5,7 +5,7 @@ interface Props {
   entry: Entry<ICtaFormFields>
 }
 
-export default function CtaForm({entry}: Props) {
+export function CtaForm({entry}: Props) {
   const {mainText, subText, buttonText} = entry.fields
 
   return (

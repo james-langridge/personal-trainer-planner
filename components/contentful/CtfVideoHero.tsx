@@ -49,7 +49,7 @@ interface Props {
   entry: Entry<IVideoHeroFeatureFields>
 }
 
-function VideoHero({entry}: Props) {
+export function CtfVideoHero({entry}: Props) {
   const {tagline1stLine, tagline2ndLine, videoUrl, programCards} = entry.fields
 
   return (
@@ -78,5 +78,3 @@ function VideoHero({entry}: Props) {
     </section>
   )
 }
-
-export default VideoHero

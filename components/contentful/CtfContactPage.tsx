@@ -8,7 +8,7 @@ interface Props {
   entry: Entry<IContactFields>
 }
 
-export default function Contact({entry}: Props) {
+export function CtfContactPage({entry}: Props) {
   const {headline, subheading, email, address, phone, facebook, image} =
     entry.fields
 

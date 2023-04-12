@@ -7,7 +7,7 @@ interface Props {
   entry: Entry<ITestimonialFields>
 }
 
-export default function Testimonial({entry}: Props) {
+export function CtfTestimonial({entry}: Props) {
   const {clientDescription, name, photo, testimonialText} = entry.fields
 
   return (

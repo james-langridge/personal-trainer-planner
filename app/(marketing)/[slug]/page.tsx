@@ -1,5 +1,5 @@
-import {ComponentRenderer} from '@/components/ComponentRenderer'
-import {getAllPageSlugs, getPageData} from '@/lib/contentful'
+import {CtfComponentRenderer} from '@/components/contentful/CtfComponentRenderer'
+import {getByContentTypeId} from '@/lib/contentful'
 import {notFound} from 'next/navigation'
 
 // Using the Contentful SDK instead of the Fetch API, for dynamic segments,
@@ -12,7 +12,9 @@ import {notFound} from 'next/navigation'
 export const dynamic = 'force-static'
 
 export async function generateStaticParams() {
-  const {items} = await getAllPageSlugs()
+  const {items} = await getByContentTypeId('page', {
+    select: 'fields.slug',
+  })
 
   return items.map(item => ({
     slug: item.fields.slug,
@@ -21,7 +23,10 @@ export async function generateStaticParams() {
 
 export default async function Page({params}: {params: {slug: string}}) {
   const {slug} = params
-  const {items} = await getPageData(slug)
+  const {items} = await getByContentTypeId('page', {
+    'fields.slug': slug,
+    include: 10,
+  })
 
   if (!items.length) {
     notFound()
@@ -32,9 +37,9 @@ export default async function Page({params}: {params: {slug: string}}) {
   return (
     <main>
       {pageContent &&
-        pageContent?.map(entry => (
-          <ComponentRenderer key={entry.sys.id} entry={entry} />
-        ))}
+        pageContent?.map(entry => {
+          return <CtfComponentRenderer key={entry.sys.id} entry={entry} />
+        })}
     </main>
   )
 }

@@ -1,49 +1,31 @@
-import {CtfPage} from '@/@types/contentful'
-import * as contentful from 'contentful'
-import {
-  IFooterFields,
-  INavbarFields,
-  IPageFields,
-} from '@/@types/generated/contentful'
-import 'server-only'
+import {createClient, EntryCollection} from 'contentful'
+import {CONTENT_TYPE, IEntry} from '@/@types/generated/contentful'
 
-export const client = contentful.createClient({
+// The types below allow TS to know the correct type returned by getByContentTypeId()
+// so it does not complain that it does not know the fields of the entries
+// https://roy-y-cheng.medium.com/contentful-model-typescript-code-generation-fe04cc276d26
+type ContentType = IEntry
+type ContentEntry<ID extends CONTENT_TYPE> = Pick<ContentType, 'fields'> & {
+  sys: {contentType: {sys: {id: ID}}}
+}
+type ContentTypeID<CT extends ContentType = ContentType> =
+  CT['sys']['contentType']['sys']['id']
+type ContentEntryByID<ID extends CONTENT_TYPE> = Extract<
+  ContentType,
+  ContentEntry<ID>
+>
+
+export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID || '',
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || '',
 })
 
-export const getAllPageSlugs = async () => {
-  return await client.getEntries<IPageFields>({
-    content_type: 'page',
-    select: 'fields.slug',
-  })
-}
-
-export const getBlogPosts = async () => {
-  return await client.getEntries<CtfPage>({
-    content_type: 'page',
-    'fields.isBlogPost': true,
-    include: 10,
-  })
-}
-
-export const getFooter = async () => {
-  return await client.getEntries<IFooterFields>({
-    'sys.id': process.env.CONTENTFUL_FOOTER_ENTRY_ID || '',
-    include: 3,
-  })
-}
-
-export const getNavbar = async () => {
-  return await client.getEntry<INavbarFields>(
-    process.env.CONTENTFUL_NAVBAR_ENTRY_ID || '',
-  )
-}
-
-export const getPageData = async (slug: string) => {
-  return await client.getEntries<CtfPage>({
-    content_type: 'page',
-    'fields.slug': slug,
-    include: 10,
-  })
+export const getByContentTypeId = async <
+  CTID extends ContentTypeID,
+  CE extends ContentEntryByID<CTID>,
+>(
+  contentTypeID: CTID,
+  options: Record<string, any>,
+): Promise<EntryCollection<CE['fields']>> => {
+  return client.getEntries({content_type: contentTypeID, ...options})
 }

@@ -7,7 +7,7 @@ interface Props {
   entry: Entry<ICtaSimpleFields>
 }
 
-export default function CtaSimple({entry}: Props) {
+export function CtfCtaSimple({entry}: Props) {
   const {mainText, subText, buttonText, buttonLink} = entry.fields
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react'
 import {render} from '@testing-library/react'
-import Footer from '../components/contentful/Footer'
+import CtfFooter from '../components/contentful/CtfFooter'
 import '@testing-library/jest-dom'
 describe('Footer', () => {
   const leftText = {
@@ -23,12 +23,12 @@ describe('Footer', () => {
   }
 
   it('renders with the correct text', () => {
-    const {getByText} = render(<Footer leftText={leftText} />)
+    const {getByText} = render(<CtfFooter leftText={leftText} />)
     expect(getByText('Lorem ipsum dolor sit amet')).toBeInTheDocument()
   })
 
   it('renders a Facebook link', () => {
-    const {getByLabelText} = render(<Footer leftText={leftText} />)
+    const {getByLabelText} = render(<CtfFooter leftText={leftText} />)
     const link = getByLabelText('Facebook')
     expect(link).toBeInTheDocument()
     expect(link).toHaveAttribute(
@@ -38,7 +38,7 @@ describe('Footer', () => {
   })
 
   it('renders all links in the Legal section', () => {
-    const {getByText} = render(<Footer leftText={leftText} />)
+    const {getByText} = render(<CtfFooter leftText={leftText} />)
     expect(getByText('Privacy policy')).toBeInTheDocument()
     expect(getByText('Terms & Conditions')).toBeInTheDocument()
     expect(getByText('Cookie Policy')).toBeInTheDocument()

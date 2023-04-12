@@ -6,7 +6,7 @@ interface Props {
   entry: Entry<IHeroSideImageFields>
 }
 
-export default function HeroSideImage({entry}: Props) {
+export function CtfHeroSideImage({entry}: Props) {
   const {
     headline,
     subheading,
