@@ -1,5 +1,4 @@
 import React from 'react'
-import {Entry} from 'contentful'
 import {
   CtfImage,
   CtfContactPage,
@@ -14,6 +13,7 @@ import {
   CtfProgramAd,
   CtfProgramAdBanner,
 } from '@/components/contentful/index'
+import {IEntry} from '@/@types/generated/contentful'
 
 const componentMap: {[key: string]: React.ComponentType<any>} = {
   contact: CtfContactPage,
@@ -30,11 +30,7 @@ const componentMap: {[key: string]: React.ComponentType<any>} = {
   videoHeroFeature: CtfVideoHero,
 }
 
-export function CtfComponentRenderer({
-  entry,
-}: {
-  entry: Entry<{[p: string]: unknown}>
-}) {
+export function CtfComponentRenderer({entry}: {entry: IEntry}) {
   const {contentType} = entry.sys
   const entryType = contentType.sys.id
   const Component = componentMap[entryType]

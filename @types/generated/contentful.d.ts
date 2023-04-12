@@ -395,7 +395,23 @@ export interface IPageFields {
   isBlogPost?: boolean | undefined
 
   /** Page content */
-  pageContent?: Entry<{[fieldId: string]: unknown}>[] | undefined
+  pageContent?:
+    | (
+        | ICtaForm
+        | ICtaSimple
+        | IHeroBackgroundImage
+        | IHeroImageHeading
+        | IHeroSideImage
+        | IImage
+        | IProgramAdBanner
+        | IRichText
+        | ITestimonial
+        | IVideoHeroFeature
+        | IVideoHeroProgramCard
+        | INavbar
+        | IFooter
+      )[]
+    | undefined
 }
 
 /** This will create a new empty page accessible at the slug you choose.  Eg: www.fitforlifetrainer.co.uk/slug.  You can add new or existing content entries to this page. */

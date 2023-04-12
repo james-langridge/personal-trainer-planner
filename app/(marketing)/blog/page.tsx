@@ -6,27 +6,27 @@ import {IImageFields} from '@/@types/generated/contentful'
 import {RANDOM_IMG_URL} from '@/lib/constants'
 
 interface Props {
-  blogPost: Entry<{[p: string]: unknown}>[] | undefined
+  image: Entry<IImageFields>
   slug: string
   pageName: string
   createdAt: string
 }
 
-function BlogCard({blogPost, createdAt, pageName, slug}: Props) {
-  const image = blogPost?.find(
-    item => item.sys.contentType.sys.id === 'image',
-  ) as unknown as Entry<IImageFields>
-  const imageSrc = `https:${image.fields.image.fields.file.url}`
-  const date = new Date(createdAt)
+function BlogCard({image, createdAt, pageName, slug}: Props) {
+  const {details, url} = image.fields.image.fields.file
+  const imageSrc = `https:${url || RANDOM_IMG_URL}`
+  const width = details.image?.width || 300
+  const height = details.image?.height || 300
+  const date = new Date(createdAt).toDateString()
 
   return (
     <div className="lg:flex">
       <Image
         className="h-56 w-full rounded-lg object-cover lg:w-64"
-        src={imageSrc || RANDOM_IMG_URL}
-        alt=""
-        width={image.fields.image.fields.file.details.image?.width || 300}
-        height={image.fields.image.fields.file.details.image?.height || 300}
+        src={imageSrc}
+        alt="Blog post image"
+        width={width}
+        height={height}
       />
       <div className="flex flex-col justify-between py-6 lg:mx-6">
         <Link
@@ -35,9 +35,7 @@ function BlogCard({blogPost, createdAt, pageName, slug}: Props) {
         >
           {pageName}
         </Link>
-        <span className="text-sm text-gray-500 dark:text-gray-300">
-          {date.toDateString()}
-        </span>
+        <span className="text-sm text-gray-500 dark:text-gray-300">{date}</span>
       </div>
     </div>
   )
@@ -56,15 +54,24 @@ export default async function Blog() {
           From the blog
         </h1>
         <div className="mt-8 grid grid-cols-1 gap-8 md:mt-16 md:grid-cols-2">
-          {items.map(item => (
-            <BlogCard
-              key={item.sys.id}
-              blogPost={item.fields.pageContent}
-              slug={item.fields.slug}
-              pageName={item.fields.pageName}
-              createdAt={item.sys.createdAt}
-            />
-          ))}
+          {items.map(item => {
+            const {sys, fields} = item
+            const {pageContent, slug, pageName} = fields
+            const {id, createdAt} = sys
+            const image = pageContent?.find(
+              item => item.sys.contentType.sys.id === 'image',
+            ) as Entry<IImageFields>
+
+            return (
+              <BlogCard
+                key={id}
+                image={image}
+                slug={slug}
+                pageName={pageName}
+                createdAt={createdAt}
+              />
+            )
+          })}
         </div>
       </div>
     </section>
