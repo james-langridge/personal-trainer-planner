@@ -14,6 +14,7 @@ export interface SessionSerialisedDate {
   description: string | null
   videoUrl: string | null
   deleted: boolean
+  appointment: boolean
 }
 
 const getSessions = async () => {

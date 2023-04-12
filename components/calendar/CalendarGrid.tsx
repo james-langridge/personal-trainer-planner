@@ -44,7 +44,7 @@ export default function CalendarGrid({
         emptyDays.map((_day, i) => {
           return (
             <div className="border text-center ring-1 ring-gray-400/25" key={i}>
-              {/*TODO: localise empty day  names?*/}
+              {/*TODO: localise empty day names?*/}
               <div className="text-xs lg:text-base">{dayNames[i]}</div>
             </div>
           )
