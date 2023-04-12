@@ -37,7 +37,8 @@ model Session {
   description String?
   videoUrl    String?
 
-  deleted Boolean @default(false)
+  appointment Boolean @default(false)
+  deleted     Boolean @default(false)
 
   @@index([ownerId, id])
 }
