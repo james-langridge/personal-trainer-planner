@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react'
 import {createSession, fetchSession, updateSession} from '@/lib/api'
 import Info from '@/components/Info'
+import {SESSION_TYPE} from '@prisma/client'
 
 export default function CalendarForm({
   sessionId,
@@ -22,6 +23,7 @@ export default function CalendarForm({
       ownerId: string
       sessionId: string
       videoUrl?: string
+      sessionType: SESSION_TYPE
     }
     status: 'idle' | 'pending' | 'rejected' | 'resolved'
   } = {
@@ -33,6 +35,7 @@ export default function CalendarForm({
       ownerId: userId,
       sessionId: '',
       videoUrl: '',
+      sessionType: SESSION_TYPE.TRAINING,
     },
     status: 'idle',
   }
@@ -50,7 +53,7 @@ export default function CalendarForm({
         const isoString = date.toISOString()
         const dateString = isoString.substring(0, 10)
 
-        setState({
+        setState(state => ({
           ...state,
           form: {
             ...state.form,
@@ -59,8 +62,9 @@ export default function CalendarForm({
             name: session.name,
             sessionId: sessionId,
             videoUrl: session.videoUrl ?? undefined,
+            sessionType: session.sessionType,
           },
-        })
+        }))
       }
     }
 
@@ -68,10 +72,10 @@ export default function CalendarForm({
   }, [sessionId])
 
   useEffect(() => {
-    setState({
+    setState(state => ({
       ...state,
       form: {...state.form, ownerId: userId},
-    })
+    }))
   }, [userId])
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -171,6 +175,50 @@ export default function CalendarForm({
           className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
           value={form.name}
         />
+        <fieldset className="mt-4">
+          <legend>Session Type:</legend>
+          <div>
+            <input
+              type="radio"
+              id={SESSION_TYPE.TRAINING}
+              name="sessionType"
+              value={SESSION_TYPE.TRAINING}
+              checked={form.sessionType === SESSION_TYPE.TRAINING}
+              className="mr-2"
+              onChange={e =>
+                setState(state => ({
+                  ...state,
+                  form: {
+                    ...state.form,
+                    sessionType: e.target.value as SESSION_TYPE,
+                  },
+                }))
+              }
+            />
+            <label htmlFor={SESSION_TYPE.TRAINING}>Training</label>
+          </div>
+
+          <div>
+            <input
+              type="radio"
+              id={SESSION_TYPE.APPOINTMENT}
+              name="sessionType"
+              checked={form.sessionType === SESSION_TYPE.APPOINTMENT}
+              value={SESSION_TYPE.APPOINTMENT}
+              className="mr-2"
+              onChange={e =>
+                setState(state => ({
+                  ...state,
+                  form: {
+                    ...state.form,
+                    sessionType: e.target.value as SESSION_TYPE,
+                  },
+                }))
+              }
+            />
+            <label htmlFor={SESSION_TYPE.APPOINTMENT}>Appointment</label>
+          </div>
+        </fieldset>
         <textarea
           onChange={e =>
             setState(state => ({
