@@ -1,4 +1,4 @@
-import {Session} from '@prisma/client'
+import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
 
 const fetcher = async ({
   url,
@@ -122,6 +122,7 @@ export const createSession = async (body: {
   date: string
   name: string
   description?: string
+  sessionType: SESSION_TYPE
   videoUrl?: string
 }) => {
   return fetcher({
@@ -134,11 +135,12 @@ export const createSession = async (body: {
 
 export const updateSession = async (body: {
   sessionId: string
+  sessionType: SESSION_TYPE
   date?: string
   deleted?: string
   description?: string
   name?: string
-  status?: string
+  status?: SESSION_STATUS
   videoUrl?: string
 }) => {
   return fetcher({

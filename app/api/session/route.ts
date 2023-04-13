@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
       name: body.name,
       date: new Date(body.date),
       description: body.description && body.description,
+      sessionType: body.sessionType,
       videoUrl: body.videoUrl && body.videoUrl,
     },
   })
@@ -30,6 +31,7 @@ export async function PUT(req: NextRequest) {
       id: body.sessionId,
     },
     data: {
+      ...(body.sessionType !== undefined && {sessionType: body.sessionType}),
       ...(body.date !== undefined && {date: new Date(body.date)}),
       ...(body.deleted === 'true' && {deleted: true}),
       ...(body.description !== undefined && {description: body.description}),
