@@ -36,9 +36,8 @@ model Session {
   date        DateTime
   description String?
   videoUrl    String?
-
-  appointment Boolean @default(false)
-  deleted     Boolean @default(false)
+  sessionType SESSION_TYPE   @default(TRAINING)
+  deleted     Boolean        @default(false)
 
   @@index([ownerId, id])
 }
@@ -46,4 +45,9 @@ model Session {
 enum SESSION_STATUS {
   NOT_STARTED
   COMPLETED
+}
+
+enum SESSION_TYPE {
+  TRAINING
+  APPOINTMENT
 }
