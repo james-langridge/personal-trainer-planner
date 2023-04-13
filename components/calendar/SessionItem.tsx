@@ -17,7 +17,7 @@ export default function SessionItem({
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
   const {status, toggleStatus} = useSessionStatus(session, updateSession)
-  const isAppointment = session.appointment
+  const isTrainingSession = session.sessionType === 'TRAINING'
 
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
     event.stopPropagation()
@@ -33,7 +33,7 @@ export default function SessionItem({
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
-      {!isAppointment && (
+      {isTrainingSession && (
         <input
           type="checkbox"
           checked={status === SESSION_STATUS.COMPLETED}
@@ -50,7 +50,7 @@ export default function SessionItem({
           onClick={onClick}
           className={classNames(
             'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
-            isAppointment ? 'bg-blue-400' : 'bg-emerald-400',
+            isTrainingSession ? 'bg-emerald-400' : 'bg-blue-400',
           )}
           id={session?.id}
         >
@@ -61,7 +61,10 @@ export default function SessionItem({
       {!isAdmin && (
         <Link
           href={`/session/${session?.id}`}
-          className="my-1 block w-full rounded bg-emerald-400 text-xs font-bold text-white lg:text-base"
+          className={classNames(
+            'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
+            isTrainingSession ? 'bg-emerald-400' : 'bg-blue-400',
+          )}
         >
           {session?.name}
         </Link>

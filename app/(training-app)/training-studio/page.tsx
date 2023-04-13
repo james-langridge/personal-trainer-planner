@@ -2,8 +2,7 @@ import {getUserFromCookie} from '@/lib/auth'
 import {cookies} from 'next/headers'
 import {db} from '@/lib/db'
 import Calendar from '@/components/calendar/Calendar'
-import {Session} from '@prisma/client'
-import {SESSION_STATUS} from '.prisma/client'
+import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
 
 export interface SessionSerialisedDate {
   id: string
@@ -14,7 +13,7 @@ export interface SessionSerialisedDate {
   description: string | null
   videoUrl: string | null
   deleted: boolean
-  appointment: boolean
+  sessionType: SESSION_TYPE
 }
 
 const getSessions = async () => {
