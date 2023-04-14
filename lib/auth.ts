@@ -3,7 +3,7 @@ import {jwtVerify, SignJWT} from 'jose'
 import {db} from './db'
 import {User} from '@prisma/client'
 import {RequestCookies} from 'next/dist/compiled/@edge-runtime/cookies'
-import {ReadonlyRequestCookies} from 'next/dist/server/app-render'
+import {ReadonlyRequestCookies} from 'next/dist/server/web/spec-extension/adapters/request-cookies'
 
 export const hashPassword = (password: string) => bcrypt.hash(password, 10)
 

@@ -1,7 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server'
 import nodemailer from 'nodemailer'
 
-export const sendEmail = async ({
+const sendEmail = async ({
   name,
   email,
   message,
