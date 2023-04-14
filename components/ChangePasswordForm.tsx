@@ -3,50 +3,38 @@
 import {updatePassword} from '@/lib/api'
 import React, {useCallback, useState} from 'react'
 import Info from '@/components/Info'
+import {useStatus} from '@/hooks'
 
 export default function ChangePasswordForm({userId}: {userId: string}) {
-  const initialState: {
-    status: 'idle' | 'pending' | 'resolved' | 'rejected'
-    form: {
-      id: string
-      oldPassword: string
-      newPassword: string
-      confirmNewPassword: string
-    }
-    error: null | Error
+  const initialForm: {
+    id: string
+    oldPassword: string
+    newPassword: string
+    confirmNewPassword: string
   } = {
-    status: 'idle',
-    form: {
-      id: userId,
-      oldPassword: '',
-      newPassword: '',
-      confirmNewPassword: '',
-    },
-    error: null,
+    id: userId,
+    oldPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
   }
 
-  const [state, setState] = useState({...initialState})
-  const {status, form, error} = state
+  const [form, setForm] = useState({...initialForm})
+  const {status, error, setStatus, setError, resetStatus} = useStatus()
 
   const handleSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
       e.preventDefault()
 
-      setState({...state, status: 'pending'})
+      setStatus('pending')
 
       try {
         await updatePassword(form)
 
-        setState({
-          ...initialState,
-          status: 'resolved',
-        })
+        setForm(initialForm)
+        setStatus('resolved')
       } catch (error) {
-        setState({
-          ...state,
-          status: 'rejected',
-          error: error as Error,
-        })
+        setError(error as Error)
+        setStatus('rejected')
       }
     },
     [form.id, form.newPassword, form.confirmNewPassword, form.oldPassword],
@@ -81,9 +69,9 @@ export default function ChangePasswordForm({userId}: {userId: string}) {
             <input
               required
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {...state.form, oldPassword: e.target.value},
+                setForm(form => ({
+                  ...form,
+                  oldPassword: e.target.value,
                 }))
               }
               type="password"
@@ -114,9 +102,9 @@ export default function ChangePasswordForm({userId}: {userId: string}) {
             <input
               required
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {...state.form, newPassword: e.target.value},
+                setForm(form => ({
+                  ...form,
+                  newPassword: e.target.value,
                 }))
               }
               type="password"
@@ -147,9 +135,9 @@ export default function ChangePasswordForm({userId}: {userId: string}) {
             <input
               required
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {...state.form, confirmNewPassword: e.target.value},
+                setForm(form => ({
+                  ...form,
+                  confirmNewPassword: e.target.value,
                 }))
               }
               type="password"
@@ -159,7 +147,12 @@ export default function ChangePasswordForm({userId}: {userId: string}) {
             />
           </div>
 
-          <Info status={status} error={error} mode="changePassword" />
+          <Info
+            reset={resetStatus}
+            status={status}
+            error={error}
+            mode="changePassword"
+          />
 
           <div className="mt-6">
             <button

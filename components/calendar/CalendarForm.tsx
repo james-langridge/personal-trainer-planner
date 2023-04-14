@@ -1,9 +1,8 @@
-'use client'
-
-import React, {useEffect, useState} from 'react'
-import {createSession, fetchSession, updateSession} from '@/lib/api'
+import React, {useEffect} from 'react'
+import {createSession, updateSession} from '@/lib/api'
 import Info from '@/components/Info'
 import {SESSION_TYPE} from '@prisma/client'
+import {useCalendarForm, useStatus} from '@/hooks'
 
 export default function CalendarForm({
   sessionId,
@@ -14,77 +13,28 @@ export default function CalendarForm({
   userId?: string
   getUserSessions: () => Promise<void>
 }) {
-  const initialState: {
-    error: null | Error
-    form: {
-      date: string
-      description?: string
-      name: string
-      ownerId: string
-      sessionId: string
-      videoUrl?: string
-      sessionType: SESSION_TYPE
-    }
-    status: 'idle' | 'pending' | 'rejected' | 'resolved'
-  } = {
-    error: null,
-    form: {
-      date: '',
-      description: '',
-      name: '',
+  const [form, setForm, resetForm] = useCalendarForm(userId, sessionId)
+  const {status, mode, setMode, error, setStatus, setError, resetStatus} =
+    useStatus()
+
+  useEffect(() => {
+    setForm(form => ({
+      ...form,
       ownerId: userId,
-      sessionId: '',
-      videoUrl: '',
-      sessionType: SESSION_TYPE.TRAINING,
-    },
-    status: 'idle',
-  }
-  const [state, setState] = useState({...initialState})
-  const {status, form, error} = state
-  const [mode, setMode] = useState<
-    'updateSession' | 'createSession' | 'deleteSession'
-  >('createSession')
-
-  useEffect(() => {
-    const getSession = async () => {
-      if (sessionId) {
-        const session = await fetchSession(sessionId)
-        const date = new Date(session.date)
-        const isoString = date.toISOString()
-        const dateString = isoString.substring(0, 10)
-
-        setState(state => ({
-          ...state,
-          form: {
-            ...state.form,
-            date: dateString,
-            description: session.description ?? undefined,
-            name: session.name,
-            sessionId: sessionId,
-            videoUrl: session.videoUrl ?? undefined,
-            sessionType: session.sessionType,
-          },
-        }))
-      }
-    }
-
-    void getSession()
-  }, [sessionId])
-
-  useEffect(() => {
-    setState(state => ({
-      ...state,
-      form: {...state.form, ownerId: userId},
     }))
-  }, [userId])
+  }, [setForm, userId])
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    setState({...state, status: 'pending'})
+    if (status !== 'idle') {
+      return
+    }
+
+    setStatus('pending')
 
     try {
-      if (state.form.sessionId) {
+      if (form.sessionId) {
         setMode('updateSession')
         await updateSession(form)
       } else {
@@ -92,10 +42,7 @@ export default function CalendarForm({
         await createSession(form)
       }
 
-      setState({
-        ...initialState,
-        status: 'resolved',
-      })
+      setStatus('resolved')
 
       // router.refresh() should refresh (fetch updated data and re-render on the server)
       // the current route from the root layout down?  Doesn't seem to work currently.
@@ -103,29 +50,25 @@ export default function CalendarForm({
       // Temporary workaround:
       void getUserSessions()
     } catch (error) {
-      setState({
-        ...state,
-        status: 'rejected',
-        error: error as Error,
-      })
+      setStatus('rejected')
+      setError(error as Error)
+    } finally {
+      resetForm()
     }
   }
 
   async function handleDelete() {
+    if (status !== 'idle' || !sessionId) {
+      return
+    }
+
     setMode('deleteSession')
-    setState({...state, status: 'pending'})
+    setStatus('pending')
 
     try {
-      if (!sessionId) {
-        return
-      }
-
       await updateSession({...form, deleted: 'true'})
 
-      setState({
-        ...initialState,
-        status: 'resolved',
-      })
+      setStatus('resolved')
 
       // router.refresh() should refresh (fetch updated data and re-render on the server)
       // the current route from the root layout down?  Doesn't seem to work currently.
@@ -133,16 +76,11 @@ export default function CalendarForm({
       // Temporary workaround:
       void getUserSessions()
     } catch (error) {
-      setState({
-        ...state,
-        status: 'rejected',
-        error: error as Error,
-      })
+      setStatus('rejected')
+      setError(error as Error)
+    } finally {
+      resetForm()
     }
-  }
-
-  function resetForm() {
-    setState({...initialState})
   }
 
   return (
@@ -153,9 +91,9 @@ export default function CalendarForm({
         <input
           required
           onChange={e =>
-            setState(state => ({
-              ...state,
-              form: {...state.form, date: e.target.value},
+            setForm(form => ({
+              ...form,
+              date: e.target.value,
             }))
           }
           placeholder="Date"
@@ -166,9 +104,9 @@ export default function CalendarForm({
         <input
           required
           onChange={e =>
-            setState(state => ({
-              ...state,
-              form: {...state.form, name: e.target.value},
+            setForm(form => ({
+              ...form,
+              name: e.target.value,
             }))
           }
           placeholder="Session name"
@@ -186,12 +124,9 @@ export default function CalendarForm({
               checked={form.sessionType === SESSION_TYPE.TRAINING}
               className="mr-2"
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {
-                    ...state.form,
-                    sessionType: e.target.value as SESSION_TYPE,
-                  },
+                setForm(form => ({
+                  ...form,
+                  sessionType: e.target.value as SESSION_TYPE,
                 }))
               }
             />
@@ -207,12 +142,9 @@ export default function CalendarForm({
               value={SESSION_TYPE.APPOINTMENT}
               className="mr-2"
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {
-                    ...state.form,
-                    sessionType: e.target.value as SESSION_TYPE,
-                  },
+                setForm(form => ({
+                  ...form,
+                  sessionType: e.target.value as SESSION_TYPE,
                 }))
               }
             />
@@ -221,9 +153,9 @@ export default function CalendarForm({
         </fieldset>
         <textarea
           onChange={e =>
-            setState(state => ({
-              ...state,
-              form: {...state.form, description: e.target.value},
+            setForm(form => ({
+              ...form,
+              description: e.target.value,
             }))
           }
           placeholder="Description"
@@ -234,9 +166,9 @@ export default function CalendarForm({
         />
         <input
           onChange={e =>
-            setState(state => ({
-              ...state,
-              form: {...state.form, videoUrl: e.target.value},
+            setForm(form => ({
+              ...form,
+              videoUrl: e.target.value,
             }))
           }
           placeholder="Video url"
@@ -244,15 +176,15 @@ export default function CalendarForm({
           className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
           value={form.videoUrl}
         />
-        <Info status={status} error={error} mode={mode} />
+        <Info status={status} reset={resetStatus} error={error} mode={mode} />
         <button
           disabled={!userId}
           type="submit"
           className="mt-4 w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 enabled:hover:bg-blue-400"
         >
-          {state.form.sessionId ? 'Update' : 'Create'}
+          {form.sessionId ? 'Update' : 'Create'}
         </button>
-        {state.form.sessionId && (
+        {form.sessionId && (
           <button
             type="button"
             onClick={handleDelete}

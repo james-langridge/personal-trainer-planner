@@ -135,7 +135,7 @@ export const createSession = async (body: {
 
 export const updateSession = async (body: {
   sessionId: string
-  sessionType: SESSION_TYPE
+  sessionType?: SESSION_TYPE
   date?: string
   deleted?: string
   description?: string

@@ -1,17 +1,16 @@
 import Link from 'next/link'
 import {Session} from '@prisma/client'
-import {updateSession} from '@/lib/api'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 import {SESSION_STATUS} from '.prisma/client'
 import {classNames} from '@/lib/misc'
-import {useSessionStatus} from '@/lib/useSessionStatus'
+import {useSessionStatus} from '@/hooks'
 
 export default function SessionItemMobile({
   session,
 }: {
   session: Session | SessionSerialisedDate
 }) {
-  const {status, toggleStatus} = useSessionStatus(session, updateSession)
+  const {status, toggleStatus} = useSessionStatus(session)
 
   return (
     <div className="flex items-center gap-2 text-lg">

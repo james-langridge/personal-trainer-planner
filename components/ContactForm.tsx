@@ -3,21 +3,22 @@
 import React, {useState} from 'react'
 import {submitContactForm} from '@/lib/api'
 import Info from '@/components/Info'
+import {useStatus} from '@/hooks'
 
-const initialState = {
-  status: 'idle',
-  form: {name: '', email: '', message: ''},
-  error: null,
+const initialForm = {
+  name: '',
+  email: '',
+  message: '',
 }
 
 export default function ContactForm() {
-  const [state, setState] = useState(initialState)
-  const {status, form, error} = state
+  const [form, setForm] = useState({...initialForm})
+  const {status, error, setStatus, setError, resetStatus} = useStatus()
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    setState({...state, status: 'pending'})
+    setStatus('pending')
 
     // Previously, API Routes could have been used for use cases like
     // handling form submissions. Route Handlers are likely not the solution
@@ -25,19 +26,14 @@ export default function ContactForm() {
     // this when ready.
     // https://beta.nextjs.org/docs/routing/route-handlers#dynamic-route-handlers
     // https://beta.nextjs.org/docs/data-fetching/mutating
-    await submitContactForm(form).then(
-      () =>
-        setState({
-          ...initialState,
-          status: 'resolved',
-        }),
-      error =>
-        setState({
-          ...initialState,
-          status: 'rejected',
-          error,
-        }),
-    )
+    try {
+      await submitContactForm(form)
+      setForm(initialForm)
+      setStatus('resolved')
+    } catch {
+      setError(error as Error)
+      setStatus('rejected')
+    }
   }
 
   return (
@@ -48,9 +44,9 @@ export default function ContactForm() {
             Full Name
             <input
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {...state.form, name: e.target.value},
+                setForm(form => ({
+                  ...form,
+                  name: e.target.value,
                 }))
               }
               required
@@ -67,9 +63,9 @@ export default function ContactForm() {
             Email address
             <input
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {...state.form, email: e.target.value},
+                setForm(form => ({
+                  ...form,
+                  email: e.target.value,
                 }))
               }
               type="email"
@@ -89,9 +85,9 @@ export default function ContactForm() {
             required
             value={form.message}
             onChange={e =>
-              setState(state => ({
-                ...state,
-                form: {...state.form, message: e.target.value},
+              setForm(form => ({
+                ...form,
+                message: e.target.value,
               }))
             }
             className="mt-2 block h-32 w-full rounded-md border border-gray-200 bg-white px-5 py-3 text-gray-700 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:placeholder-gray-600 dark:focus:border-blue-400 md:h-56"
@@ -100,7 +96,7 @@ export default function ContactForm() {
         </label>
       </div>
 
-      <Info status={status} error={error} mode="contact" />
+      <Info reset={resetStatus} status={status} error={error} mode="contact" />
 
       <button
         type="submit"

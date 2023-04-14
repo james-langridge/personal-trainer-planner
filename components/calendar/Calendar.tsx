@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react'
 import CalendarHeading from '@/components/calendar/CalendarHeading'
 import CalendarGrid from '@/components/calendar/CalendarGrid'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
-import useMediaQuery from '@/lib/useMediaQuery'
+import {useMediaQuery} from '@/hooks'
 import CalendarMobile from '@/components/calendar/CalendarMobile'
 
 const now = new Date()

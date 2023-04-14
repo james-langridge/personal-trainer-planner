@@ -6,7 +6,7 @@ const today = now.getDate()
 const thisMonth = now.getMonth()
 const thisYear = now.getFullYear()
 
-export default function useCalendarData() {
+export function useCalendarData() {
   const startDay = {
     day: today,
     weekDay: 0,

@@ -3,8 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 import {SESSION_STATUS} from '.prisma/client'
-import {updateSession} from '@/lib/api'
-import {useSessionStatus} from '@/lib/useSessionStatus'
+import {useSessionStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
 
 export default function SessionItem({
@@ -16,7 +15,7 @@ export default function SessionItem({
   isAdmin: boolean
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
-  const {status, toggleStatus} = useSessionStatus(session, updateSession)
+  const {status, toggleStatus} = useSessionStatus(session)
   const isTrainingSession = session.sessionType === 'TRAINING'
 
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {

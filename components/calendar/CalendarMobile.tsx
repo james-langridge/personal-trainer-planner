@@ -3,8 +3,7 @@ import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 import {getSessionsToday, shouldScrollToThisDay} from '@/lib/calendar'
 import DayMobile from '@/components/calendar/DayMobile'
-import useCalendarData from '@/lib/useCalendarData'
-import useCalendarIntersectionObserver from '@/lib/useCalendarIntersectionObserver'
+import {useCalendarData, useCalendarIntersectionObserver} from '@/hooks'
 
 export default function CalendarMobile({
   sessions,

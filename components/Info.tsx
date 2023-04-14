@@ -1,5 +1,16 @@
 import {useState} from 'react'
 
+export type Mode =
+  | 'login'
+  | 'contact'
+  | 'register'
+  | 'createSession'
+  | 'updateSession'
+  | 'deleteSession'
+  | 'changePassword'
+
+export type Status = 'idle' | 'pending' | 'resolved' | 'rejected'
+
 const contactContent = {
   pending: 'Sending message...',
   error: 'Error sending message:',
@@ -44,22 +55,28 @@ const changePasswordContent = {
 
 export default function Info({
   status,
+  reset,
   error,
   mode,
 }: {
-  status: string
-  error: null | Error
-  mode:
-    | 'login'
-    | 'contact'
-    | 'register'
-    | 'createSession'
-    | 'updateSession'
-    | 'deleteSession'
-    | 'changePassword'
+  status: Status
+  reset: () => void
+  error: undefined | Error
+  mode?: Mode
 }) {
   const [visible, setVisible] = useState(true)
-  const toggleVisible = () => setVisible(visible => !visible)
+  const toggleVisible = () => {
+    setVisible(visible => !visible)
+  }
+
+  const resetInfo = () => {
+    if (status === 'pending') {
+      return
+    }
+
+    toggleVisible()
+    reset()
+  }
 
   let content
 
@@ -98,7 +115,7 @@ export default function Info({
           role="alert"
           className="mt-4 rounded bg-yellow-600 p-2.5 text-center text-white"
         >
-          {content.pending}
+          {content?.pending}
         </div>
       )
       break
@@ -108,7 +125,7 @@ export default function Info({
           role="alert"
           className="mt-4 rounded bg-red-700 p-2.5 text-center text-white"
         >
-          {content.error}{' '}
+          {content?.error}{' '}
           <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
         </div>
       )
@@ -119,7 +136,7 @@ export default function Info({
           role="alert"
           className="mt-4 rounded bg-green-700 p-2.5 text-center text-white"
         >
-          {content.resolved}
+          {content?.resolved}
         </div>
       )
       break
@@ -128,10 +145,14 @@ export default function Info({
   return visible ? (
     <div
       role="button"
-      onKeyDown={toggleVisible}
+      onKeyDown={resetInfo}
       tabIndex={0}
-      onClick={toggleVisible}
+      onClick={resetInfo}
+      className="relative"
     >
+      {status !== 'pending' && (
+        <div className="absolute top-1 right-1.5 text-white">X</div>
+      )}
       {element}
     </div>
   ) : null

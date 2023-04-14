@@ -7,20 +7,18 @@ import {useRouter} from 'next/navigation'
 import Image from 'next/image'
 import Info from '@/components/Info'
 import {LOGO_URL} from '@/lib/constants'
+import {useStatus} from '@/hooks'
 
-const initialState: {
-  status: 'idle' | 'pending' | 'resolved' | 'rejected'
-  form: {
-    firstName: string
-    lastName: string
-    email: string
-    password: string
-  }
-  error: null | Error
+const initialForm: {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
 } = {
-  status: 'idle',
-  form: {firstName: '', lastName: '', email: '', password: ''},
-  error: null,
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
 }
 
 const registerContent = {
@@ -34,41 +32,33 @@ const loginContent = {
 }
 
 export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
-  const [state, setState] = useState({...initialState})
-  const {status, form, error} = state
+  const [form, setForm] = useState({...initialForm})
   const router = useRouter()
   const content = mode === 'register' ? registerContent : loginContent
+  const {status, error, setStatus, setError, resetStatus} = useStatus()
 
   const handleSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
       e.preventDefault()
 
-      setState({...state, status: 'pending'})
+      setStatus('pending')
 
       try {
         if (mode === 'register') {
           await register(form)
 
-          setState({
-            ...initialState,
-            status: 'resolved',
-          })
+          setForm(initialForm)
+          setStatus('resolved')
         } else {
           await login(form)
 
-          setState({
-            ...state,
-            status: 'resolved',
-          })
+          setStatus('resolved')
 
           router.push('/training-studio')
         }
       } catch (error) {
-        setState({
-          ...state,
-          status: 'rejected',
-          error: error as Error,
-        })
+        setError(error as Error)
+        setStatus('rejected')
       }
     },
     [form.email, form.firstName, form.lastName, form.password],
@@ -114,9 +104,9 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
                 <input
                   required
                   onChange={e =>
-                    setState(state => ({
-                      ...state,
-                      form: {...state.form, firstName: e.target.value},
+                    setForm(form => ({
+                      ...form,
+                      firstName: e.target.value,
                     }))
                   }
                   type="text"
@@ -147,9 +137,9 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
                 <input
                   required
                   onChange={e =>
-                    setState(state => ({
-                      ...state,
-                      form: {...state.form, lastName: e.target.value},
+                    setForm(form => ({
+                      ...form,
+                      lastName: e.target.value,
                     }))
                   }
                   type="text"
@@ -182,9 +172,9 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             <input
               required
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {...state.form, email: e.target.value},
+                setForm(form => ({
+                  ...form,
+                  email: e.target.value,
                 }))
               }
               type="email"
@@ -215,9 +205,9 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             <input
               required
               onChange={e =>
-                setState(state => ({
-                  ...state,
-                  form: {...state.form, password: e.target.value},
+                setForm(form => ({
+                  ...form,
+                  password: e.target.value,
                 }))
               }
               type="password"
@@ -227,7 +217,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
             />
           </div>
 
-          <Info status={status} error={error} mode={mode} />
+          <Info reset={resetStatus} status={status} error={error} mode={mode} />
 
           <div className="mt-6">
             <button
