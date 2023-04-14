@@ -5,7 +5,7 @@ import {SESSION_STATUS} from '.prisma/client'
 import {classNames} from '@/lib/misc'
 import {useSessionStatus} from '@/hooks'
 
-export default function SessionItemMobile({
+export function SessionItemMobile({
   session,
 }: {
   session: Session | SessionSerialisedDate

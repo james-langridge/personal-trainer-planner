@@ -7,9 +7,9 @@ import {
   isDayToday,
   isDayTomorrow,
 } from '@/lib/calendar'
-import SessionItemMobile from '@/components/calendar/SessionItemMobile'
+import {SessionItemMobile} from '@/components/calendar/SessionItemMobile'
 
-export default function DayMobile({
+export function DayMobile({
   dayData,
   sessionsToday,
 }: {

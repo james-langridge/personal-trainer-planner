@@ -1,7 +1,7 @@
-import CalendarNavbarClient from '@/components/calendar/CalendarNavbarClient'
+import {CalendarNavbarClient} from '@/components/calendar/CalendarNavbarClient'
 import {getByContentTypeId} from '@/lib/contentful'
 
-export default async function CalendarNavbar({isAdmin}: {isAdmin: boolean}) {
+export async function CalendarNavbar({isAdmin}: {isAdmin: boolean}) {
   const {items} = await getByContentTypeId('navbar', {
     include: 3,
   })

@@ -1,18 +1,20 @@
+'use client'
+
 import React, {useEffect, useRef, useState} from 'react'
 import {Session} from '@prisma/client'
 import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
 import {getSessionsToday, shouldScrollToThisDay} from '@/lib/calendar'
-import DayMobile from '@/components/calendar/DayMobile'
-import {useCalendarData, useCalendarIntersectionObserver} from '@/hooks'
+import {DayMobile} from '@/components/calendar/DayMobile'
+import {useMobileCalendarData, useCalendarIntersectionObserver} from '@/hooks'
 
-export default function CalendarMobile({
+export function CalendarMobile({
   sessions,
 }: {
   sessions?: Session[] | SessionSerialisedDate[]
 }) {
   const [isFrozen, setIsFrozen] = useState(false)
   const {data, scrollToThisDay, loadNextMonth, loadPreviousMonth} =
-    useCalendarData()
+    useMobileCalendarData()
   const startElementRef = useRef<HTMLDivElement>(null)
   const endElementRef = useRef(null)
   const scrollToRef = useRef<HTMLDivElement>(null)

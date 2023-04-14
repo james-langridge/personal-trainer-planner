@@ -4,7 +4,7 @@ import Info from '@/components/Info'
 import {SESSION_TYPE} from '@prisma/client'
 import {useCalendarForm, useStatus} from '@/hooks'
 
-export default function CalendarForm({
+export function CalendarForm({
   sessionId,
   userId = '',
   getUserSessions,

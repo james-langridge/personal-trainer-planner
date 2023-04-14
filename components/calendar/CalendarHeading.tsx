@@ -15,7 +15,7 @@ const monthNames = [
   'December',
 ]
 
-export default function CalendarHeading({
+export function CalendarHeading({
   year,
   month,
   setYear,

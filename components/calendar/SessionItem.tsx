@@ -6,7 +6,7 @@ import {SESSION_STATUS} from '.prisma/client'
 import {useSessionStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
 
-export default function SessionItem({
+export function SessionItem({
   session,
   isAdmin,
   setSessionId,

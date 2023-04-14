@@ -1,38 +1,13 @@
-import React, {useMemo} from 'react'
-import {
-  generateCalendarMonth,
-  getSessionsToday,
-  getShortWeekday,
-  isDayToday,
-} from '@/lib/calendar'
-import SessionItem from '@/components/calendar/SessionItem'
-import {Session} from '@prisma/client'
-import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
+import React from 'react'
 import {classNames} from '@/lib/misc'
 
-const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-
-export default function CalendarGrid({
-  year,
-  month,
-  sessions,
-  isAdmin,
-  setSessionId,
+export function CalendarGrid({
+  calendarSquares,
+  children,
 }: {
-  year: number
-  month: number
-  sessions?: Session[] | SessionSerialisedDate[]
-  isAdmin: boolean
-  setSessionId?: React.Dispatch<React.SetStateAction<string>>
+  calendarSquares: number
+  children: React.ReactNode
 }) {
-  const monthData = useMemo(
-    () => generateCalendarMonth(month, year),
-    [month, year],
-  )
-  const firstDayOfMonth = monthData[0].weekDay
-  const emptyDays = Array(firstDayOfMonth).fill(null)
-  const calendarSquares = firstDayOfMonth + monthData.length
-
   return (
     <div
       className={classNames(
@@ -40,54 +15,7 @@ export default function CalendarGrid({
         'grid h-full w-full grid-cols-calendar ring-offset-1',
       )}
     >
-      {emptyDays &&
-        emptyDays.map((_day, i) => {
-          return (
-            <div className="border text-center ring-1 ring-gray-400/25" key={i}>
-              {/*TODO: localise empty day names?*/}
-              <div className="text-xs lg:text-base">{dayNames[i]}</div>
-            </div>
-          )
-        })}
-
-      {monthData.map((day, index) => {
-        const weekday = getShortWeekday(day)
-        const sessionsToday = sessions ? getSessionsToday(sessions, day) : null
-        const isToday = isDayToday(day)
-
-        return (
-          <div
-            className="border text-center ring-1 ring-gray-400/25"
-            key={day.day + day.year + day.month}
-          >
-            {index + firstDayOfMonth < 7 && (
-              <div className="text-xs lg:text-base">{weekday}</div>
-            )}
-            <div
-              className={
-                'mx-auto w-6 rounded-full p-1 text-xs lg:w-8 lg:text-base' +
-                (isToday ? ` bg-blue-900 text-white` : '')
-              }
-            >
-              {day.day}
-            </div>
-            {sessionsToday &&
-              sessionsToday.map((session, i) => {
-                return (
-                  <div key={day.day * day.year * day.month * i}>
-                    {session && (
-                      <SessionItem
-                        session={session}
-                        isAdmin={isAdmin}
-                        setSessionId={setSessionId}
-                      />
-                    )}
-                  </div>
-                )
-              })}
-          </div>
-        )
-      })}
+      {children}
     </div>
   )
 }

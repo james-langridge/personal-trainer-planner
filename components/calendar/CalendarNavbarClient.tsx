@@ -29,7 +29,7 @@ const clientNavigation = [
   {href: '/profile', name: 'Profile'},
 ]
 
-export default function CalendarNavbarClient({logo, isAdmin}: Props) {
+export function CalendarNavbarClient({logo, isAdmin}: Props) {
   const {src, alt, width, height} = logo
   const router = useRouter()
   const navigation = isAdmin ? adminNavigation : clientNavigation

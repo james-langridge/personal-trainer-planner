@@ -1,5 +1,5 @@
 import React from 'react'
-import CalendarNavbar from '@/components/calendar/CalendarNavbar'
+import {CalendarNavbar} from '@/components/calendar/CalendarNavbar'
 import {getUserFromCookie} from '@/lib/auth'
 import {cookies} from 'next/headers'
 import {redirect} from 'next/navigation'

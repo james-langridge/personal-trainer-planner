@@ -10,7 +10,7 @@ export interface User {
   id: string
 }
 
-export default function CalendarDropdown({
+export function CalendarDropdown({
   setUser,
 }: {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>
