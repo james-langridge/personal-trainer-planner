@@ -3,6 +3,7 @@
 export * from './useCalendarData'
 export * from './useCalendarForm'
 export * from './useFetchSession'
+export * from './useLockBodyScroll'
 export * from './useMobileCalendarData'
 export * from './useStatus'
 export * from './useSessionStatus'

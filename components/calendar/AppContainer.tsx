@@ -1,7 +1,7 @@
 'use client'
 
-import React, {useEffect} from 'react'
-import {useCalendarData, useMediaQuery} from '@/hooks'
+import React from 'react'
+import {useCalendarData, useLockBodyScroll, useMediaQuery} from '@/hooks'
 import {Calendar} from '@/components/calendar/Calendar'
 import {CalendarDays} from '@/components/calendar/CalendarDays'
 import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
@@ -21,12 +21,7 @@ export function AppContainer({sessions}: {sessions: SessionSerialisedDate[]}) {
     setMonth,
   } = useCalendarData()
   const isMobile = useMediaQuery('(max-width: 639px)')
-
-  useEffect(() => {
-    // Lock scroll for large screens
-    if (!isMobile) document.body.style.overflow = 'hidden'
-    if (isMobile) document.body.style.overflow = 'visible'
-  }, [isMobile])
+  useLockBodyScroll(isMobile)
 
   return (
     <div className="flex h-[90vh]">
