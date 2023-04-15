@@ -131,3 +131,12 @@ export function getMonthName(dayData: Day) {
     month: 'short',
   })
 }
+
+export function serialiseDates(sessions: Session[]) {
+  return sessions.map(session => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {createdAt, updatedAt, ...rest} = session
+
+    return {...rest, date: session.date.toDateString()}
+  })
+}

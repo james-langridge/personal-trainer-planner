@@ -1,9 +1,10 @@
 import {getUserFromCookie} from '@/lib/auth'
 import {cookies} from 'next/headers'
 import {db} from '@/lib/db'
-import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
+import {SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
 import React from 'react'
 import {AppContainer} from '@/components/calendar/AppContainer'
+import {serialiseDates} from '@/lib/calendar'
 
 export interface SessionSerialisedDate {
   id: string
@@ -30,15 +31,6 @@ const getSessions = async (): Promise<SessionSerialisedDate[]> => {
   })
 
   return serialiseDates(sessions)
-}
-
-function serialiseDates(sessions: Session[]) {
-  return sessions.map(session => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {createdAt, updatedAt, ...rest} = session
-
-    return {...rest, date: session.date.toDateString()}
-  })
 }
 
 export default async function TrainingStudio() {
