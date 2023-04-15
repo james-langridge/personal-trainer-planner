@@ -3,8 +3,9 @@ import {cookies} from 'next/headers'
 import {db} from '@/lib/db'
 import {SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
 import React from 'react'
-import {AppContainer} from '@/components/calendar/AppContainer'
 import {serialiseDates} from '@/lib/calendar'
+import {Calendar} from '@/components/calendar/Calendar'
+import {Container} from '@/components/calendar/Container'
 
 export interface SerialisedSession {
   id: string
@@ -34,8 +35,11 @@ const getSessions = async (): Promise<SerialisedSession[]> => {
 }
 
 export default async function TrainingStudio() {
-  const serialisedSessions = await getSessions()
+  const sessions = await getSessions()
 
-  // Fetch the sessions in this server component to pass to 'use client' component
-  return <AppContainer sessions={serialisedSessions} />
+  return (
+    <Container>
+      <Calendar sessions={sessions} />
+    </Container>
+  )
 }

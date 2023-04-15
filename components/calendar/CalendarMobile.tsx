@@ -5,7 +5,12 @@ import {Session} from '@prisma/client'
 import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {getSessionsToday, shouldScrollToThisDay} from '@/lib/calendar'
 import {DayMobile} from '@/components/calendar/DayMobile'
-import {useMobileCalendarData, useCalendarIntersectionObserver} from '@/hooks'
+import {
+  useMobileCalendarData,
+  useCalendarIntersectionObserver,
+  useMediaQuery,
+  useLockBodyScroll,
+} from '@/hooks'
 
 export function CalendarMobile({
   sessions,
@@ -22,6 +27,8 @@ export function CalendarMobile({
     startElementRef,
     endElementRef,
   )
+  const isMobile = useMediaQuery('(max-width: 639px)')
+  useLockBodyScroll(isMobile)
 
   useEffect(() => {
     async function loadPrev() {
@@ -42,6 +49,10 @@ export function CalendarMobile({
   useEffect(() => {
     scrollToRef.current?.scrollIntoView()
   }, [scrollToThisDay])
+
+  if (!isMobile) {
+    return null
+  }
 
   return (
     <div className="py-5">

@@ -1,4 +1,5 @@
 import React from 'react'
+import {useMediaQuery} from '@/hooks'
 
 const monthNames = [
   'January',
@@ -27,6 +28,11 @@ export function CalendarHeading({
   setMonth: React.Dispatch<React.SetStateAction<number>>
 }) {
   const monthName = monthNames[month]
+  const isMobile = useMediaQuery('(max-width: 639px)')
+
+  if (isMobile) {
+    return null
+  }
 
   function decrementMonth() {
     if (month === 0) {

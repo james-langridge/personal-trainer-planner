@@ -9,12 +9,12 @@ export function CalendarDays({
   monthData,
   sessions,
   setSessionId,
-  isAdmin = false,
+  isAdmin,
 }: {
   monthData: Day[]
   sessions?: Session[] | SerialisedSession[]
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
-  isAdmin?: boolean
+  isAdmin: boolean
 }) {
   const firstDayOfMonth = monthData[0].weekDay
 
