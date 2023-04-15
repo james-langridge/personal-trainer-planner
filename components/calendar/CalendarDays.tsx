@@ -1,7 +1,7 @@
 import {Day, getSessionsToday} from '@/lib/calendar'
 import React from 'react'
 import {Session} from '@prisma/client'
-import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
+import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {CalendarDay} from '@/components/calendar/CalendarDay'
 import {SessionItems} from '@/components/calendar/SessionItems'
 
@@ -12,7 +12,7 @@ export function CalendarDays({
   isAdmin = false,
 }: {
   monthData: Day[]
-  sessions?: Session[] | SessionSerialisedDate[]
+  sessions?: Session[] | SerialisedSession[]
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
   isAdmin?: boolean
 }) {

@@ -1,5 +1,5 @@
 import {Session} from '@prisma/client'
-import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
+import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {
   Day,
   getMonthName,
@@ -14,10 +14,7 @@ export function DayMobile({
   sessionsToday,
 }: {
   dayData: Day
-  sessionsToday:
-    | (Session | SessionSerialisedDate | undefined)[]
-    | null
-    | undefined
+  sessionsToday: (Session | SerialisedSession | undefined)[] | null | undefined
 }) {
   const isToday = isDayToday(dayData)
   const isTomorrow = isDayTomorrow(dayData)

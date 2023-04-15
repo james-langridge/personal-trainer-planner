@@ -6,7 +6,7 @@ import React from 'react'
 import {AppContainer} from '@/components/calendar/AppContainer'
 import {serialiseDates} from '@/lib/calendar'
 
-export interface SessionSerialisedDate {
+export interface SerialisedSession {
   id: string
   ownerId: string
   status: SESSION_STATUS
@@ -18,7 +18,7 @@ export interface SessionSerialisedDate {
   sessionType: SESSION_TYPE
 }
 
-const getSessions = async (): Promise<SessionSerialisedDate[]> => {
+const getSessions = async (): Promise<SerialisedSession[]> => {
   const user = await getUserFromCookie(cookies())
 
   const sessions = await db.session.findMany({

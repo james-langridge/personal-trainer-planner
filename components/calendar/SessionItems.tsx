@@ -1,5 +1,5 @@
 import {Session} from '@prisma/client'
-import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
+import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {SessionItem} from '@/components/calendar/SessionItem'
 import React from 'react'
 import {Day} from '@/lib/calendar'
@@ -10,7 +10,7 @@ export function SessionItems({
   isAdmin,
   day,
 }: {
-  sessions: (Session | SessionSerialisedDate | undefined)[] | null | undefined
+  sessions: (Session | SerialisedSession | undefined)[] | null | undefined
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
   isAdmin: boolean
   day: Day

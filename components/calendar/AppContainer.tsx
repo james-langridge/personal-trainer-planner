@@ -8,9 +8,9 @@ import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
 import {CalendarGrid} from '@/components/calendar/CalendarGrid'
 import {CalendarHeading} from '@/components/calendar/CalendarHeading'
 import {CalendarMobile} from '@/components/calendar/CalendarMobile'
-import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
+import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 
-export function AppContainer({sessions}: {sessions: SessionSerialisedDate[]}) {
+export function AppContainer({sessions}: {sessions: SerialisedSession[]}) {
   const {
     calendarSquares,
     emptyDays,

@@ -1,5 +1,5 @@
 import {Session} from '@prisma/client'
-import {SessionSerialisedDate} from '@/app/(training-app)/training-studio/page'
+import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 
 function getDaysInMonth(month: number, year: number) {
   return new Date(year, month + 1, 0).getDate()
@@ -35,7 +35,7 @@ function areDatesEqual(calendarDate: Date, sessionDate: Date) {
 }
 
 export function getSessionsToday(
-  sessions: Session[] | SessionSerialisedDate[],
+  sessions: Session[] | SerialisedSession[],
   calendarDay: {
     day: number
     weekDay: number
