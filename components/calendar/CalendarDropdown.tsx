@@ -1,8 +1,8 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {Fragment} from 'react'
 import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
-import {fetchUsers} from '@/lib/api'
 import {classNames} from '@/lib/misc'
+import {useGetUsers} from '@/hooks/useGetUsers'
 
 export interface User {
   firstName: string
@@ -15,17 +15,7 @@ export function CalendarDropdown({
 }: {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>
 }) {
-  const [users, setUsers] = useState<User[]>()
-
-  const getUsers = async () => {
-    const users = await fetchUsers()
-
-    setUsers(users)
-  }
-
-  useEffect(() => {
-    void getUsers()
-  }, [])
+  const [users] = useGetUsers()
 
   return (
     <Menu as="div" className="relative mt-4 inline-block text-left">
