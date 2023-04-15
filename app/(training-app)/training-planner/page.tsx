@@ -3,8 +3,7 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {fetchSessions} from '@/lib/api'
 import {Session} from '@prisma/client'
-import {useCalendarData, useMediaQuery} from '@/hooks'
-import {CalendarMobile} from '@/components/calendar/CalendarMobile'
+import {useCalendarData} from '@/hooks'
 import {CalendarDropdown, User} from '@/components/calendar/CalendarDropdown'
 import {CalendarForm} from '@/components/calendar/CalendarForm'
 import {Calendar} from '@/components/calendar/Calendar'
@@ -28,7 +27,6 @@ export default function TrainingPlanner() {
     setYear,
     setMonth,
   } = useCalendarData()
-  const isMobile = useMediaQuery('(max-width: 639px)')
 
   const getUserSessions = useCallback(async () => {
     if (user) {
@@ -42,12 +40,6 @@ export default function TrainingPlanner() {
     void getUserSessions()
   }, [getUserSessions, user])
 
-  useEffect(() => {
-    // Lock scroll for large screens
-    if (!isMobile) document.body.style.overflow = 'hidden'
-    if (isMobile) document.body.style.overflow = 'visible'
-  }, [isMobile])
-
   return (
     <div className="flex h-[90vh]">
       <Sidebar>
@@ -60,27 +52,21 @@ export default function TrainingPlanner() {
         />
       </Sidebar>
       <Calendar>
-        {isMobile && <CalendarMobile sessions={sessions} />}
-
-        {!isMobile && (
-          <>
-            <CalendarHeading
-              year={year}
-              setYear={setYear}
-              month={month}
-              setMonth={setMonth}
-            />
-            <CalendarGrid calendarSquares={calendarSquares}>
-              <CalendarEmptyDays emptyDays={emptyDays} />
-              <CalendarDays
-                monthData={monthData}
-                sessions={sessions}
-                isAdmin
-                setSessionId={setSessionId}
-              />
-            </CalendarGrid>
-          </>
-        )}
+        <CalendarHeading
+          year={year}
+          setYear={setYear}
+          month={month}
+          setMonth={setMonth}
+        />
+        <CalendarGrid calendarSquares={calendarSquares}>
+          <CalendarEmptyDays emptyDays={emptyDays} />
+          <CalendarDays
+            monthData={monthData}
+            sessions={sessions}
+            isAdmin
+            setSessionId={setSessionId}
+          />
+        </CalendarGrid>
       </Calendar>
     </div>
   )
