@@ -3,12 +3,7 @@ import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {classNames} from '@/lib/misc'
 import {useGetUsers} from '@/hooks/useGetUsers'
-
-export interface User {
-  firstName: string
-  lastName: string
-  id: string
-}
+import {User} from '@/app/api/users/route'
 
 export function CalendarDropdown({
   setUser,

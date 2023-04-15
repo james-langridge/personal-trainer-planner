@@ -2,7 +2,7 @@ import {NextResponse} from 'next/server'
 import {db} from '@/lib/db'
 
 export async function GET() {
-  const users = await db.user.findMany({
+  const users: User[] = await db.user.findMany({
     where: {
       admin: false,
     },
@@ -17,4 +17,10 @@ export async function GET() {
     status: 200,
     data: users,
   })
+}
+
+export interface User {
+  firstName: string | null
+  lastName: string | null
+  id: string
 }

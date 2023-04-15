@@ -1,13 +1,14 @@
 'use client'
 
 import React, {useState} from 'react'
-import {CalendarDropdown, User} from '@/components/calendar/CalendarDropdown'
+import {CalendarDropdown} from '@/components/calendar/CalendarDropdown'
 import {CalendarForm} from '@/components/calendar/CalendarForm'
 import {Calendar} from '@/components/calendar/Calendar'
 import {Sidebar} from '@/components/calendar/Sidebar'
 import {UserName} from '@/components/calendar/UserName'
 import {Container} from '@/components/calendar/Container'
 import {useUserSessions} from '@/hooks'
+import {User} from '@/app/api/users/route'
 
 export default function TrainingPlanner() {
   const [user, setUser] = useState<User>()

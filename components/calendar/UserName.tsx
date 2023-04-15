@@ -1,5 +1,5 @@
 import React from 'react'
-import {User} from '@/components/calendar/CalendarDropdown'
+import {User} from '@/app/api/users/route'
 
 export function UserName({user}: {user?: User}) {
   if (!user) {
