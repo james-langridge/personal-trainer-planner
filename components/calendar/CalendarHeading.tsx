@@ -1,20 +1,6 @@
 import React from 'react'
 import {useMediaQuery} from '@/hooks'
-
-const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-]
+import {monthNames} from '@/lib/calendar'
 
 export function CalendarHeading({
   year,

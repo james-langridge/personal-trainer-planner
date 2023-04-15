@@ -1,6 +1,21 @@
 import {Session} from '@prisma/client'
 import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 
+export const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
+
 function getDaysInMonth(month: number, year: number) {
   return new Date(year, month + 1, 0).getDate()
 }
