@@ -1,6 +1,6 @@
 import React from 'react'
+import {dayNames} from '@/lib/calendar'
 
-const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 export function CalendarEmptyDays({emptyDays}: {emptyDays: null[]}) {
   if (!emptyDays.length) {
     return null

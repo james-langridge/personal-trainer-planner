@@ -16,6 +16,8 @@ export const monthNames = [
   'December',
 ]
 
+export const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
 function getDaysInMonth(month: number, year: number) {
   return new Date(year, month + 1, 0).getDate()
 }
