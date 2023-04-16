@@ -21,6 +21,7 @@ interface Props {
 const adminNavigation = [
   {href: '/training-planner', name: 'Training planner'},
   {href: '/register', name: 'Create client'},
+  {href: '/clients', name: 'Clients'},
   {href: '/profile', name: 'Profile'},
 ]
 
