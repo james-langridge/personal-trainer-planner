@@ -1,4 +1,4 @@
-# Fit For Life Trainer &middot; [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0) ![This repository is actively maintained](https://img.shields.io/maintenance/yes/2023)
+# Fit For Life Trainer &middot; [![License: WTFPL](https://img.shields.io/github/license/james-langridge/fit-for-life-trainer.svg)](http://www.wtfpl.net/about/) ![This repository is actively maintained](https://img.shields.io/maintenance/yes/2023)
 
 Full stack web app for a personal trainer made with Typescript, Next.js v13, React v18, Tailwind CSS, Contentful (headless CMS) integration, PostgreSQL, and Prisma.
 
