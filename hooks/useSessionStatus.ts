@@ -3,17 +3,19 @@ import {SESSION_STATUS} from '.prisma/client'
 import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {Session} from '@prisma/client'
 import {updateSession} from '@/lib/api'
+import {useQueryClient} from '@tanstack/react-query'
 
 export function useSessionStatus(session: Session | SerialisedSession) {
   const [status, setStatus] = useState(session.status)
   const [isFirstRender, setIsFirstRender] = useState(true)
+  const queryClient = useQueryClient()
 
   const updateStatus = useCallback(async () => {
     await updateSession({
       sessionId: session.id,
       status: status,
-    })
-  }, [session.id, status])
+    }).then(() => queryClient.invalidateQueries({queryKey: ['users']}))
+  }, [queryClient, session.id, status])
 
   useEffect(() => {
     // Added this check to avoid making PUT reqs when the checkbox is checked on the first render
