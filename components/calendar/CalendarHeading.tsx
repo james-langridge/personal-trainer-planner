@@ -1,5 +1,5 @@
 import React from 'react'
-import {useMediaQuery} from '@/hooks'
+import {useIsMobile} from '@/hooks'
 import {monthNames} from '@/lib/calendar'
 
 export function CalendarHeading({
@@ -14,7 +14,7 @@ export function CalendarHeading({
   setMonth: React.Dispatch<React.SetStateAction<number>>
 }) {
   const monthName = monthNames[month]
-  const isMobile = useMediaQuery('(max-width: 639px)')
+  const isMobile = useIsMobile()
 
   if (isMobile) {
     return null

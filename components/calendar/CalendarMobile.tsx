@@ -8,8 +8,8 @@ import {DayMobile} from '@/components/calendar/DayMobile'
 import {
   useMobileCalendarData,
   useCalendarIntersectionObserver,
-  useMediaQuery,
   useLockBodyScroll,
+  useIsMobile,
 } from '@/hooks'
 
 export function CalendarMobile({
@@ -27,8 +27,8 @@ export function CalendarMobile({
     startElementRef,
     endElementRef,
   )
-  const isMobile = useMediaQuery('(max-width: 639px)')
-  useLockBodyScroll(isMobile)
+  const isMobile = useIsMobile()
+  useLockBodyScroll()
 
   useEffect(() => {
     async function loadPrev() {

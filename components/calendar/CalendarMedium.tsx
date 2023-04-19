@@ -1,5 +1,6 @@
 import React from 'react'
-import {useLockBodyScroll, useMediaQuery} from '@/hooks'
+import {useLockBodyScroll} from '@/hooks'
+import {useIsMobile} from '@/hooks'
 
 export function CalendarMedium({
   children,
@@ -8,8 +9,8 @@ export function CalendarMedium({
   children: React.ReactNode
   isAdmin: boolean
 }) {
-  const isMobile = useMediaQuery('(max-width: 639px)')
-  useLockBodyScroll(isMobile)
+  const isMobile = useIsMobile()
+  useLockBodyScroll()
 
   if (isMobile && !isAdmin) {
     return null
