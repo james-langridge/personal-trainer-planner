@@ -1,5 +1,6 @@
 import {NextResponse} from 'next/server'
 import {db} from '@/lib/db'
+import {User} from '@/lib/api'
 
 export async function GET() {
   const users: User[] = await db.user.findMany({
@@ -13,14 +14,5 @@ export async function GET() {
     },
   })
 
-  return NextResponse.json({
-    status: 200,
-    data: users,
-  })
-}
-
-export interface User {
-  firstName: string | null
-  lastName: string | null
-  id: string
+  return NextResponse.json({users})
 }

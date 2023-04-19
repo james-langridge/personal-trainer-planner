@@ -1,5 +1,6 @@
 import React from 'react'
-import {User} from '@/app/api/users/route'
+
+import {User} from '@/lib/api'
 
 export function UserName({user}: {user?: User}) {
   if (!user) {

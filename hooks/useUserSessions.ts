@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useState} from 'react'
-import {fetchSessions} from '@/lib/api'
+import {fetchSessions, User} from '@/lib/api'
 import {Session} from '@prisma/client'
-import {User} from '@/app/api/users/route'
 
 export function useUserSessions(user?: User) {
   const [sessions, setSessions] = useState<Session[]>()

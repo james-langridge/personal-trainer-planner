@@ -2,15 +2,15 @@ import React, {Fragment} from 'react'
 import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {classNames} from '@/lib/misc'
-import {useGetUsers} from '@/hooks/useGetUsers'
-import {User} from '@/app/api/users/route'
+import {useQuery} from '@tanstack/react-query'
+import {fetchUsers, User} from '@/lib/api'
 
 export function CalendarDropdown({
   setUser,
 }: {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>
 }) {
-  const [users] = useGetUsers()
+  const {data} = useQuery(['usersShort'], fetchUsers)
 
   return (
     <Menu as="div" className="relative mt-4 inline-block text-left">
@@ -35,8 +35,8 @@ export function CalendarDropdown({
       >
         <Menu.Items className="w-50 absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            {users &&
-              users.map(user => {
+            {data &&
+              data.map(user => {
                 return (
                   <Menu.Item key={user.lastName}>
                     {({active}) => (

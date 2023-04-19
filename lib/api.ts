@@ -1,4 +1,5 @@
 import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
+import axios from 'axios'
 
 const fetcher = async ({
   url,
@@ -75,11 +76,18 @@ export const register = async (body: {
   })
 }
 
-export const fetchUsers = async () => {
-  return fetcher({
-    url: '/api/users',
-    method: 'get',
-  })
+export interface User {
+  firstName: string | null
+  lastName: string | null
+  id: string
+}
+
+export const fetchUsers = async (): Promise<User[]> => {
+  const {
+    data: {users},
+  } = await axios.get('/api/users')
+
+  return users
 }
 
 export const fetchUser = async (id: string) => {

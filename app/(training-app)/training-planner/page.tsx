@@ -8,7 +8,8 @@ import {Sidebar} from '@/components/calendar/Sidebar'
 import {UserName} from '@/components/calendar/UserName'
 import {Container} from '@/components/calendar/Container'
 import {useUserSessions} from '@/hooks'
-import {User} from '@/app/api/users/route'
+
+import {User} from '@/lib/api'
 
 export default function TrainingPlanner() {
   const [user, setUser] = useState<User>()
