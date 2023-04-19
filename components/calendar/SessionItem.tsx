@@ -10,12 +10,14 @@ export function SessionItem({
   session,
   isAdmin,
   setSessionId,
+  userId,
 }: {
   session: Session | SerialisedSession
   isAdmin: boolean
   setSessionId?: React.Dispatch<React.SetStateAction<string>>
+  userId?: string
 }) {
-  const {status, toggleStatus} = useSessionStatus(session)
+  const {status, toggleStatus} = useSessionStatus(session, userId)
   const isTrainingSession = session.sessionType === 'TRAINING'
   const isAppointment = session.sessionType === 'APPOINTMENT'
 
