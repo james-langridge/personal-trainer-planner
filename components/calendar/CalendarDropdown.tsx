@@ -3,14 +3,15 @@ import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {classNames} from '@/lib/misc'
 import {useQuery} from '@tanstack/react-query'
-import {fetchUsers, User} from '@/lib/api'
+import {getUsers} from '@/lib/api'
+import {SerialisedUser} from '@/lib/users'
 
 export function CalendarDropdown({
   setUser,
 }: {
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>
+  setUser: React.Dispatch<React.SetStateAction<SerialisedUser | undefined>>
 }) {
-  const {data} = useQuery(['usersShort'], fetchUsers)
+  const {data} = useQuery(['users'], getUsers)
 
   return (
     <Menu as="div" className="relative mt-4 inline-block text-left">

@@ -5,7 +5,6 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
 
   if (body.key === 'static_key') {
-    console.log('hello')
     const cookie = serialize(process.env.COOKIE_NAME || '', '', {
       httpOnly: true,
       maxAge: -1,

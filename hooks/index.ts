@@ -3,6 +3,7 @@
 export * from './useCalendarData'
 export * from './useCalendarForm'
 export * from './useCalendarIntersectionObserver'
+export * from './useClientsTableData'
 export * from './useFetchSession'
 export * from './useIntersectionObserver'
 export * from './useIsMobile'

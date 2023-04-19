@@ -1,6 +1,4 @@
-import {Session, User} from '@prisma/client'
-
-type UserData = Omit<User, 'password' | 'admin'> & {sessions: Session[]}
+import {UserSession, UserWithSessions} from '@/lib/api'
 
 type SessionData = {
   sessionsAssigned: number
@@ -53,28 +51,7 @@ export function isValidKey(key: string): key is SerialisedUserKey {
   return validKeys.includes(key as SerialisedUserKey)
 }
 
-export function sortUsers(key: SerialisedUserKey, users: SerialisedUser[]) {
-  return users.sort((a, b) => {
-    const keyA = a[key]
-    const keyB = b[key]
-
-    if (!keyA || !keyB) {
-      return 0
-    }
-
-    if (keyA < keyB) {
-      return -1
-    }
-
-    if (keyA > keyB) {
-      return 1
-    }
-
-    return 0
-  })
-}
-
-export function serialiseUsers(users: UserData[]): SerialisedUser[] {
+export function serialiseUsers(users: UserWithSessions[]): SerialisedUser[] {
   return users.map(user => {
     const {createdAt, updatedAt, sessions, ...rest} = user
     const {
@@ -90,13 +67,13 @@ export function serialiseUsers(users: UserData[]): SerialisedUser[] {
       sessionsCompleted: sessionsCompleted.toString(),
       appointmentsAttended: appointmentsAttended.toString(),
       appointments: appointments.toString(),
-      createdAt: formatDate(createdAt),
-      updatedAt: formatDate(updatedAt),
+      createdAt: createdAt.substring(0, 10),
+      updatedAt: updatedAt.substring(0, 10),
     }
   })
 }
 
-function extractSessionData(sessions: Session[]): SessionData {
+function extractSessionData(sessions: UserSession[]): SessionData {
   const sessionsData = {
     sessionsAssigned: 0,
     sessionsCompleted: 0,
@@ -123,22 +100,4 @@ function extractSessionData(sessions: Session[]): SessionData {
 
     return acc
   }, sessionsData)
-}
-
-function formatDate(date: Date) {
-  const year = date.getFullYear()
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const day = date.getDate().toString().padStart(2, '0')
-
-  return `${year}-${month}-${day}`
-}
-
-export function trimUsers(users: (User & {sessions: Session[]})[]) {
-  return users.map(user => {
-    // Cannot include sessions in user query as well as omit these fields
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {admin, password, ...rest} = user
-
-    return rest
-  })
 }

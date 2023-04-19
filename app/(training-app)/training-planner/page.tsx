@@ -8,18 +8,17 @@ import {Sidebar} from '@/components/calendar/Sidebar'
 import {UserName} from '@/components/calendar/UserName'
 import {Container} from '@/components/calendar/Container'
 import {useUserSessions} from '@/hooks'
-
-import {User} from '@/lib/api'
+import {SerialisedUser} from '@/lib/users'
 
 export default function TrainingPlanner() {
-  const [user, setUser] = useState<User>()
+  const [user, setUser] = useState<SerialisedUser>()
   const [sessionId, setSessionId] = useState('')
   const {sessions, getUserSessions} = useUserSessions(user)
 
   return (
     <Container>
       <Sidebar>
-        <UserName user={user} />
+        <UserName firstName={user?.firstName} lastName={user?.lastName} />
         <CalendarDropdown setUser={setUser} />
         <CalendarForm
           userId={user?.id}

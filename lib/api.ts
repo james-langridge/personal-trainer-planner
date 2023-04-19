@@ -1,5 +1,6 @@
 import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
 import axios from 'axios'
+import {serialiseUsers} from '@/lib/users'
 
 const fetcher = async ({
   url,
@@ -76,18 +77,36 @@ export const register = async (body: {
   })
 }
 
-export interface User {
-  firstName: string | null
-  lastName: string | null
+export type UserSession = {
   id: string
+  createdAt: string
+  updatedAt: string
+  ownerId: string
+  status: SESSION_STATUS
+  name: string
+  date: string
+  description: string | null
+  videoUrl: string | null
+  sessionType: SESSION_TYPE
+  deleted: boolean
 }
 
-export const fetchUsers = async (): Promise<User[]> => {
+export type UserWithSessions = {
+  id: string
+  createdAt: string
+  updatedAt: string
+  email: string
+  firstName: string | null
+  lastName: string | null
+  sessions: UserSession[]
+}
+
+export const getUsers = async () => {
   const {
     data: {users},
   } = await axios.get('/api/users')
 
-  return users
+  return serialiseUsers(users)
 }
 
 export const fetchUser = async (id: string) => {

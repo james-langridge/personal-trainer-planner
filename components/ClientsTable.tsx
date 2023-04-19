@@ -1,31 +1,12 @@
 'use client'
 
-import React, {useState} from 'react'
+import React from 'react'
 import SortSvg from '@/components/SortSvg'
-import {
-  isValidKey,
-  keyMap,
-  SerialisedUser,
-  sortUsers,
-  validKeys,
-} from '@/lib/users'
+import {keyMap, validKeys} from '@/lib/users'
+import {useClientsTableData} from '@/hooks'
 
-export default function ClientsTable({
-  initialUsers,
-}: {
-  initialUsers: SerialisedUser[]
-}) {
-  const [users, setUsers] = useState(initialUsers)
-
-  function onClick(e: React.MouseEvent) {
-    const key = e.currentTarget.id
-
-    if (isValidKey(key)) {
-      const sortedUsers = sortUsers(key, [...users])
-
-      setUsers(sortedUsers)
-    }
-  }
+export default function ClientsTable() {
+  const {data, setSortCol} = useClientsTableData()
 
   return (
     <section className="container mx-auto px-4">
@@ -49,7 +30,7 @@ export default function ClientsTable({
                         >
                           <button
                             id={key}
-                            onClick={e => onClick(e)}
+                            onClick={e => setSortCol(e.currentTarget.id)}
                             className="flex items-center gap-x-3 focus:outline-none"
                           >
                             <span>{keyMap[key]}</span>
@@ -62,30 +43,31 @@ export default function ClientsTable({
                 </thead>
 
                 <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                  {users.map(user => {
-                    return (
-                      <tr key={user.id}>
-                        {validKeys.map(key => {
-                          if (key === 'id') {
-                            return null
-                          }
+                  {data &&
+                    data.map(user => {
+                      return (
+                        <tr key={user.id}>
+                          {validKeys.map(key => {
+                            if (key === 'id') {
+                              return null
+                            }
 
-                          return (
-                            <td
-                              key={key}
-                              className="whitespace-nowrap px-4 py-4 text-sm"
-                            >
-                              <div>
-                                <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
-                                  {user[key]?.toString()}
-                                </p>
-                              </div>
-                            </td>
-                          )
-                        })}
-                      </tr>
-                    )
-                  })}
+                            return (
+                              <td
+                                key={key}
+                                className="whitespace-nowrap px-4 py-4 text-sm"
+                              >
+                                <div>
+                                  <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
+                                    {user[key]?.toString()}
+                                  </p>
+                                </div>
+                              </td>
+                            )
+                          })}
+                        </tr>
+                      )
+                    })}
                 </tbody>
               </table>
             </div>

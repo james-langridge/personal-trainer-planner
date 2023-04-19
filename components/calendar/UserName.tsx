@@ -1,15 +1,19 @@
 import React from 'react'
 
-import {User} from '@/lib/api'
-
-export function UserName({user}: {user?: User}) {
-  if (!user) {
+export function UserName({
+  firstName,
+  lastName,
+}: {
+  firstName?: string | null
+  lastName?: string | null
+}) {
+  if (!firstName || !lastName) {
     return null
   }
 
   return (
     <span className="mt-4 text-center font-medium text-gray-800 dark:text-gray-200">
-      {user && `${user.firstName} ${user.lastName}`}
+      {`${firstName} ${lastName}`}
     </span>
   )
 }

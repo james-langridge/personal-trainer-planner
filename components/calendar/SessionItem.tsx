@@ -17,6 +17,7 @@ export function SessionItem({
 }) {
   const {status, toggleStatus} = useSessionStatus(session)
   const isTrainingSession = session.sessionType === 'TRAINING'
+  const isAppointment = session.sessionType === 'APPOINTMENT'
 
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
     event.stopPropagation()
@@ -33,6 +34,15 @@ export function SessionItem({
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
       {isTrainingSession && (
+        <input
+          type="checkbox"
+          checked={status === SESSION_STATUS.COMPLETED}
+          className="h-7 w-7 rounded"
+          onChange={toggleStatus}
+        />
+      )}
+
+      {isAppointment && isAdmin && (
         <input
           type="checkbox"
           checked={status === SESSION_STATUS.COMPLETED}
