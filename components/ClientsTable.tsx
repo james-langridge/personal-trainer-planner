@@ -18,7 +18,7 @@ export default function ClientsTable() {
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
                     {validKeys.map(key => {
-                      if (key === 'id') {
+                      if (key === 'id' || key === 'sessions') {
                         return null
                       }
 
@@ -48,7 +48,7 @@ export default function ClientsTable() {
                       return (
                         <tr key={user.id}>
                           {validKeys.map(key => {
-                            if (key === 'id') {
+                            if (key === 'id' || key === 'sessions') {
                               return null
                             }
 

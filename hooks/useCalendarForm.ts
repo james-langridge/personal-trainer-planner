@@ -30,7 +30,7 @@ export const useCalendarForm = (
   React.Dispatch<React.SetStateAction<CalendarFormState>>,
   () => void,
 ] => {
-  const [form, setForm] = useState<CalendarFormState>({
+  const [session, setSession] = useState<CalendarFormState>({
     ...initialState,
     ownerId: userId,
   })
@@ -39,16 +39,16 @@ export const useCalendarForm = (
 
   useEffect(() => {
     if (sessionData) {
-      setForm(sessionData)
+      setSession(sessionData)
     }
   }, [sessionData])
 
   function resetForm() {
-    setForm({
+    setSession({
       ...initialState,
       ownerId: userId,
     })
   }
 
-  return [form, setForm, resetForm]
+  return [session, setSession, resetForm]
 }

@@ -2,6 +2,8 @@ import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
 import axios from 'axios'
 import {serialiseUsers} from '@/lib/users'
 
+import {QueryKey} from '@tanstack/react-query'
+
 const fetcher = async ({
   url,
   method,
@@ -109,13 +111,6 @@ export const getUsers = async () => {
   return serialiseUsers(users)
 }
 
-export const fetchUser = async (id: string) => {
-  return fetcher({
-    url: `/api/user/${id}`,
-    method: 'get',
-  })
-}
-
 export const updatePassword = async (body: {
   id: string
   oldPassword: string
@@ -137,11 +132,18 @@ export const fetchSession = async (id: string): Promise<Session> => {
   })
 }
 
-export const fetchSessions = async (id: string): Promise<Session[]> => {
-  return fetcher({
-    url: `/api/sessions/${id}`,
-    method: 'get',
-  })
+export const getSessionsByUserId = async ({
+  queryKey,
+}: {
+  queryKey: QueryKey
+}): Promise<Session[]> => {
+  const id = queryKey[1]
+
+  const {
+    data: {sessions},
+  } = await axios.get(`/api/sessions/${id}`)
+
+  return sessions
 }
 
 export const createSession = async (body: {

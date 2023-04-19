@@ -18,6 +18,7 @@ export type SerialisedUser = {
   sessionsCompleted: string
   appointments: string
   appointmentsAttended: string
+  sessions: UserSession[]
 }
 
 type SerialisedUserKey = keyof SerialisedUser
@@ -29,6 +30,7 @@ export const validKeys: SerialisedUserKey[] = [
   'email',
   'firstName',
   'lastName',
+  'sessions',
   'sessionsAssigned',
   'sessionsCompleted',
   'appointments',
@@ -63,6 +65,7 @@ export function serialiseUsers(users: UserWithSessions[]): SerialisedUser[] {
 
     return {
       ...rest,
+      sessions,
       sessionsAssigned: sessionsAssigned.toString(),
       sessionsCompleted: sessionsCompleted.toString(),
       appointmentsAttended: appointmentsAttended.toString(),

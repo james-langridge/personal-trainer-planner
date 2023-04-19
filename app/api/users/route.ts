@@ -2,10 +2,10 @@ import {NextResponse} from 'next/server'
 import {db} from '@/lib/db'
 import {Session, User} from '@prisma/client'
 
-type Users = Omit<User, 'password' | 'admin'> & {sessions: Session[]}
+type UserRes = Omit<User, 'password' | 'admin'> & {sessions: Session[]}
 
 export async function GET() {
-  const users: Users[] = await db.user.findMany({
+  const users: UserRes[] = await db.user.findMany({
     select: {
       id: true,
       createdAt: true,

@@ -13,20 +13,16 @@ import {SerialisedUser} from '@/lib/users'
 export default function TrainingPlanner() {
   const [user, setUser] = useState<SerialisedUser>()
   const [sessionId, setSessionId] = useState('')
-  const {sessions, getUserSessions} = useUserSessions(user)
+  const {sessionsData} = useUserSessions(user?.id)
 
   return (
     <Container>
       <Sidebar>
         <UserName firstName={user?.firstName} lastName={user?.lastName} />
         <CalendarDropdown setUser={setUser} />
-        <CalendarForm
-          userId={user?.id}
-          sessionId={sessionId}
-          getUserSessions={getUserSessions}
-        />
+        <CalendarForm userId={user?.id} sessionId={sessionId} />
       </Sidebar>
-      <Calendar sessions={sessions} setSessionId={setSessionId} isAdmin />
+      <Calendar sessions={sessionsData} setSessionId={setSessionId} isAdmin />
     </Container>
   )
 }
