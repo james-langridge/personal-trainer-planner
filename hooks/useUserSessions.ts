@@ -1,12 +1,21 @@
 import {getSessionsByUserId} from '@/lib/api'
-import {useQuery} from '@tanstack/react-query'
+import {useCallback, useEffect, useState} from 'react'
+import {Session} from '@prisma/client'
 
-export function useUserSessions(userId: string | undefined) {
-  const {data: sessionsData} = useQuery({
-    queryKey: ['sessions', userId],
-    queryFn: getSessionsByUserId,
-    enabled: !!userId,
-  })
+export function useUserSessions(userId: string | undefined = '') {
+  const [sessions, setSessions] = useState<Session[]>()
 
-  return {sessionsData}
+  const fetchSessions = useCallback(async () => {
+    const sessions = await getSessionsByUserId(userId)
+
+    setSessions(sessions)
+  }, [userId])
+
+  useEffect(() => {
+    if (userId) {
+      void fetchSessions()
+    }
+  }, [fetchSessions, userId])
+
+  return {sessions, fetchSessions}
 }

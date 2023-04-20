@@ -1,7 +1,5 @@
 import '../styles/globals.css'
 import React from 'react'
-import Providers from '@/app/providers'
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 
 export const metadata = {
   title: 'Fit For Life Trainer',
@@ -15,12 +13,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Providers>
-          {children}
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Providers>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

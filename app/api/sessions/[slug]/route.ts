@@ -15,5 +15,8 @@ export async function GET(
     },
   })
 
-  return NextResponse.json({sessions})
+  return NextResponse.json({
+    status: 200,
+    data: sessions,
+  })
 }

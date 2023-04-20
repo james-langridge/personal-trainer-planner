@@ -1,19 +1,18 @@
 import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
-import axios from 'axios'
-import {serialiseUsers} from '@/lib/users'
-
-import {QueryKey} from '@tanstack/react-query'
+import {SerialisedUser, transformUsers} from '@/lib/users'
 
 const fetcher = async ({
   url,
   method,
   body,
   json = true,
+  cache,
 }: {
   url: string
   method: string
   body?: {[key: string]: string}
   json?: boolean
+  cache?: 'force-cache' | 'no-store'
 }) => {
   const res = await fetch(url, {
     method,
@@ -22,6 +21,7 @@ const fetcher = async ({
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    cache: cache && cache,
   })
 
   const data = await res.json()
@@ -79,36 +79,13 @@ export const register = async (body: {
   })
 }
 
-export type UserSession = {
-  id: string
-  createdAt: string
-  updatedAt: string
-  ownerId: string
-  status: SESSION_STATUS
-  name: string
-  date: string
-  description: string | null
-  videoUrl: string | null
-  sessionType: SESSION_TYPE
-  deleted: boolean
-}
+export const getUsersWithSessions = async (): Promise<SerialisedUser[]> => {
+  const users = await fetcher({
+    url: '/api/users',
+    method: 'get',
+  })
 
-export type UserWithSessions = {
-  id: string
-  createdAt: string
-  updatedAt: string
-  email: string
-  firstName: string | null
-  lastName: string | null
-  sessions: UserSession[]
-}
-
-export const getUsers = async () => {
-  const {
-    data: {users},
-  } = await axios.get('/api/users')
-
-  return serialiseUsers(users)
+  return transformUsers(users)
 }
 
 export const updatePassword = async (body: {
@@ -132,18 +109,11 @@ export const fetchSession = async (id: string): Promise<Session> => {
   })
 }
 
-export const getSessionsByUserId = async ({
-  queryKey,
-}: {
-  queryKey: QueryKey
-}): Promise<Session[]> => {
-  const id = queryKey[1]
-
-  const {
-    data: {sessions},
-  } = await axios.get(`/api/sessions/${id}`)
-
-  return sessions
+export const getSessionsByUserId = async (id: string): Promise<Session[]> => {
+  return fetcher({
+    url: `/api/sessions/${id}`,
+    method: 'get',
+  })
 }
 
 export const createSession = async (body: {

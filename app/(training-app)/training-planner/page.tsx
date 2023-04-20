@@ -19,7 +19,7 @@ export default function TrainingPlanner() {
   const [user, setUser] = useState<SerialisedUser>()
   const [sessionId, setSessionId] = useState('')
   const userId = user?.id
-  const {sessionsData} = useUserSessions(userId)
+  const {sessions, fetchSessions} = useUserSessions(userId)
   const {
     calendarSquares,
     emptyDays,
@@ -37,7 +37,11 @@ export default function TrainingPlanner() {
       <Sidebar>
         <UserName firstName={user?.firstName} lastName={user?.lastName} />
         <CalendarDropdown setUser={setUser} />
-        <CalendarForm userId={userId} sessionId={sessionId} />
+        <CalendarForm
+          userId={userId}
+          sessionId={sessionId}
+          getUserSessions={fetchSessions}
+        />
       </Sidebar>
       <div className="flex w-full flex-col px-5 sm:items-center ">
         <CalendarHeading
@@ -49,8 +53,8 @@ export default function TrainingPlanner() {
         <CalendarGrid calendarSquares={calendarSquares}>
           <CalendarEmptyDays emptyDays={emptyDays} />
           {monthData.map((day, index) => {
-            const sessionsToday = sessionsData
-              ? getSessionsToday(sessionsData, day)
+            const sessionsToday = sessions
+              ? getSessionsToday(sessions, day)
               : null
             const isFirstWeek = index + firstDayOfMonth < 7
 
@@ -65,7 +69,6 @@ export default function TrainingPlanner() {
                             session={session}
                             isAdmin
                             setSessionId={setSessionId}
-                            userId={userId}
                           />
                         )}
                       </div>

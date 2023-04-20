@@ -1,25 +1,19 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import {SESSION_STATUS} from '.prisma/client'
 import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {Session} from '@prisma/client'
 import {updateSession} from '@/lib/api'
-import {useMutation, useQueryClient} from '@tanstack/react-query'
 
-export function useSessionStatus(
-  session: Session | SerialisedSession,
-  userId?: string,
-) {
+export function useSessionStatus(session: Session | SerialisedSession) {
   const [status, setStatus] = useState(session.status)
   const [isFirstRender, setIsFirstRender] = useState(true)
-  const queryClient = useQueryClient()
 
-  const updateMutation = useMutation({
-    mutationFn: updateSession,
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['users']})
-      queryClient.invalidateQueries({queryKey: ['sessions', userId]})
-    },
-  })
+  const updateStatus = useCallback(async () => {
+    await updateSession({
+      sessionId: session.id,
+      status: status,
+    })
+  }, [session.id, status])
 
   useEffect(() => {
     // Added this check to avoid making PUT reqs when the checkbox is checked on the first render
@@ -29,11 +23,8 @@ export function useSessionStatus(
       return
     }
 
-    updateMutation.mutate({
-      sessionId: session.id,
-      status: status,
-    })
-  }, [status])
+    void updateStatus()
+  }, [status, updateStatus])
 
   function toggleStatus() {
     if (status === SESSION_STATUS.NOT_STARTED) {

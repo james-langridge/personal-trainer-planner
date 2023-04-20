@@ -4,6 +4,8 @@ import {Session, User} from '@prisma/client'
 
 type UserRes = Omit<User, 'password' | 'admin'> & {sessions: Session[]}
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   const users: UserRes[] = await db.user.findMany({
     select: {
@@ -13,12 +15,19 @@ export async function GET() {
       email: true,
       firstName: true,
       lastName: true,
-      sessions: true,
+      sessions: {
+        where: {
+          deleted: false,
+        },
+      },
     },
     where: {
       admin: false,
     },
   })
 
-  return NextResponse.json({users})
+  return NextResponse.json({
+    status: 200,
+    data: users,
+  })
 }

@@ -24,5 +24,8 @@ export async function GET(
     },
   })
 
-  return NextResponse.json({user})
+  return NextResponse.json({
+    status: 200,
+    data: user,
+  })
 }

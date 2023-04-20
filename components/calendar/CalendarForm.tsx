@@ -1,18 +1,22 @@
 import React, {useEffect} from 'react'
 import {createSession, updateSession} from '@/lib/api'
 import {SESSION_TYPE} from '@prisma/client'
-import {useCalendarForm} from '@/hooks'
-import {useMutation, useQueryClient} from '@tanstack/react-query'
+import {useCalendarForm, useStatus} from '@/hooks'
+import Info from '@/components/Info'
 
 export function CalendarForm({
   sessionId,
   userId = '',
+  getUserSessions,
 }: {
   sessionId?: string
   userId?: string
+  getUserSessions: () => Promise<void>
 }) {
   const [session, setSession, resetForm] = useCalendarForm(userId, sessionId)
-  const queryClient = useQueryClient()
+  const {status, mode, setMode, error, setStatus, setError, resetStatus} =
+    useStatus()
+  const isDisabled = status !== 'idle'
 
   useEffect(() => {
     setSession(session => ({
@@ -21,37 +25,59 @@ export function CalendarForm({
     }))
   }, [setSession, userId])
 
-  const updateMutation = useMutation({
-    mutationFn: updateSession,
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['sessions', userId]})
-      resetForm()
-    },
-  })
-
-  const createMutation = useMutation({
-    mutationFn: createSession,
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['sessions', userId]})
-      resetForm()
-    },
-  })
-
-  const isDisabled =
-    createMutation.status === 'loading' || updateMutation.status === 'loading'
-
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    if (session.sessionId) {
-      updateMutation.mutate(session)
-    } else {
-      createMutation.mutate(session)
+    setStatus('pending')
+
+    try {
+      if (session.sessionId) {
+        setMode('updateSession')
+        await updateSession(session)
+      } else {
+        setMode('createSession')
+        await createSession(session)
+      }
+
+      setStatus('resolved')
+
+      // router.refresh() should refresh (fetch updated data and re-render on the server)
+      // the current route from the root layout down?  Doesn't seem to work currently.
+      // https://beta.nextjs.org/docs/data-fetching/mutating
+      // Temporary workaround:
+      void getUserSessions()
+    } catch (error) {
+      setStatus('rejected')
+      setError(error as Error)
+    } finally {
+      resetForm()
     }
   }
 
   async function handleDelete() {
-    updateMutation.mutate({...session, deleted: 'true'})
+    if (status !== 'idle' || !sessionId) {
+      return
+    }
+
+    setMode('deleteSession')
+    setStatus('pending')
+
+    try {
+      await updateSession({...session, deleted: 'true'})
+
+      setStatus('resolved')
+
+      // router.refresh() should refresh (fetch updated data and re-render on the server)
+      // the current route from the root layout down?  Doesn't seem to work currently.
+      // https://beta.nextjs.org/docs/data-fetching/mutating
+      // Temporary workaround:
+      void getUserSessions()
+    } catch (error) {
+      setStatus('rejected')
+      setError(error as Error)
+    } finally {
+      resetForm()
+    }
   }
 
   return (
@@ -147,6 +173,7 @@ export function CalendarForm({
           className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
           value={session.videoUrl}
         />
+        <Info status={status} reset={resetStatus} error={error} mode={mode} />
         <button
           disabled={isDisabled || !userId}
           type="submit"
