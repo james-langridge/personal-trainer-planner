@@ -3,6 +3,7 @@ import {createSession, updateSession} from '@/lib/api'
 import {SESSION_TYPE} from '@prisma/client'
 import {useCalendarForm, useStatus} from '@/hooks'
 import Info from '@/components/Info'
+import Link from 'next/link'
 
 export function CalendarForm({
   sessionId,
@@ -182,14 +183,25 @@ export function CalendarForm({
           {session.sessionId ? 'Update' : 'Create'}
         </button>
         {session.sessionId && (
-          <button
-            disabled={isDisabled}
-            type="button"
-            onClick={handleDelete}
-            className="mt-4 w-full transform rounded-lg bg-red-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-red-400 focus:outline-none focus:ring focus:ring-red-300 focus:ring-opacity-50"
-          >
-            Delete
-          </button>
+          <>
+            <button
+              disabled={isDisabled}
+              type="button"
+              onClick={handleDelete}
+              className="mt-4 w-full transform rounded-lg bg-red-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-red-400 focus:outline-none focus:ring focus:ring-red-300 focus:ring-opacity-50"
+            >
+              Delete
+            </button>
+            <Link href={`/session/${session.sessionId}`}>
+              <button
+                disabled={isDisabled}
+                type="button"
+                className="mt-4 w-full transform rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-emerald-400 focus:outline-none focus:ring focus:ring-red-300 focus:ring-opacity-50"
+              >
+                View
+              </button>
+            </Link>
+          </>
         )}
         <button
           disabled={isDisabled}
