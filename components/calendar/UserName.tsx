@@ -12,7 +12,7 @@ export function UserName({
   }
 
   return (
-    <span className="mt-4 text-center font-medium text-gray-800 dark:text-gray-200">
+    <span className="mt-4 text-center font-medium capitalize text-gray-800 dark:text-gray-200">
       {`${firstName} ${lastName}`}
     </span>
   )
