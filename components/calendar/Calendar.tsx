@@ -8,17 +8,16 @@ import {CalendarHeading} from '@/components/calendar/CalendarHeading'
 import {CalendarGrid} from '@/components/calendar/CalendarGrid'
 import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
 import {CalendarDays} from '@/components/calendar/CalendarDays'
-import {useCalendarData} from '@/hooks'
-import {Session} from '@prisma/client'
+import {useCalendarData, useUpdateSessions} from '@/hooks'
 
 export function Calendar({
-  sessions,
+  initialSessions,
+  userId,
   isAdmin = false,
-  setSessionId,
 }: {
-  sessions?: SerialisedSession[] | Session[]
+  initialSessions: SerialisedSession[]
+  userId?: string
   isAdmin?: boolean
-  setSessionId?: React.Dispatch<React.SetStateAction<string>>
 }) {
   const {
     calendarSquares,
@@ -29,6 +28,7 @@ export function Calendar({
     setYear,
     setMonth,
   } = useCalendarData()
+  const sessions = useUpdateSessions({userId, initialSessions})
 
   return (
     <div className="flex w-full flex-col px-5 sm:items-center ">
@@ -46,7 +46,6 @@ export function Calendar({
             monthData={monthData}
             sessions={sessions}
             isAdmin={isAdmin}
-            setSessionId={setSessionId}
           />
         </CalendarGrid>
       </CalendarMedium>

@@ -8,12 +8,10 @@ import {SessionItems} from '@/components/calendar/SessionItems'
 export function CalendarDays({
   monthData,
   sessions,
-  setSessionId,
   isAdmin,
 }: {
   monthData: Day[]
   sessions?: Session[] | SerialisedSession[]
-  setSessionId?: React.Dispatch<React.SetStateAction<string>>
   isAdmin: boolean
 }) {
   const firstDayOfMonth = monthData[0].weekDay
@@ -28,7 +26,6 @@ export function CalendarDays({
           <CalendarDay day={day} isFirstWeek={isFirstWeek} key={index}>
             <SessionItems
               sessions={sessionsToday}
-              setSessionId={setSessionId}
               isAdmin={isAdmin}
               day={day}
             />

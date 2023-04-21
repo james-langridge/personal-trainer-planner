@@ -19,7 +19,10 @@ export interface SerialisedSession {
   sessionType: SESSION_TYPE
 }
 
-const getSessions = async (): Promise<SerialisedSession[]> => {
+const getSessions = async (): Promise<{
+  sessions: SerialisedSession[]
+  userId: string | undefined
+}> => {
   const user = await getUserFromCookie(cookies())
 
   const sessions = await db.session.findMany({
@@ -31,15 +34,15 @@ const getSessions = async (): Promise<SerialisedSession[]> => {
     },
   })
 
-  return serialiseDates(sessions)
+  return {sessions: serialiseDates(sessions), userId: user?.id}
 }
 
 export default async function TrainingStudio() {
-  const sessions = await getSessions()
+  const {sessions, userId} = await getSessions()
 
   return (
     <Container>
-      <Calendar sessions={sessions} />
+      <Calendar initialSessions={sessions} userId={userId} />
     </Container>
   )
 }

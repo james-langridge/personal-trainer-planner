@@ -6,12 +6,10 @@ import {Day} from '@/lib/calendar'
 
 export function SessionItems({
   sessions,
-  setSessionId,
   isAdmin,
   day,
 }: {
   sessions: (Session | SerialisedSession | undefined)[] | null | undefined
-  setSessionId?: React.Dispatch<React.SetStateAction<string>>
   isAdmin: boolean
   day: Day
 }) {
@@ -24,13 +22,7 @@ export function SessionItems({
       {sessions.map((session, i) => {
         return (
           <div key={day.day * day.year * day.month * i}>
-            {session && (
-              <SessionItem
-                session={session}
-                isAdmin={isAdmin}
-                setSessionId={setSessionId}
-              />
-            )}
+            {session && <SessionItem session={session} isAdmin={isAdmin} />}
           </div>
         )
       })}
