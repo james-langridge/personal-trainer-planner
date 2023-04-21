@@ -24,6 +24,7 @@ const initialState: CalendarFormState = {
 
 export const useCalendarForm = (
   userId: string,
+  setSessionId: React.Dispatch<React.SetStateAction<string>>,
   sessionId?: string,
 ): [
   CalendarFormState,
@@ -48,6 +49,7 @@ export const useCalendarForm = (
       ...initialState,
       ownerId: userId,
     })
+    setSessionId('')
   }
 
   return [session, setSession, resetForm]

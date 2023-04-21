@@ -41,6 +41,7 @@ export default function TrainingPlanner() {
           userId={userId}
           sessionId={sessionId}
           getUserSessions={fetchSessions}
+          setSessionId={setSessionId}
         />
       </Sidebar>
       <div className="flex w-full flex-col px-5 sm:items-center ">

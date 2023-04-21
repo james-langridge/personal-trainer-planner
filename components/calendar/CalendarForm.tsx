@@ -9,12 +9,18 @@ export function CalendarForm({
   sessionId,
   userId = '',
   getUserSessions,
+  setSessionId,
 }: {
   sessionId?: string
   userId?: string
   getUserSessions: () => Promise<void>
+  setSessionId: React.Dispatch<React.SetStateAction<string>>
 }) {
-  const [session, setSession, resetForm] = useCalendarForm(userId, sessionId)
+  const [session, setSession, resetForm] = useCalendarForm(
+    userId,
+    setSessionId,
+    sessionId,
+  )
   const {status, mode, setMode, error, setStatus, setError, resetStatus} =
     useStatus()
   const isDisabled = status !== 'idle'
