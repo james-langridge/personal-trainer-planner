@@ -1,6 +1,8 @@
 import {db} from '@/lib/db'
 import BackButton from '@/components/BackButton'
 
+export const dynamic = 'force-dynamic'
+
 const getSession = async (id: string) => {
   const session = await db.session.findUnique({
     where: {
