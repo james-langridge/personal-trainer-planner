@@ -1,4 +1,4 @@
-import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
+import {Session, SESSION_STATUS, SESSION_TYPE, User} from '@prisma/client'
 
 export type UserWithSessions = {
   id: string
@@ -36,6 +36,37 @@ export type SerialisedUser = {
   sessionsCompleted: string
   appointments: string
   appointmentsAttended: string
+}
+
+export function serialiseUser(
+  user?:
+    | (User & {
+        sessions: Session[]
+      })
+    | null,
+): SerialisedUser | undefined {
+  if (!user) {
+    return
+  }
+
+  const {createdAt, updatedAt, sessions, ...rest} = user
+  const {
+    sessionsAssigned,
+    sessionsCompleted,
+    appointmentsAttended,
+    appointments,
+  } = extractSessionData(sessions)
+
+  return {
+    ...rest,
+    sessions: serialiseSessions(sessions),
+    sessionsAssigned: sessionsAssigned.toString(),
+    sessionsCompleted: sessionsCompleted.toString(),
+    appointmentsAttended: appointmentsAttended.toString(),
+    appointments: appointments.toString(),
+    createdAt: formatDate(createdAt),
+    updatedAt: formatDate(updatedAt),
+  }
 }
 
 function serialiseSessions(sessions: Session[]) {

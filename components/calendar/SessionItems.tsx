@@ -6,11 +6,9 @@ import {Day} from '@/lib/calendar'
 
 export function SessionItems({
   sessions,
-  isAdmin,
   day,
 }: {
   sessions: (Session | SerialisedSession | undefined)[] | null | undefined
-  isAdmin: boolean
   day: Day
 }) {
   if (!sessions) {
@@ -22,7 +20,7 @@ export function SessionItems({
       {sessions.map((session, i) => {
         return (
           <div key={day.day * day.year * day.month * i}>
-            {session && <SessionItem session={session} isAdmin={isAdmin} />}
+            {session && <SessionItem session={session} />}
           </div>
         )
       })}

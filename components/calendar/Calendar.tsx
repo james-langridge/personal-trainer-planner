@@ -6,49 +6,36 @@ import {CalendarMobile} from '@/components/calendar/CalendarMobile'
 import {CalendarMedium} from '@/components/calendar/CalendarMedium'
 import {CalendarHeading} from '@/components/calendar/CalendarHeading'
 import {CalendarGrid} from '@/components/calendar/CalendarGrid'
-import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
-import {CalendarDays} from '@/components/calendar/CalendarDays'
-import {useCalendarData, useUpdateSessions} from '@/hooks'
+import {useCalendarData} from '@/hooks'
+import Providers from '@/app/(training-app)/training-planner/Providers'
+import {SerialisedUser} from '@/lib/users'
+import ClientWrapper from '@/components/calendar/ClientWrapper'
 
 export function Calendar({
   initialSessions,
-  userId,
-  isAdmin = false,
+  user,
 }: {
-  initialSessions: SerialisedSession[]
-  userId?: string
-  isAdmin?: boolean
+  initialSessions?: SerialisedSession[]
+  user?: SerialisedUser
 }) {
-  const {
-    calendarSquares,
-    emptyDays,
-    monthData,
-    year,
-    month,
-    setYear,
-    setMonth,
-  } = useCalendarData()
-  const sessions = useUpdateSessions({userId, initialSessions})
+  const {monthData, year, month, setYear, setMonth} = useCalendarData()
 
   return (
-    <div className="flex w-full flex-col px-5 sm:items-center ">
-      {!isAdmin && <CalendarMobile sessions={sessions} />}
-      <CalendarMedium isAdmin={isAdmin}>
-        <CalendarHeading
-          year={year}
-          setYear={setYear}
-          month={month}
-          setMonth={setMonth}
-        />
-        <CalendarGrid calendarSquares={calendarSquares}>
-          <CalendarEmptyDays emptyDays={emptyDays} />
-          <CalendarDays
-            monthData={monthData}
-            sessions={sessions}
-            isAdmin={isAdmin}
-          />
-        </CalendarGrid>
-      </CalendarMedium>
-    </div>
+    <Providers>
+      <ClientWrapper sessions={initialSessions} user={user}>
+        <div className="flex w-full flex-col px-5 sm:items-center ">
+          <CalendarMobile />
+          <CalendarMedium>
+            <CalendarHeading
+              year={year}
+              setYear={setYear}
+              month={month}
+              setMonth={setMonth}
+            />
+            <CalendarGrid monthData={monthData} />
+          </CalendarMedium>
+        </div>
+      </ClientWrapper>
+    </Providers>
   )
 }

@@ -1,26 +1,16 @@
 import React, {useEffect} from 'react'
 import {createSession, updateSession} from '@/lib/api'
 import {SESSION_TYPE} from '@prisma/client'
-import {useCalendarForm, useStatus} from '@/hooks'
+import {useCalendarForm, useStatus, useUserSessions} from '@/hooks'
 import Info from '@/components/Info'
 import Link from 'next/link'
+import {useUser} from '@/app/(training-app)/training-planner/Providers'
 
-export function CalendarForm({
-  sessionId,
-  userId = '',
-  getUserSessions,
-  setSessionId,
-}: {
-  sessionId?: string
-  userId?: string
-  getUserSessions: () => Promise<void>
-  setSessionId: React.Dispatch<React.SetStateAction<string>>
-}) {
-  const [session, setSession, resetForm] = useCalendarForm(
-    userId,
-    setSessionId,
-    sessionId,
-  )
+export function CalendarForm() {
+  const userState = useUser()
+  const userId = userState?.user?.id ?? ''
+  const [refreshSessions] = useUserSessions({})
+  const [session, setSession, resetForm] = useCalendarForm()
   const {status, mode, setMode, error, setStatus, setError, resetStatus} =
     useStatus()
   const isDisabled = status !== 'idle'
@@ -48,11 +38,7 @@ export function CalendarForm({
 
       setStatus('resolved')
 
-      // router.refresh() should refresh (fetch updated data and re-render on the server)
-      // the current route from the root layout down?  Doesn't seem to work currently.
-      // https://beta.nextjs.org/docs/data-fetching/mutating
-      // Temporary workaround:
-      void getUserSessions()
+      void refreshSessions()
     } catch (error) {
       setStatus('rejected')
       setError(error as Error)
@@ -62,7 +48,7 @@ export function CalendarForm({
   }
 
   async function handleDelete() {
-    if (status !== 'idle' || !sessionId) {
+    if (status !== 'idle' || !session.sessionId) {
       return
     }
 
@@ -74,11 +60,7 @@ export function CalendarForm({
 
       setStatus('resolved')
 
-      // router.refresh() should refresh (fetch updated data and re-render on the server)
-      // the current route from the root layout down?  Doesn't seem to work currently.
-      // https://beta.nextjs.org/docs/data-fetching/mutating
-      // Temporary workaround:
-      void getUserSessions()
+      void refreshSessions()
     } catch (error) {
       setStatus('rejected')
       setError(error as Error)
@@ -90,7 +72,7 @@ export function CalendarForm({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input type="hidden" value={sessionId} />
+        <input type="hidden" value={session.sessionId} />
         <input required type="hidden" value={userId} />
         <input
           required

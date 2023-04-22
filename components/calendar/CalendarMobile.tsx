@@ -1,8 +1,6 @@
 'use client'
 
 import React, {useEffect, useRef, useState} from 'react'
-import {Session} from '@prisma/client'
-import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {getSessionsToday, shouldScrollToThisDay} from '@/lib/calendar'
 import {DayMobile} from '@/components/calendar/DayMobile'
 import {
@@ -11,12 +9,11 @@ import {
   useLockBodyScroll,
   useIsMobile,
 } from '@/hooks'
+import {useSessions} from '@/app/(training-app)/training-planner/Providers'
 
-export function CalendarMobile({
-  sessions,
-}: {
-  sessions?: Session[] | SerialisedSession[]
-}) {
+export function CalendarMobile() {
+  const sessionsState = useSessions()
+  const sessions = sessionsState.sessions
   const [isFrozen, setIsFrozen] = useState(false)
   const {data, scrollToThisDay, loadNextMonth, loadPreviousMonth} =
     useMobileCalendarData()
@@ -58,7 +55,7 @@ export function CalendarMobile({
     <div className="py-5">
       <div ref={startElementRef}></div>
       {data.map(day => {
-        const sessionsToday = sessions ? getSessionsToday(sessions, day) : null
+        const sessionsToday = sessions ? getSessionsToday(day, sessions) : null
 
         return (
           <div

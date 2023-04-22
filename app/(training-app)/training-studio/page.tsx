@@ -1,11 +1,11 @@
 import {getUserFromCookie} from '@/lib/auth'
 import {cookies} from 'next/headers'
-import {db} from '@/lib/db'
-import {SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
+import {Session, SESSION_STATUS, SESSION_TYPE, User} from '@prisma/client'
 import React from 'react'
 import {serialiseDates} from '@/lib/calendar'
 import {Calendar} from '@/components/calendar/Calendar'
 import {Container} from '@/components/calendar/Container'
+import {serialiseUser} from '@/lib/users'
 
 export interface SerialisedSession {
   id: string
@@ -19,30 +19,26 @@ export interface SerialisedSession {
   sessionType: SESSION_TYPE
 }
 
+type UserWithSessions = User & {
+  sessions: Session[]
+}
+
 const getSessions = async (): Promise<{
-  sessions: SerialisedSession[]
-  userId: string | undefined
+  user: UserWithSessions | null | undefined
 }> => {
   const user = await getUserFromCookie(cookies())
 
-  const sessions = await db.session.findMany({
-    where: {
-      ownerId: user?.id,
-      NOT: {
-        deleted: true,
-      },
-    },
-  })
-
-  return {sessions: serialiseDates(sessions), userId: user?.id}
+  return {user: user}
 }
 
 export default async function TrainingStudio() {
-  const {sessions, userId} = await getSessions()
+  const {user} = await getSessions()
+  const serialisedUser = serialiseUser(user)
+  const sessions = serialiseDates(user?.sessions)
 
   return (
     <Container>
-      <Calendar initialSessions={sessions} userId={userId} />
+      <Calendar initialSessions={sessions} user={serialisedUser} />
     </Container>
   )
 }

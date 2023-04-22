@@ -52,13 +52,13 @@ function areDatesEqual(calendarDate: Date, sessionDate: Date) {
 }
 
 export function getSessionsToday(
-  sessions: Session[] | SerialisedSession[],
   calendarDay: {
     day: number
     weekDay: number
     month: number
     year: number
   },
+  sessions?: Session[] | SerialisedSession[],
 ) {
   if (!sessions) {
     return
@@ -149,8 +149,8 @@ export function getMonthName(dayData: Day) {
   })
 }
 
-export function serialiseDates(sessions: Session[]) {
-  return sessions.map(session => {
+export function serialiseDates(sessions?: Session[]) {
+  return sessions?.map(session => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {createdAt, updatedAt, ...rest} = session
 

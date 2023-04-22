@@ -2,14 +2,11 @@ import React, {Fragment} from 'react'
 import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {classNames} from '@/lib/misc'
-import {SerialisedUser} from '@/lib/users'
 import {useGetUsers} from '@/hooks'
+import {useUserDispatch} from '@/app/(training-app)/training-planner/Providers'
 
-export function CalendarDropdown({
-  setUser,
-}: {
-  setUser: React.Dispatch<React.SetStateAction<SerialisedUser | undefined>>
-}) {
+export function CalendarDropdown() {
+  const dispatch = useUserDispatch()
   const {users} = useGetUsers()
 
   return (
@@ -41,7 +38,7 @@ export function CalendarDropdown({
                   <Menu.Item key={user.id}>
                     {({active}) => (
                       <button
-                        onClick={() => setUser(user)}
+                        onClick={() => dispatch({type: 'setUser', user: user})}
                         className={classNames(
                           active
                             ? 'bg-gray-100 text-gray-900'

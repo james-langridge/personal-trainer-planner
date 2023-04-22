@@ -5,16 +5,15 @@ import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {SESSION_STATUS} from '.prisma/client'
 import {useSessionStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
+import {
+  useAuth,
+  useSessionIdDispatch,
+} from '@/app/(training-app)/training-planner/Providers'
 
-export function SessionItem({
-  session,
-  isAdmin,
-  setSessionId,
-}: {
-  session: Session | SerialisedSession
-  isAdmin: boolean
-  setSessionId?: React.Dispatch<React.SetStateAction<string>>
-}) {
+export function SessionItem({session}: {session: Session | SerialisedSession}) {
+  const dispatch = useSessionIdDispatch()
+  const authState = useAuth()
+  const isAdmin = authState.isAdmin
   const {status, toggleStatus} = useSessionStatus(session)
   const isTrainingSession = session.sessionType === 'TRAINING'
   const isAppointment = session.sessionType === 'APPOINTMENT'
@@ -22,13 +21,13 @@ export function SessionItem({
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
     event.stopPropagation()
 
-    if (!isAdmin || !setSessionId) {
+    if (!isAdmin) {
       return
     }
 
     const sessionId = (event.target as HTMLElement).id
 
-    setSessionId(sessionId)
+    dispatch({type: 'setSessionId', sessionId: sessionId})
   }
 
   return (

@@ -48,6 +48,21 @@ export const getUserFromCookie = async (
       where: {
         id: id as string,
       },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        email: true,
+        password: true,
+        admin: true,
+        firstName: true,
+        lastName: true,
+        sessions: {
+          where: {
+            deleted: false,
+          },
+        },
+      },
     })
   }
 }

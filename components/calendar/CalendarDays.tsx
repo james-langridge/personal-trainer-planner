@@ -8,27 +8,21 @@ import {SessionItems} from '@/components/calendar/SessionItems'
 export function CalendarDays({
   monthData,
   sessions,
-  isAdmin,
 }: {
   monthData: Day[]
   sessions?: Session[] | SerialisedSession[]
-  isAdmin: boolean
 }) {
   const firstDayOfMonth = monthData[0].weekDay
 
   return (
     <>
       {monthData.map((day, index) => {
-        const sessionsToday = sessions ? getSessionsToday(sessions, day) : null
+        const sessionsToday = sessions ? getSessionsToday(day, sessions) : null
         const isFirstWeek = index + firstDayOfMonth < 7
 
         return (
           <CalendarDay day={day} isFirstWeek={isFirstWeek} key={index}>
-            <SessionItems
-              sessions={sessionsToday}
-              isAdmin={isAdmin}
-              day={day}
-            />
+            <SessionItems sessions={sessionsToday} day={day} />
           </CalendarDay>
         )
       })}
