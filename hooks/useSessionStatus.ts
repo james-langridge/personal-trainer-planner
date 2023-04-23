@@ -6,30 +6,27 @@ import {updateSession} from '@/lib/api'
 
 export function useSessionStatus(session: Session | SerialisedSession) {
   const [status, setStatus] = useState(session.status)
-  const [isFirstRender, setIsFirstRender] = useState(true)
 
-  const updateStatus = useCallback(async () => {
-    await updateSession({
-      sessionId: session.id,
-      status: status,
-    })
-  }, [session.id, status])
+  const updateStatus = useCallback(
+    async (status: SESSION_STATUS) => {
+      await updateSession({
+        sessionId: session.id,
+        status: status,
+      })
+    },
+    [session.id],
+  )
 
   useEffect(() => {
-    // Added this check to avoid making PUT reqs when the checkbox is checked on the first render
-    if (isFirstRender) {
-      setIsFirstRender(false)
-
-      return
-    }
-
-    void updateStatus()
-  }, [status, updateStatus])
+    setStatus(session.status)
+  }, [session.status])
 
   function toggleStatus() {
     if (status === SESSION_STATUS.NOT_STARTED) {
+      void updateStatus(SESSION_STATUS.COMPLETED)
       setStatus(SESSION_STATUS.COMPLETED)
     } else {
+      void updateStatus(SESSION_STATUS.NOT_STARTED)
       setStatus(SESSION_STATUS.NOT_STARTED)
     }
   }

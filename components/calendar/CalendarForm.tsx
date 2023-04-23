@@ -9,7 +9,7 @@ import {useUser} from '@/app/(training-app)/training-planner/Providers'
 export function CalendarForm() {
   const userState = useUser()
   const userId = userState?.user?.id ?? ''
-  const [refreshSessions] = useUserSessions({})
+  const [refreshSessions] = useUserSessions(true)
   const [session, setSession, resetForm] = useCalendarForm()
   const {status, mode, setMode, error, setStatus, setError, resetStatus} =
     useStatus()
