@@ -20,9 +20,7 @@ export default function Clients() {
 
   return (
     <Container>
-      <h1 className="prose text-6xl font-bold leading-normal">
-        Clients: {users?.length}
-      </h1>
+      <h1 className="prose text-6xl font-bold leading-normal">Clients</h1>
       <section className="container mx-auto px-4">
         <div className="mt-6 flex flex-col">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
