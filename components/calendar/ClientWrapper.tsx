@@ -5,16 +5,20 @@ import {
   useSessionsDispatch,
   useUserDispatch,
 } from '@/app/(training-app)/training-planner/Providers'
+import {useUserSessions} from '@/hooks'
 
 export default function ClientWrapper({
   children,
   sessions,
   user,
+  isAdmin = false,
 }: {
   children: React.ReactNode
   sessions?: SerialisedSession[]
   user?: SerialisedUser
+  isAdmin?: boolean
 }) {
+  useUserSessions(isAdmin)
   const dispatchUser = useUserDispatch()
   const dispatchSessions = useSessionsDispatch()
 
@@ -28,5 +32,5 @@ export default function ClientWrapper({
     }
   }, [dispatchSessions, dispatchUser, sessions, user])
 
-  return <>{children}</>
+  return <div className="flex h-[90vh]">{children}</div>
 }

@@ -4,17 +4,13 @@ import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
 import {getSessionsToday} from '@/lib/calendar'
 import {CalendarDay} from '@/components/calendar/CalendarDay'
 import {SessionItem} from '@/components/calendar/SessionItem'
-import {useUserSessions} from '@/hooks'
 import {useSessions} from '@/app/(training-app)/training-planner/Providers'
 
 export function CalendarGrid({
   monthData,
-  isAdmin = false,
 }: {
   monthData: {day: number; weekDay: number; month: number; year: number}[]
-  isAdmin?: boolean
 }) {
-  useUserSessions(isAdmin)
   const sessionsState = useSessions()
   const sessions = sessionsState.sessions
   const firstDayOfMonth = monthData[0].weekDay

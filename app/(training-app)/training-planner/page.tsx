@@ -2,11 +2,11 @@
 
 import React from 'react'
 import {Sidebar} from '@/components/calendar/Sidebar'
-import {Container} from '@/components/calendar/Container'
 import {useCalendarData, useLockBodyScroll} from '@/hooks'
 import {CalendarHeading} from '@/components/calendar/CalendarHeading'
 import {CalendarGrid} from '@/components/calendar/CalendarGrid'
 import Providers from '@/app/(training-app)/training-planner/Providers'
+import ClientWrapper from '@/components/calendar/ClientWrapper'
 
 const SidebarMemo = React.memo(Sidebar)
 
@@ -16,7 +16,7 @@ export default function TrainingPlanner() {
 
   return (
     <Providers>
-      <Container>
+      <ClientWrapper isAdmin>
         <SidebarMemo />
         <div className="flex w-full flex-col px-5 sm:items-center ">
           <CalendarHeading
@@ -25,9 +25,9 @@ export default function TrainingPlanner() {
             month={month}
             setMonth={setMonth}
           />
-          <CalendarGrid monthData={monthData} isAdmin />
+          <CalendarGrid monthData={monthData} />
         </div>
-      </Container>
+      </ClientWrapper>
     </Providers>
   )
 }

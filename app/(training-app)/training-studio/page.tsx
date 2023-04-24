@@ -4,7 +4,6 @@ import {Session, SESSION_STATUS, SESSION_TYPE, User} from '@prisma/client'
 import React from 'react'
 import {serialiseDates} from '@/lib/calendar'
 import {Calendar} from '@/components/calendar/Calendar'
-import {Container} from '@/components/calendar/Container'
 import {serialiseUser} from '@/lib/users'
 
 export interface SerialisedSession {
@@ -36,9 +35,5 @@ export default async function TrainingStudio() {
   const serialisedUser = serialiseUser(user)
   const sessions = serialiseDates(user?.sessions)
 
-  return (
-    <Container>
-      <Calendar initialSessions={sessions} user={serialisedUser} />
-    </Container>
-  )
+  return <Calendar initialSessions={sessions} user={serialisedUser} />
 }
