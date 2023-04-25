@@ -6,19 +6,19 @@ Site owner has complete flexibility to create and add content to new pages via C
 
 Features include calendar app behind login. Admin can create, update, and delete training sessions in each client's calendar.  Clients can log in to follow the assigned training sessions on mobile or larger screens.  Calendar is optimised for mobile with infinite scroll.
 
-## Trainer view
-![trainerViewLarge.png](docs/trainerViewLarge.png)
+## Personal Trainer views
+### Calendar
+![calendarTrainer.png](docs/calendarTrainer.png)
+### Client management
+![clientsTable.png](docs/clientsTable.png)
+### Client details
+![clientsDetails.png](docs/clientsDetails.png)
 
-## Client view
-### Mobile
-![clientViewCalendarMobile.png](docs/clientViewCalendarMobile.png)
+## Client mobile views
+![mobileCalendar.png](docs/mobileCalendar.png)
 
-![clientViewSessionMobile.png](docs/clientViewSessionMobile.png)
+![mobileSession.png](docs/mobileSession.png)
 
-### Large screen
-![clientViewCalendarLarge.png](docs/clientViewCalendarLarge.png)
-
-![clientViewSessionLarge.png](docs/clientViewSessionLarge.png)
 
 
 
