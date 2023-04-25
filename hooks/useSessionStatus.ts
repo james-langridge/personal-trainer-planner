@@ -1,10 +1,9 @@
 import {useState, useEffect, useCallback} from 'react'
 import {SESSION_STATUS} from '.prisma/client'
-import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
-import {Session} from '@prisma/client'
 import {updateSession} from '@/lib/api'
+import {SerialisedSession} from '@/lib/sessions'
 
-export function useSessionStatus(session: Session | SerialisedSession) {
+export function useSessionStatus(session: SerialisedSession) {
   const [status, setStatus] = useState(session.status)
 
   const updateStatus = useCallback(

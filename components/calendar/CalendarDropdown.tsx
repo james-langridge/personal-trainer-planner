@@ -3,7 +3,7 @@ import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {classNames} from '@/lib/misc'
 import {useGetUsers} from '@/hooks'
-import {useUserDispatch} from '@/app/(training-app)/training-planner/Providers'
+import {useUserDispatch} from '@/app/(training-app)/Providers'
 
 export function CalendarDropdown() {
   const dispatch = useUserDispatch()

@@ -53,7 +53,6 @@ export const getUserFromCookie = async (
         createdAt: true,
         updatedAt: true,
         email: true,
-        password: true,
         admin: true,
         firstName: true,
         lastName: true,

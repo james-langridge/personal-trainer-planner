@@ -1,16 +1,12 @@
-import {Session} from '@prisma/client'
 import Link from 'next/link'
 import React from 'react'
-import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {SESSION_STATUS} from '.prisma/client'
 import {useSessionStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
-import {
-  useAuth,
-  useSessionIdDispatch,
-} from '@/app/(training-app)/training-planner/Providers'
+import {useAuth, useSessionIdDispatch} from '@/app/(training-app)/Providers'
+import {SerialisedSession} from '@/lib/sessions'
 
-export function SessionItem({session}: {session: Session | SerialisedSession}) {
+export function SessionItem({session}: {session: SerialisedSession}) {
   const dispatch = useSessionIdDispatch()
   const authState = useAuth()
   const isAdmin = authState.isAdmin

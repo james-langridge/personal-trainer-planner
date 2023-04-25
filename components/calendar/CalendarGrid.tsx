@@ -1,18 +1,14 @@
 import React from 'react'
 import {classNames} from '@/lib/misc'
 import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
-import {getSessionsToday} from '@/lib/calendar'
+import {Day, getSessionsToday} from '@/lib/calendar'
 import {CalendarDay} from '@/components/calendar/CalendarDay'
 import {SessionItem} from '@/components/calendar/SessionItem'
-import {useSessions} from '@/app/(training-app)/training-planner/Providers'
+import {useUser} from '@/app/(training-app)/Providers'
 
-export function CalendarGrid({
-  monthData,
-}: {
-  monthData: {day: number; weekDay: number; month: number; year: number}[]
-}) {
-  const sessionsState = useSessions()
-  const sessions = sessionsState.sessions
+export function CalendarGrid({monthData}: {monthData: Day[]}) {
+  const userState = useUser()
+  const sessions = userState.user?.sessions
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDays = Array(firstDayOfMonth).fill(null)
   const calendarSquares = firstDayOfMonth + monthData.length

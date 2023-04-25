@@ -1,14 +1,13 @@
-import {Session} from '@prisma/client'
-import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {SessionItem} from '@/components/calendar/SessionItem'
 import React from 'react'
 import {Day} from '@/lib/calendar'
+import {SerialisedSession} from '@/lib/sessions'
 
 export function SessionItems({
   sessions,
   day,
 }: {
-  sessions: (Session | SerialisedSession | undefined)[] | null | undefined
+  sessions: (SerialisedSession | undefined)[] | null | undefined
   day: Day
 }) {
   if (!sessions) {

@@ -71,7 +71,7 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
                   <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                     {sessions?.map(session => {
                       // TODO implement show deleted toggle
-                      if (session.deleted) {
+                      if (session.deleted === 'true') {
                         return
                       }
 

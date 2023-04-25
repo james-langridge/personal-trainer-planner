@@ -9,11 +9,11 @@ import {
   useLockBodyScroll,
   useIsMobile,
 } from '@/hooks'
-import {useSessions} from '@/app/(training-app)/training-planner/Providers'
+import {useUser} from '@/app/(training-app)/Providers'
 
 export function CalendarMobile() {
-  const sessionsState = useSessions()
-  const sessions = sessionsState.sessions
+  const userState = useUser()
+  const sessions = userState.user?.sessions
   const [isFrozen, setIsFrozen] = useState(false)
   const {data, scrollToThisDay, loadNextMonth, loadPreviousMonth} =
     useMobileCalendarData()

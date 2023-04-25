@@ -4,12 +4,12 @@ import {SESSION_TYPE} from '@prisma/client'
 import {useCalendarForm, useStatus, useUserSessions} from '@/hooks'
 import Info from '@/components/Info'
 import Link from 'next/link'
-import {useUser} from '@/app/(training-app)/training-planner/Providers'
+import {useUser} from '@/app/(training-app)/Providers'
 
 export function CalendarForm() {
   const userState = useUser()
   const userId = userState?.user?.id ?? ''
-  const [refreshSessions] = useUserSessions(true)
+  const [refreshUserWithSessions] = useUserSessions(true)
   const [session, setSession, resetForm] = useCalendarForm()
   const {status, mode, setMode, error, setStatus, setError, resetStatus} =
     useStatus()
@@ -38,7 +38,7 @@ export function CalendarForm() {
 
       setStatus('resolved')
 
-      void refreshSessions()
+      void refreshUserWithSessions()
     } catch (error) {
       setStatus('rejected')
       setError(error as Error)
@@ -60,7 +60,7 @@ export function CalendarForm() {
 
       setStatus('resolved')
 
-      void refreshSessions()
+      void refreshUserWithSessions()
     } catch (error) {
       setStatus('rejected')
       setError(error as Error)

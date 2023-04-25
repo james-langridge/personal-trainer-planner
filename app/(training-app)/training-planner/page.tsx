@@ -5,7 +5,7 @@ import {Sidebar} from '@/components/calendar/Sidebar'
 import {useCalendarData, useLockBodyScroll} from '@/hooks'
 import {CalendarHeading} from '@/components/calendar/CalendarHeading'
 import {CalendarGrid} from '@/components/calendar/CalendarGrid'
-import Providers from '@/app/(training-app)/training-planner/Providers'
+import Providers from '@/app/(training-app)/Providers'
 import ClientWrapper from '@/components/calendar/ClientWrapper'
 
 const SidebarMemo = React.memo(Sidebar)

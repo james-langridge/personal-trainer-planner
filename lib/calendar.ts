@@ -1,5 +1,4 @@
-import {Session} from '@prisma/client'
-import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
+import {SerialisedSession} from '@/lib/sessions'
 
 export const monthNames = [
   'January',
@@ -58,7 +57,7 @@ export function getSessionsToday(
     month: number
     year: number
   },
-  sessions?: Session[] | SerialisedSession[],
+  sessions?: SerialisedSession[],
 ) {
   if (!sessions) {
     return
@@ -72,7 +71,7 @@ export function getSessionsToday(
   )
 
   const sessionsMap = sessions.map(session => {
-    if (session.deleted) {
+    if (session.deleted === 'true') {
       return
     }
 
@@ -149,11 +148,10 @@ export function getMonthName(dayData: Day) {
   })
 }
 
-export function serialiseDates(sessions?: Session[]) {
-  return sessions?.map(session => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {createdAt, updatedAt, ...rest} = session
+export function formatDate(date: Date) {
+  const year = date.getFullYear()
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
 
-    return {...rest, date: session.date.toDateString()}
-  })
+  return `${year}-${month}-${day}`
 }

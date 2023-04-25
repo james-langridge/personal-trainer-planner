@@ -1,9 +1,13 @@
 'use client'
 
 import {useCallback, useEffect, useState} from 'react'
-import {SerialisedSession, SerialisedUser} from '@/lib/users'
-import {SerialisedSessionKey, sortSessions} from '@/lib/sessions'
-import {fetchUser} from '@/lib/api'
+import {SerialisedUser} from '@/lib/users'
+import {
+  SerialisedSession,
+  SerialisedSessionKey,
+  sortSessions,
+} from '@/lib/sessions'
+import {getUserWithSessions} from '@/lib/api'
 
 export function useGetSessionsTableData(slug: string) {
   const [sortCol, setSortCol] = useState<SerialisedSessionKey>('date')
@@ -11,7 +15,7 @@ export function useGetSessionsTableData(slug: string) {
   const [user, setUser] = useState<SerialisedUser>()
 
   const getUserSessions = useCallback(async () => {
-    const fetchedUser = await fetchUser(slug)
+    const fetchedUser = await getUserWithSessions(slug)
     const sortedSessions = sortSessions(sortCol, fetchedUser.sessions)
 
     setUser(fetchedUser)

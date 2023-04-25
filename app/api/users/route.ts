@@ -1,15 +1,14 @@
 import {NextResponse} from 'next/server'
 import {db} from '@/lib/db'
-import {Session, User} from '@prisma/client'
-
-type UserRes = Omit<User, 'password' | 'admin'> & {sessions: Session[]}
+import {serialiseUsersWithSessions, UserWithSessions} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const users: UserRes[] = await db.user.findMany({
+  const users: UserWithSessions[] = await db.user.findMany({
     select: {
       id: true,
+      admin: true,
       createdAt: true,
       updatedAt: true,
       email: true,
@@ -26,8 +25,10 @@ export async function GET() {
     },
   })
 
+  const serialisedUsers = serialiseUsersWithSessions(users)
+
   return NextResponse.json({
     status: 200,
-    data: users,
+    data: serialisedUsers,
   })
 }

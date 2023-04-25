@@ -5,7 +5,7 @@ import {
   useSessionId,
   useSessionIdDispatch,
   useUser,
-} from '@/app/(training-app)/training-planner/Providers'
+} from '@/app/(training-app)/Providers'
 
 export type CalendarFormState = {
   date: string

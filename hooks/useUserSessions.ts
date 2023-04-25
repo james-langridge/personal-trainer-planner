@@ -1,15 +1,15 @@
-import {getSessionsByUserId} from '@/lib/api'
+import {getUserWithSessions} from '@/lib/api'
 import {useCallback, useEffect} from 'react'
 import {
   useAuthDispatch,
-  useSessionsDispatch,
   useUser,
-} from '@/app/(training-app)/training-planner/Providers'
+  useUserDispatch,
+} from '@/app/(training-app)/Providers'
 
 type UseUserSessionsReturnType = [() => Promise<void>]
 
 export function useUserSessions(isAdmin: boolean): UseUserSessionsReturnType {
-  const dispatchSessions = useSessionsDispatch()
+  const dispatchUser = useUserDispatch()
   const dispatchAuth = useAuthDispatch()
   const userState = useUser()
   const userId = userState?.user?.id ?? ''
@@ -20,17 +20,17 @@ export function useUserSessions(isAdmin: boolean): UseUserSessionsReturnType {
     }
   }, [dispatchAuth, isAdmin])
 
-  const refreshSessions = useCallback(async () => {
-    const sessions = await getSessionsByUserId(userId)
+  const refreshUserWithSessions = useCallback(async () => {
+    const user = await getUserWithSessions(userId)
 
-    dispatchSessions({type: 'setSessions', sessions: sessions})
-  }, [dispatchSessions, userId])
+    dispatchUser({type: 'setUser', user: user})
+  }, [dispatchUser, userId])
 
   useEffect(() => {
     if (userId) {
-      void refreshSessions()
+      void refreshUserWithSessions()
     }
-  }, [refreshSessions, userId])
+  }, [refreshUserWithSessions, userId])
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -38,13 +38,13 @@ export function useUserSessions(isAdmin: boolean): UseUserSessionsReturnType {
         return
       }
 
-      void refreshSessions()
+      void refreshUserWithSessions()
     }, 60000)
 
     return () => {
       clearInterval(interval)
     }
-  }, [dispatchSessions, refreshSessions, userId])
+  }, [refreshUserWithSessions, userId])
 
-  return [refreshSessions]
+  return [refreshUserWithSessions]
 }

@@ -1,15 +1,10 @@
 import Link from 'next/link'
-import {Session} from '@prisma/client'
-import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {SESSION_STATUS} from '.prisma/client'
 import {classNames} from '@/lib/misc'
 import {useSessionStatus} from '@/hooks'
+import {SerialisedSession} from '@/lib/sessions'
 
-export function SessionItemMobile({
-  session,
-}: {
-  session: Session | SerialisedSession
-}) {
+export function SessionItemMobile({session}: {session: SerialisedSession}) {
   const {status, toggleStatus} = useSessionStatus(session)
 
   return (

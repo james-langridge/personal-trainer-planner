@@ -1,5 +1,5 @@
 import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
-import {SerialisedUser, transformUsers} from '@/lib/users'
+import {SerialisedUser} from '@/lib/users'
 
 const fetcher = async ({
   url,
@@ -80,23 +80,19 @@ export const register = async (body: {
 }
 
 export const getUsersWithSessions = async (): Promise<SerialisedUser[]> => {
-  const users = await fetcher({
+  return fetcher({
     url: '/api/users',
     method: 'get',
   })
-
-  return transformUsers(users)
 }
 
-export const fetchUser = async (id: string): Promise<SerialisedUser> => {
-  const user = await fetcher({
+export const getUserWithSessions = async (
+  id: string,
+): Promise<SerialisedUser> => {
+  return fetcher({
     url: `/api/user/${id}`,
     method: 'get',
   })
-
-  const [transformedUser] = transformUsers([user])
-
-  return transformedUser
 }
 
 export const updatePassword = async (body: {
@@ -116,13 +112,6 @@ export const updatePassword = async (body: {
 export const fetchSession = async (id: string): Promise<Session> => {
   return fetcher({
     url: `/api/session/${id}`,
-    method: 'get',
-  })
-}
-
-export const getSessionsByUserId = async (id: string): Promise<Session[]> => {
-  return fetcher({
-    url: `/api/sessions/${id}`,
     method: 'get',
   })
 }

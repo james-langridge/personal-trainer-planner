@@ -1,5 +1,5 @@
 import React from 'react'
-import {useUser} from '@/app/(training-app)/training-planner/Providers'
+import {useUser} from '@/app/(training-app)/Providers'
 
 export function UserName() {
   const userState = useUser()

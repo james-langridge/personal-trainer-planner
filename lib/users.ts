@@ -1,27 +1,9 @@
-import {Session, SESSION_STATUS, SESSION_TYPE, User} from '@prisma/client'
+import {Session, User} from '@prisma/client'
+import {SerialisedSession, serialiseSessions} from '@/lib/sessions'
+import {formatDate} from '@/lib/calendar'
 
-export type UserWithSessions = {
-  id: string
-  createdAt: Date
-  updatedAt: Date
-  email: string
-  firstName: string | null
-  lastName: string | null
+export type UserWithSessions = Omit<User, 'password'> & {
   sessions: Session[]
-}
-
-export type SerialisedSession = {
-  id: string
-  createdAt: string
-  updatedAt: string
-  ownerId: string
-  status: SESSION_STATUS
-  name: string
-  date: string
-  description: string | null
-  videoUrl: string | null
-  sessionType: SESSION_TYPE
-  deleted: string
 }
 
 export type SerialisedUser = {
@@ -38,12 +20,12 @@ export type SerialisedUser = {
   appointmentsAttended: string
 }
 
-export function serialiseUser(
-  user?:
-    | (User & {
-        sessions: Session[]
-      })
-    | null,
+export function serialiseUsersWithSessions(users: UserWithSessions[]) {
+  return users.map(user => serialiseUserWithSessions(user))
+}
+
+export function serialiseUserWithSessions(
+  user?: UserWithSessions | null,
 ): SerialisedUser | undefined {
   if (!user) {
     return
@@ -67,79 +49,6 @@ export function serialiseUser(
     createdAt: formatDate(createdAt),
     updatedAt: formatDate(updatedAt),
   }
-}
-
-function serialiseSessions(sessions: Session[]) {
-  return sessions.map(session => {
-    const {createdAt, updatedAt, date, deleted, ...rest} = session
-
-    return {
-      ...rest,
-      deleted: deleted.toString(),
-      createdAt: createdAt.toDateString(),
-      updatedAt: updatedAt.toDateString(),
-      date: date.toDateString(),
-    }
-  })
-}
-
-function transformSessions(sessions: SerialisedSession[]) {
-  return sessions.map(session => {
-    const {createdAt, updatedAt, date, ...rest} = session
-
-    return {
-      ...rest,
-      createdAt: createdAt.substring(0, 10),
-      updatedAt: updatedAt.substring(0, 10),
-      date: date.substring(0, 10),
-    }
-  })
-}
-
-export function transformUsers(users: SerialisedUser[]): SerialisedUser[] {
-  return users.map(user => {
-    const {createdAt, updatedAt, sessions, ...rest} = user
-    const {
-      sessionsAssigned,
-      sessionsCompleted,
-      appointmentsAttended,
-      appointments,
-    } = extractSerialisedSessionData(sessions)
-
-    return {
-      ...rest,
-      sessions: transformSessions(sessions),
-      sessionsAssigned: sessionsAssigned.toString(),
-      sessionsCompleted: sessionsCompleted.toString(),
-      appointmentsAttended: appointmentsAttended.toString(),
-      appointments: appointments.toString(),
-      createdAt: createdAt.substring(0, 10),
-      updatedAt: updatedAt.substring(0, 10),
-    }
-  })
-}
-
-export function serialiseUsers(users: UserWithSessions[]): SerialisedUser[] {
-  return users.map(user => {
-    const {createdAt, updatedAt, sessions, ...rest} = user
-    const {
-      sessionsAssigned,
-      sessionsCompleted,
-      appointmentsAttended,
-      appointments,
-    } = extractSessionData(sessions)
-
-    return {
-      ...rest,
-      sessions: serialiseSessions(sessions),
-      sessionsAssigned: sessionsAssigned.toString(),
-      sessionsCompleted: sessionsCompleted.toString(),
-      appointmentsAttended: appointmentsAttended.toString(),
-      appointments: appointments.toString(),
-      createdAt: formatDate(createdAt),
-      updatedAt: formatDate(updatedAt),
-    }
-  })
 }
 
 type SessionData = {
@@ -176,45 +85,6 @@ function extractSessionData(sessions: Session[]): SessionData {
 
     return acc
   }, sessionsData)
-}
-
-function extractSerialisedSessionData(
-  sessions: SerialisedSession[],
-): SessionData {
-  const sessionsData = {
-    sessionsAssigned: 0,
-    sessionsCompleted: 0,
-    appointments: 0,
-    appointmentsAttended: 0,
-  }
-
-  return sessions.reduce((acc, cur) => {
-    if (cur.sessionType === 'TRAINING') {
-      acc.sessionsAssigned++
-    }
-
-    if (cur.sessionType === 'TRAINING' && cur.status === 'COMPLETED') {
-      acc.sessionsCompleted++
-    }
-
-    if (cur.sessionType === 'APPOINTMENT') {
-      acc.appointments++
-    }
-
-    if (cur.sessionType === 'APPOINTMENT' && cur.status === 'COMPLETED') {
-      acc.appointmentsAttended++
-    }
-
-    return acc
-  }, sessionsData)
-}
-
-function formatDate(date: Date) {
-  const year = date.getFullYear()
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const day = date.getDate().toString().padStart(2, '0')
-
-  return `${year}-${month}-${day}`
 }
 
 export type SerialisedUserKey = keyof Omit<SerialisedUser, 'id' | 'sessions'>

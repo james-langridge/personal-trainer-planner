@@ -1,16 +1,15 @@
 import {Day, getSessionsToday} from '@/lib/calendar'
 import React from 'react'
-import {Session} from '@prisma/client'
-import {SerialisedSession} from '@/app/(training-app)/training-studio/page'
 import {CalendarDay} from '@/components/calendar/CalendarDay'
 import {SessionItems} from '@/components/calendar/SessionItems'
+import {SerialisedSession} from '@/lib/sessions'
 
 export function CalendarDays({
   monthData,
   sessions,
 }: {
   monthData: Day[]
-  sessions?: Session[] | SerialisedSession[]
+  sessions?: SerialisedSession[]
 }) {
   const firstDayOfMonth = monthData[0].weekDay
 

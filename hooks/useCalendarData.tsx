@@ -1,12 +1,12 @@
 import {useMemo, useState} from 'react'
-import {generateCalendarMonth} from '@/lib/calendar'
+import {Day, generateCalendarMonth} from '@/lib/calendar'
 
 const now = new Date()
 
 export function useCalendarData() {
   const [year, setYear] = useState(() => now.getFullYear())
   const [month, setMonth] = useState(() => now.getMonth())
-  const monthData = useMemo(
+  const monthData: Day[] = useMemo(
     () => generateCalendarMonth(month, year),
     [month, year],
   )
