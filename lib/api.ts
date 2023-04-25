@@ -88,6 +88,17 @@ export const getUsersWithSessions = async (): Promise<SerialisedUser[]> => {
   return transformUsers(users)
 }
 
+export const fetchUser = async (id: string): Promise<SerialisedUser> => {
+  const user = await fetcher({
+    url: `/api/user/${id}`,
+    method: 'get',
+  })
+
+  const [transformedUser] = transformUsers([user])
+
+  return transformedUser
+}
+
 export const updatePassword = async (body: {
   id: string
   oldPassword: string

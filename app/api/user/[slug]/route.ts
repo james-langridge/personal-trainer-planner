@@ -17,7 +17,11 @@ export async function GET(
       email: true,
       firstName: true,
       lastName: true,
-      sessions: true,
+      sessions: {
+        where: {
+          deleted: false,
+        },
+      },
     },
     where: {
       id: id,

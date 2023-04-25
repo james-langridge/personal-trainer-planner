@@ -4,7 +4,7 @@ import {useCallback, useEffect, useState} from 'react'
 import {getUsersWithSessions} from '@/lib/api'
 import {SerialisedUser, SerialisedUserKey, sortUsers} from '@/lib/users'
 
-export function useGetTableData() {
+export function useGetClientsTableData() {
   const [sortCol, setSortCol] = useState<SerialisedUserKey>('firstName')
   const [users, setUsers] = useState<SerialisedUser[] | undefined>()
 

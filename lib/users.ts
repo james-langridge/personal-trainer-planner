@@ -21,7 +21,7 @@ export type SerialisedSession = {
   description: string | null
   videoUrl: string | null
   sessionType: SESSION_TYPE
-  deleted: boolean
+  deleted: string
 }
 
 export type SerialisedUser = {
@@ -71,10 +71,11 @@ export function serialiseUser(
 
 function serialiseSessions(sessions: Session[]) {
   return sessions.map(session => {
-    const {createdAt, updatedAt, date, ...rest} = session
+    const {createdAt, updatedAt, date, deleted, ...rest} = session
 
     return {
       ...rest,
+      deleted: deleted.toString(),
       createdAt: createdAt.toDateString(),
       updatedAt: updatedAt.toDateString(),
       date: date.toDateString(),
