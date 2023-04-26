@@ -8,8 +8,12 @@ export const dynamic = 'force-dynamic'
 export default async function Login() {
   const user = await getUserFromCookie(cookies())
 
-  if (user) {
+  if (user && !user.admin) {
     redirect('/training-studio')
+  }
+
+  if (user && user.admin) {
+    redirect('/training-planner')
   }
 
   return <AuthForm mode="login" />
