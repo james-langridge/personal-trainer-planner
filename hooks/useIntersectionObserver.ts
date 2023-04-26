@@ -1,3 +1,5 @@
+// https://usehooks-ts.com/react-hook/use-intersection-observer
+
 import {RefObject, useEffect, useState} from 'react'
 
 interface Args extends IntersectionObserverInit {

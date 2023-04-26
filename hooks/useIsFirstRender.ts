@@ -1,3 +1,5 @@
+// https://usehooks-ts.com/react-hook/use-is-first-render
+
 import {useRef} from 'react'
 
 export function useIsFirstRender(): boolean {
