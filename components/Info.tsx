@@ -8,6 +8,7 @@ export type Mode =
   | 'updateSession'
   | 'deleteSession'
   | 'changePassword'
+  | 'generalForm'
 
 export type Status = 'idle' | 'pending' | 'resolved' | 'rejected'
 
@@ -15,6 +16,12 @@ const contactContent = {
   pending: 'Sending message...',
   error: 'Error sending message:',
   resolved: "Thank you for your message. I'll get back to you in a jiffy!",
+}
+
+const generalFormContent = {
+  pending: 'Sending form...',
+  error: 'Error sending form:',
+  resolved: 'Form submitted successfully.',
 }
 
 const loginContent = {
@@ -101,6 +108,9 @@ export default function Info({
       break
     case 'changePassword':
       content = changePasswordContent
+      break
+    case 'generalForm':
+      content = generalFormContent
       break
   }
 

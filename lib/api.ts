@@ -47,6 +47,14 @@ export const submitContactForm = (body: {
   })
 }
 
+export const submitForm = (body: Record<string, string>) => {
+  return fetcher({
+    url: '/api/form',
+    method: 'post',
+    body,
+  })
+}
+
 export const login = async (body: {email: string; password: string}) => {
   return fetcher({
     url: '/api/login',

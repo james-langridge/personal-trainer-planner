@@ -199,6 +199,65 @@ export interface IFooterLinkSection extends Entry<IFooterLinkSectionFields> {
   }
 }
 
+export interface IFormFields {
+  /** Name */
+  name: string
+
+  /** Slug */
+  slug: string
+
+  /** Intro text */
+  introText?: Document | undefined
+
+  /** Inputs */
+  inputs?: IFormInput[] | undefined
+}
+
+export interface IForm extends Entry<IFormFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'form'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
+export interface IFormInputFields {
+  /** Question or Text */
+  questionOrText: string
+
+  /** Input type */
+  inputType: 'Single line' | 'Text box' | 'Yes or no'
+
+  /** Required */
+  required: boolean
+}
+
+export interface IFormInput extends Entry<IFormInputFields> {
+  sys: {
+    id: string
+    type: string
+    createdAt: string
+    updatedAt: string
+    locale: string
+    contentType: {
+      sys: {
+        id: 'formInput'
+        linkType: 'ContentType'
+        type: 'Link'
+      }
+    }
+  }
+}
+
 export interface IHeroBackgroundImageFields {
   /** Heading */
   heading: string
@@ -622,6 +681,8 @@ export type CONTENT_TYPE =
   | 'footer'
   | 'footerLink'
   | 'footerLinkSection'
+  | 'form'
+  | 'formInput'
   | 'heroBackgroundImage'
   | 'heroImageHeading'
   | 'heroSideImage'
@@ -643,6 +704,8 @@ export type IEntry =
   | IFooter
   | IFooterLink
   | IFooterLinkSection
+  | IForm
+  | IFormInput
   | IHeroBackgroundImage
   | IHeroImageHeading
   | IHeroSideImage
