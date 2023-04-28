@@ -1,4 +1,4 @@
-import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
+import {Workout, WORKOUT_STATUS, WORKOUT_TYPE} from '@prisma/client'
 import {SerialisedUser} from '@/lib/users'
 
 const fetcher = async ({
@@ -87,14 +87,14 @@ export const register = async (body: {
   })
 }
 
-export const getUsersWithSessions = async (): Promise<SerialisedUser[]> => {
+export const getUsersWithWorkouts = async (): Promise<SerialisedUser[]> => {
   return fetcher({
     url: '/api/users',
     method: 'get',
   })
 }
 
-export const getUserWithSessions = async (
+export const getUserWithWorkouts = async (
   id: string,
 ): Promise<SerialisedUser> => {
   return fetcher({
@@ -117,41 +117,41 @@ export const updatePassword = async (body: {
   })
 }
 
-export const fetchSession = async (id: string): Promise<Session> => {
+export const fetchWorkout = async (id: string): Promise<Workout> => {
   return fetcher({
-    url: `/api/session/${id}`,
+    url: `/api/workout/${id}`,
     method: 'get',
   })
 }
 
-export const createSession = async (body: {
+export const createWorkout = async (body: {
   ownerId: string
   date: string
   name: string
   description?: string
-  sessionType: SESSION_TYPE
+  type: WORKOUT_TYPE
   videoUrl?: string
 }) => {
   return fetcher({
-    url: '/api/session',
+    url: '/api/workout',
     method: 'post',
     body,
     json: false,
   })
 }
 
-export const updateSession = async (body: {
-  sessionId: string
-  sessionType?: SESSION_TYPE
+export const updateWorkout = async (body: {
+  workoutId: string
+  type?: WORKOUT_TYPE
   date?: string
   deleted?: string
   description?: string
   name?: string
-  status?: SESSION_STATUS
+  status?: WORKOUT_STATUS
   videoUrl?: string
 }) => {
   return fetcher({
-    url: '/api/session',
+    url: '/api/workout',
     method: 'put',
     body,
     json: false,

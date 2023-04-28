@@ -4,9 +4,9 @@ export type Mode =
   | 'login'
   | 'contact'
   | 'register'
-  | 'createSession'
-  | 'updateSession'
-  | 'deleteSession'
+  | 'createWorkout'
+  | 'updateWorkout'
+  | 'deleteWorkout'
   | 'changePassword'
   | 'generalForm'
 
@@ -36,22 +36,22 @@ const registerContent = {
   resolved: 'User created successfully',
 }
 
-const createSessionContent = {
-  pending: 'Creating new session...',
-  error: 'Error creating session:',
-  resolved: 'Session created successfully',
+const createWorkoutContent = {
+  pending: 'Creating new workout...',
+  error: 'Error creating workout:',
+  resolved: 'Workout created successfully',
 }
 
-const updateSessionContent = {
-  pending: 'Updating session...',
-  error: 'Error updating session:',
-  resolved: 'Session updated successfully',
+const updateWorkoutContent = {
+  pending: 'Updating workout...',
+  error: 'Error updating workout:',
+  resolved: 'Workout updated successfully',
 }
 
-const deleteSessionContent = {
-  pending: 'Deleting session...',
-  error: 'Error deleting session:',
-  resolved: 'Session deleted successfully',
+const deleteWorkoutContent = {
+  pending: 'Deleting workout...',
+  error: 'Error deleting workout:',
+  resolved: 'Workout deleted successfully',
 }
 
 const changePasswordContent = {
@@ -97,14 +97,14 @@ export default function Info({
     case 'register':
       content = registerContent
       break
-    case 'createSession':
-      content = createSessionContent
+    case 'createWorkout':
+      content = createWorkoutContent
       break
-    case 'updateSession':
-      content = updateSessionContent
+    case 'updateWorkout':
+      content = updateWorkoutContent
       break
-    case 'deleteSession':
-      content = deleteSessionContent
+    case 'deleteWorkout':
+      content = deleteWorkoutContent
       break
     case 'changePassword':
       content = changePasswordContent

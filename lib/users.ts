@@ -1,9 +1,9 @@
-import {Session, User} from '@prisma/client'
-import {SerialisedSession, serialiseSessions} from '@/lib/sessions'
+import {User, Workout} from '@prisma/client'
+import {SerialisedWorkout, serialiseWorkouts} from '@/lib/workouts'
 import {formatDate} from '@/lib/calendar'
 
-export type UserWithSessions = Omit<User, 'password'> & {
-  sessions: Session[]
+export type UserWithWorkouts = Omit<User, 'password'> & {
+  workouts: Workout[]
 }
 
 export type SerialisedUser = {
@@ -15,82 +15,82 @@ export type SerialisedUser = {
   firstName: string | null
   id: string
   lastName: string | null
-  sessions: SerialisedSession[]
-  sessionsAssigned: string
-  sessionsCompleted: string
   updatedAt: string
+  workouts: SerialisedWorkout[]
+  workoutsAssigned: string
+  workoutsCompleted: string
 }
 
-export function serialiseUsersWithSessions(users: UserWithSessions[]) {
-  return users.map(user => serialiseUserWithSessions(user))
+export function serialiseUsersWithWorkouts(users: UserWithWorkouts[]) {
+  return users.map(user => serialiseUserWithWorkouts(user))
 }
 
-export function serialiseUserWithSessions(
-  user?: UserWithSessions | null,
+export function serialiseUserWithWorkouts(
+  user?: UserWithWorkouts | null,
 ): SerialisedUser | undefined {
   if (!user) {
     return
   }
 
-  const {createdAt, sessions, updatedAt, ...rest} = user
+  const {createdAt, workouts, updatedAt, ...rest} = user
   const {
     appointments,
     appointmentsAttended,
-    sessionsAssigned,
-    sessionsCompleted,
-  } = extractSessionData(sessions)
+    workoutsAssigned,
+    workoutsCompleted,
+  } = extractWorkoutData(workouts)
 
   return {
     ...rest,
     appointments: appointments.toString(),
     appointmentsAttended: appointmentsAttended.toString(),
     createdAt: formatDate(createdAt),
-    sessions: serialiseSessions(sessions),
-    sessionsAssigned: sessionsAssigned.toString(),
-    sessionsCompleted: sessionsCompleted.toString(),
+    workouts: serialiseWorkouts(workouts),
+    workoutsAssigned: workoutsAssigned.toString(),
+    workoutsCompleted: workoutsCompleted.toString(),
     updatedAt: formatDate(updatedAt),
   }
 }
 
-type SessionData = {
+type WorkoutData = {
   appointments: number
   appointmentsAttended: number
-  sessionsAssigned: number
-  sessionsCompleted: number
+  workoutsAssigned: number
+  workoutsCompleted: number
 }
 
-function extractSessionData(sessions: Session[]): SessionData {
-  const sessionsData = {
+function extractWorkoutData(workouts: Workout[]): WorkoutData {
+  const workoutsData = {
     appointments: 0,
     appointmentsAttended: 0,
-    sessionsAssigned: 0,
-    sessionsCompleted: 0,
+    workoutsAssigned: 0,
+    workoutsCompleted: 0,
   }
 
-  return sessions.reduce((acc, cur) => {
-    if (cur.sessionType === 'TRAINING') {
-      acc.sessionsAssigned++
+  return workouts.reduce((acc, cur) => {
+    if (cur.type === 'TRAINING') {
+      acc.workoutsAssigned++
     }
 
-    if (cur.sessionType === 'TRAINING' && cur.status === 'COMPLETED') {
-      acc.sessionsCompleted++
+    if (cur.type === 'TRAINING' && cur.status === 'COMPLETED') {
+      acc.workoutsCompleted++
     }
 
-    if (cur.sessionType === 'APPOINTMENT') {
+    if (cur.type === 'APPOINTMENT') {
       acc.appointments++
     }
 
-    if (cur.sessionType === 'APPOINTMENT' && cur.status === 'COMPLETED') {
+    if (cur.type === 'APPOINTMENT' && cur.status === 'COMPLETED') {
       acc.appointmentsAttended++
     }
 
     return acc
-  }, sessionsData)
+  }, workoutsData)
 }
 
 export type SerialisedUserKey = keyof Omit<
   SerialisedUser,
-  'admin' | 'id' | 'sessions'
+  'admin' | 'id' | 'workouts'
 >
 
 export function isValidKey(key: string): key is SerialisedUserKey {
@@ -102,8 +102,8 @@ export const validKeys: SerialisedUserKey[] = [
   'firstName',
   'lastName',
   'email',
-  'sessionsAssigned',
-  'sessionsCompleted',
+  'workoutsAssigned',
+  'workoutsCompleted',
   'appointments',
   'appointmentsAttended',
   'createdAt',
@@ -117,8 +117,8 @@ export const keyMap = {
   email: 'Email',
   firstName: 'First name',
   lastName: 'Last name',
-  sessionsAssigned: 'Sessions assigned',
-  sessionsCompleted: 'Sessions completed',
+  workoutsAssigned: 'Workouts assigned',
+  workoutsCompleted: 'Workouts completed',
   updatedAt: 'Updated',
 }
 

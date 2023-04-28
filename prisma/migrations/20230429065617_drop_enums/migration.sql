@@ -1,0 +1,5 @@
+-- DropEnum
+DROP TYPE "WORKOUT_STATUS";
+
+-- DropEnum
+DROP TYPE "WORKOUT_TYPE";

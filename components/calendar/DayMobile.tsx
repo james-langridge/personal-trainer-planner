@@ -5,15 +5,15 @@ import {
   isDayToday,
   isDayTomorrow,
 } from '@/lib/calendar'
-import {SessionItemMobile} from '@/components/calendar/SessionItemMobile'
-import {SerialisedSession} from '@/lib/sessions'
+import {WorkoutItemMobile} from '@/components/calendar/WorkoutItemMobile'
+import {SerialisedWorkout} from '@/lib/workouts'
 
 export function DayMobile({
   dayData,
-  sessionsToday,
+  workoutsToday,
 }: {
   dayData: Day
-  sessionsToday: (SerialisedSession | undefined)[] | null | undefined
+  workoutsToday: (SerialisedWorkout | undefined)[] | null | undefined
 }) {
   const isToday = isDayToday(dayData)
   const isTomorrow = isDayTomorrow(dayData)
@@ -33,12 +33,12 @@ export function DayMobile({
             : dayData.day + ' ' + monthName}
         </div>
       </div>
-      {sessionsToday &&
-        sessionsToday.map((session, i) => {
+      {workoutsToday &&
+        workoutsToday.map((workout, i) => {
           return (
-            <div key={session?.id}>
-              {session && <SessionItemMobile session={session} />}
-              {i < sessionsToday.length - 1 && (
+            <div key={workout?.id}>
+              {workout && <WorkoutItemMobile workout={workout} />}
+              {i < workoutsToday.length - 1 && (
                 <hr className="my-4 h-px border-none bg-gray-200 dark:bg-gray-700" />
               )}
             </div>

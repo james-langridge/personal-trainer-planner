@@ -1,15 +1,15 @@
 'use client'
 
-import {useGetSessionsTableData} from '@/hooks'
+import {useGetWorkoutsTableData} from '@/hooks'
 import SortSvg from '@/components/SortSvg'
 import Link from 'next/link'
 import React from 'react'
-import {keyMap, validKeys, isValidKey} from '@/lib/sessions'
+import {keyMap, validKeys, isValidKey} from '@/lib/workouts'
 
 export default function ClientDetails({params}: {params: {slug: string}}) {
   const {slug} = params
 
-  const {sessions, user, setSortCol} = useGetSessionsTableData(slug)
+  const {workouts, user, setSortCol} = useGetWorkoutsTableData(slug)
 
   if (!user) {
     return null
@@ -30,8 +30,8 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
       </h1>
       <div className="m-2 max-w-fit border p-2">
         <div>Email: {user.email}</div>
-        <div>Sessions assigned: {user.sessionsAssigned}</div>
-        <div>Sessions completed: {user.sessionsCompleted}</div>
+        <div>Workouts assigned: {user.workoutsAssigned}</div>
+        <div>Workouts completed: {user.workoutsCompleted}</div>
         <div>Appointments: {user.appointments}</div>
         <div>Appointments attended: {user.appointmentsAttended}</div>
       </div>
@@ -69,14 +69,14 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
                   </thead>
 
                   <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                    {sessions?.map(session => {
+                    {workouts?.map(workout => {
                       // TODO implement show deleted toggle
-                      if (session.deleted === 'true') {
+                      if (workout.deleted === 'true') {
                         return
                       }
 
                       return (
-                        <tr key={session.id}>
+                        <tr key={workout.id}>
                           {validKeys.map(key => {
                             return (
                               <td
@@ -85,7 +85,7 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
                               >
                                 <div>
                                   <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
-                                    {session[key]}
+                                    {workout[key]}
                                   </p>
                                 </div>
                               </td>
@@ -95,7 +95,7 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
                             <div className="flex items-center gap-x-6">
                               <Link
                                 className="text-gray-500 transition-colors duration-200 hover:text-yellow-500 focus:outline-none dark:text-gray-300 dark:hover:text-yellow-500"
-                                href={`/session/${session.id}`}
+                                href={`/workout/${workout.id}`}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"

@@ -3,25 +3,25 @@ import {SerialisedUser} from '@/lib/users'
 
 export default function Providers({children}: {children: React.ReactNode}) {
   const [user, userDispatch] = useReducer(userReducer, {} as UserState)
-  const [sessionId, sessionIdDispatch] = useReducer(
-    sessionIdReducer,
-    {} as SessionIdState,
+  const [workoutId, workoutIdDispatch] = useReducer(
+    workoutIdReducer,
+    {} as WorkoutIdState,
   )
   const [isAdmin, authDispatch] = useReducer(authReducer, {} as AuthState)
 
   return (
     <UserContext.Provider value={user}>
-      <SessionIdContext.Provider value={sessionId}>
+      <WorkoutIdContext.Provider value={workoutId}>
         <AuthContext.Provider value={isAdmin}>
           <AuthDispatchContext.Provider value={authDispatch}>
             <UserDispatchContext.Provider value={userDispatch}>
-              <SessionIdDispatchContext.Provider value={sessionIdDispatch}>
+              <WorkoutIdDispatchContext.Provider value={workoutIdDispatch}>
                 {children}
-              </SessionIdDispatchContext.Provider>
+              </WorkoutIdDispatchContext.Provider>
             </UserDispatchContext.Provider>
           </AuthDispatchContext.Provider>
         </AuthContext.Provider>
-      </SessionIdContext.Provider>
+      </WorkoutIdContext.Provider>
     </UserContext.Provider>
   )
 }
@@ -43,15 +43,15 @@ function userReducer(state: UserState, action: UserAction): UserState {
   }
 }
 
-type SessionIdAction = {type: 'setSessionId'; sessionId: string}
-type SessionIdState = {sessionId: string}
+type WorkoutIdAction = {type: 'setWorkoutId'; workoutId: string}
+type WorkoutIdState = {workoutId: string}
 
-function sessionIdReducer(state: SessionIdState, action: SessionIdAction) {
+function workoutIdReducer(state: WorkoutIdState, action: WorkoutIdAction) {
   switch (action.type) {
-    case 'setSessionId': {
+    case 'setWorkoutId': {
       return {
         ...state,
-        sessionId: action.sessionId,
+        workoutId: action.workoutId,
       }
     }
     default: {
@@ -84,9 +84,9 @@ const UserContext = createContext<UserState>({} as UserState)
 const UserDispatchContext = createContext<Dispatch<UserAction>>(
   {} as Dispatch<UserAction>,
 )
-const SessionIdContext = createContext<SessionIdState>({} as SessionIdState)
-const SessionIdDispatchContext = createContext<Dispatch<SessionIdAction>>(
-  {} as Dispatch<SessionIdAction>,
+const WorkoutIdContext = createContext<WorkoutIdState>({} as WorkoutIdState)
+const WorkoutIdDispatchContext = createContext<Dispatch<WorkoutIdAction>>(
+  {} as Dispatch<WorkoutIdAction>,
 )
 const AuthContext = createContext<AuthState>({} as AuthState)
 const AuthDispatchContext = createContext<Dispatch<AuthAction>>(
@@ -101,12 +101,12 @@ export function useUserDispatch() {
   return useContext(UserDispatchContext)
 }
 
-export function useSessionId() {
-  return useContext(SessionIdContext)
+export function useWorkoutId() {
+  return useContext(WorkoutIdContext)
 }
 
-export function useSessionIdDispatch() {
-  return useContext(SessionIdDispatchContext)
+export function useWorkoutIdDispatch() {
+  return useContext(WorkoutIdDispatchContext)
 }
 
 export function useAuth() {

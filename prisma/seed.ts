@@ -1,9 +1,9 @@
 import {db} from '@/lib/db'
-import {SESSION_STATUS} from '@prisma/client'
+import {WORKOUT_STATUS} from '@prisma/client'
 import {hashPassword} from '@/lib/auth'
 
-const getRandomSessionStatus = () => {
-  const statuses = [SESSION_STATUS.COMPLETED, SESSION_STATUS.NOT_STARTED]
+const getRandomWorkoutStatus = () => {
+  const statuses = [WORKOUT_STATUS.COMPLETED, WORKOUT_STATUS.NOT_STARTED]
   return statuses[Math.floor(Math.random() * statuses.length)]
 }
 
@@ -19,17 +19,17 @@ async function main() {
       firstName: 'User',
       lastName: 'Person',
       password: passwordUser,
-      sessions: {
+      workouts: {
         create: new Array(5).fill(1).map((_, i) => ({
-          name: `Session ${i}`,
-          description: `Everything that describes Session ${i}`,
+          name: `Workout ${i}`,
+          description: `Everything that describes Workout ${i}`,
           date: new Date(2023, 4, i),
-          status: getRandomSessionStatus(),
+          status: getRandomWorkoutStatus(),
         })),
       },
     },
     include: {
-      sessions: true,
+      workouts: true,
     },
   })
 

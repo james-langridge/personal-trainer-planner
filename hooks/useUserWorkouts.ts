@@ -1,4 +1,4 @@
-import {getUserWithSessions} from '@/lib/api'
+import {getUserWithWorkouts} from '@/lib/api'
 import {useCallback, useEffect} from 'react'
 import {
   useAuthDispatch,
@@ -6,9 +6,9 @@ import {
   useUserDispatch,
 } from '@/app/(training-app)/Providers'
 
-type UseUserSessionsReturnType = [() => Promise<void>]
+type UseUserWorkoutsReturnType = [() => Promise<void>]
 
-export function useUserSessions(isAdmin?: boolean): UseUserSessionsReturnType {
+export function useUserWorkouts(isAdmin: boolean): UseUserWorkoutsReturnType {
   const dispatchUser = useUserDispatch()
   const dispatchAuth = useAuthDispatch()
   const userState = useUser()
@@ -20,17 +20,17 @@ export function useUserSessions(isAdmin?: boolean): UseUserSessionsReturnType {
     }
   }, [dispatchAuth, isAdmin])
 
-  const refreshUserWithSessions = useCallback(async () => {
-    const user = await getUserWithSessions(userId)
+  const refreshUserWithWorkouts = useCallback(async () => {
+    const user = await getUserWithWorkouts(userId)
 
     dispatchUser({type: 'setUser', user: user})
   }, [dispatchUser, userId])
 
   useEffect(() => {
     if (userId) {
-      void refreshUserWithSessions()
+      void refreshUserWithWorkouts()
     }
-  }, [refreshUserWithSessions, userId])
+  }, [refreshUserWithWorkouts, userId])
 
   // This is to sync updates between users (personal trainer and their clients)
   useEffect(() => {
@@ -39,13 +39,13 @@ export function useUserSessions(isAdmin?: boolean): UseUserSessionsReturnType {
         return
       }
 
-      void refreshUserWithSessions()
+      void refreshUserWithWorkouts()
     }, 60000)
 
     return () => {
       clearInterval(interval)
     }
-  }, [refreshUserWithSessions, userId])
+  }, [refreshUserWithWorkouts, userId])
 
-  return [refreshUserWithSessions]
+  return [refreshUserWithWorkouts]
 }

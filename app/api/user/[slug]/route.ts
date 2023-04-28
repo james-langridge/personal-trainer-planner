@@ -1,13 +1,13 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {db} from '@/lib/db'
-import {serialiseUserWithSessions, UserWithSessions} from '@/lib/users'
+import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 
 export async function GET(
   req: NextRequest,
   {params}: {params: {slug: string}},
 ) {
   const id = params.slug
-  const user: UserWithSessions | null = await db.user.findUnique({
+  const user: UserWithWorkouts | null = await db.user.findUnique({
     select: {
       id: true,
       admin: true,
@@ -16,7 +16,7 @@ export async function GET(
       email: true,
       firstName: true,
       lastName: true,
-      sessions: {
+      workouts: {
         where: {
           deleted: false,
         },
@@ -27,7 +27,7 @@ export async function GET(
     },
   })
 
-  const serialisedUser = serialiseUserWithSessions(user)
+  const serialisedUser = serialiseUserWithWorkouts(user)
 
   return NextResponse.json({
     status: 200,

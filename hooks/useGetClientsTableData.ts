@@ -1,7 +1,7 @@
 'use client'
 
 import {useCallback, useEffect, useState} from 'react'
-import {getUsersWithSessions} from '@/lib/api'
+import {getUsersWithWorkouts} from '@/lib/api'
 import {SerialisedUser, SerialisedUserKey, sortUsers} from '@/lib/users'
 
 export function useGetClientsTableData() {
@@ -9,7 +9,7 @@ export function useGetClientsTableData() {
   const [users, setUsers] = useState<SerialisedUser[] | undefined>()
 
   const fetchUsers = useCallback(async () => {
-    const fetchedUsers = await getUsersWithSessions()
+    const fetchedUsers = await getUsersWithWorkouts()
     const sortedUsers = sortUsers(sortCol, fetchedUsers)
 
     setUsers(sortedUsers)

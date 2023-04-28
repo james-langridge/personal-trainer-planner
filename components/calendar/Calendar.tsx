@@ -13,9 +13,9 @@ import {Sidebar} from '@/components/calendar/Sidebar'
 
 const SidebarMemo = React.memo(Sidebar)
 
-export function Calendar({user}: {user?: SerialisedUser}) {
+export function Calendar({user}: {user: SerialisedUser}) {
   const {monthData, year, month, setYear, setMonth} = useCalendarData()
-  const isAdmin = user?.admin
+  const isAdmin = user.admin
 
   return (
     <Providers>
