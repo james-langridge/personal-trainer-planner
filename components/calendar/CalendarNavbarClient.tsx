@@ -38,7 +38,7 @@ export function CalendarNavbarClient({logo, isAdmin}: Props) {
   async function handleLogOut() {
     await logout({key: 'static_key'})
 
-    router.push('/')
+    router.push('/login')
   }
 
   return (
@@ -61,7 +61,7 @@ export function CalendarNavbarClient({logo, isAdmin}: Props) {
 
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <Link href="/">
+                  <Link href="/training-planner">
                     <Image
                       className="block h-8 w-auto lg:hidden"
                       src={src}

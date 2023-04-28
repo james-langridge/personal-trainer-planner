@@ -4,6 +4,8 @@ import React from 'react'
 import {Calendar} from '@/components/calendar/Calendar'
 import {serialiseUserWithSessions, UserWithSessions} from '@/lib/users'
 
+export const dynamic = 'force-dynamic'
+
 const getUserWithSessions = async (): Promise<{
   user: UserWithSessions | null | undefined
 }> => {

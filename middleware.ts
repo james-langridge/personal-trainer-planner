@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
     const JWTPayload = await getJWTPayload(req.cookies)
 
     // This avoids redirecting unauthenticated users first to /training-planner
-    // then to /login via app/(training-app)/layout.tsx
+    // then to /login via app/(training-app)/layout-old.tsx
     if (!JWTPayload) {
       req.nextUrl.pathname = '/login'
 
