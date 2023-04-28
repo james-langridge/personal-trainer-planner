@@ -1,19 +1,16 @@
-import {getByContentTypeId} from '@/lib/contentful'
-import {CtfComponentRenderer} from '@/components/contentful/CtfComponentRenderer'
+import {classNames} from '@/lib/misc'
+import Link from 'next/link'
 
-export default async function Home() {
-  const {items} = await getByContentTypeId('page', {
-    'fields.slug': 'home',
-    include: 10,
-  })
-  const pageContent = items[0].fields.pageContent
-
+export default async function Login() {
   return (
-    <main className="relative">
-      {pageContent &&
-        pageContent?.map(entry => (
-          <CtfComponentRenderer key={entry.sys.id} entry={entry} />
-        ))}
-    </main>
+    <Link
+      href={'/login'}
+      className={classNames(
+        'text-gray-300 hover:bg-gray-700 hover:text-white',
+        'rounded-md px-3 py-2 text-sm font-medium',
+      )}
+    >
+      Log in
+    </Link>
   )
 }
