@@ -18,7 +18,7 @@ export default async function TrainingLayout({
   const user = await getUserFromCookie(cookies())
 
   if (!user) {
-    redirect('/login')
+    redirect('/')
   }
 
   return (
@@ -28,7 +28,7 @@ export default async function TrainingLayout({
           <>
             <div>Please log in.</div>
             <Link
-              href="/login"
+              href="/"
               className="mt-4 w-full transform rounded-md bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
             >
               Log in

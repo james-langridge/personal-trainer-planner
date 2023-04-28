@@ -1,19 +1,16 @@
-import {getByContentTypeId} from '@/lib/contentful'
-import {CtfComponentRenderer} from '@/components/contentful/CtfComponentRenderer'
+import AuthForm from '@/components/AuthForm'
+import {getUserFromCookie} from '@/lib/auth'
+import {cookies} from 'next/headers'
+import {redirect} from 'next/navigation'
 
-export default async function Home() {
-  const {items} = await getByContentTypeId('page', {
-    'fields.slug': 'home',
-    include: 10,
-  })
-  const pageContent = items[0].fields.pageContent
+export const dynamic = 'force-dynamic'
 
-  return (
-    <main className="relative">
-      {pageContent &&
-        pageContent?.map(entry => (
-          <CtfComponentRenderer key={entry.sys.id} entry={entry} />
-        ))}
-    </main>
-  )
+export default async function Login() {
+  const user = await getUserFromCookie(cookies())
+
+  if (user) {
+    redirect('/training-planner')
+  }
+
+  return <AuthForm mode="login" />
 }
