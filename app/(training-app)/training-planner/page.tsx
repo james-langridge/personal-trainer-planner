@@ -1,33 +1,20 @@
-'use client'
-
+import {getUserFromCookie} from '@/lib/auth'
+import {cookies} from 'next/headers'
 import React from 'react'
-import {Sidebar} from '@/components/calendar/Sidebar'
-import {useCalendarData, useLockBodyScroll} from '@/hooks'
-import {CalendarHeading} from '@/components/calendar/CalendarHeading'
-import {CalendarGrid} from '@/components/calendar/CalendarGrid'
-import Providers from '@/app/(training-app)/Providers'
-import ClientWrapper from '@/components/calendar/ClientWrapper'
+import {Calendar} from '@/components/calendar/Calendar'
+import {serialiseUserWithSessions, UserWithSessions} from '@/lib/users'
 
-const SidebarMemo = React.memo(Sidebar)
+const getUserWithSessions = async (): Promise<{
+  user: UserWithSessions | null | undefined
+}> => {
+  const user = await getUserFromCookie(cookies())
 
-export default function TrainingPlanner() {
-  const {monthData, year, month, setYear, setMonth} = useCalendarData()
-  useLockBodyScroll()
+  return {user: user}
+}
 
-  return (
-    <Providers>
-      <ClientWrapper isAdmin>
-        <SidebarMemo />
-        <div className="flex w-full flex-col px-5 sm:items-center ">
-          <CalendarHeading
-            year={year}
-            setYear={setYear}
-            month={month}
-            setMonth={setMonth}
-          />
-          <CalendarGrid monthData={monthData} />
-        </div>
-      </ClientWrapper>
-    </Providers>
-  )
+export default async function TrainingStudio() {
+  const {user} = await getUserWithSessions()
+  const serialisedUserWithSessions = serialiseUserWithSessions(user)
+
+  return <Calendar user={serialisedUserWithSessions} />
 }

@@ -7,17 +7,18 @@ export type UserWithSessions = Omit<User, 'password'> & {
 }
 
 export type SerialisedUser = {
-  id: string
+  admin: boolean
+  appointments: string
+  appointmentsAttended: string
   createdAt: string
-  updatedAt: string
   email: string
   firstName: string | null
+  id: string
   lastName: string | null
   sessions: SerialisedSession[]
   sessionsAssigned: string
   sessionsCompleted: string
-  appointments: string
-  appointmentsAttended: string
+  updatedAt: string
 }
 
 export function serialiseUsersWithSessions(users: UserWithSessions[]) {
@@ -31,39 +32,39 @@ export function serialiseUserWithSessions(
     return
   }
 
-  const {createdAt, updatedAt, sessions, ...rest} = user
+  const {createdAt, sessions, updatedAt, ...rest} = user
   const {
+    appointments,
+    appointmentsAttended,
     sessionsAssigned,
     sessionsCompleted,
-    appointmentsAttended,
-    appointments,
   } = extractSessionData(sessions)
 
   return {
     ...rest,
+    appointments: appointments.toString(),
+    appointmentsAttended: appointmentsAttended.toString(),
+    createdAt: formatDate(createdAt),
     sessions: serialiseSessions(sessions),
     sessionsAssigned: sessionsAssigned.toString(),
     sessionsCompleted: sessionsCompleted.toString(),
-    appointmentsAttended: appointmentsAttended.toString(),
-    appointments: appointments.toString(),
-    createdAt: formatDate(createdAt),
     updatedAt: formatDate(updatedAt),
   }
 }
 
 type SessionData = {
-  sessionsAssigned: number
-  sessionsCompleted: number
   appointments: number
   appointmentsAttended: number
+  sessionsAssigned: number
+  sessionsCompleted: number
 }
 
 function extractSessionData(sessions: Session[]): SessionData {
   const sessionsData = {
-    sessionsAssigned: 0,
-    sessionsCompleted: 0,
     appointments: 0,
     appointmentsAttended: 0,
+    sessionsAssigned: 0,
+    sessionsCompleted: 0,
   }
 
   return sessions.reduce((acc, cur) => {
@@ -87,34 +88,38 @@ function extractSessionData(sessions: Session[]): SessionData {
   }, sessionsData)
 }
 
-export type SerialisedUserKey = keyof Omit<SerialisedUser, 'id' | 'sessions'>
+export type SerialisedUserKey = keyof Omit<
+  SerialisedUser,
+  'admin' | 'id' | 'sessions'
+>
 
 export function isValidKey(key: string): key is SerialisedUserKey {
   return validKeys.includes(key as SerialisedUserKey)
 }
 
+// Changing the order of validKeys will change the display order of the cols on /clients
 export const validKeys: SerialisedUserKey[] = [
-  'createdAt',
-  'updatedAt',
-  'email',
   'firstName',
   'lastName',
+  'email',
   'sessionsAssigned',
   'sessionsCompleted',
   'appointments',
   'appointmentsAttended',
+  'createdAt',
+  'updatedAt',
 ]
 
 export const keyMap = {
-  firstName: 'First name',
-  lastName: 'Last name',
-  email: 'Email',
-  createdAt: 'Created',
-  updatedAt: 'Updated',
-  sessionsAssigned: 'Sessions assigned',
-  sessionsCompleted: 'Sessions completed',
   appointments: 'Appointments',
   appointmentsAttended: 'Appointments attended',
+  createdAt: 'Created',
+  email: 'Email',
+  firstName: 'First name',
+  lastName: 'Last name',
+  sessionsAssigned: 'Sessions assigned',
+  sessionsCompleted: 'Sessions completed',
+  updatedAt: 'Updated',
 }
 
 export function sortUsers(key: SerialisedUserKey, users: SerialisedUser[]) {

@@ -8,7 +8,7 @@ import {
 
 type UseUserSessionsReturnType = [() => Promise<void>]
 
-export function useUserSessions(isAdmin: boolean): UseUserSessionsReturnType {
+export function useUserSessions(isAdmin?: boolean): UseUserSessionsReturnType {
   const dispatchUser = useUserDispatch()
   const dispatchAuth = useAuthDispatch()
   const userState = useUser()
@@ -32,6 +32,7 @@ export function useUserSessions(isAdmin: boolean): UseUserSessionsReturnType {
     }
   }, [refreshUserWithSessions, userId])
 
+  // This is to sync updates between users (personal trainer and their clients)
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!userId) {

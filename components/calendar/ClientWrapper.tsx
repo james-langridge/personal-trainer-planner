@@ -6,20 +6,20 @@ import {useUserSessions} from '@/hooks'
 export default function ClientWrapper({
   children,
   user,
-  isAdmin = false,
 }: {
   children: React.ReactNode
   user?: SerialisedUser
-  isAdmin?: boolean
 }) {
-  useUserSessions(isAdmin)
+  const isAdmin = user?.admin
   const dispatchUser = useUserDispatch()
+  useUserSessions(isAdmin)
 
+  // Admin starts with blank calendar, and manually selects user
   useEffect(() => {
-    if (user) {
+    if (user && !isAdmin) {
       dispatchUser({type: 'setUser', user: user})
     }
-  }, [dispatchUser, user])
+  }, [dispatchUser, isAdmin, user])
 
   return <div className="flex h-[90vh]">{children}</div>
 }

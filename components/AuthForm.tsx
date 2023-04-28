@@ -54,7 +54,7 @@ export default function AuthForm({mode}: {mode: 'register' | 'login'}) {
 
           setStatus('resolved')
 
-          router.push('/training-studio')
+          router.push('/training-planner')
         }
       } catch (error) {
         setError(error as Error)
