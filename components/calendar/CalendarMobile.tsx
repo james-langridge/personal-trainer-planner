@@ -1,7 +1,7 @@
 'use client'
 
 import React, {useEffect, useRef, useState} from 'react'
-import {getSessionsToday, shouldScrollToThisDay} from '@/lib/calendar'
+import {getWorkoutsToday, shouldScrollToThisDay} from '@/lib/calendar'
 import {DayMobile} from '@/components/calendar/DayMobile'
 import {
   useMobileCalendarData,
@@ -13,7 +13,7 @@ import {useUser} from '@/app/(training-app)/Providers'
 
 export function CalendarMobile() {
   const userState = useUser()
-  const sessions = userState.user?.sessions
+  const workouts = userState.user?.workouts
   const [isFrozen, setIsFrozen] = useState(false)
   const {data, scrollToThisDay, loadNextMonth, loadPreviousMonth} =
     useMobileCalendarData()
@@ -55,7 +55,7 @@ export function CalendarMobile() {
     <div className="py-5">
       <div ref={startElementRef}></div>
       {data.map(day => {
-        const sessionsToday = sessions ? getSessionsToday(day, sessions) : null
+        const workoutsToday = workouts ? getWorkoutsToday(day, workouts) : null
 
         return (
           <div
@@ -64,7 +64,7 @@ export function CalendarMobile() {
             }
             key={`${day.day}-${day.month}-${day.year}`}
           >
-            <DayMobile dayData={day} sessionsToday={sessionsToday} />
+            <DayMobile dayData={day} workoutsToday={workoutsToday} />
           </div>
         )
       })}

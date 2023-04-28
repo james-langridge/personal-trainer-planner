@@ -1,14 +1,14 @@
 import React from 'react'
 import {classNames} from '@/lib/misc'
 import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
-import {Day, getSessionsToday} from '@/lib/calendar'
+import {Day, getWorkoutsToday} from '@/lib/calendar'
 import {CalendarDay} from '@/components/calendar/CalendarDay'
-import {SessionItem} from '@/components/calendar/SessionItem'
+import {WorkoutItem} from '@/components/calendar/WorkoutItem'
 import {useUser} from '@/app/(training-app)/Providers'
 
 export function CalendarGrid({monthData}: {monthData: Day[]}) {
   const userState = useUser()
-  const sessions = userState.user?.sessions
+  const workouts = userState.user?.workouts
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDays = Array(firstDayOfMonth).fill(null)
   const calendarSquares = firstDayOfMonth + monthData.length
@@ -22,16 +22,16 @@ export function CalendarGrid({monthData}: {monthData: Day[]}) {
     >
       <CalendarEmptyDays emptyDays={emptyDays} />
       {monthData.map((day, index) => {
-        const sessionsToday = sessions ? getSessionsToday(day, sessions) : null
+        const workoutsToday = workouts ? getWorkoutsToday(day, workouts) : null
         const isFirstWeek = index + firstDayOfMonth < 7
 
         return (
           <CalendarDay day={day} isFirstWeek={isFirstWeek} key={index}>
-            {sessionsToday &&
-              sessionsToday.map((session, i) => {
+            {workoutsToday &&
+              workoutsToday.map((workout, i) => {
                 return (
                   <div key={day.day * day.year * day.month * i}>
-                    {session && <SessionItem session={session} />}
+                    {workout && <WorkoutItem workout={workout} />}
                   </div>
                 )
               })}

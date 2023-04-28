@@ -1,4 +1,4 @@
-import {SerialisedSession} from '@/lib/sessions'
+import {SerialisedWorkout} from '@/lib/workouts'
 
 export const monthNames = [
   'January',
@@ -34,32 +34,32 @@ export function generateCalendarMonth(month: number, year: number) {
   return monthData
 }
 
-function areDatesEqual(calendarDate: Date, sessionDate: Date) {
-  const sessionYear = sessionDate.getFullYear()
-  const sessionMonth = sessionDate.getMonth()
-  const sessionDay = sessionDate.getDate()
+function areDatesEqual(calendarDate: Date, workoutDate: Date) {
+  const workoutYear = workoutDate.getFullYear()
+  const workoutMonth = workoutDate.getMonth()
+  const workoutDay = workoutDate.getDate()
 
   const calendarYear = calendarDate.getFullYear()
   const calendarMonth = calendarDate.getMonth()
   const calendarDay = calendarDate.getDate()
 
   return (
-    sessionYear === calendarYear &&
-    sessionMonth === calendarMonth &&
-    sessionDay === calendarDay
+    workoutYear === calendarYear &&
+    workoutMonth === calendarMonth &&
+    workoutDay === calendarDay
   )
 }
 
-export function getSessionsToday(
+export function getWorkoutsToday(
   calendarDay: {
     day: number
     weekDay: number
     month: number
     year: number
   },
-  sessions?: SerialisedSession[],
+  workouts?: SerialisedWorkout[],
 ) {
-  if (!sessions) {
+  if (!workouts) {
     return
   }
 
@@ -70,19 +70,19 @@ export function getSessionsToday(
     )}-${String(calendarDay.day).padStart(2, '0')}`,
   )
 
-  const sessionsMap = sessions.map(session => {
-    if (session.deleted === 'true') {
+  const workoutsMap = workouts.map(workout => {
+    if (workout.deleted === 'true') {
       return
     }
 
-    const sessionDate = new Date(session.date)
+    const workoutDate = new Date(workout.date)
 
-    if (areDatesEqual(calendarDate, sessionDate)) {
-      return session
+    if (areDatesEqual(calendarDate, workoutDate)) {
+      return workout
     }
   })
 
-  return sessionsMap.filter(Boolean)
+  return workoutsMap.filter(Boolean)
 }
 
 export type Day = {

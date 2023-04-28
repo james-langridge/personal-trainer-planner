@@ -8,7 +8,7 @@ export async function GET(
   {params}: {params: {slug: string}},
 ) {
   const id = params.slug
-  const session = await db.session.findUnique({
+  const workout = await db.workout.findUnique({
     where: {
       id: id,
     },
@@ -16,6 +16,6 @@ export async function GET(
 
   return NextResponse.json({
     status: 200,
-    data: session,
+    data: workout,
   })
 }

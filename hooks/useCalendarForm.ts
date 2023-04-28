@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {SESSION_TYPE} from '@prisma/client'
-import {useFetchSession} from '@/hooks'
+import {WORKOUT_TYPE} from '@prisma/client'
+import {useFetchWorkout} from '@/hooks'
 import {
-  useSessionId,
-  useSessionIdDispatch,
+  useWorkoutId,
+  useWorkoutIdDispatch,
   useUser,
 } from '@/app/(training-app)/Providers'
 
@@ -12,9 +12,9 @@ export type CalendarFormState = {
   description?: string
   name: string
   ownerId: string
-  sessionId: string
+  workoutId: string
   videoUrl?: string
-  sessionType: SESSION_TYPE
+  type: WORKOUT_TYPE
 }
 
 const initialState: CalendarFormState = {
@@ -22,9 +22,9 @@ const initialState: CalendarFormState = {
   description: '',
   name: '',
   ownerId: '',
-  sessionId: '',
+  workoutId: '',
   videoUrl: '',
-  sessionType: SESSION_TYPE.TRAINING,
+  type: WORKOUT_TYPE.TRAINING,
 }
 
 export const useCalendarForm = (): [
@@ -34,28 +34,28 @@ export const useCalendarForm = (): [
 ] => {
   const userState = useUser()
   const userId = userState?.user?.id ?? ''
-  const {sessionId} = useSessionId()
-  const dispatch = useSessionIdDispatch()
-  const [session, setSession] = useState<CalendarFormState>({
+  const {workoutId} = useWorkoutId()
+  const dispatch = useWorkoutIdDispatch()
+  const [workout, setWorkout] = useState<CalendarFormState>({
     ...initialState,
     ownerId: userId,
   })
 
-  const sessionData = useFetchSession(sessionId ?? '')
+  const workoutData = useFetchWorkout(workoutId ?? '')
 
   useEffect(() => {
-    if (sessionData) {
-      setSession(sessionData)
+    if (workoutData) {
+      setWorkout(workoutData)
     }
-  }, [sessionData])
+  }, [workoutData])
 
   function resetForm() {
-    setSession({
+    setWorkout({
       ...initialState,
       ownerId: userId,
     })
-    dispatch({type: 'setSessionId', sessionId: ''})
+    dispatch({type: 'setWorkoutId', workoutId: ''})
   }
 
-  return [session, setSession, resetForm]
+  return [workout, setWorkout, resetForm]
 }

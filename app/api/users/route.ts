@@ -1,11 +1,11 @@
 import {NextResponse} from 'next/server'
 import {db} from '@/lib/db'
-import {serialiseUsersWithSessions, UserWithSessions} from '@/lib/users'
+import {serialiseUsersWithWorkouts, UserWithWorkouts} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const users: UserWithSessions[] = await db.user.findMany({
+  const users: UserWithWorkouts[] = await db.user.findMany({
     select: {
       id: true,
       admin: true,
@@ -14,7 +14,7 @@ export async function GET() {
       email: true,
       firstName: true,
       lastName: true,
-      sessions: {
+      workouts: {
         where: {
           deleted: false,
         },
@@ -25,7 +25,7 @@ export async function GET() {
     },
   })
 
-  const serialisedUsers = serialiseUsersWithSessions(users)
+  const serialisedUsers = serialiseUsersWithWorkouts(users)
 
   return NextResponse.json({
     status: 200,

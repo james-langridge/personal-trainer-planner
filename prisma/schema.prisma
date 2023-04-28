@@ -20,10 +20,10 @@ model User {
   admin     Boolean   @default(false)
   firstName String?
   lastName  String?
-  sessions  Session[]
+  workouts  Workout[]
 }
 
-model Session {
+model Workout {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -31,23 +31,23 @@ model Session {
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id])
 
-  status      SESSION_STATUS @default(NOT_STARTED)
+  status      WORKOUT_STATUS @default(NOT_STARTED)
   name        String
   date        DateTime
   description String?
   videoUrl    String?
-  sessionType SESSION_TYPE   @default(TRAINING)
+  type        WORKOUT_TYPE   @default(TRAINING)
   deleted     Boolean        @default(false)
 
   @@index([ownerId, id])
 }
 
-enum SESSION_STATUS {
+enum WORKOUT_STATUS {
   NOT_STARTED
   COMPLETED
 }
 
-enum SESSION_TYPE {
+enum WORKOUT_TYPE {
   TRAINING
   APPOINTMENT
 }

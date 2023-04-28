@@ -1,12 +1,12 @@
 import {useEffect, useState} from 'react'
-import {getUsersWithSessions} from '@/lib/api'
+import {getUsersWithWorkouts} from '@/lib/api'
 import {SerialisedUser, sortUsers} from '@/lib/users'
 
 export function useGetUsers() {
   const [users, setUsers] = useState<SerialisedUser[] | undefined>()
 
   const fetchUsers = async () => {
-    const fetchedUsers = await getUsersWithSessions()
+    const fetchedUsers = await getUsersWithWorkouts()
     const sortedUsers = sortUsers('firstName', fetchedUsers)
 
     setUsers(sortedUsers)

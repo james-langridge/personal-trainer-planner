@@ -55,7 +55,7 @@ export const getUserFromCookie = async (
         firstName: true,
         id: true,
         lastName: true,
-        sessions: {
+        workouts: {
           where: {
             deleted: false,
           },

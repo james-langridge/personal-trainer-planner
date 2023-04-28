@@ -2,7 +2,7 @@
 
 Full stack web app for a personal trainer made with Next.js 13 (beta), React 18, Tailwind CSS, PostgreSQL, and Prisma.
 
-Admin can create, update, and delete training sessions in each users' calendar, with updates synced.  Users can log in to follow the assigned training sessions on mobile or larger screens.  Calendar is optimised for mobile with infinite scroll.
+Admin can create, update, and delete workouts in each users' calendar, with updates synced.  Users can log in to follow the assigned workouts on mobile or larger screens.  Calendar is optimised for mobile with infinite scroll.
 
 ## Personal Trainer views
 ### Calendar

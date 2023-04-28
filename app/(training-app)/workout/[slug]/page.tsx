@@ -1,17 +1,17 @@
 'use client'
 
 import BackButton from '@/components/BackButton'
-import {useFetchSession} from '@/hooks'
+import {useFetchWorkout} from '@/hooks'
 
-export default function Session({params}: {params: {slug: string}}) {
+export default function Workout({params}: {params: {slug: string}}) {
   const {slug} = params
-  const sessionData = useFetchSession(slug)
+  const workoutData = useFetchWorkout(slug)
 
-  if (!sessionData) {
+  if (!workoutData) {
     return null
   }
 
-  const date = new Date(sessionData.date).toLocaleString('default', {
+  const date = new Date(workoutData.date).toLocaleString('default', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -22,13 +22,13 @@ export default function Session({params}: {params: {slug: string}}) {
     <div className="flex justify-center p-10">
       <div className="prose w-screen text-center">
         <h1>{date}</h1>
-        <h2>{sessionData.name}</h2>
-        <p>{sessionData.description}</p>
-        {sessionData.videoUrl && (
+        <h2>{workoutData.name}</h2>
+        <p>{workoutData.description}</p>
+        {workoutData.videoUrl && (
           <iframe
             title="Fit For Life Trainer Intro"
             className="mt-12 h-64 min-w-full overflow-hidden rounded-xl border-none md:h-[450px]"
-            src={sessionData.videoUrl}
+            src={workoutData.videoUrl}
             allow="autoplay; fullscreen"
             allowFullScreen={false}
           ></iframe>

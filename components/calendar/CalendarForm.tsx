@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
-import {createSession, updateSession} from '@/lib/api'
-import {SESSION_TYPE} from '@prisma/client'
-import {useCalendarForm, useStatus, useUserSessions} from '@/hooks'
+import {createWorkout, updateWorkout} from '@/lib/api'
+import {WORKOUT_TYPE} from '@prisma/client'
+import {useCalendarForm, useStatus, useUserWorkouts} from '@/hooks'
 import Info from '@/components/Info'
 import Link from 'next/link'
 import {useUser} from '@/app/(training-app)/Providers'
@@ -9,18 +9,18 @@ import {useUser} from '@/app/(training-app)/Providers'
 export function CalendarForm() {
   const userState = useUser()
   const userId = userState?.user?.id ?? ''
-  const [refreshUserWithSessions] = useUserSessions(true)
-  const [session, setSession, resetForm] = useCalendarForm()
+  const [refreshUserWithWorkouts] = useUserWorkouts(true)
+  const [workout, setWorkout, resetForm] = useCalendarForm()
   const {status, mode, setMode, error, setStatus, setError, resetStatus} =
     useStatus()
   const isDisabled = status !== 'idle'
 
   useEffect(() => {
-    setSession(session => ({
-      ...session,
+    setWorkout(workout => ({
+      ...workout,
       ownerId: userId,
     }))
-  }, [setSession, userId])
+  }, [setWorkout, userId])
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
@@ -28,17 +28,17 @@ export function CalendarForm() {
     setStatus('pending')
 
     try {
-      if (session.sessionId) {
-        setMode('updateSession')
-        await updateSession(session)
+      if (workout.workoutId) {
+        setMode('updateWorkout')
+        await updateWorkout(workout)
       } else {
-        setMode('createSession')
-        await createSession(session)
+        setMode('createWorkout')
+        await createWorkout(workout)
       }
 
       setStatus('resolved')
 
-      void refreshUserWithSessions()
+      void refreshUserWithWorkouts()
     } catch (error) {
       setStatus('rejected')
       setError(error as Error)
@@ -48,19 +48,19 @@ export function CalendarForm() {
   }
 
   async function handleDelete() {
-    if (status !== 'idle' || !session.sessionId) {
+    if (status !== 'idle' || !workout.workoutId) {
       return
     }
 
-    setMode('deleteSession')
+    setMode('deleteWorkout')
     setStatus('pending')
 
     try {
-      await updateSession({...session, deleted: 'true'})
+      await updateWorkout({...workout, deleted: 'true'})
 
       setStatus('resolved')
 
-      void refreshUserWithSessions()
+      void refreshUserWithWorkouts()
     } catch (error) {
       setStatus('rejected')
       setError(error as Error)
@@ -72,75 +72,75 @@ export function CalendarForm() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input type="hidden" value={session.sessionId} />
+        <input type="hidden" value={workout.workoutId} />
         <input required type="hidden" value={userId} />
         <input
           required
           onChange={e =>
-            setSession(session => ({
-              ...session,
+            setWorkout(workout => ({
+              ...workout,
               date: e.target.value,
             }))
           }
           placeholder="Date"
           type="date"
           className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          value={session.date}
+          value={workout.date}
         />
         <input
           required
           onChange={e =>
-            setSession(session => ({
-              ...session,
+            setWorkout(workout => ({
+              ...workout,
               name: e.target.value,
             }))
           }
-          placeholder="Session name"
+          placeholder="Workout name"
           className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          value={session.name}
+          value={workout.name}
         />
         <fieldset className="mt-4">
-          <legend>Session Type:</legend>
+          <legend>Workout Type:</legend>
           <div>
             <input
               type="radio"
-              id={SESSION_TYPE.TRAINING}
-              name="sessionType"
-              value={SESSION_TYPE.TRAINING}
-              checked={session.sessionType === SESSION_TYPE.TRAINING}
+              id={WORKOUT_TYPE.TRAINING}
+              name="type"
+              value={WORKOUT_TYPE.TRAINING}
+              checked={workout.type === WORKOUT_TYPE.TRAINING}
               className="mr-2"
               onChange={e =>
-                setSession(session => ({
-                  ...session,
-                  sessionType: e.target.value as SESSION_TYPE,
+                setWorkout(workout => ({
+                  ...workout,
+                  type: e.target.value as WORKOUT_TYPE,
                 }))
               }
             />
-            <label htmlFor={SESSION_TYPE.TRAINING}>Training</label>
+            <label htmlFor={WORKOUT_TYPE.TRAINING}>Training</label>
           </div>
 
           <div>
             <input
               type="radio"
-              id={SESSION_TYPE.APPOINTMENT}
-              name="sessionType"
-              checked={session.sessionType === SESSION_TYPE.APPOINTMENT}
-              value={SESSION_TYPE.APPOINTMENT}
+              id={WORKOUT_TYPE.APPOINTMENT}
+              name="type"
+              checked={workout.type === WORKOUT_TYPE.APPOINTMENT}
+              value={WORKOUT_TYPE.APPOINTMENT}
               className="mr-2"
               onChange={e =>
-                setSession(session => ({
-                  ...session,
-                  sessionType: e.target.value as SESSION_TYPE,
+                setWorkout(workout => ({
+                  ...workout,
+                  type: e.target.value as WORKOUT_TYPE,
                 }))
               }
             />
-            <label htmlFor={SESSION_TYPE.APPOINTMENT}>Appointment</label>
+            <label htmlFor={WORKOUT_TYPE.APPOINTMENT}>Appointment</label>
           </div>
         </fieldset>
         <textarea
           onChange={e =>
-            setSession(session => ({
-              ...session,
+            setWorkout(workout => ({
+              ...workout,
               description: e.target.value,
             }))
           }
@@ -148,19 +148,19 @@ export function CalendarForm() {
           rows={5}
           cols={15}
           className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          value={session.description}
+          value={workout.description}
         />
         <input
           onChange={e =>
-            setSession(session => ({
-              ...session,
+            setWorkout(workout => ({
+              ...workout,
               videoUrl: e.target.value,
             }))
           }
           placeholder="Video url"
           type="url"
           className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          value={session.videoUrl}
+          value={workout.videoUrl}
         />
         <Info status={status} reset={resetStatus} error={error} mode={mode} />
         <button
@@ -168,9 +168,9 @@ export function CalendarForm() {
           type="submit"
           className="mt-4 w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 enabled:hover:bg-blue-400"
         >
-          {session.sessionId ? 'Update' : 'Create'}
+          {workout.workoutId ? 'Update' : 'Create'}
         </button>
-        {session.sessionId && (
+        {workout.workoutId && (
           <>
             <button
               disabled={isDisabled}
@@ -180,7 +180,7 @@ export function CalendarForm() {
             >
               Delete
             </button>
-            <Link href={`/session/${session.sessionId}`}>
+            <Link href={`/workout/${workout.workoutId}`}>
               <button
                 disabled={isDisabled}
                 type="button"

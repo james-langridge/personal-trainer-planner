@@ -1,34 +1,34 @@
-import {Session, SESSION_STATUS, SESSION_TYPE} from '@prisma/client'
+import {Workout, WORKOUT_STATUS, WORKOUT_TYPE} from '@prisma/client'
 import {formatDate} from '@/lib/calendar'
 
-export type SerialisedSession = {
+export type SerialisedWorkout = {
   id: string
   createdAt: string
   updatedAt: string
   ownerId: string
-  status: SESSION_STATUS
+  status: WORKOUT_STATUS
   name: string
   date: string
   description: string | null
   videoUrl: string | null
-  sessionType: SESSION_TYPE
+  type: WORKOUT_TYPE
   deleted: string
 }
 
-export type SerialisedSessionKey = keyof Omit<
-  SerialisedSession,
+export type SerialisedWorkoutKey = keyof Omit<
+  SerialisedWorkout,
   'id' | 'ownerId' | 'createdAt' | 'updatedAt' | 'deleted'
 >
 
-export function isValidKey(key: string): key is SerialisedSessionKey {
-  return validKeys.includes(key as SerialisedSessionKey)
+export function isValidKey(key: string): key is SerialisedWorkoutKey {
+  return validKeys.includes(key as SerialisedWorkoutKey)
 }
 
-export const validKeys: SerialisedSessionKey[] = [
+export const validKeys: SerialisedWorkoutKey[] = [
   'date',
   'name',
   'description',
-  'sessionType',
+  'type',
   'status',
   'videoUrl',
 ]
@@ -37,21 +37,21 @@ export const keyMap = {
   date: 'Date',
   name: 'Name',
   description: 'Description',
-  sessionType: 'Type',
+  type: 'Type',
   status: 'Status',
   videoUrl: 'Video url',
 }
 
-export function sortSessions(
-  key: SerialisedSessionKey,
-  sessions: SerialisedSession[],
+export function sortWorkouts(
+  key: SerialisedWorkoutKey,
+  workouts: SerialisedWorkout[],
 ) {
-  return sessions.sort((a, b) => {
+  return workouts.sort((a, b) => {
     switch (key) {
       case 'status':
       case 'name':
       case 'date':
-      case 'sessionType':
+      case 'type':
         return a[key].localeCompare(b[key], undefined, {sensitivity: 'base'})
       case 'description':
       case 'videoUrl':
@@ -64,9 +64,9 @@ export function sortSessions(
   })
 }
 
-export function serialiseSessions(sessions: Session[]) {
-  return sessions.map(session => {
-    const {createdAt, updatedAt, date, deleted, ...rest} = session
+export function serialiseWorkouts(workouts: Workout[]) {
+  return workouts.map(workout => {
+    const {createdAt, updatedAt, date, deleted, ...rest} = workout
 
     return {
       ...rest,

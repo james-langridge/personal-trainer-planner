@@ -2,12 +2,12 @@ import {getUserFromCookie} from '@/lib/auth'
 import {cookies} from 'next/headers'
 import React from 'react'
 import {Calendar} from '@/components/calendar/Calendar'
-import {serialiseUserWithSessions, UserWithSessions} from '@/lib/users'
+import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
 
-const getUserWithSessions = async (): Promise<{
-  user: UserWithSessions | null | undefined
+const getUserWithWorkouts = async (): Promise<{
+  user: UserWithWorkouts | null | undefined
 }> => {
   const user = await getUserFromCookie(cookies())
 
@@ -15,8 +15,12 @@ const getUserWithSessions = async (): Promise<{
 }
 
 export default async function TrainingStudio() {
-  const {user} = await getUserWithSessions()
-  const serialisedUserWithSessions = serialiseUserWithSessions(user)
+  const {user} = await getUserWithWorkouts()
+  const serialisedUserWithWorkouts = serialiseUserWithWorkouts(user)
 
-  return <Calendar user={serialisedUserWithSessions} />
+  if (!serialisedUserWithWorkouts) {
+    return null
+  }
+
+  return <Calendar user={serialisedUserWithWorkouts} />
 }

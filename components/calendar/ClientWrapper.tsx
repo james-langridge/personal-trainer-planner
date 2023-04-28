@@ -1,18 +1,18 @@
 import React, {useEffect} from 'react'
 import {SerialisedUser} from '@/lib/users'
 import {useUserDispatch} from '@/app/(training-app)/Providers'
-import {useUserSessions} from '@/hooks'
+import {useUserWorkouts} from '@/hooks'
 
 export default function ClientWrapper({
   children,
   user,
 }: {
   children: React.ReactNode
-  user?: SerialisedUser
+  user: SerialisedUser
 }) {
-  const isAdmin = user?.admin
+  const isAdmin = user.admin
   const dispatchUser = useUserDispatch()
-  useUserSessions(isAdmin)
+  useUserWorkouts(isAdmin)
 
   // Admin starts with blank calendar, and manually selects user
   useEffect(() => {

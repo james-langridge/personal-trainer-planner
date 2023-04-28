@@ -1,18 +1,18 @@
 import Link from 'next/link'
 import React from 'react'
-import {SESSION_STATUS} from '.prisma/client'
-import {useSessionStatus} from '@/hooks'
+import {useWorkoutStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
-import {useAuth, useSessionIdDispatch} from '@/app/(training-app)/Providers'
-import {SerialisedSession} from '@/lib/sessions'
+import {useAuth, useWorkoutIdDispatch} from '@/app/(training-app)/Providers'
+import {SerialisedWorkout} from '@/lib/workouts'
+import {WORKOUT_STATUS} from '@prisma/client'
 
-export function SessionItem({session}: {session: SerialisedSession}) {
-  const dispatch = useSessionIdDispatch()
+export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
+  const dispatch = useWorkoutIdDispatch()
   const authState = useAuth()
   const isAdmin = authState.isAdmin
-  const {status, toggleStatus} = useSessionStatus(session)
-  const isTrainingSession = session.sessionType === 'TRAINING'
-  const isAppointment = session.sessionType === 'APPOINTMENT'
+  const {status, toggleStatus} = useWorkoutStatus(workout)
+  const isTrainingWorkout = workout.type === 'TRAINING'
+  const isAppointment = workout.type === 'APPOINTMENT'
 
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
     event.stopPropagation()
@@ -21,17 +21,17 @@ export function SessionItem({session}: {session: SerialisedSession}) {
       return
     }
 
-    const sessionId = (event.target as HTMLElement).id
+    const workoutId = (event.target as HTMLElement).id
 
-    dispatch({type: 'setSessionId', sessionId: sessionId})
+    dispatch({type: 'setWorkoutId', workoutId: workoutId})
   }
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
-      {isTrainingSession && (
+      {isTrainingWorkout && (
         <input
           type="checkbox"
-          checked={status === SESSION_STATUS.COMPLETED}
+          checked={status === WORKOUT_STATUS.COMPLETED}
           className="h-7 w-7 rounded"
           onChange={toggleStatus}
         />
@@ -40,7 +40,7 @@ export function SessionItem({session}: {session: SerialisedSession}) {
       {isAppointment && isAdmin && (
         <input
           type="checkbox"
-          checked={status === SESSION_STATUS.COMPLETED}
+          checked={status === WORKOUT_STATUS.COMPLETED}
           className="h-7 w-7 rounded"
           onChange={toggleStatus}
         />
@@ -54,23 +54,23 @@ export function SessionItem({session}: {session: SerialisedSession}) {
           onClick={onClick}
           className={classNames(
             'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
-            isTrainingSession ? 'bg-emerald-400' : 'bg-blue-400',
+            isTrainingWorkout ? 'bg-emerald-400' : 'bg-blue-400',
           )}
-          id={session?.id}
+          id={workout?.id}
         >
-          {session?.name}
+          {workout?.name}
         </div>
       )}
 
       {!isAdmin && (
         <Link
-          href={`/session/${session?.id}`}
+          href={`/workout/${workout?.id}`}
           className={classNames(
             'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
-            isTrainingSession ? 'bg-emerald-400' : 'bg-blue-400',
+            isTrainingWorkout ? 'bg-emerald-400' : 'bg-blue-400',
           )}
         >
-          {session?.name}
+          {workout?.name}
         </Link>
       )}
     </div>
