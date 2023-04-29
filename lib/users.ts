@@ -2,7 +2,10 @@ import {User, Workout} from '@prisma/client'
 import {SerialisedWorkout, serialiseWorkouts} from '@/lib/workouts'
 import {formatDate} from '@/lib/calendar'
 
-export type UserWithWorkouts = Omit<User, 'password'> & {
+export type UserWithWorkouts = Omit<
+  User,
+  'password' | 'emailVerified' | 'image'
+> & {
   workouts: Workout[]
 }
 
@@ -12,9 +15,8 @@ export type SerialisedUser = {
   appointmentsAttended: string
   createdAt: string
   email: string
-  firstName: string | null
   id: string
-  lastName: string | null
+  name: string | null
   updatedAt: string
   workouts: SerialisedWorkout[]
   workoutsAssigned: string
@@ -99,8 +101,7 @@ export function isValidKey(key: string): key is SerialisedUserKey {
 
 // Changing the order of validKeys will change the display order of the cols on /clients
 export const validKeys: SerialisedUserKey[] = [
-  'firstName',
-  'lastName',
+  'name',
   'email',
   'workoutsAssigned',
   'workoutsCompleted',
@@ -115,8 +116,7 @@ export const keyMap = {
   appointmentsAttended: 'Appointments attended',
   createdAt: 'Created',
   email: 'Email',
-  firstName: 'First name',
-  lastName: 'Last name',
+  name: 'Name',
   workoutsAssigned: 'Workouts assigned',
   workoutsCompleted: 'Workouts completed',
   updatedAt: 'Updated',

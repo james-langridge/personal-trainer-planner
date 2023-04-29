@@ -2,8 +2,7 @@ import {NextRequest, NextResponse} from 'next/server'
 import {jwtVerify} from 'jose'
 import {RequestCookies} from 'next/dist/compiled/@edge-runtime/cookies'
 
-// Unauthenticated users are redirected to /login from all (training-app) group routes in app/(training-app)/layout.tsx
-
+// TODO: handle this with roles and NextAuth.js
 const adminRoutes = ['/clients', '/register']
 
 export default async function middleware(req: NextRequest) {
@@ -12,8 +11,6 @@ export default async function middleware(req: NextRequest) {
   if (adminRoutes.some(route => pathname.startsWith(route))) {
     const JWTPayload = await getJWTPayload(req.cookies)
 
-    // This avoids redirecting unauthenticated users first to /training-planner
-    // then to /login via app/(training-app)/layout-old.tsx
     if (!JWTPayload) {
       req.nextUrl.pathname = '/login'
 

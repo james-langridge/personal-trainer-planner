@@ -7,7 +7,7 @@ export function useGetUsers() {
 
   const fetchUsers = async () => {
     const fetchedUsers = await getUsersWithWorkouts()
-    const sortedUsers = sortUsers('firstName', fetchedUsers)
+    const sortedUsers = sortUsers('name', fetchedUsers)
 
     setUsers(sortedUsers)
   }

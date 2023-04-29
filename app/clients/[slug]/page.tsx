@@ -1,15 +1,19 @@
 'use client'
 
-import Container from '@/components/Container'
-import {isValidKey, keyMap, validKeys} from '@/lib/users'
+import {useGetWorkoutsTableData} from '@/hooks'
 import SortSvg from '@/components/SortSvg'
-import {classNames} from '@/lib/misc'
-import React from 'react'
-import {useGetClientsTableData} from '@/hooks'
 import Link from 'next/link'
+import React from 'react'
+import {keyMap, validKeys, isValidKey} from '@/lib/workouts'
 
-export default function Clients() {
-  const {users, setSortCol} = useGetClientsTableData()
+export default function ClientDetails({params}: {params: {slug: string}}) {
+  const {slug} = params
+
+  const {workouts, user, setSortCol} = useGetWorkoutsTableData(slug)
+
+  if (!user) {
+    return null
+  }
 
   function onClick(e: React.MouseEvent) {
     const key = e.currentTarget.id
@@ -20,8 +24,16 @@ export default function Clients() {
   }
 
   return (
-    <Container>
-      <h1 className="prose text-6xl font-bold leading-normal">Clients</h1>
+    <div className="p-5">
+      <h1 className="mb-5 text-6xl font-bold capitalize">{user.name}</h1>
+      <div className="m-2 max-w-fit border p-2">
+        <div>Email: {user.email}</div>
+        <div>Workouts assigned: {user.workoutsAssigned}</div>
+        <div>Workouts completed: {user.workoutsCompleted}</div>
+        <div>Appointments: {user.appointments}</div>
+        <div>Appointments attended: {user.appointmentsAttended}</div>
+      </div>
+
       <section className="container mx-auto px-4">
         <div className="mt-6 flex flex-col">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -55,23 +67,23 @@ export default function Clients() {
                   </thead>
 
                   <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                    {users?.map(user => {
+                    {workouts?.map(workout => {
+                      // TODO implement show deleted toggle
+                      if (workout.deleted === 'true') {
+                        return
+                      }
+
                       return (
-                        <tr key={user.id}>
+                        <tr key={workout.id}>
                           {validKeys.map(key => {
                             return (
                               <td
                                 key={key}
-                                className={classNames(
-                                  'whitespace-nowrap px-4 py-4 text-sm',
-                                  key === 'firstName' || key === 'lastName'
-                                    ? 'capitalize'
-                                    : '',
-                                )}
+                                className="whitespace-normal px-4 py-4 text-sm"
                               >
                                 <div>
                                   <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
-                                    {user[key]}
+                                    {workout[key]}
                                   </p>
                                 </div>
                               </td>
@@ -81,7 +93,7 @@ export default function Clients() {
                             <div className="flex items-center gap-x-6">
                               <Link
                                 className="text-gray-500 transition-colors duration-200 hover:text-yellow-500 focus:outline-none dark:text-gray-300 dark:hover:text-yellow-500"
-                                href={`/clients/${user.id}`}
+                                href={`/workout/${workout.id}`}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -110,6 +122,6 @@ export default function Clients() {
           </div>
         </div>
       </section>
-    </Container>
+    </div>
   )
 }

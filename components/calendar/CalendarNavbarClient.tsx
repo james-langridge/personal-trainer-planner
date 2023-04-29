@@ -4,9 +4,8 @@ import {Disclosure} from '@headlessui/react'
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import Image from 'next/image'
-import {useRouter} from 'next/navigation'
-import {logout} from '@/lib/api'
 import {classNames} from '@/lib/misc'
+import {signOut} from 'next-auth/react'
 
 interface Props {
   logo: {
@@ -19,27 +18,19 @@ interface Props {
 }
 
 const adminNavigation = [
-  {href: '/training-planner', name: 'Training planner'},
-  {href: '/register', name: 'Create client'},
+  {href: '/', name: 'Training planner'},
   {href: '/clients', name: 'Clients'},
   {href: '/profile', name: 'Profile'},
 ]
 
 const clientNavigation = [
-  {href: '/training-planner', name: 'Training planner'},
+  {href: '/', name: 'Training planner'},
   {href: '/profile', name: 'Profile'},
 ]
 
 export function CalendarNavbarClient({logo, isAdmin}: Props) {
   const {src, alt, width, height} = logo
-  const router = useRouter()
   const navigation = isAdmin ? adminNavigation : clientNavigation
-
-  async function handleLogOut() {
-    await logout({key: 'static_key'})
-
-    router.push('/login')
-  }
 
   return (
     <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-gray-800">
@@ -61,7 +52,7 @@ export function CalendarNavbarClient({logo, isAdmin}: Props) {
 
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <Link href="/training-planner">
+                  <Link href="/">
                     <Image
                       className="block h-8 w-auto lg:hidden"
                       src={src}
@@ -94,7 +85,7 @@ export function CalendarNavbarClient({logo, isAdmin}: Props) {
                       </Link>
                     ))}
                     <button
-                      onClick={handleLogOut}
+                      onClick={() => signOut()}
                       className={classNames(
                         'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'rounded-md px-3 py-2 text-sm font-medium',
@@ -125,7 +116,7 @@ export function CalendarNavbarClient({logo, isAdmin}: Props) {
                 </Disclosure.Button>
               ))}
               <Disclosure.Button
-                onClick={handleLogOut}
+                onClick={() => signOut()}
                 className={classNames(
                   'text-gray-300 hover:bg-gray-700 hover:text-white',
                   'block rounded-md px-3 py-2 text-base font-medium',

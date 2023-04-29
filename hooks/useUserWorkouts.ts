@@ -1,10 +1,6 @@
 import {getUserWithWorkouts} from '@/lib/api'
 import {useCallback, useEffect} from 'react'
-import {
-  useAuthDispatch,
-  useUser,
-  useUserDispatch,
-} from '@/app/(training-app)/Providers'
+import {useAuthDispatch, useUser, useUserDispatch} from '@/app/Providers'
 
 type UseUserWorkoutsReturnType = [() => Promise<void>]
 

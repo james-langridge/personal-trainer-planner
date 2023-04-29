@@ -35,55 +35,11 @@ const fetcher = async ({
   }
 }
 
-export const submitContactForm = (body: {
-  name: string
-  email: string
-  message: string
-}) => {
-  return fetcher({
-    url: '/api/contact',
-    method: 'post',
-    body,
-  })
-}
-
 export const submitForm = (body: Record<string, string>) => {
   return fetcher({
     url: '/api/form',
     method: 'post',
     body,
-  })
-}
-
-export const login = async (body: {email: string; password: string}) => {
-  return fetcher({
-    url: '/api/login',
-    method: 'post',
-    body,
-    json: false,
-  })
-}
-
-export const logout = async (body: {key: string}) => {
-  return fetcher({
-    url: '/api/logout',
-    method: 'post',
-    body,
-    json: false,
-  })
-}
-
-export const register = async (body: {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-}) => {
-  return fetcher({
-    url: '/api/register',
-    method: 'post',
-    body,
-    json: false,
   })
 }
 
@@ -100,20 +56,6 @@ export const getUserWithWorkouts = async (
   return fetcher({
     url: `/api/user/${id}`,
     method: 'get',
-  })
-}
-
-export const updatePassword = async (body: {
-  id: string
-  oldPassword: string
-  newPassword: string
-  confirmNewPassword: string
-}) => {
-  return fetcher({
-    url: '/api/password',
-    method: 'put',
-    body,
-    json: false,
   })
 }
 

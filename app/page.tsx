@@ -1,16 +1,26 @@
-import {classNames} from '@/lib/misc'
-import Link from 'next/link'
+import {getUserFromCookie} from '@/lib/auth'
+import {cookies} from 'next/headers'
+import React from 'react'
+import {Calendar} from '@/components/calendar/Calendar'
+import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 
-export default async function Login() {
-  return (
-    <Link
-      href={'/login'}
-      className={classNames(
-        'text-gray-300 hover:bg-gray-700 hover:text-white',
-        'rounded-md px-3 py-2 text-sm font-medium',
-      )}
-    >
-      Log in
-    </Link>
-  )
+export const dynamic = 'force-dynamic'
+
+const getUserWithWorkouts = async (): Promise<{
+  user: UserWithWorkouts | null | undefined
+}> => {
+  const user = await getUserFromCookie(cookies())
+
+  return {user: user}
+}
+
+export default async function TrainingStudio() {
+  const {user} = await getUserWithWorkouts()
+  const serialisedUserWithWorkouts = serialiseUserWithWorkouts(user)
+
+  if (!serialisedUserWithWorkouts) {
+    return null
+  }
+
+  return <Calendar user={serialisedUserWithWorkouts} />
 }

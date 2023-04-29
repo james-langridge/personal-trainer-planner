@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {SerialisedUser} from '@/lib/users'
-import {useUserDispatch} from '@/app/(training-app)/Providers'
+import {useUserDispatch} from '@/app/Providers'
 import {useUserWorkouts} from '@/hooks'
 
 export default function ClientWrapper({

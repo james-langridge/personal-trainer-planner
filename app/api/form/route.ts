@@ -5,8 +5,8 @@ const sendForm = async (body: Record<string, string>) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.GMAIL_USERNAME_FROM,
-      pass: process.env.GMAIL_PASSWORD,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
     },
   })
 
@@ -27,7 +27,7 @@ const sendForm = async (body: Record<string, string>) => {
   try {
     await transporter.sendMail({
       from: `${body['Full name']} ${body.Email}`,
-      to: process.env.GMAIL_USERNAME_TO,
+      to: process.env.EMAIL_TO,
       subject: `Form submission from ${body.Email}`,
       text: bodyString,
     })

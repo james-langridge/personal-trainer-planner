@@ -1,5 +1,8 @@
+'use client'
+
 import React, {createContext, Dispatch, useContext, useReducer} from 'react'
 import {SerialisedUser} from '@/lib/users'
+import {SessionProvider} from 'next-auth/react'
 
 export default function Providers({children}: {children: React.ReactNode}) {
   const [user, userDispatch] = useReducer(userReducer, {} as UserState)
@@ -10,19 +13,21 @@ export default function Providers({children}: {children: React.ReactNode}) {
   const [isAdmin, authDispatch] = useReducer(authReducer, {} as AuthState)
 
   return (
-    <UserContext.Provider value={user}>
-      <WorkoutIdContext.Provider value={workoutId}>
-        <AuthContext.Provider value={isAdmin}>
-          <AuthDispatchContext.Provider value={authDispatch}>
-            <UserDispatchContext.Provider value={userDispatch}>
-              <WorkoutIdDispatchContext.Provider value={workoutIdDispatch}>
-                {children}
-              </WorkoutIdDispatchContext.Provider>
-            </UserDispatchContext.Provider>
-          </AuthDispatchContext.Provider>
-        </AuthContext.Provider>
-      </WorkoutIdContext.Provider>
-    </UserContext.Provider>
+    <SessionProvider>
+      <UserContext.Provider value={user}>
+        <WorkoutIdContext.Provider value={workoutId}>
+          <AuthContext.Provider value={isAdmin}>
+            <AuthDispatchContext.Provider value={authDispatch}>
+              <UserDispatchContext.Provider value={userDispatch}>
+                <WorkoutIdDispatchContext.Provider value={workoutIdDispatch}>
+                  {children}
+                </WorkoutIdDispatchContext.Provider>
+              </UserDispatchContext.Provider>
+            </AuthDispatchContext.Provider>
+          </AuthContext.Provider>
+        </WorkoutIdContext.Provider>
+      </UserContext.Provider>
+    </SessionProvider>
   )
 }
 
