@@ -1,5 +1,5 @@
 import React from 'react'
-import {useUser} from '@/app/(training-app)/Providers'
+import {useUser} from '@/app/Providers'
 
 export function UserName() {
   const userState = useUser()
@@ -9,7 +9,7 @@ export function UserName() {
 
   return (
     <span className="mt-4 text-center font-medium capitalize text-gray-800 dark:text-gray-200">
-      {`${userState?.user?.firstName} ${userState?.user?.lastName}`}
+      {userState?.user?.name}
     </span>
   )
 }

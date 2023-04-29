@@ -3,7 +3,7 @@ import {notFound} from 'next/navigation'
 import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
 import Container from '@/components/Container'
 import React from 'react'
-import Form from '@/app/(training-app)/forms/Form'
+import Form from '@/app/forms/Form'
 
 // TODO: On dev I got this error after submitting the form and hovering on navbar links.
 //  On production it seems okay.

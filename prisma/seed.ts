@@ -1,6 +1,5 @@
 import {db} from '@/lib/db'
 import {WORKOUT_STATUS} from '@prisma/client'
-import {hashPassword} from '@/lib/auth'
 
 const getRandomWorkoutStatus = () => {
   const statuses = [WORKOUT_STATUS.COMPLETED, WORKOUT_STATUS.NOT_STARTED]
@@ -8,17 +7,13 @@ const getRandomWorkoutStatus = () => {
 }
 
 async function main() {
-  const passwordUser = await hashPassword('password')
-  const passwordAdmin = await hashPassword('password')
-
   const user = await db.user.upsert({
     where: {email: 'user@email.com'},
     update: {},
     create: {
       email: 'user@email.com',
-      firstName: 'User',
-      lastName: 'Person',
-      password: passwordUser,
+      name: 'User',
+      password: 'foo',
       workouts: {
         create: new Array(5).fill(1).map((_, i) => ({
           name: `Workout ${i}`,
@@ -38,9 +33,8 @@ async function main() {
     update: {},
     create: {
       email: 'admin@email.com',
-      firstName: 'Admin',
-      lastName: 'Person',
-      password: passwordAdmin,
+      name: 'Admin',
+      password: 'bar',
       admin: true,
     },
   })

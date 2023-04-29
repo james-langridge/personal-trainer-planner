@@ -2,7 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import {useWorkoutStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
-import {useAuth, useWorkoutIdDispatch} from '@/app/(training-app)/Providers'
+import {useAuth, useWorkoutIdDispatch} from '@/app/Providers'
 import {SerialisedWorkout} from '@/lib/workouts'
 import {WORKOUT_STATUS} from '@prisma/client'
 

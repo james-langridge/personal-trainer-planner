@@ -4,7 +4,7 @@ import {WORKOUT_TYPE} from '@prisma/client'
 import {useCalendarForm, useStatus, useUserWorkouts} from '@/hooks'
 import Info from '@/components/Info'
 import Link from 'next/link'
-import {useUser} from '@/app/(training-app)/Providers'
+import {useUser} from '@/app/Providers'
 
 export function CalendarForm() {
   const userState = useUser()

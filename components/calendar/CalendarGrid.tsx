@@ -4,7 +4,7 @@ import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
 import {Day, getWorkoutsToday} from '@/lib/calendar'
 import {CalendarDay} from '@/components/calendar/CalendarDay'
 import {WorkoutItem} from '@/components/calendar/WorkoutItem'
-import {useUser} from '@/app/(training-app)/Providers'
+import {useUser} from '@/app/Providers'
 
 export function CalendarGrid({monthData}: {monthData: Day[]}) {
   const userState = useUser()

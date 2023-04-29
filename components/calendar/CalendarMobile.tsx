@@ -9,7 +9,7 @@ import {
   useLockBodyScroll,
   useIsMobile,
 } from '@/hooks'
-import {useUser} from '@/app/(training-app)/Providers'
+import {useUser} from '@/app/Providers'
 
 export function CalendarMobile() {
   const userState = useUser()

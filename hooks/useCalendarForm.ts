@@ -1,11 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {WORKOUT_TYPE} from '@prisma/client'
 import {useFetchWorkout} from '@/hooks'
-import {
-  useWorkoutId,
-  useWorkoutIdDispatch,
-  useUser,
-} from '@/app/(training-app)/Providers'
+import {useWorkoutId, useWorkoutIdDispatch, useUser} from '@/app/Providers'
 
 export type CalendarFormState = {
   date: string

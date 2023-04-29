@@ -12,8 +12,7 @@ export async function GET() {
       createdAt: true,
       updatedAt: true,
       email: true,
-      firstName: true,
-      lastName: true,
+      name: true,
       workouts: {
         where: {
           deleted: false,

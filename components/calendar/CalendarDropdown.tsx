@@ -3,7 +3,7 @@ import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {classNames} from '@/lib/misc'
 import {useGetUsers} from '@/hooks'
-import {useUserDispatch} from '@/app/(training-app)/Providers'
+import {useUserDispatch} from '@/app/Providers'
 
 export function CalendarDropdown() {
   const dispatch = useUserDispatch()
@@ -46,7 +46,7 @@ export function CalendarDropdown() {
                           'block w-44 px-4 py-2 text-sm capitalize',
                         )}
                       >
-                        {user.firstName} {user.lastName}
+                        {user.name}
                       </button>
                     )}
                   </Menu.Item>
