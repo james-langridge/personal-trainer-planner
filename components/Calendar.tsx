@@ -1,15 +1,15 @@
 'use client'
 
 import React, {useEffect} from 'react'
-import {CalendarMobile} from '@/components/calendar/CalendarMobile'
-import {CalendarMedium} from '@/components/calendar/CalendarMedium'
-import {CalendarHeading} from '@/components/calendar/CalendarHeading'
-import {CalendarGrid} from '@/components/calendar/CalendarGrid'
+import {CalendarMobile} from '@/components/CalendarMobile'
+import {CalendarMedium} from '@/components/CalendarMedium'
+import {CalendarHeading} from '@/components/CalendarHeading'
+import {CalendarGrid} from '@/components/CalendarGrid'
 import {useCalendarData} from '@/hooks'
 import Providers from '@/app/Providers'
 import {SerialisedUser} from '@/lib/users'
-import ClientWrapper from '@/components/calendar/ClientWrapper'
-import {Sidebar} from '@/components/calendar/Sidebar'
+import ClientWrapper from '@/components/ClientWrapper'
+import {Sidebar} from '@/components/Sidebar'
 import {useSession} from 'next-auth/react'
 
 const SidebarMemo = React.memo(Sidebar)

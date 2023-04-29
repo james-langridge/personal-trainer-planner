@@ -2,7 +2,7 @@
 
 import React, {useEffect, useRef, useState} from 'react'
 import {getWorkoutsToday, shouldScrollToThisDay} from '@/lib/calendar'
-import {DayMobile} from '@/components/calendar/DayMobile'
+import {DayMobile} from '@/components/DayMobile'
 import {
   useMobileCalendarData,
   useCalendarIntersectionObserver,

@@ -5,7 +5,7 @@ import {
   isDayToday,
   isDayTomorrow,
 } from '@/lib/calendar'
-import {WorkoutItemMobile} from '@/components/calendar/WorkoutItemMobile'
+import {WorkoutItemMobile} from '@/components/WorkoutItemMobile'
 import {SerialisedWorkout} from '@/lib/workouts'
 
 export function DayMobile({
