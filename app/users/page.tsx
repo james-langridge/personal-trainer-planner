@@ -1,17 +1,17 @@
 'use client'
 
-import {useGetWorkoutsTableData} from '@/hooks'
+import Container from '@/components/Container'
+import {isValidKey, keyMap, validKeys} from '@/lib/users'
 import SortSvg from '@/components/SortSvg'
-import Link from 'next/link'
+import {classNames} from '@/lib/misc'
 import React from 'react'
-import {keyMap, validKeys, isValidKey} from '@/lib/workouts'
+import {useGetUsersTableData} from '@/hooks'
+import Link from 'next/link'
 import {useSession} from 'next-auth/react'
 
-export default function ClientDetails({params}: {params: {slug: string}}) {
-  const {slug} = params
+export default function Users() {
+  const {users, setSortCol} = useGetUsersTableData()
   const {data: session, status} = useSession()
-
-  const {workouts, user, setSortCol} = useGetWorkoutsTableData(slug)
 
   if (status === 'loading') {
     return <p>Loading...</p>
@@ -19,10 +19,6 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
 
   if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
     return <p>Access Denied</p>
-  }
-
-  if (!user) {
-    return null
   }
 
   function onClick(e: React.MouseEvent) {
@@ -34,16 +30,8 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
   }
 
   return (
-    <div className="p-5">
-      <h1 className="mb-5 text-6xl font-bold capitalize">{user.name}</h1>
-      <div className="m-2 max-w-fit border p-2">
-        <div>Email: {user.email}</div>
-        <div>Workouts assigned: {user.workoutsAssigned}</div>
-        <div>Workouts completed: {user.workoutsCompleted}</div>
-        <div>Appointments: {user.appointments}</div>
-        <div>Appointments attended: {user.appointmentsAttended}</div>
-      </div>
-
+    <Container>
+      <h1 className="prose text-6xl font-bold leading-normal">Clients</h1>
       <section className="container mx-auto px-4">
         <div className="mt-6 flex flex-col">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -77,23 +65,21 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
                   </thead>
 
                   <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                    {workouts?.map(workout => {
-                      // TODO implement show deleted toggle
-                      if (workout.deleted === 'true') {
-                        return
-                      }
-
+                    {users?.map(user => {
                       return (
-                        <tr key={workout.id}>
+                        <tr key={user.id}>
                           {validKeys.map(key => {
                             return (
                               <td
                                 key={key}
-                                className="whitespace-normal px-4 py-4 text-sm"
+                                className={classNames(
+                                  'whitespace-nowrap px-4 py-4 text-sm',
+                                  key === 'name' ? 'capitalize' : '',
+                                )}
                               >
                                 <div>
                                   <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
-                                    {workout[key]}
+                                    {user[key]}
                                   </p>
                                 </div>
                               </td>
@@ -103,7 +89,7 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
                             <div className="flex items-center gap-x-6">
                               <Link
                                 className="text-gray-500 transition-colors duration-200 hover:text-yellow-500 focus:outline-none dark:text-gray-300 dark:hover:text-yellow-500"
-                                href={`/workout/${workout.id}`}
+                                href={`/users/${user.id}`}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -132,6 +118,6 @@ export default function ClientDetails({params}: {params: {slug: string}}) {
           </div>
         </div>
       </section>
-    </div>
+    </Container>
   )
 }
