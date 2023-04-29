@@ -3,8 +3,8 @@ import React from 'react'
 import {getServerSession} from 'next-auth/next'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {redirect} from 'next/navigation'
-import {CalendarNavbar} from '@/components/CalendarNavbar'
 import Providers from '@/app/Providers'
+import {CalendarNavbar} from '@/components/CalendarNavbar'
 
 export const metadata = {
   title: 'Fit For Life Trainer',
@@ -28,7 +28,7 @@ export default async function RootLayout({
         <body>
           <div className="relative min-h-screen pt-16 dark:bg-gray-900">
             <div className="pb-[1066px] sm:pb-[614px] md:pb-[534px] lg:pb-[438px] xl:pb-[354px] 2xl:pb-[326px]">
-              {await CalendarNavbar()}
+              <CalendarNavbar />
               <>{children}</>
             </div>
           </div>
