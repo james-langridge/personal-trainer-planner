@@ -10,21 +10,16 @@ export default function Providers({children}: {children: React.ReactNode}) {
     workoutIdReducer,
     {} as WorkoutIdState,
   )
-  const [isAdmin, authDispatch] = useReducer(authReducer, {} as AuthState)
 
   return (
     <SessionProvider>
       <UserContext.Provider value={user}>
         <WorkoutIdContext.Provider value={workoutId}>
-          <AuthContext.Provider value={isAdmin}>
-            <AuthDispatchContext.Provider value={authDispatch}>
-              <UserDispatchContext.Provider value={userDispatch}>
-                <WorkoutIdDispatchContext.Provider value={workoutIdDispatch}>
-                  {children}
-                </WorkoutIdDispatchContext.Provider>
-              </UserDispatchContext.Provider>
-            </AuthDispatchContext.Provider>
-          </AuthContext.Provider>
+          <UserDispatchContext.Provider value={userDispatch}>
+            <WorkoutIdDispatchContext.Provider value={workoutIdDispatch}>
+              {children}
+            </WorkoutIdDispatchContext.Provider>
+          </UserDispatchContext.Provider>
         </WorkoutIdContext.Provider>
       </UserContext.Provider>
     </SessionProvider>
@@ -65,26 +60,6 @@ function workoutIdReducer(state: WorkoutIdState, action: WorkoutIdAction) {
   }
 }
 
-type AuthAction = {
-  type: 'setAuth'
-  isAdmin: boolean
-}
-type AuthState = {isAdmin: boolean}
-
-function authReducer(state: AuthState, action: AuthAction) {
-  switch (action.type) {
-    case 'setAuth': {
-      return {
-        ...state,
-        isAdmin: action.isAdmin,
-      }
-    }
-    default: {
-      throw Error('Unknown action: ' + action.type)
-    }
-  }
-}
-
 const UserContext = createContext<UserState>({} as UserState)
 const UserDispatchContext = createContext<Dispatch<UserAction>>(
   {} as Dispatch<UserAction>,
@@ -93,11 +68,6 @@ const WorkoutIdContext = createContext<WorkoutIdState>({} as WorkoutIdState)
 const WorkoutIdDispatchContext = createContext<Dispatch<WorkoutIdAction>>(
   {} as Dispatch<WorkoutIdAction>,
 )
-const AuthContext = createContext<AuthState>({} as AuthState)
-const AuthDispatchContext = createContext<Dispatch<AuthAction>>(
-  {} as Dispatch<AuthAction>,
-)
-
 export function useUser() {
   return useContext(UserContext)
 }
@@ -112,12 +82,4 @@ export function useWorkoutId() {
 
 export function useWorkoutIdDispatch() {
   return useContext(WorkoutIdDispatchContext)
-}
-
-export function useAuth() {
-  return useContext(AuthContext)
-}
-
-export function useAuthDispatch() {
-  return useContext(AuthDispatchContext)
 }

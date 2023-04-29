@@ -24,6 +24,7 @@ model User {
   id            String    @id @default(uuid())
   image         String?
   name          String?
+  role          String?
   sessions      Session[]
 }
 

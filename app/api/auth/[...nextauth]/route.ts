@@ -18,6 +18,16 @@ export const authOptions: NextAuthOptions = {
       from: process.env.EMAIL_FROM,
     }),
   ],
+  callbacks: {
+    session({session, user}) {
+      if (session.user) {
+        session.user.role = user.role
+        session.user.id = user.id
+      }
+
+      return session
+    },
+  },
 }
 
 const handler = NextAuth(authOptions)

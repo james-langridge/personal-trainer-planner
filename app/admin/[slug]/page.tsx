@@ -5,11 +5,21 @@ import SortSvg from '@/components/SortSvg'
 import Link from 'next/link'
 import React from 'react'
 import {keyMap, validKeys, isValidKey} from '@/lib/workouts'
+import {useSession} from 'next-auth/react'
 
 export default function ClientDetails({params}: {params: {slug: string}}) {
   const {slug} = params
+  const {data: session, status} = useSession()
 
   const {workouts, user, setSortCol} = useGetWorkoutsTableData(slug)
+
+  if (status === 'loading') {
+    return <p>Loading...</p>
+  }
+
+  if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
+    return <p>Access Denied</p>
+  }
 
   if (!user) {
     return null

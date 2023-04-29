@@ -4,7 +4,7 @@ import {formatDate} from '@/lib/calendar'
 
 export type UserWithWorkouts = Omit<
   User,
-  'password' | 'emailVerified' | 'image'
+  'password' | 'emailVerified' | 'image' | 'role'
 > & {
   workouts: Workout[]
 }
@@ -99,7 +99,7 @@ export function isValidKey(key: string): key is SerialisedUserKey {
   return validKeys.includes(key as SerialisedUserKey)
 }
 
-// Changing the order of validKeys will change the display order of the cols on /clients
+// Changing the order of validKeys will change the display order of the cols on /admin
 export const validKeys: SerialisedUserKey[] = [
   'name',
   'email',

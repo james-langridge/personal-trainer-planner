@@ -1,7 +1,7 @@
 import {CalendarNavbarClient} from '@/components/CalendarNavbarClient'
 import {getByContentTypeId} from '@/lib/contentful'
 
-export async function CalendarNavbar({isAdmin}: {isAdmin: boolean}) {
+export async function CalendarNavbar() {
   const {items} = await getByContentTypeId('navbar', {
     include: 3,
   })
@@ -15,5 +15,5 @@ export async function CalendarNavbar({isAdmin}: {isAdmin: boolean}) {
     height: logoFields.file.details.image?.height,
   }
 
-  return <CalendarNavbarClient logo={navbarLogo} isAdmin={isAdmin} />
+  return <CalendarNavbarClient logo={navbarLogo} />
 }

@@ -1,20 +1,13 @@
 import {getUserWithWorkouts} from '@/lib/api'
 import {useCallback, useEffect} from 'react'
-import {useAuthDispatch, useUser, useUserDispatch} from '@/app/Providers'
+import {useUser, useUserDispatch} from '@/app/Providers'
 
 type UseUserWorkoutsReturnType = [() => Promise<void>]
 
-export function useUserWorkouts(isAdmin: boolean): UseUserWorkoutsReturnType {
+export function useUserWorkouts(): UseUserWorkoutsReturnType {
   const dispatchUser = useUserDispatch()
-  const dispatchAuth = useAuthDispatch()
   const userState = useUser()
   const userId = userState?.user?.id ?? ''
-
-  useEffect(() => {
-    if (isAdmin) {
-      dispatchAuth({type: 'setAuth', isAdmin: isAdmin})
-    }
-  }, [dispatchAuth, isAdmin])
 
   const refreshUserWithWorkouts = useCallback(async () => {
     const user = await getUserWithWorkouts(userId)

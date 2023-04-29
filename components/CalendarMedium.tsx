@@ -1,14 +1,11 @@
 import React from 'react'
 import {useLockBodyScroll} from '@/hooks'
 import {useIsMobile} from '@/hooks'
+import {useSession} from 'next-auth/react'
 
-export function CalendarMedium({
-  children,
-  isAdmin,
-}: {
-  children: React.ReactNode
-  isAdmin?: boolean
-}) {
+export function CalendarMedium({children}: {children: React.ReactNode}) {
+  const {data: session} = useSession()
+  const isAdmin = session?.user?.role === 'admin'
   const isMobile = useIsMobile()
   useLockBodyScroll()
 

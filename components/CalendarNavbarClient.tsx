@@ -5,7 +5,7 @@ import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import Image from 'next/image'
 import {classNames} from '@/lib/misc'
-import {signOut} from 'next-auth/react'
+import {signOut, useSession} from 'next-auth/react'
 
 interface Props {
   logo: {
@@ -14,12 +14,11 @@ interface Props {
     width: number | undefined
     height: number | undefined
   }
-  isAdmin?: boolean
 }
 
 const adminNavigation = [
   {href: '/', name: 'Training planner'},
-  {href: '/clients', name: 'Clients'},
+  {href: '/admin', name: 'Admin'},
   {href: '/profile', name: 'Profile'},
 ]
 
@@ -28,9 +27,11 @@ const clientNavigation = [
   {href: '/profile', name: 'Profile'},
 ]
 
-export function CalendarNavbarClient({logo, isAdmin}: Props) {
+export function CalendarNavbarClient({logo}: Props) {
+  const {data: session} = useSession()
   const {src, alt, width, height} = logo
-  const navigation = isAdmin ? adminNavigation : clientNavigation
+  const navigation =
+    session?.user?.role === 'admin' ? adminNavigation : clientNavigation
 
   return (
     <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-gray-800">

@@ -16,7 +16,6 @@ const SidebarMemo = React.memo(Sidebar)
 
 export function Calendar({user}: {user: SerialisedUser}) {
   const {monthData, year, month, setYear, setMonth} = useCalendarData()
-  const isAdmin = user.admin
   const {data: session, status} = useSession()
 
   useEffect(() => {
@@ -26,11 +25,10 @@ export function Calendar({user}: {user: SerialisedUser}) {
   return (
     <Providers>
       <ClientWrapper user={user}>
-        {isAdmin && <SidebarMemo />}
+        <SidebarMemo />
         <div className="flex w-full flex-col px-5 sm:items-center ">
-          {/*TODO: Admin view is not optimised for mobile*/}
-          {!isAdmin && <CalendarMobile />}
-          <CalendarMedium isAdmin={isAdmin}>
+          <CalendarMobile />
+          <CalendarMedium>
             <CalendarHeading
               year={year}
               setYear={setYear}
