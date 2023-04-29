@@ -1,9 +1,9 @@
 import React from 'react'
 import {classNames} from '@/lib/misc'
-import {CalendarEmptyDays} from '@/components/calendar/CalendarEmptyDays'
+import {CalendarEmptyDays} from '@/components/CalendarEmptyDays'
 import {Day, getWorkoutsToday} from '@/lib/calendar'
-import {CalendarDay} from '@/components/calendar/CalendarDay'
-import {WorkoutItem} from '@/components/calendar/WorkoutItem'
+import {CalendarDay} from '@/components/CalendarDay'
+import {WorkoutItem} from '@/components/WorkoutItem'
 import {useUser} from '@/app/Providers'
 
 export function CalendarGrid({monthData}: {monthData: Day[]}) {

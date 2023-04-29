@@ -3,7 +3,7 @@ import React from 'react'
 import {getServerSession} from 'next-auth/next'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {redirect} from 'next/navigation'
-import {CalendarNavbar} from '@/components/calendar/CalendarNavbar'
+import {CalendarNavbar} from '@/components/CalendarNavbar'
 import Providers from '@/app/Providers'
 
 export const metadata = {

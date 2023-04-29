@@ -1,7 +1,7 @@
 import React from 'react'
-import {UserName} from '@/components/calendar/UserName'
-import {CalendarDropdown} from '@/components/calendar/CalendarDropdown'
-import {CalendarForm} from '@/components/calendar/CalendarForm'
+import {UserName} from '@/components/UserName'
+import {CalendarDropdown} from '@/components/CalendarDropdown'
+import {CalendarForm} from '@/components/CalendarForm'
 
 export function Sidebar() {
   return (

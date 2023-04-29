@@ -1,4 +1,4 @@
-import {CalendarNavbarClient} from '@/components/calendar/CalendarNavbarClient'
+import {CalendarNavbarClient} from '@/components/CalendarNavbarClient'
 import {getByContentTypeId} from '@/lib/contentful'
 
 export async function CalendarNavbar({isAdmin}: {isAdmin: boolean}) {

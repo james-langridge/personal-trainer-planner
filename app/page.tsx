@@ -1,7 +1,7 @@
 import {getUserFromCookie} from '@/lib/auth'
 import {cookies} from 'next/headers'
 import React from 'react'
-import {Calendar} from '@/components/calendar/Calendar'
+import {Calendar} from '@/components/Calendar'
 import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
