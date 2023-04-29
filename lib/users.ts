@@ -4,19 +4,19 @@ import {formatDate} from '@/lib/calendar'
 
 export type UserWithWorkouts = Omit<
   User,
-  'password' | 'emailVerified' | 'image' | 'role'
+  'password' | 'emailVerified' | 'image'
 > & {
   workouts: Workout[]
 }
 
 export type SerialisedUser = {
-  admin: boolean
   appointments: string
   appointmentsAttended: string
   createdAt: string
   email: string
   id: string
   name: string | null
+  role: string | null
   updatedAt: string
   workouts: SerialisedWorkout[]
   workoutsAssigned: string
@@ -92,7 +92,7 @@ function extractWorkoutData(workouts: Workout[]): WorkoutData {
 
 export type SerialisedUserKey = keyof Omit<
   SerialisedUser,
-  'admin' | 'id' | 'workouts'
+  'role' | 'id' | 'workouts'
 >
 
 export function isValidKey(key: string): key is SerialisedUserKey {

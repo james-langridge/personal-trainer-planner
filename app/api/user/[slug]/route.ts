@@ -10,7 +10,7 @@ export async function GET(
   const user: UserWithWorkouts | null = await db.user.findUnique({
     select: {
       id: true,
-      admin: true,
+      role: true,
       createdAt: true,
       updatedAt: true,
       email: true,
