@@ -1,14 +1,13 @@
 {
-  "name": "fit-for-life-trainer",
+  "name": "personal-trainer-planner",
   "author": "James Langridge <l@ngridge.com> (https://github.com/james-langridge)",
-  "description": "Marketing website for a personal trainer made with Next.js v13 and React v18, with Contentful (CMS) integration.",
-  "homepage": "https://fit-for-life-trainer.vercel.app/",
+  "description": "A client management and scheduling app for personal trainers made with the Next.js 13 beta features like the App Router and React Server Components.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/james-langridge/fit-for-life-trainer.git"
+    "url": "https://github.com/james-langridge/personal-trainer-planner.git"
   },
-  "bugs": "https://github.com/james-langridge/fit-for-life-trainer/issues",
-  "license": "WTFPL",
+  "bugs": "https://github.com/james-langridge/personal-trainer-planner/issues",
+  "license": "MIT",
   "version": "0.1.0",
   "private": true,
   "prisma": {
