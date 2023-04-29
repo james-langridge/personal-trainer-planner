@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
     data: {
       email: body.email,
       name: body.name,
-      password: 'delete-this',
     },
   })
 

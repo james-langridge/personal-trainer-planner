@@ -8,12 +8,13 @@ const getRandomWorkoutStatus = () => {
 
 async function main() {
   const user = await db.user.upsert({
+    // Change this to an email of your own, so you can log in as this user
     where: {email: 'user@email.com'},
     update: {},
     create: {
+      // Change this to an email of your own, so you can log in as this user
       email: 'user@email.com',
       name: 'User',
-      password: 'foo',
       workouts: {
         create: new Array(5).fill(1).map((_, i) => ({
           name: `Workout ${i}`,
@@ -29,13 +30,14 @@ async function main() {
   })
 
   const admin = await db.user.upsert({
+    // Change this to an email of your own, so you can log in as this user
     where: {email: 'admin@email.com'},
     update: {},
     create: {
+      // Change this to an email of your own, so you can log in as this user
       email: 'admin@email.com',
       name: 'Admin',
-      password: 'bar',
-      admin: true,
+      role: 'admin',
     },
   })
 

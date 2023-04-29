@@ -8,7 +8,7 @@ export async function GET() {
   const users: UserWithWorkouts[] = await db.user.findMany({
     select: {
       id: true,
-      admin: true,
+      role: true,
       createdAt: true,
       updatedAt: true,
       email: true,
@@ -20,7 +20,7 @@ export async function GET() {
       },
     },
     where: {
-      admin: false,
+      role: null,
     },
   })
 

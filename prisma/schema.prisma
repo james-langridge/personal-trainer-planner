@@ -11,9 +11,7 @@ datasource db {
 }
 
 model User {
-  admin     Boolean   @default(false)
   createdAt DateTime  @default(now())
-  password  String
   updatedAt DateTime  @updatedAt
   workouts  Workout[]
 
