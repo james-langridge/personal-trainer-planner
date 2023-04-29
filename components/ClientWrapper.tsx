@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import {SerialisedUser} from '@/lib/users'
 import {useUserDispatch} from '@/app/Providers'
 import {useUserWorkouts} from '@/hooks'
+import {useSession} from 'next-auth/react'
 
 export default function ClientWrapper({
   children,
@@ -10,9 +11,10 @@ export default function ClientWrapper({
   children: React.ReactNode
   user: SerialisedUser
 }) {
-  const isAdmin = user.admin
+  const {data: session} = useSession()
+  const isAdmin = session?.user?.role === 'admin'
   const dispatchUser = useUserDispatch()
-  useUserWorkouts(isAdmin)
+  useUserWorkouts()
 
   // Admin starts with blank calendar, and manually selects user
   useEffect(() => {

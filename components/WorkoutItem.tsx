@@ -2,14 +2,15 @@ import Link from 'next/link'
 import React from 'react'
 import {useWorkoutStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
-import {useAuth, useWorkoutIdDispatch} from '@/app/Providers'
+import {useWorkoutIdDispatch} from '@/app/Providers'
 import {SerialisedWorkout} from '@/lib/workouts'
 import {WORKOUT_STATUS} from '@prisma/client'
+import {useSession} from 'next-auth/react'
 
 export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
   const dispatch = useWorkoutIdDispatch()
-  const authState = useAuth()
-  const isAdmin = authState.isAdmin
+  const {data: session} = useSession()
+  const isAdmin = session?.user?.role === 'admin'
   const {status, toggleStatus} = useWorkoutStatus(workout)
   const isTrainingWorkout = workout.type === 'TRAINING'
   const isAppointment = workout.type === 'APPOINTMENT'

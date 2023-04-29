@@ -10,6 +10,7 @@ import {
   useIsMobile,
 } from '@/hooks'
 import {useUser} from '@/app/Providers'
+import {useSession} from 'next-auth/react'
 
 export function CalendarMobile() {
   const userState = useUser()
@@ -26,6 +27,8 @@ export function CalendarMobile() {
   )
   const isMobile = useIsMobile()
   useLockBodyScroll()
+  const {data: session} = useSession()
+  const isAdmin = session?.user?.role === 'admin'
 
   useEffect(() => {
     async function loadPrev() {
@@ -47,7 +50,8 @@ export function CalendarMobile() {
     scrollToRef.current?.scrollIntoView()
   }, [scrollToThisDay])
 
-  if (!isMobile) {
+  // TODO: Admin view is not optimised for mobile
+  if (!isMobile || isAdmin) {
     return null
   }
 

@@ -1,21 +1,46 @@
-import {getUserFromCookie} from '@/lib/auth'
-import {cookies} from 'next/headers'
 import React from 'react'
 import {Calendar} from '@/components/Calendar'
 import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
+import {getServerSession} from 'next-auth/next'
+import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {db} from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
-const getUserWithWorkouts = async (): Promise<{
+const getUserWithWorkouts = async (
+  id?: string,
+): Promise<{
   user: UserWithWorkouts | null | undefined
 }> => {
-  const user = await getUserFromCookie(cookies())
+  if (!id) {
+    return {user: undefined}
+  }
+
+  const user: UserWithWorkouts | null = await db.user.findUnique({
+    select: {
+      id: true,
+      admin: true,
+      createdAt: true,
+      updatedAt: true,
+      email: true,
+      name: true,
+      workouts: {
+        where: {
+          deleted: false,
+        },
+      },
+    },
+    where: {
+      id: id,
+    },
+  })
 
   return {user: user}
 }
 
 export default async function TrainingStudio() {
-  const {user} = await getUserWithWorkouts()
+  const session = await getServerSession(authOptions)
+  const {user} = await getUserWithWorkouts(session?.user?.id)
   const serialisedUserWithWorkouts = serialiseUserWithWorkouts(user)
 
   if (!serialisedUserWithWorkouts) {

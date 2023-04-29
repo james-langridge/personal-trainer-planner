@@ -7,9 +7,19 @@ import {classNames} from '@/lib/misc'
 import React from 'react'
 import {useGetClientsTableData} from '@/hooks'
 import Link from 'next/link'
+import {useSession} from 'next-auth/react'
 
 export default function Clients() {
   const {users, setSortCol} = useGetClientsTableData()
+  const {data: session, status} = useSession()
+
+  if (status === 'loading') {
+    return <p>Loading...</p>
+  }
+
+  if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
+    return <p>Access Denied</p>
+  }
 
   function onClick(e: React.MouseEvent) {
     const key = e.currentTarget.id

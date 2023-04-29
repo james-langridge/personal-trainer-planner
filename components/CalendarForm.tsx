@@ -9,7 +9,7 @@ import {useUser} from '@/app/Providers'
 export function CalendarForm() {
   const userState = useUser()
   const userId = userState?.user?.id ?? ''
-  const [refreshUserWithWorkouts] = useUserWorkouts(true)
+  const [refreshUserWithWorkouts] = useUserWorkouts()
   const [workout, setWorkout, resetForm] = useCalendarForm()
   const {status, mode, setMode, error, setStatus, setError, resetStatus} =
     useStatus()
