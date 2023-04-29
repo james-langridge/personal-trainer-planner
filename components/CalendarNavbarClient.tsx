@@ -18,7 +18,8 @@ interface Props {
 
 const adminNavigation = [
   {href: '/', name: 'Training planner'},
-  {href: '/admin', name: 'Admin'},
+  {href: '/users', name: 'Clients'},
+  {href: '/users/register', name: 'Create client'},
   {href: '/profile', name: 'Profile'},
 ]
 

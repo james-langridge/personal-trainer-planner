@@ -1,7 +1,6 @@
 import {useState} from 'react'
 
 export type Mode =
-  | 'login'
   | 'contact'
   | 'register'
   | 'createWorkout'
@@ -22,12 +21,6 @@ const generalFormContent = {
   pending: 'Sending form...',
   error: 'Error sending form:',
   resolved: 'Form submitted successfully.',
-}
-
-const loginContent = {
-  pending: 'Logging in...',
-  error: 'Error logging in:',
-  resolved: 'Welcome Back',
 }
 
 const registerContent = {
@@ -90,9 +83,6 @@ export default function Info({
   switch (mode) {
     case 'contact':
       content = contactContent
-      break
-    case 'login':
-      content = loginContent
       break
     case 'register':
       content = registerContent

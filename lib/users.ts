@@ -99,7 +99,7 @@ export function isValidKey(key: string): key is SerialisedUserKey {
   return validKeys.includes(key as SerialisedUserKey)
 }
 
-// Changing the order of validKeys will change the display order of the cols on /admin
+// Changing the order of validKeys will change the display order of the cols on /users
 export const validKeys: SerialisedUserKey[] = [
   'name',
   'email',

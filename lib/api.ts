@@ -35,6 +35,15 @@ const fetcher = async ({
   }
 }
 
+export const register = async (body: {name: string; email: string}) => {
+  return fetcher({
+    url: '/api/user',
+    method: 'post',
+    body,
+    json: false,
+  })
+}
+
 export const submitForm = (body: Record<string, string>) => {
   return fetcher({
     url: '/api/form',
