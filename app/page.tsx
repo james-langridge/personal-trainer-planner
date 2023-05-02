@@ -1,9 +1,10 @@
-import React from 'react'
-import {Calendar} from '@/components/Calendar'
-import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 import {getServerSession} from 'next-auth/next'
+import React from 'react'
+
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {Calendar} from '@/components/Calendar'
 import {db} from '@/lib/db'
+import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
 

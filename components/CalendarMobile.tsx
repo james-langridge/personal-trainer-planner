@@ -1,7 +1,9 @@
 'use client'
 
+import {useSession} from 'next-auth/react'
 import React, {useEffect, useRef, useState} from 'react'
-import {getWorkoutsToday, shouldScrollToThisDay} from '@/lib/calendar'
+
+import {useUser} from '@/app/Providers'
 import {DayMobile} from '@/components/DayMobile'
 import {
   useMobileCalendarData,
@@ -9,8 +11,7 @@ import {
   useLockBodyScroll,
   useIsMobile,
 } from '@/hooks'
-import {useUser} from '@/app/Providers'
-import {useSession} from 'next-auth/react'
+import {getWorkoutsToday, shouldScrollToThisDay} from '@/lib/calendar'
 
 export function CalendarMobile() {
   const userState = useUser()

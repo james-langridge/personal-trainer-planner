@@ -1,10 +1,12 @@
 'use client'
 
-import {register} from '@/lib/api'
+import {useSession} from 'next-auth/react'
 import React, {useCallback, useState} from 'react'
+
 import Info from '@/components/Info'
 import {useStatus} from '@/hooks'
-import {useSession} from 'next-auth/react'
+import {register} from '@/lib/api'
+
 
 const initialForm: {
   name: string

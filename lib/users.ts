@@ -1,6 +1,7 @@
 import {User, Workout} from '@prisma/client'
-import {SerialisedWorkout, serialiseWorkouts} from '@/lib/workouts'
+
 import {formatDate} from '@/lib/calendar'
+import {SerialisedWorkout, serialiseWorkouts} from '@/lib/workouts'
 
 export type UserWithWorkouts = Omit<
   User,

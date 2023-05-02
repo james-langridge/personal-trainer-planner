@@ -1,9 +1,10 @@
-import React, {Fragment} from 'react'
 import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
-import {classNames} from '@/lib/misc'
-import {useGetUsers} from '@/hooks'
+import React, {Fragment} from 'react'
+
 import {useUserDispatch} from '@/app/Providers'
+import {useGetUsers} from '@/hooks'
+import {classNames} from '@/lib/misc'
 
 export function CalendarDropdown() {
   const dispatch = useUserDispatch()

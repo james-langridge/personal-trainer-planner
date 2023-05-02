@@ -18,7 +18,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "format": "prettier --write \"app/**/*.{ts,tsx}\" \"components/**/*.{ts,tsx}\"",
-    "lint": "next lint",
+    "lint": "next lint --fix",
     "test": "jest --watch",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output @types/generated/contentful.d.ts"
   },

@@ -1,8 +1,9 @@
-import Link from 'next/link'
-import {classNames} from '@/lib/misc'
-import {useWorkoutStatus} from '@/hooks'
-import {SerialisedWorkout} from '@/lib/workouts'
 import {WORKOUT_STATUS} from '@prisma/client'
+import Link from 'next/link'
+
+import {useWorkoutStatus} from '@/hooks'
+import {classNames} from '@/lib/misc'
+import {SerialisedWorkout} from '@/lib/workouts'
 
 export function WorkoutItemMobile({workout}: {workout: SerialisedWorkout}) {
   const {status, toggleStatus} = useWorkoutStatus(workout)

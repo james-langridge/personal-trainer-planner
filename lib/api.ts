@@ -1,4 +1,5 @@
 import {Workout, WORKOUT_STATUS, WORKOUT_TYPE} from '@prisma/client'
+
 import {SerialisedUser} from '@/lib/users'
 
 const fetcher = async ({

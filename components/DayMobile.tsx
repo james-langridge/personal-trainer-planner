@@ -1,3 +1,4 @@
+import {WorkoutItemMobile} from '@/components/WorkoutItemMobile'
 import {
   Day,
   getMonthName,
@@ -5,7 +6,6 @@ import {
   isDayToday,
   isDayTomorrow,
 } from '@/lib/calendar'
-import {WorkoutItemMobile} from '@/components/WorkoutItemMobile'
 import {SerialisedWorkout} from '@/lib/workouts'
 
 export function DayMobile({

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export default function SortSvg() {
   return (
@@ -27,5 +27,5 @@ export default function SortSvg() {
         strokeWidth="0.3"
       />
     </svg>
-  );
+  )
 }

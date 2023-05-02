@@ -1,4 +1,5 @@
 import {Workout, WORKOUT_STATUS, WORKOUT_TYPE} from '@prisma/client'
+
 import {formatDate} from '@/lib/calendar'
 
 export type SerialisedWorkout = {
