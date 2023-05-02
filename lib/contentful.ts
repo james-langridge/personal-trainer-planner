@@ -1,4 +1,5 @@
 import {createClient, EntryCollection} from 'contentful'
+
 import {CONTENT_TYPE, IEntry} from '@/@types/generated/contentful'
 
 // The types below allow TS to know the correct type returned by getByContentTypeId()

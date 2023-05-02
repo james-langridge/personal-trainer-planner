@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {dayNames} from '@/lib/calendar'
 
 export function CalendarEmptyDays({emptyDays}: {emptyDays: null[]}) {

@@ -1,8 +1,9 @@
 'use client'
 
-import React, {createContext, Dispatch, useContext, useReducer} from 'react'
-import {SerialisedUser} from '@/lib/users'
 import {SessionProvider} from 'next-auth/react'
+import React, {createContext, Dispatch, useContext, useReducer} from 'react'
+
+import {SerialisedUser} from '@/lib/users'
 
 export default function Providers({children}: {children: React.ReactNode}) {
   const [user, userDispatch] = useReducer(userReducer, {} as UserState)

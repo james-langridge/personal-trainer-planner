@@ -13,7 +13,30 @@
   ],
   "rules": {
     "react/prop-types": 0,
-    "react/react-in-jsx-scope": 0
+    "react/react-in-jsx-scope": 0,
+    "import/order": [
+      "warn",
+      {
+        "groups": ["builtin", "external", ["parent", "sibling"], "index"],
+        "newlines-between": "always",
+        "pathGroups": [
+          {
+            "pattern": "@/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@test/**",
+            "group": "external",
+            "position": "after"
+          }
+        ],
+        "alphabetize": {
+          "order": "asc" /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */,
+          "caseInsensitive": true /* ignore case. Options: [true, false] */
+        }
+      }
+    ]
   },
   "plugins": ["react", "import", "jsx-a11y", "@typescript-eslint"],
   "parser": "@typescript-eslint/parser",

@@ -1,8 +1,9 @@
-import Container from '@/components/Container'
-import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
-import {db} from '@/lib/db'
 import {getServerSession} from 'next-auth/next'
+
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import Container from '@/components/Container'
+import {db} from '@/lib/db'
+import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 
 const getUserWithWorkouts = async (
   id?: string,

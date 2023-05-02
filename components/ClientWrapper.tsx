@@ -1,8 +1,9 @@
+import {useSession} from 'next-auth/react'
 import React, {useEffect} from 'react'
-import {SerialisedUser} from '@/lib/users'
+
 import {useUserDispatch} from '@/app/Providers'
 import {useUserWorkouts} from '@/hooks'
-import {useSession} from 'next-auth/react'
+import {SerialisedUser} from '@/lib/users'
 
 export default function ClientWrapper({
   children,

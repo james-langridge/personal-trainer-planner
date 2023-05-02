@@ -1,8 +1,9 @@
+import {useSession} from 'next-auth/react'
 import React from 'react'
-import {UserName} from '@/components/UserName'
+
 import {CalendarDropdown} from '@/components/CalendarDropdown'
 import {CalendarForm} from '@/components/CalendarForm'
-import {useSession} from 'next-auth/react'
+import {UserName} from '@/components/UserName'
 
 export function Sidebar() {
   const {data: session} = useSession()

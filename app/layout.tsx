@@ -1,8 +1,9 @@
 import '../styles/globals.css'
-import React from 'react'
-import {getServerSession} from 'next-auth/next'
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {redirect} from 'next/navigation'
+import {getServerSession} from 'next-auth/next'
+import React from 'react'
+
+import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Providers from '@/app/Providers'
 import {CalendarNavbar} from '@/components/CalendarNavbar'
 

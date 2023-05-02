@@ -1,6 +1,7 @@
+import {PrismaAdapter} from '@next-auth/prisma-adapter'
 import NextAuth, {NextAuthOptions} from 'next-auth'
 import Email from 'next-auth/providers/email'
-import {PrismaAdapter} from '@next-auth/prisma-adapter'
+
 import {db} from '@/lib/db'
 
 export const authOptions: NextAuthOptions = {

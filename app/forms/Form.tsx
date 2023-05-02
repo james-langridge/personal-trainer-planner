@@ -1,10 +1,11 @@
 'use client'
 
 import React, {useEffect, useState} from 'react'
+
 import {IFormInput} from '@/@types/generated/contentful'
-import {submitForm} from '@/lib/api'
 import Info from '@/components/Info'
 import {useStatus} from '@/hooks'
+import {submitForm} from '@/lib/api'
 
 type Form = Record<string, string>
 

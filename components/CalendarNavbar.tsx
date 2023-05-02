@@ -2,10 +2,12 @@
 
 import {Disclosure} from '@headlessui/react'
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
-import Link from 'next/link'
 import Image from 'next/image'
-import {classNames} from '@/lib/misc'
+import Link from 'next/link'
 import {signOut, useSession} from 'next-auth/react'
+
+import {classNames} from '@/lib/misc'
+
 
 const adminNavigation = [
   {href: '/', name: 'Training planner'},

@@ -1,11 +1,12 @@
+import {WORKOUT_STATUS} from '@prisma/client'
 import Link from 'next/link'
+import {useSession} from 'next-auth/react'
 import React from 'react'
+
+import {useWorkoutIdDispatch} from '@/app/Providers'
 import {useWorkoutStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
-import {useWorkoutIdDispatch} from '@/app/Providers'
 import {SerialisedWorkout} from '@/lib/workouts'
-import {WORKOUT_STATUS} from '@prisma/client'
-import {useSession} from 'next-auth/react'
 
 export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
   const dispatch = useWorkoutIdDispatch()

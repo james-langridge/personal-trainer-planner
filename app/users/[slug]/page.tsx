@@ -1,11 +1,13 @@
 'use client'
 
-import {useGetWorkoutsTableData} from '@/hooks'
-import SortSvg from '@/components/SortSvg'
 import Link from 'next/link'
-import React from 'react'
-import {keyMap, validKeys, isValidKey} from '@/lib/workouts'
 import {useSession} from 'next-auth/react'
+import React from 'react'
+
+import SortSvg from '@/components/SortSvg'
+import {useGetWorkoutsTableData} from '@/hooks'
+import {keyMap, validKeys, isValidKey} from '@/lib/workouts'
+
 
 export default function UserDetails({params}: {params: {slug: string}}) {
   const {slug} = params

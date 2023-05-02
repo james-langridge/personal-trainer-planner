@@ -1,10 +1,11 @@
 import React from 'react'
-import {classNames} from '@/lib/misc'
-import {CalendarEmptyDays} from '@/components/CalendarEmptyDays'
-import {Day, getWorkoutsToday} from '@/lib/calendar'
-import {CalendarDay} from '@/components/CalendarDay'
-import {WorkoutItem} from '@/components/WorkoutItem'
+
 import {useUser} from '@/app/Providers'
+import {CalendarDay} from '@/components/CalendarDay'
+import {CalendarEmptyDays} from '@/components/CalendarEmptyDays'
+import {WorkoutItem} from '@/components/WorkoutItem'
+import {Day, getWorkoutsToday} from '@/lib/calendar'
+import {classNames} from '@/lib/misc'
 
 export function CalendarGrid({monthData}: {monthData: Day[]}) {
   const userState = useUser()

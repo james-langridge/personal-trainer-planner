@@ -1,9 +1,10 @@
-import {getByContentTypeId} from '@/lib/contentful'
-import {notFound} from 'next/navigation'
 import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
-import Container from '@/components/Container'
+import {notFound} from 'next/navigation'
 import React from 'react'
+
 import Form from '@/app/forms/Form'
+import Container from '@/components/Container'
+import {getByContentTypeId} from '@/lib/contentful'
 
 // TODO: On dev I got this error after submitting the form and hovering on navbar links.
 //  On production it seems okay.
