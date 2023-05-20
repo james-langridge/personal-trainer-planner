@@ -1,4 +1,5 @@
 import {useEffect} from 'react'
+
 import {useIsMobile} from '@/hooks'
 
 export function useLockBodyScroll() {

@@ -1,5 +1,5 @@
-import {useIntersectionObserver} from '@/hooks'
 import {RefObject} from 'react'
+import {useIntersectionObserver} from 'usehooks-ts'
 
 export function useCalendarIntersectionObserver(
   startElementRef: RefObject<Element>,
