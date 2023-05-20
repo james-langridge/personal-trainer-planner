@@ -1,12 +1,15 @@
 'use client'
+// Everything imported here into this client component and below is a client component.
+// Server components cannot be imported into client components.
+// Move this logic up to the parent Page server component,
+// which can import client components that take server components as children or props.
 
-import {useSession} from 'next-auth/react'
-import React, {useEffect} from 'react'
+import React from 'react'
 
 import Providers from '@/app/Providers'
-import {CalendarGrid} from '@/components/CalendarGrid'
+import {CalendarGridUser} from '@/components/CalendarGridUser'
 import {CalendarHeading} from '@/components/CalendarHeading'
-import {CalendarMedium} from '@/components/CalendarMedium'
+import {CalendarMediumUser} from '@/components/CalendarMediumUser'
 import {CalendarMobile} from '@/components/CalendarMobile'
 import ClientWrapper from '@/components/ClientWrapper'
 import {Sidebar} from '@/components/Sidebar'
@@ -16,12 +19,8 @@ import {SerialisedUser} from '@/lib/users'
 const SidebarMemo = React.memo(Sidebar)
 
 export function Calendar({user}: {user: SerialisedUser}) {
+  // TODO: move this down to at least CalendarMediumUser
   const {monthData, year, month, setYear, setMonth} = useCalendarData()
-  const {data: session, status} = useSession()
-
-  useEffect(() => {
-    console.log({session, status})
-  }, [session, status])
 
   return (
     <Providers>
@@ -29,15 +28,15 @@ export function Calendar({user}: {user: SerialisedUser}) {
         <SidebarMemo />
         <div className="flex w-full flex-col px-5 sm:items-center ">
           <CalendarMobile />
-          <CalendarMedium>
+          <CalendarMediumUser>
             <CalendarHeading
               year={year}
               setYear={setYear}
               month={month}
               setMonth={setMonth}
             />
-            <CalendarGrid monthData={monthData} />
-          </CalendarMedium>
+            <CalendarGridUser monthData={monthData} />
+          </CalendarMediumUser>
         </div>
       </ClientWrapper>
     </Providers>

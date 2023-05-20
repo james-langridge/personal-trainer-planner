@@ -1,10 +1,10 @@
+// TODO: make this route dynamic so admin always sees fresh data
 import {redirect} from 'next/navigation'
 import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Providers from '@/app/Providers'
-import {CalendarGridUser} from '@/components/CalendarGridUser'
 import {CalendarMediumUser} from '@/components/CalendarMediumUser'
 import {CalendarMobile} from '@/components/CalendarMobile'
 import ClientWrapper from '@/components/ClientWrapper'
@@ -43,34 +43,33 @@ const getUserWithWorkouts = async (
   return {user: user}
 }
 
-export default async function Calender() {
-  // const session = await getServerSession(authOptions)
-  // const {user} = await getUserWithWorkouts(session?.user?.id)
-  // TODO: some mapping takes place here, not just serialisation
-  // const serialisedUserWithWorkouts = serialiseUserWithWorkouts(user)
+// TODO: no need to memoize this?
+const SidebarMemo = React.memo(Sidebar)
 
-  // if (!user) {
-  //   return null
-  // }
+export default async function Calender() {
+  const session = await getServerSession(authOptions)
+  const {user} = await getUserWithWorkouts(session?.user?.id)
+  const serialisedUserWithWorkouts = serialiseUserWithWorkouts(user)
+
+  if (!serialisedUserWithWorkouts) {
+    return null
+  }
 
   // Redirect admin to protected dynamic route.
   // Static route with revalidation is fine for users.
-  // FIXME: Unnecessary redirect.  Doesn't matter if admin can access.
-  // if (user?.role === 'admin') {
-  //   redirect('/admin/calendar')
-  // }
-
-  // TODO: are the providers needed?
+  if (user?.role === 'admin') {
+    redirect('/admin/calendar')
+  }
 
   return (
     <Providers>
-      {/*<ClientWrapper user={serialisedUserWithWorkouts}>*/}
-      {/*<CalendarMediumUser className="flex w-full flex-col px-5 sm:items-center ">*/}
-      <CalendarMobile />
-      <CalendarMediumUser>
-        <CalendarGridUser monthData={monthData} />
-      </CalendarMediumUser>
-      {/*</ClientWrapper>*/}
+      <ClientWrapper user={serialisedUserWithWorkouts}>
+        <SidebarMemo />
+        <div className="flex w-full flex-col px-5 sm:items-center ">
+          <CalendarMobile />
+          <CalendarMediumUser />
+        </div>
+      </ClientWrapper>
     </Providers>
   )
 }

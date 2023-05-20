@@ -8,6 +8,7 @@ import {Day, getWorkoutsToday} from '@/lib/calendar'
 import {classNames} from '@/lib/misc'
 
 export function CalendarGrid({monthData}: {monthData: Day[]}) {
+  // TODO: get session date here instead of context
   const userState = useUser()
   const workouts = userState.user?.workouts
   const firstDayOfMonth = monthData[0].weekDay

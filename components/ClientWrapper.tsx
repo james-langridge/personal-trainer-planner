@@ -1,3 +1,5 @@
+'use client'
+
 import {useSession} from 'next-auth/react'
 import React, {useEffect} from 'react'
 
@@ -5,6 +7,8 @@ import {useUserDispatch} from '@/app/Providers'
 import {useUserWorkouts} from '@/hooks'
 import {SerialisedUser} from '@/lib/users'
 
+// TODO: get rid of this component?
+//  it just sets the user in client side state, but this can be server side
 export default function ClientWrapper({
   children,
   user,

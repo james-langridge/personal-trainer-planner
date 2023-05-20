@@ -22,6 +22,8 @@ export function useUserWorkouts(): UseUserWorkoutsReturnType {
   }, [refreshUserWithWorkouts, userId])
 
   // This is to sync updates between users (personal trainer and their clients)
+  // TODO: make users' routes static, and revalidate the cache instead
+  //  admin doesn't need data refreshed like this
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!userId) {

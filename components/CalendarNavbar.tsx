@@ -10,9 +10,9 @@ import {classNames} from '@/lib/misc'
 
 
 const adminNavigation = [
-  {href: '/', name: 'Training planner'},
-  {href: '/users', name: 'Clients'},
-  {href: '/users/register', name: 'Create client'},
+  {href: '/admin/calendar', name: 'Training planner'},
+  {href: '/admin/users', name: 'Clients'},
+  {href: '/admin/users/register', name: 'Create client'},
   {href: '/profile', name: 'Profile'},
 ]
 
