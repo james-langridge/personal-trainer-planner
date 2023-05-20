@@ -39,7 +39,7 @@
     "cookie": "^0.5.0",
     "eslint-config-next": "^13.3.1",
     "jose": "^4.13.1",
-    "next": "^13.3.1",
+    "next": "^13.4.3",
     "next-auth": "^4.22.1",
     "nodemailer": "^6.9.1",
     "prisma": "^4.13.0",
