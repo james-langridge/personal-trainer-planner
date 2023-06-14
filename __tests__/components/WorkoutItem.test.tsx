@@ -21,11 +21,32 @@ jest.mock('@/app/Providers', () => ({
   useWorkoutIdDispatch: jest.fn(),
 }))
 
+const createWorkout = (overrides = {}): SerialisedWorkout => {
+  return {
+    id: '1',
+    name: 'Workout 1',
+    type: WORKOUT_TYPE.TRAINING,
+    status: WORKOUT_STATUS.COMPLETED,
+    createdAt: '',
+    updatedAt: '',
+    ownerId: '',
+    date: '',
+    description: null,
+    videoUrl: null,
+    deleted: '',
+    ...overrides,
+  }
+}
+
+let workout: SerialisedWorkout
+
 describe('WorkoutItem', () => {
   const toggleStatus = jest.fn()
   const dispatch = jest.fn()
 
   beforeEach(() => {
+    workout = createWorkout()
+
     jest.clearAllMocks()
     ;(useSession as jest.Mock).mockReturnValue({
       data: {user: {role: 'user'}} as Session,
@@ -37,63 +58,24 @@ describe('WorkoutItem', () => {
     ;(useWorkoutIdDispatch as jest.Mock).mockReturnValue(dispatch)
   })
 
-  it('renders correctly', () => {
-    const workout: SerialisedWorkout = {
-      id: '1',
-      name: 'Workout 1',
-      type: WORKOUT_TYPE.TRAINING,
-      status: WORKOUT_STATUS.COMPLETED,
-      createdAt: '',
-      updatedAt: '',
-      ownerId: '',
-      date: '',
-      description: null,
-      videoUrl: null,
-      deleted: '',
-    }
+  it('should display the name of the workout when rendered', () => {
     const {getByText} = render(<WorkoutItem workout={workout} />)
     expect(getByText('Workout 1')).toBeInTheDocument()
   })
 
-  it('renders checkbox for TRAINING type workouts', () => {
-    const workout: SerialisedWorkout = {
-      id: '1',
-      name: 'Workout 1',
-      type: WORKOUT_TYPE.TRAINING,
-      status: WORKOUT_STATUS.COMPLETED,
-      createdAt: '',
-      updatedAt: '',
-      ownerId: '',
-      date: '',
-      description: null,
-      videoUrl: null,
-      deleted: '',
-    }
-
+  it('should render a checkbox for TRAINING type workouts', () => {
     render(<WorkoutItem workout={workout} />)
     const checkbox = screen.getByRole('checkbox')
 
     expect(checkbox).toBeInTheDocument()
   })
 
-  it('renders checkbox for APPOINTMENT type workouts for admin users', () => {
+  it('should render a checkbox for APPOINTMENT type workouts for admin users', () => {
     ;(useSession as jest.Mock).mockReturnValue({
       data: {user: {role: 'admin'}} as Session,
     })
 
-    const workout: SerialisedWorkout = {
-      id: '1',
-      name: 'Workout 1',
-      type: WORKOUT_TYPE.APPOINTMENT,
-      status: WORKOUT_STATUS.COMPLETED,
-      createdAt: '',
-      updatedAt: '',
-      ownerId: '',
-      date: '',
-      description: null,
-      videoUrl: null,
-      deleted: '',
-    }
+    workout = createWorkout({type: WORKOUT_TYPE.APPOINTMENT})
 
     render(<WorkoutItem workout={workout} />)
     const checkbox = screen.getByRole('checkbox')
@@ -101,21 +83,20 @@ describe('WorkoutItem', () => {
     expect(checkbox).toBeInTheDocument()
   })
 
-  it('calls toggleStatus when checkbox is clicked', () => {
-    const workout: SerialisedWorkout = {
-      id: '1',
-      name: 'Workout 1',
-      type: WORKOUT_TYPE.TRAINING,
-      status: WORKOUT_STATUS.COMPLETED,
-      createdAt: '',
-      updatedAt: '',
-      ownerId: '',
-      date: '',
-      description: null,
-      videoUrl: null,
-      deleted: '',
-    }
+  it('should not render a checkbox for APPOINTMENT type workouts for non-admin users', () => {
+    ;(useSession as jest.Mock).mockReturnValue({
+      data: {user: {role: 'user'}} as Session,
+    })
 
+    workout = createWorkout({type: WORKOUT_TYPE.APPOINTMENT})
+
+    render(<WorkoutItem workout={workout} />)
+    const checkbox = screen.queryByRole('checkbox')
+
+    expect(checkbox).not.toBeInTheDocument()
+  })
+
+  it('should call toggleStatus when checkbox is clicked', () => {
     render(<WorkoutItem workout={workout} />)
     const checkbox = screen.getByRole('checkbox')
 
@@ -123,24 +104,11 @@ describe('WorkoutItem', () => {
     expect(toggleStatus).toHaveBeenCalled()
   })
 
-  it('dispatches setWorkoutId action for admin users when div is clicked', () => {
+  it('should dispatch setWorkoutId action for admin users when div is clicked', () => {
     ;(useSession as jest.Mock).mockReturnValue({
       data: {user: {role: 'admin'}} as Session,
     })
 
-    const workout: SerialisedWorkout = {
-      id: '1',
-      name: 'Workout 1',
-      type: WORKOUT_TYPE.TRAINING,
-      status: WORKOUT_STATUS.COMPLETED,
-      createdAt: '',
-      updatedAt: '',
-      ownerId: '',
-      date: '',
-      description: null,
-      videoUrl: null,
-      deleted: '',
-    }
     render(<WorkoutItem workout={workout} />)
     const div = screen.getByRole('button')
 
@@ -151,24 +119,11 @@ describe('WorkoutItem', () => {
     })
   })
 
-  it('does not dispatch setWorkoutId action for non-admin users when div is clicked', () => {
+  it('should not dispatch setWorkoutId action for non-admin users when div is clicked', () => {
     ;(useSession as jest.Mock).mockReturnValue({
       data: {user: {role: 'user'}} as Session,
     })
 
-    const workout: SerialisedWorkout = {
-      id: '1',
-      name: 'Workout 1',
-      type: WORKOUT_TYPE.TRAINING,
-      status: WORKOUT_STATUS.COMPLETED,
-      createdAt: '',
-      updatedAt: '',
-      ownerId: '',
-      date: '',
-      description: null,
-      videoUrl: null,
-      deleted: '',
-    }
     render(<WorkoutItem workout={workout} />)
     const link = screen.getByText('Workout 1')
 
@@ -176,38 +131,17 @@ describe('WorkoutItem', () => {
     expect(dispatch).not.toHaveBeenCalled()
   })
 
-  it('renders workout name with correct color based on workout type', () => {
-    const workout: SerialisedWorkout = {
-      id: '1',
-      name: 'Workout 1',
-      type: WORKOUT_TYPE.TRAINING,
-      status: WORKOUT_STATUS.COMPLETED,
-      createdAt: '',
-      updatedAt: '',
-      ownerId: '',
-      date: '',
-      description: null,
-      videoUrl: null,
-      deleted: '',
-    }
+  it('should render workout name with correct color based on workout type', () => {
     render(<WorkoutItem workout={workout} />)
     const link = screen.getByText('Workout 1')
 
     expect(link).toHaveClass('bg-emerald-400')
 
-    const workout2: SerialisedWorkout = {
+    const workout2 = createWorkout({
       id: '2',
       name: 'Workout 2',
       type: WORKOUT_TYPE.APPOINTMENT,
-      status: WORKOUT_STATUS.COMPLETED,
-      createdAt: '',
-      updatedAt: '',
-      ownerId: '',
-      date: '',
-      description: null,
-      videoUrl: null,
-      deleted: '',
-    }
+    })
     render(<WorkoutItem workout={workout2} />)
     const link2 = screen.getByText('Workout 2')
 
