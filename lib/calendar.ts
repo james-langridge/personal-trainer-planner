@@ -64,10 +64,9 @@ export function getWorkoutsToday(
   }
 
   const calendarDate = new Date(
-    `${calendarDay.year}-${String(calendarDay.month + 1).padStart(
-      2,
-      '0',
-    )}-${String(calendarDay.day).padStart(2, '0')}`,
+    `${calendarDay.year}-${padZero(calendarDay.month + 1)}-${padZero(
+      calendarDay.day,
+    )}`,
   )
 
   const workoutsMap = workouts.map(workout => {
@@ -150,8 +149,12 @@ export function getMonthName(dayData: Day) {
 
 export function formatDate(date: Date) {
   const year = date.getFullYear()
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const day = date.getDate().toString().padStart(2, '0')
+  const month = padZero(date.getMonth() + 1)
+  const day = padZero(date.getDate())
 
   return `${year}-${month}-${day}`
+}
+
+export function padZero(num: number | string) {
+  return String(num).padStart(2, '0')
 }

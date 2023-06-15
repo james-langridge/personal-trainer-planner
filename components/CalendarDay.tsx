@@ -18,6 +18,7 @@ export function CalendarDay({
     <div
       className="border text-center ring-1 ring-gray-400/25"
       key={day.day + day.year + day.month}
+      data-testid={`${day.year}-${day.month}-${day.day}`}
     >
       {isFirstWeek && <div className="text-xs lg:text-base">{weekday}</div>}
       <div

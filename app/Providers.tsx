@@ -61,7 +61,7 @@ function workoutIdReducer(state: WorkoutIdState, action: WorkoutIdAction) {
   }
 }
 
-const UserContext = createContext<UserState>({} as UserState)
+export const UserContext = createContext<UserState>({} as UserState)
 const UserDispatchContext = createContext<Dispatch<UserAction>>(
   {} as Dispatch<UserAction>,
 )

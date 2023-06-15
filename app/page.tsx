@@ -2,6 +2,7 @@ import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import Providers from '@/app/Providers'
 import {Calendar} from '@/components/Calendar'
 import {db} from '@/lib/db'
 import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
@@ -48,5 +49,9 @@ export default async function TrainingStudio() {
     return null
   }
 
-  return <Calendar user={serialisedUserWithWorkouts} />
+  return (
+    <Providers>
+      <Calendar user={serialisedUserWithWorkouts} />
+    </Providers>
+  )
 }
