@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {useUser} from '@/app/Providers'
 import {CalendarDay} from '@/components/CalendarDay'
 import {CalendarEmptyDays} from '@/components/CalendarEmptyDays'
