@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom'
 import {WORKOUT_STATUS, WORKOUT_TYPE} from '@prisma/client'
 import {render, fireEvent, screen} from '@testing-library/react'
 import {Session} from 'next-auth'
@@ -8,6 +7,8 @@ import {useWorkoutIdDispatch} from '@/app/Providers'
 import {WorkoutItem} from '@/components/WorkoutItem'
 import {useWorkoutStatus} from '@/hooks'
 import {SerialisedWorkout} from '@/lib/workouts'
+
+// TODO: move these tests into main Calender integration test
 
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),

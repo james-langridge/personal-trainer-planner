@@ -1,19 +1,12 @@
-import '@testing-library/jest-dom'
-import {render, screen} from '@testing-library/react'
-import {SessionProvider} from 'next-auth/react'
-
-import {UserContext} from '@/app/Providers'
-import {CalendarGrid} from '@/components/CalendarGrid'
-import {generateCalendarMonth, padZero} from '@/lib/calendar'
+import {padZero} from '@/lib/calendar'
 import {SerialisedUser} from '@/lib/users'
 
 const now = new Date()
-const year = now.getFullYear()
-const month = now.getMonth()
-const monthData = generateCalendarMonth(month, year)
+export const year = now.getFullYear()
+export const month = now.getMonth()
 const uiMonth = padZero(month + 1)
 
-const user: SerialisedUser = {
+export const user: SerialisedUser = {
   id: '123',
   role: null,
   email: 'email',
@@ -80,34 +73,13 @@ const user: SerialisedUser = {
   updatedAt: '2023-06-14',
 }
 
-const session = {
+export const session = {
   user: {
-    name: 'name',
-    email: 'email',
+    name: user.name,
+    email: user.email,
     image: null,
     role: undefined,
-    id: '12345',
+    id: user.id,
   },
   expires: '2023-07-15T14:46:39.270Z',
 }
-
-describe('CalendarGrid', () => {
-  it('should render the workouts in the calendar', () => {
-    render(
-      <SessionProvider session={session}>
-        <UserContext.Provider value={{user: user}}>
-          <CalendarGrid monthData={monthData} />
-        </UserContext.Provider>
-      </SessionProvider>,
-    )
-    const trainingDay = screen.getByTestId(`${year}-${month}-19`)
-
-    expect(trainingDay).toHaveTextContent('workout 1')
-    expect(trainingDay).toHaveTextContent('workout 2')
-    expect(trainingDay).not.toHaveTextContent('workout 3')
-
-    const appointmentDay = screen.getByTestId(`${year}-${month}-20`)
-
-    expect(appointmentDay).toHaveTextContent('appointment 1')
-  })
-})
