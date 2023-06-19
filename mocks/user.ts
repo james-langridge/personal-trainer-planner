@@ -26,7 +26,7 @@ export const user: SerialisedUser = {
       deleted: 'false',
       createdAt: '2023-04-29',
       updatedAt: '2023-04-29',
-      date: `${year}-${uiMonth}-19`,
+      date: `${year}-${uiMonth}-1`,
     },
     {
       id: '2',
@@ -39,7 +39,7 @@ export const user: SerialisedUser = {
       deleted: 'false',
       createdAt: '2023-04-29',
       updatedAt: '2023-04-29',
-      date: `${year}-${uiMonth}-19`,
+      date: `${year}-${uiMonth}-1`,
     },
     {
       id: '3',
@@ -52,7 +52,7 @@ export const user: SerialisedUser = {
       deleted: 'true',
       createdAt: '2023-04-29',
       updatedAt: '2023-04-29',
-      date: `${year}-${uiMonth}-19`,
+      date: `${year}-${uiMonth}-1`,
     },
     {
       id: '4',
@@ -65,7 +65,7 @@ export const user: SerialisedUser = {
       deleted: 'false',
       createdAt: '2023-04-29',
       updatedAt: '2023-04-29',
-      date: `${year}-${uiMonth}-20`,
+      date: `${year}-${uiMonth}-2`,
     },
   ],
   workoutsAssigned: '1',

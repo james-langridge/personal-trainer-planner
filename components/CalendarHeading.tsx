@@ -45,6 +45,7 @@ export function CalendarHeading({
         <button
           onClick={decrementMonth}
           className="mx-1 flex transform items-center justify-center rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white rtl:-scale-x-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
+          data-testid={'prevMonthBtn'}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,13 +61,14 @@ export function CalendarHeading({
           </svg>
         </button>
 
-        <p>
+        <p data-testid={'heading'}>
           {monthName} {year}
         </p>
 
         <button
           onClick={incrementMonth}
           className="mx-1 flex transform items-center justify-center rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white rtl:-scale-x-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
+          data-testid={'nextMonthBtn'}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
