@@ -71,6 +71,7 @@ export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
             'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
             isTrainingWorkout ? 'bg-emerald-400' : 'bg-blue-400',
           )}
+          data-testid={`${workout?.id}`}
         >
           {workout?.name}
         </Link>
