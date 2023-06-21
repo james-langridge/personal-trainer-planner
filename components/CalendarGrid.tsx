@@ -1,7 +1,7 @@
 import {useUser} from '@/app/Providers'
 import {CalendarDay} from '@/components/CalendarDay'
 import {CalendarEmptyDays} from '@/components/CalendarEmptyDays'
-import {WorkoutItem} from '@/components/WorkoutItem'
+import {WorkoutItems} from '@/components/WorkoutItems'
 import {Day, getWorkoutsToday} from '@/lib/calendar'
 import {classNames} from '@/lib/misc'
 
@@ -26,14 +26,9 @@ export function CalendarGrid({monthData}: {monthData: Day[]}) {
 
         return (
           <CalendarDay day={day} isFirstWeek={isFirstWeek} key={index}>
-            {workoutsToday &&
-              workoutsToday.map((workout, i) => {
-                return (
-                  <div key={day.day * day.year * day.month * i}>
-                    {workout && <WorkoutItem workout={workout} />}
-                  </div>
-                )
-              })}
+            {workoutsToday && (
+              <WorkoutItems workouts={workoutsToday} day={day} />
+            )}
           </CalendarDay>
         )
       })}
