@@ -1,11 +1,13 @@
 'use client'
 
 import BackButton from '@/components/BackButton'
-import {useFetchWorkout} from '@/hooks'
+import {useFetchWorkout, useScrollToTop} from '@/hooks'
 
 export default function Workout({params}: {params: {slug: string}}) {
   const {slug} = params
   const workoutData = useFetchWorkout(slug)
+  // TODO: Temp fix for page opening scrolled to bottom on mobile view
+  useScrollToTop()
 
   if (!workoutData) {
     return null
