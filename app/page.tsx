@@ -51,7 +51,7 @@ export default async function TrainingStudio() {
 
   return (
     <Providers>
-      <Calendar user={serialisedUserWithWorkouts} />
+      <Calendar initialUser={serialisedUserWithWorkouts} />
     </Providers>
   )
 }
