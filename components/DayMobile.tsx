@@ -1,4 +1,4 @@
-import {WorkoutItemMobile} from '@/components/WorkoutItemMobile'
+import {WorkoutItemMobile} from '@/components'
 import {
   Day,
   getMonthName,

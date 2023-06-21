@@ -4,12 +4,10 @@ import Link from 'next/link'
 import {useSession} from 'next-auth/react'
 import React from 'react'
 
-import Container from '@/components/Container'
-import SortSvg from '@/components/SortSvg'
+import {Container, SortSvg} from '@/components'
 import {useGetUsersTableData} from '@/hooks'
 import {classNames} from '@/lib/misc'
 import {isValidKey, keyMap, validKeys} from '@/lib/users'
-
 
 export default function Users() {
   const {users, setSortCol} = useGetUsersTableData()
@@ -47,7 +45,7 @@ export default function Users() {
                           <th
                             key={key}
                             scope="col"
-                            className="py-3.5 px-4 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
+                            className="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
                           >
                             <button
                               id={key}
@@ -60,7 +58,7 @@ export default function Users() {
                           </th>
                         )
                       })}
-                      <th scope="col" className="relative py-3.5 px-4">
+                      <th scope="col" className="relative px-4 py-3.5">
                         <span className="sr-only">Edit</span>
                       </th>
                     </tr>

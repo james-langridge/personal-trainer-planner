@@ -1,6 +1,6 @@
 'use client'
 
-import BackButton from '@/components/BackButton'
+import {BackButton} from '@/components'
 import {useFetchWorkout} from '@/hooks'
 
 export default function Workout({params}: {params: {slug: string}}) {

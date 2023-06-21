@@ -1,7 +1,7 @@
 import {getServerSession} from 'next-auth/next'
 
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
-import Container from '@/components/Container'
+import {Container} from '@/components'
 import {db} from '@/lib/db'
 import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 

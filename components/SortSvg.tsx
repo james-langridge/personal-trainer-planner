@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function SortSvg() {
+export function SortSvg() {
   return (
     <svg
       className="h-3"

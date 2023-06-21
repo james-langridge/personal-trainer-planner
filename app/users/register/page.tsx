@@ -3,10 +3,9 @@
 import {useSession} from 'next-auth/react'
 import React, {useCallback, useState} from 'react'
 
-import Info from '@/components/Info'
+import {Info} from '@/components'
 import {useStatus} from '@/hooks'
 import {register} from '@/lib/api'
-
 
 const initialForm: {
   name: string
@@ -83,7 +82,7 @@ export default function Register() {
                 }))
               }
               type="text"
-              className="block w-full rounded-lg border bg-white py-3 px-11 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+              className="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
               placeholder="Full name"
               value={form.name}
             />
@@ -116,7 +115,7 @@ export default function Register() {
                 }))
               }
               type="email"
-              className="block w-full rounded-lg border bg-white py-3 px-11 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+              className="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
               placeholder="Email address"
               value={form.email}
             />

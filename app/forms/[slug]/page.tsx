@@ -3,7 +3,7 @@ import {notFound} from 'next/navigation'
 import React from 'react'
 
 import Form from '@/app/forms/Form'
-import Container from '@/components/Container'
+import {Container} from '@/components'
 import {getByContentTypeId} from '@/lib/contentful'
 
 // TODO: On dev I got this error after submitting the form and hovering on navbar links.

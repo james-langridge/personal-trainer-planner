@@ -53,7 +53,7 @@ const changePasswordContent = {
   resolved: 'Password changed successfully',
 }
 
-export default function Info({
+export function Info({
   status,
   reset,
   error,
@@ -151,7 +151,7 @@ export default function Info({
       className="relative"
     >
       {status !== 'pending' && (
-        <div className="absolute top-1 right-1.5 text-white">X</div>
+        <div className="absolute right-1.5 top-1 text-white">X</div>
       )}
       {element}
     </div>

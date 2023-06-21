@@ -3,7 +3,7 @@ import React from 'react'
 
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Providers from '@/app/Providers'
-import {Calendar} from '@/components/Calendar'
+import {Calendar} from '@/components'
 import {db} from '@/lib/db'
 import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
 

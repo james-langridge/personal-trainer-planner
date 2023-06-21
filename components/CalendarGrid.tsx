@@ -1,7 +1,5 @@
 import {useUser} from '@/app/Providers'
-import {CalendarDay} from '@/components/CalendarDay'
-import {CalendarEmptyDays} from '@/components/CalendarEmptyDays'
-import {WorkoutItem} from '@/components/WorkoutItem'
+import {CalendarDay, CalendarEmptyDays, WorkoutItem} from '@/components'
 import {Day, getWorkoutsToday} from '@/lib/calendar'
 import {classNames} from '@/lib/misc'
 

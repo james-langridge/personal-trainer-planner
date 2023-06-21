@@ -1,4 +1,4 @@
-export default function ComingSoon() {
+export function ComingSoon() {
   return (
     <section className="min-h-full w-full bg-white dark:bg-gray-900">
       <div className="container relative mx-auto flex min-h-[250px] flex-col px-6 py-8 sm:min-h-[500px]">

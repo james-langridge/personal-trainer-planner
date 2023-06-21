@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React, {useEffect} from 'react'
 
 import {useUser} from '@/app/Providers'
-import Info from '@/components/Info'
+import {Info} from '@/components'
 import {useCalendarForm, useStatus, useUserWorkouts} from '@/hooks'
 import {createWorkout, updateWorkout} from '@/lib/api'
 

@@ -2,11 +2,13 @@
 
 import React from 'react'
 
-import {CalendarGrid} from '@/components/CalendarGrid'
-import {CalendarHeading} from '@/components/CalendarHeading'
-import {CalendarMedium} from '@/components/CalendarMedium'
-import {CalendarMobile} from '@/components/CalendarMobile'
-import {Sidebar} from '@/components/Sidebar'
+import {
+  CalendarGrid,
+  CalendarHeading,
+  CalendarMedium,
+  CalendarMobile,
+  Sidebar,
+} from '@/components'
 import {useCalendarData, useUserWorkouts} from '@/hooks'
 import {SerialisedUser} from '@/lib/users'
 

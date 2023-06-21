@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {WorkoutItem} from '@/components/WorkoutItem'
+import {WorkoutItem} from '@/components'
 import {Day} from '@/lib/calendar'
 import {SerialisedWorkout} from '@/lib/workouts'
 

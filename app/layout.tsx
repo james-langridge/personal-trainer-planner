@@ -5,7 +5,7 @@ import React from 'react'
 
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Providers from '@/app/Providers'
-import {CalendarNavbar} from '@/components/CalendarNavbar'
+import {CalendarNavbar} from '@/components'
 
 export const metadata = {
   title: 'Fit For Life Trainer',

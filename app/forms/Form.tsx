@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react'
 
 import {IFormInput} from '@/@types/generated/contentful'
-import Info from '@/components/Info'
+import {Info} from '@/components'
 import {useStatus} from '@/hooks'
 import {submitForm} from '@/lib/api'
 

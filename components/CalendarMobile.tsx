@@ -4,7 +4,7 @@ import {useSession} from 'next-auth/react'
 import React, {useEffect, useRef, useState} from 'react'
 
 import {useUser} from '@/app/Providers'
-import {DayMobile} from '@/components/DayMobile'
+import {DayMobile} from '@/components'
 import {
   useMobileCalendarData,
   useCalendarIntersectionObserver,
