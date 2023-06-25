@@ -1,9 +1,6 @@
 import '../styles/globals.css'
-import {redirect} from 'next/navigation'
-import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Providers from '@/app/Providers'
 import {CalendarNavbar} from '@/components/CalendarNavbar'
 
@@ -17,24 +14,18 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession(authOptions)
-
-  if (!session) {
-    redirect('/api/auth/signin')
-  }
-
   return (
-    <Providers>
-      <html lang="en">
-        <body>
-          <div className="relative min-h-screen pt-16 dark:bg-gray-900">
-            <div className="pb-[1066px] sm:pb-[614px] md:pb-[534px] lg:pb-[438px] xl:pb-[354px] 2xl:pb-[326px]">
+    <html lang="en">
+      <body>
+        <div className="relative min-h-screen pt-16 dark:bg-gray-900">
+          <div className="pb-[1066px] sm:pb-[614px] md:pb-[534px] lg:pb-[438px] xl:pb-[354px] 2xl:pb-[326px]">
+            <Providers>
               <CalendarNavbar />
-              <>{children}</>
-            </div>
+              {children}
+            </Providers>
           </div>
-        </body>
-      </html>
-    </Providers>
+        </div>
+      </body>
+    </html>
   )
 }

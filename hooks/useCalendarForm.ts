@@ -1,7 +1,9 @@
-import React, {useEffect, useState} from 'react'
 import {WORKOUT_TYPE} from '@prisma/client'
+import React, {useEffect, useState} from 'react'
+
 import {useFetchWorkout} from '@/hooks'
-import {useWorkoutId, useWorkoutIdDispatch, useUser} from '@/app/Providers'
+import {useAppDispatch, useAppSelector} from '@/redux/hooks'
+import {resetWorkoutId} from '@/redux/workoutSlice'
 
 export type CalendarFormState = {
   date: string
@@ -28,10 +30,10 @@ export const useCalendarForm = (): [
   React.Dispatch<React.SetStateAction<CalendarFormState>>,
   () => void,
 ] => {
-  const userState = useUser()
-  const userId = userState?.user?.id ?? ''
-  const {workoutId} = useWorkoutId()
-  const dispatch = useWorkoutIdDispatch()
+  const user = useAppSelector(state => state.users.user)
+  const userId = user?.id || ''
+  const workoutId = useAppSelector(state => state.workout.id)
+  const dispatch = useAppDispatch()
   const [workout, setWorkout] = useState<CalendarFormState>({
     ...initialState,
     ownerId: userId,
@@ -50,7 +52,7 @@ export const useCalendarForm = (): [
       ...initialState,
       ownerId: userId,
     })
-    dispatch({type: 'setWorkoutId', workoutId: ''})
+    dispatch(resetWorkoutId())
   }
 
   return [workout, setWorkout, resetForm]

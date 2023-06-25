@@ -7,13 +7,14 @@ import {CalendarHeading} from '@/components/CalendarHeading'
 import {CalendarMedium} from '@/components/CalendarMedium'
 import {CalendarMobile} from '@/components/CalendarMobile'
 import {Sidebar} from '@/components/Sidebar'
-import {useCalendarData, useUserWorkouts} from '@/hooks'
+import {useCalendarData, useUser, useWorkouts} from '@/hooks'
 import {SerialisedUser} from '@/lib/users'
 
 const SidebarMemo = React.memo(Sidebar)
 
 export function Calendar({initialUser}: {initialUser: SerialisedUser}) {
-  useUserWorkouts({initialUser})
+  useUser(initialUser)
+  useWorkouts()
   const {monthData, year, month, setYear, setMonth} = useCalendarData()
 
   return (

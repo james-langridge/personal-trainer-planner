@@ -2,12 +2,13 @@ import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import React, {Fragment} from 'react'
 
-import {useUserDispatch} from '@/app/Providers'
 import {useGetUsers} from '@/hooks'
 import {classNames} from '@/lib/misc'
+import {useAppDispatch} from '@/redux/hooks'
+import {setUser} from '@/redux/usersSlice'
 
 export function CalendarDropdown() {
-  const dispatch = useUserDispatch()
+  const dispatch = useAppDispatch()
   const {users} = useGetUsers()
 
   return (
@@ -39,7 +40,7 @@ export function CalendarDropdown() {
                   <Menu.Item key={user.id}>
                     {({active}) => (
                       <button
-                        onClick={() => dispatch({type: 'setUser', user: user})}
+                        onClick={() => dispatch(setUser(user))}
                         className={classNames(
                           active
                             ? 'bg-gray-100 text-gray-900'

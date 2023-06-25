@@ -1,8 +1,8 @@
+import {redirect} from 'next/navigation'
 import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
-import Providers from '@/app/Providers'
 import {Calendar} from '@/components/Calendar'
 import {db} from '@/lib/db'
 import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
@@ -42,16 +42,17 @@ const getUserWithWorkouts = async (
 
 export default async function TrainingStudio() {
   const session = await getServerSession(authOptions)
-  const {user} = await getUserWithWorkouts(session?.user?.id)
+
+  if (!session) {
+    redirect('/api/auth/signin')
+  }
+
+  const {user} = await getUserWithWorkouts(session.user?.id)
   const serialisedUserWithWorkouts = serialiseUserWithWorkouts(user)
 
   if (!serialisedUserWithWorkouts) {
     return null
   }
 
-  return (
-    <Providers>
-      <Calendar initialUser={serialisedUserWithWorkouts} />
-    </Providers>
-  )
+  return <Calendar initialUser={serialisedUserWithWorkouts} />
 }
