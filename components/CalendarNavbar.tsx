@@ -4,10 +4,10 @@ import {Disclosure} from '@headlessui/react'
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import {signOut, useSession} from 'next-auth/react'
+import {signOut} from 'next-auth/react'
 
 import {classNames} from '@/lib/misc'
-
+import {useAppSelector} from '@/redux/hooks'
 
 const adminNavigation = [
   {href: '/', name: 'Training planner'},
@@ -29,9 +29,8 @@ const logo = {
 }
 
 export function CalendarNavbar() {
-  const {data: session} = useSession()
-  const navigation =
-    session?.user?.role === 'admin' ? adminNavigation : clientNavigation
+  const isAdmin = useAppSelector(state => state.auth.isAdmin)
+  const navigation = isAdmin ? adminNavigation : clientNavigation
 
   return (
     <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-gray-800">
@@ -94,7 +93,7 @@ export function CalendarNavbar() {
           </div>
 
           <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 px-2 pt-2 pb-3">
+            <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation?.map(item => (
                 <Disclosure.Button
                   key={item.name}

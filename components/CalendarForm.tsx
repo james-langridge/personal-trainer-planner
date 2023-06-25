@@ -2,21 +2,25 @@ import {WORKOUT_TYPE} from '@prisma/client'
 import Link from 'next/link'
 import React, {useEffect} from 'react'
 
-import {useUser} from '@/app/Providers'
 import Info from '@/components/Info'
-import {useCalendarForm, useStatus, useUserWorkouts} from '@/hooks'
+import {useCalendarForm, useStatus, useWorkouts} from '@/hooks'
 import {createWorkout, updateWorkout} from '@/lib/api'
+import {useAppSelector} from '@/redux/hooks'
 
 export function CalendarForm() {
-  const userState = useUser()
-  const userId = userState?.user?.id ?? ''
-  const [refreshUserWithWorkouts] = useUserWorkouts()
+  const user = useAppSelector(state => state.users.user)
+  const userId = user?.id
+  const [refreshUserWithWorkouts] = useWorkouts()
   const [workout, setWorkout, resetForm] = useCalendarForm()
   const {status, mode, setMode, error, setStatus, setError, resetStatus} =
     useStatus()
   const isDisabled = status !== 'idle'
 
   useEffect(() => {
+    if (!userId) {
+      return
+    }
+
     setWorkout(workout => ({
       ...workout,
       ownerId: userId,

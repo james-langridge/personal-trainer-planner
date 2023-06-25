@@ -1,16 +1,13 @@
 import React from 'react'
 
-import {useUser} from '@/app/Providers'
+import {useAppSelector} from '@/redux/hooks'
 
 export function UserName() {
-  const userState = useUser()
-  if (!userState.user) {
-    return null
-  }
+  const user = useAppSelector(state => state.users.user)
 
   return (
     <span className="mt-4 text-center font-medium capitalize text-gray-800 dark:text-gray-200">
-      {userState?.user?.name}
+      {user?.name}
     </span>
   )
 }

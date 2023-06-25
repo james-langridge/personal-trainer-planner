@@ -3,13 +3,14 @@ import Link from 'next/link'
 import {useSession} from 'next-auth/react'
 import React from 'react'
 
-import {useWorkoutIdDispatch} from '@/app/Providers'
 import {useWorkoutStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
 import {SerialisedWorkout} from '@/lib/workouts'
+import {useAppDispatch} from '@/redux/hooks'
+import {setWorkoutId} from '@/redux/workoutSlice'
 
 export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
-  const dispatch = useWorkoutIdDispatch()
+  const dispatch = useAppDispatch()
   const {data: session} = useSession()
   const isAdmin = session?.user?.role === 'admin'
   const {status, toggleStatus} = useWorkoutStatus(workout)
@@ -25,7 +26,7 @@ export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
 
     const workoutId = (event.target as HTMLElement).id
 
-    dispatch({type: 'setWorkoutId', workoutId: workoutId})
+    dispatch(setWorkoutId(workoutId))
   }
 
   return (

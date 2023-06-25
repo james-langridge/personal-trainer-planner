@@ -1,7 +1,6 @@
 import {useSession} from 'next-auth/react'
 import React, {useEffect, useRef, useState} from 'react'
 
-import {useUser} from '@/app/Providers'
 import {DayMobile} from '@/components/DayMobile'
 import {
   useMobileCalendarData,
@@ -10,10 +9,11 @@ import {
   useIsMobile,
 } from '@/hooks'
 import {getWorkoutsToday, shouldScrollToThisDay} from '@/lib/calendar'
+import {useAppSelector} from '@/redux/hooks'
 
 export function CalendarMobile() {
-  const userState = useUser()
-  const workouts = userState.user?.workouts
+  const user = useAppSelector(state => state.users.user)
+  const workouts = user?.workouts
   const [isFrozen, setIsFrozen] = useState(false)
   const {data, scrollToThisDay, loadNextMonth, loadPreviousMonth} =
     useMobileCalendarData()
