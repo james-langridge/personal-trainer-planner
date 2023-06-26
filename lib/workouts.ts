@@ -47,7 +47,7 @@ export function sortWorkouts(
   key: SerialisedWorkoutKey,
   workouts: SerialisedWorkout[],
 ) {
-  return workouts.sort((a, b) => {
+  return [...workouts].sort((a, b) => {
     switch (key) {
       case 'status':
       case 'name':

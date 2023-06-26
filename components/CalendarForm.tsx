@@ -3,18 +3,24 @@ import Link from 'next/link'
 import React, {useEffect} from 'react'
 
 import Info from '@/components/Info'
-import {useCalendarForm, useStatus, useWorkouts} from '@/hooks'
-import {createWorkout, updateWorkout} from '@/lib/api'
+import {useCalendarForm, useStatus} from '@/hooks'
+import {
+  useCreateWorkoutMutation,
+  useDeleteWorkoutMutation,
+  useUpdateWorkoutMutation,
+} from '@/redux/apiSlice'
 import {useAppSelector} from '@/redux/hooks'
 
 export function CalendarForm() {
   const user = useAppSelector(state => state.users.user)
   const userId = user?.id
-  const [refreshUserWithWorkouts] = useWorkouts()
   const [workout, setWorkout, resetForm] = useCalendarForm()
   const {status, mode, setMode, error, setStatus, setError, resetStatus} =
     useStatus()
   const isDisabled = status !== 'idle'
+  const [createWorkout] = useCreateWorkoutMutation()
+  const [updateWorkout] = useUpdateWorkoutMutation()
+  const [deleteWorkout] = useDeleteWorkoutMutation()
 
   useEffect(() => {
     if (!userId) {
@@ -35,15 +41,13 @@ export function CalendarForm() {
     try {
       if (workout.workoutId) {
         setMode('updateWorkout')
-        await updateWorkout(workout)
+        await updateWorkout(workout).unwrap()
       } else {
         setMode('createWorkout')
-        await createWorkout(workout)
+        await createWorkout(workout).unwrap()
       }
 
       setStatus('resolved')
-
-      void refreshUserWithWorkouts()
     } catch (error) {
       setStatus('rejected')
       setError(error as Error)
@@ -61,11 +65,13 @@ export function CalendarForm() {
     setStatus('pending')
 
     try {
-      await updateWorkout({...workout, deleted: 'true'})
+      await deleteWorkout({
+        deleted: true,
+        ownerId: workout.ownerId,
+        workoutId: workout.workoutId,
+      }).unwrap()
 
       setStatus('resolved')
-
-      void refreshUserWithWorkouts()
     } catch (error) {
       setStatus('rejected')
       setError(error as Error)

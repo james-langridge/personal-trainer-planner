@@ -1,6 +1,7 @@
-import {useCallback, useEffect, useState} from 'react'
-import {fetchWorkout} from '@/lib/api'
 import {WORKOUT_TYPE} from '@prisma/client'
+import {useCallback, useEffect, useState} from 'react'
+
+import {useGetWorkoutQuery} from '@/redux/apiSlice'
 
 type WorkoutData = {
   date: string
@@ -14,9 +15,13 @@ type WorkoutData = {
 
 export const useFetchWorkout = (workoutId: string): WorkoutData | null => {
   const [workoutData, setWorkoutData] = useState<WorkoutData | null>(null)
+  const {data: workout} = useGetWorkoutQuery(workoutId, {skip: !workoutId})
 
   const fetchWorkoutData = useCallback(async () => {
-    const workout = await fetchWorkout(workoutId)
+    if (!workout) {
+      return
+    }
+
     const date = new Date(workout.date)
     const isoString = date.toISOString()
     const dateString = isoString.substring(0, 10)
@@ -32,7 +37,7 @@ export const useFetchWorkout = (workoutId: string): WorkoutData | null => {
     }
 
     setWorkoutData(workoutFormData)
-  }, [workoutId])
+  }, [workout])
 
   useEffect(() => {
     if (!workoutId) {

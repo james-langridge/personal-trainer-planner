@@ -1,23 +1,28 @@
 'use client'
 
 import {useCallback, useEffect, useState} from 'react'
-import {getUsersWithWorkouts} from '@/lib/api'
+
 import {SerialisedUser, SerialisedUserKey, sortUsers} from '@/lib/users'
+import {useGetUsersQuery} from '@/redux/apiSlice'
 
 export function useGetUsersTableData() {
   const [sortCol, setSortCol] = useState<SerialisedUserKey>('name')
   const [users, setUsers] = useState<SerialisedUser[] | undefined>()
+  const {data: fetchedUsers} = useGetUsersQuery()
 
   const fetchUsers = useCallback(async () => {
-    const fetchedUsers = await getUsersWithWorkouts()
+    if (!fetchedUsers) {
+      return
+    }
+
     const sortedUsers = sortUsers(sortCol, fetchedUsers)
 
     setUsers(sortedUsers)
-  }, [sortCol])
+  }, [fetchedUsers, sortCol])
 
   useEffect(() => {
     void fetchUsers()
-  }, [])
+  }, [fetchUsers])
 
   useEffect(() => {
     if (!users) {

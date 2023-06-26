@@ -1,18 +1,16 @@
 import {WORKOUT_STATUS} from '@prisma/client'
 import Link from 'next/link'
-import {useSession} from 'next-auth/react'
 import React from 'react'
 
 import {useWorkoutStatus} from '@/hooks'
 import {classNames} from '@/lib/misc'
 import {SerialisedWorkout} from '@/lib/workouts'
-import {useAppDispatch} from '@/redux/hooks'
+import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {setWorkoutId} from '@/redux/workoutSlice'
 
 export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
   const dispatch = useAppDispatch()
-  const {data: session} = useSession()
-  const isAdmin = session?.user?.role === 'admin'
+  const isAdmin = useAppSelector(state => state.auth.isAdmin)
   const {status, toggleStatus} = useWorkoutStatus(workout)
   const isTrainingWorkout = workout.type === 'TRAINING'
   const isAppointment = workout.type === 'APPOINTMENT'

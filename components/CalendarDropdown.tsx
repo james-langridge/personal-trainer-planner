@@ -2,14 +2,19 @@ import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import React, {Fragment} from 'react'
 
-import {useGetUsers} from '@/hooks'
 import {classNames} from '@/lib/misc'
+import {SerialisedUser} from '@/lib/users'
+import {useGetUsersQuery} from '@/redux/apiSlice'
 import {useAppDispatch} from '@/redux/hooks'
 import {setUser} from '@/redux/usersSlice'
 
 export function CalendarDropdown() {
   const dispatch = useAppDispatch()
-  const {users} = useGetUsers()
+  const {data: users = []} = useGetUsersQuery()
+
+  const onCLick = (user: SerialisedUser) => {
+    dispatch(setUser(user))
+  }
 
   return (
     <Menu as="div" className="relative mt-4 inline-block text-left">
@@ -34,26 +39,23 @@ export function CalendarDropdown() {
       >
         <Menu.Items className="w-50 absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            {users &&
-              users.map(user => {
-                return (
-                  <Menu.Item key={user.id}>
-                    {({active}) => (
-                      <button
-                        onClick={() => dispatch(setUser(user))}
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block w-44 px-4 py-2 text-sm capitalize',
-                        )}
-                      >
-                        {user.name}
-                      </button>
-                    )}
-                  </Menu.Item>
-                )
-              })}
+            {users.map(user => {
+              return (
+                <Menu.Item key={user.id}>
+                  {({active}) => (
+                    <button
+                      onClick={() => onCLick(user)}
+                      className={classNames(
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        'block w-44 px-4 py-2 text-sm capitalize',
+                      )}
+                    >
+                      {user.name}
+                    </button>
+                  )}
+                </Menu.Item>
+              )
+            })}
           </div>
         </Menu.Items>
       </Transition>
