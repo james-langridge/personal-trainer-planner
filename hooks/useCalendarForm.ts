@@ -39,7 +39,7 @@ export const useCalendarForm = (): [
     ownerId: userId,
   })
 
-  const workoutData = useFetchWorkout(workoutId ?? '')
+  const workoutData = useFetchWorkout(workoutId)
 
   useEffect(() => {
     if (workoutData) {

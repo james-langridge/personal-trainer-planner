@@ -124,7 +124,7 @@ export const keyMap = {
 }
 
 export function sortUsers(key: SerialisedUserKey, users: SerialisedUser[]) {
-  return users.sort((a, b) => {
+  return [...users].sort((a, b) => {
     const keyA = a[key]?.toUpperCase()
     const keyB = b[key]?.toUpperCase()
 

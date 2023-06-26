@@ -1,19 +1,17 @@
-import {useSession} from 'next-auth/react'
 import React, {useEffect, useRef, useState} from 'react'
 
 import {DayMobile} from '@/components/DayMobile'
 import {
   useMobileCalendarData,
   useCalendarIntersectionObserver,
-  useLockBodyScroll,
   useIsMobile,
+  usePollForUserUpdates,
 } from '@/hooks'
 import {getWorkoutsToday, shouldScrollToThisDay} from '@/lib/calendar'
 import {useAppSelector} from '@/redux/hooks'
 
 export function CalendarMobile() {
-  const user = useAppSelector(state => state.users.user)
-  const workouts = user?.workouts
+  const workouts = usePollForUserUpdates()
   const [isFrozen, setIsFrozen] = useState(false)
   const {data, scrollToThisDay, loadNextMonth, loadPreviousMonth} =
     useMobileCalendarData()
@@ -25,9 +23,7 @@ export function CalendarMobile() {
     endElementRef,
   )
   const isMobile = useIsMobile()
-  useLockBodyScroll()
-  const {data: session} = useSession()
-  const isAdmin = session?.user?.role === 'admin'
+  const isAdmin = useAppSelector(state => state.auth.isAdmin)
 
   useEffect(() => {
     async function loadPrev() {

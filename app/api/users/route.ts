@@ -27,8 +27,5 @@ export async function GET() {
 
   const serialisedUsers = serialiseUsersWithWorkouts(users)
 
-  return NextResponse.json({
-    status: 200,
-    data: serialisedUsers,
-  })
+  return NextResponse.json(serialisedUsers)
 }

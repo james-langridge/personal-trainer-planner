@@ -1,7 +1,8 @@
+// TODO: Update this test with redux
+
 import {fireEvent, render, screen, within} from '@testing-library/react'
 import {SessionProvider} from 'next-auth/react'
 
-import {UserContext, UserDispatchContext} from '@/app/Providers'
 import {Calendar} from '@/components/Calendar'
 import {monthNames} from '@/lib/calendar'
 import {user, year, month, session} from '@/mocks/user'
@@ -25,15 +26,9 @@ describe('Calendar', () => {
       })),
     })
 
-    const mockUserDispatch = jest.fn()
-
     render(
       <SessionProvider session={session}>
-        <UserContext.Provider value={{user: user}}>
-          <UserDispatchContext.Provider value={mockUserDispatch}>
-            <Calendar user={user} />
-          </UserDispatchContext.Provider>
-        </UserContext.Provider>
+        <Calendar initialUser={user} />
       </SessionProvider>,
     )
   })

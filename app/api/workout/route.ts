@@ -34,7 +34,7 @@ export async function PUT(req: NextRequest) {
     data: {
       ...(body.type !== undefined && {type: body.type}),
       ...(body.date !== undefined && {date: new Date(body.date)}),
-      ...(body.deleted === 'true' && {deleted: true}),
+      ...(body.deleted === true && {deleted: true}),
       ...(body.description !== undefined && {description: body.description}),
       ...(body.name !== undefined && {name: body.name}),
       ...(body.status !== undefined && {status: body.status}),

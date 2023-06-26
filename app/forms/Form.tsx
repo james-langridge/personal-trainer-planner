@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react'
 import {IFormInput} from '@/@types/generated/contentful'
 import Info from '@/components/Info'
 import {useStatus} from '@/hooks'
-import {submitForm} from '@/lib/api'
+import {useSubmitFormMutation} from '@/redux/apiSlice'
 
 type Form = Record<string, string>
 
@@ -13,6 +13,7 @@ export default function Form({inputs}: {inputs?: IFormInput[]}) {
   const [initialForm, setInitialForm] = useState<Form>()
   const [form, setForm] = useState<Form>()
   const {status, error, setStatus, setError, resetStatus} = useStatus()
+  const [submitForm] = useSubmitFormMutation()
 
   useEffect(() => {
     const initialForm: Form = {}
@@ -38,7 +39,7 @@ export default function Form({inputs}: {inputs?: IFormInput[]}) {
 
     if (form) {
       try {
-        await submitForm(form)
+        await submitForm(form).unwrap()
         setForm(initialForm)
         setStatus('resolved')
       } catch {
