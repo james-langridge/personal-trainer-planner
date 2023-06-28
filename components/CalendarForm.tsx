@@ -2,6 +2,7 @@ import {WORKOUT_TYPE} from '@prisma/client'
 import Link from 'next/link'
 import React, {useEffect} from 'react'
 
+import Button from '@/components/Button'
 import Info from '@/components/Info'
 import {useCalendarForm, useStatus} from '@/hooks'
 import {
@@ -174,42 +175,45 @@ export function CalendarForm() {
           value={workout.videoUrl}
         />
         <Info status={status} reset={resetStatus} error={error} mode={mode} />
-        <button
-          disabled={isDisabled || !userId}
+        <Button
           type="submit"
-          className="mt-4 w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 enabled:hover:bg-blue-400"
+          disabled={isDisabled || !userId}
+          className="mt-4 w-full"
         >
           {workout.workoutId ? 'Update' : 'Create'}
-        </button>
+        </Button>
         {workout.workoutId && (
           <>
-            <button
-              disabled={isDisabled}
+            <Button
               type="button"
+              intent="danger"
               onClick={handleDelete}
-              className="mt-4 w-full transform rounded-lg bg-red-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-red-400 focus:outline-none focus:ring focus:ring-red-300 focus:ring-opacity-50"
+              disabled={isDisabled}
+              className="mt-4 w-full"
             >
               Delete
-            </button>
+            </Button>
             <Link href={`/workout/${workout.workoutId}`}>
-              <button
-                disabled={isDisabled}
+              <Button
                 type="button"
-                className="mt-4 w-full transform rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-emerald-400 focus:outline-none focus:ring focus:ring-red-300 focus:ring-opacity-50"
+                intent="success"
+                disabled={isDisabled}
+                className="mt-4 w-full"
               >
                 View
-              </button>
+              </Button>
             </Link>
           </>
         )}
-        <button
+        <Button
+          intent="warning"
           disabled={isDisabled}
           type="button"
           onClick={resetForm}
-          className="mt-4 w-full transform rounded-lg bg-yellow-500 px-6 py-3 text-sm font-medium tracking-wide text-white transition-colors duration-300 hover:bg-yellow-400 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-50"
+          className="mt-4 w-full"
         >
           Reset form
-        </button>
+        </Button>
       </form>
     </>
   )

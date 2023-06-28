@@ -30,6 +30,7 @@
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^4.13.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "contentful": "^9.3.3",
     "contentful-management": "^10.30.0",
