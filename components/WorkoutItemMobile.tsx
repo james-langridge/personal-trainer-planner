@@ -1,8 +1,8 @@
 import {WORKOUT_STATUS} from '@prisma/client'
+import clsx from 'clsx'
 import Link from 'next/link'
 
 import {useWorkoutStatus} from '@/hooks'
-import {classNames} from '@/lib/misc'
 import {SerialisedWorkout} from '@/lib/workouts'
 
 export function WorkoutItemMobile({workout}: {workout: SerialisedWorkout}) {
@@ -21,12 +21,10 @@ export function WorkoutItemMobile({workout}: {workout: SerialisedWorkout}) {
       )}
       <Link
         href={`/workout/${workout?.id}`}
-        className={classNames(
-          'my-1 block',
-          status === WORKOUT_STATUS.COMPLETED && isTrainingWorkout
-            ? 'line-through'
-            : '',
-        )}
+        className={clsx('my-1 block', {
+          'line-through':
+            status === WORKOUT_STATUS.COMPLETED && isTrainingWorkout,
+        })}
       >
         {workout?.name}
       </Link>

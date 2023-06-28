@@ -1,8 +1,8 @@
 import {Menu, Transition} from '@headlessui/react'
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
+import clsx from 'clsx'
 import React, {Fragment} from 'react'
 
-import {classNames} from '@/lib/misc'
 import {SerialisedUser} from '@/lib/users'
 import {useGetUsersQuery} from '@/redux/apiSlice'
 import {useAppDispatch} from '@/redux/hooks'
@@ -45,8 +45,11 @@ export function CalendarDropdown() {
                   {({active}) => (
                     <button
                       onClick={() => onCLick(user)}
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      className={clsx(
+                        {
+                          'bg-gray-100 text-gray-900': active,
+                          'text-gray-700': !active,
+                        },
                         'block w-44 px-4 py-2 text-sm capitalize',
                       )}
                     >

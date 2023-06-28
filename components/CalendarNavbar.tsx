@@ -6,7 +6,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {signOut} from 'next-auth/react'
 
-import {classNames} from '@/lib/misc'
 import {useAppSelector} from '@/redux/hooks'
 
 const adminNavigation = [
@@ -68,10 +67,7 @@ export function CalendarNavbar() {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className={classNames(
-                          'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium',
-                        )}
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                         aria-current={undefined}
                       >
                         {item.name}
@@ -79,10 +75,7 @@ export function CalendarNavbar() {
                     ))}
                     <button
                       onClick={() => signOut()}
-                      className={classNames(
-                        'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'rounded-md px-3 py-2 text-sm font-medium',
-                      )}
+                      className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                     >
                       Log out
                     </button>
@@ -99,10 +92,7 @@ export function CalendarNavbar() {
                   key={item.name}
                   as="a"
                   href={item.href}
-                  className={classNames(
-                    'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block rounded-md px-3 py-2 text-base font-medium',
-                  )}
+                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                   aria-current={undefined}
                 >
                   {item.name}
@@ -110,10 +100,7 @@ export function CalendarNavbar() {
               ))}
               <Disclosure.Button
                 onClick={() => signOut()}
-                className={classNames(
-                  'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'block rounded-md px-3 py-2 text-base font-medium',
-                )}
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 aria-current={undefined}
               >
                 Log out
