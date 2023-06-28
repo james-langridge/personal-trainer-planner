@@ -1,9 +1,9 @@
 import {WORKOUT_STATUS} from '@prisma/client'
+import clsx from 'clsx'
 import Link from 'next/link'
 import React from 'react'
 
 import {useWorkoutStatus} from '@/hooks'
-import {classNames} from '@/lib/misc'
 import {SerialisedWorkout} from '@/lib/workouts'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {setWorkoutId} from '@/redux/workoutSlice'
@@ -53,9 +53,12 @@ export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
           tabIndex={0}
           onKeyDown={onClick}
           onClick={onClick}
-          className={classNames(
+          className={clsx(
             'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
-            isTrainingWorkout ? 'bg-emerald-400' : 'bg-blue-400',
+            {
+              'bg-emerald-400': isTrainingWorkout,
+              'bg-blue-400': !isTrainingWorkout,
+            },
           )}
           id={workout?.id}
         >
@@ -66,9 +69,12 @@ export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
       {!isAdmin && (
         <Link
           href={`/workout/${workout?.id}`}
-          className={classNames(
+          className={clsx(
             'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
-            isTrainingWorkout ? 'bg-emerald-400' : 'bg-blue-400',
+            {
+              'bg-emerald-400': isTrainingWorkout,
+              'bg-blue-400': !isTrainingWorkout,
+            },
           )}
           data-testid={`${workout?.id}`}
         >

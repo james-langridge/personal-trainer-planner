@@ -1,9 +1,10 @@
+import clsx from 'clsx'
+
 import {CalendarDay} from '@/components/CalendarDay'
 import {CalendarEmptyDays} from '@/components/CalendarEmptyDays'
 import {WorkoutItems} from '@/components/WorkoutItems'
 import {usePollForUserUpdates} from '@/hooks'
 import {Day, getWorkoutsToday} from '@/lib/calendar'
-import {classNames} from '@/lib/misc'
 
 export function CalendarGrid({monthData}: {monthData: Day[]}) {
   const workouts = usePollForUserUpdates()
@@ -13,8 +14,11 @@ export function CalendarGrid({monthData}: {monthData: Day[]}) {
 
   return (
     <div
-      className={classNames(
-        calendarSquares > 35 ? 'grid-rows-calendar-6' : 'grid-rows-calendar-5',
+      className={clsx(
+        {
+          'grid-rows-calendar-6': calendarSquares > 35,
+          'grid-rows-calendar-5': calendarSquares <= 35,
+        },
         'grid h-full w-full grid-cols-calendar ring-offset-1',
       )}
     >
