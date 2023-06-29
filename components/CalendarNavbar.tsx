@@ -21,7 +21,7 @@ const clientNavigation = [
 ]
 
 const logo = {
-  src: 'https://images.ctfassets.net/5ct6f2q9wwt3/2dQg3rHxURIhQCjK3Oxds2/10460c53028ab886bd8a1c925459cf53/FFLTrainer-logo-V1.png',
+  src: String(process.env.NEXT_PUBLIC_LOGO_URL),
   alt: 'logo',
   width: 300,
   height: 138,
