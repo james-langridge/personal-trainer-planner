@@ -25,6 +25,7 @@ export default async function RootLayout({
             </Providers>
           </div>
         </div>
+        <div id="modal"></div>
       </body>
     </html>
   )

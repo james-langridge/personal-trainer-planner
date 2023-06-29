@@ -16,8 +16,6 @@ export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
   const isAppointment = workout.type === 'APPOINTMENT'
 
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
-    event.stopPropagation()
-
     if (!isAdmin) {
       return
     }

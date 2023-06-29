@@ -25,7 +25,11 @@ const initialState: CalendarFormState = {
   type: WORKOUT_TYPE.TRAINING,
 }
 
-export const useCalendarForm = (): [
+export const useCalendarForm = ({
+  date,
+}: {
+  date: string
+}): [
   CalendarFormState,
   React.Dispatch<React.SetStateAction<CalendarFormState>>,
   () => void,
@@ -36,6 +40,7 @@ export const useCalendarForm = (): [
   const dispatch = useAppDispatch()
   const [workout, setWorkout] = useState<CalendarFormState>({
     ...initialState,
+    date,
     ownerId: userId,
   })
 
