@@ -57,6 +57,7 @@ export function CalendarDay({
       >
         <CalendarForm
           date={`${day.year}-${padZero(day.month + 1)}-${padZero(day.day)}`}
+          closeModal={closeModal}
         />
       </Modal>
       <div

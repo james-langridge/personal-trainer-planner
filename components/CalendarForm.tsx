@@ -9,10 +9,18 @@ import {
   useDeleteWorkoutMutation,
   useUpdateWorkoutMutation,
 } from '@/redux/apiSlice'
-import {useAppSelector} from '@/redux/hooks'
+import {useAppDispatch, useAppSelector} from '@/redux/hooks'
+import {resetWorkoutId} from '@/redux/workoutSlice'
 
-export function CalendarForm({date}: {date: string}) {
+export function CalendarForm({
+  date,
+  closeModal,
+}: {
+  date: string
+  closeModal: (e: React.SyntheticEvent) => void
+}) {
   const user = useAppSelector(state => state.users.user)
+  const dispatch = useAppDispatch()
   const userId = user?.id
   const [workout, setWorkout, resetForm] = useCalendarForm({date})
   const [error, setError] = useState<Error>()
@@ -44,11 +52,12 @@ export function CalendarForm({date}: {date: string}) {
     } catch (error) {
       setError(error as Error)
     } finally {
+      closeModal(e)
       resetForm()
     }
   }
 
-  async function handleDelete() {
+  async function handleDelete(e: React.SyntheticEvent) {
     if (isDisabled || !workout.workoutId) {
       return
     }
@@ -62,6 +71,7 @@ export function CalendarForm({date}: {date: string}) {
     } catch (error) {
       setError(error as Error)
     } finally {
+      closeModal(e)
       resetForm()
     }
   }
@@ -157,54 +167,48 @@ export function CalendarForm({date}: {date: string}) {
         className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
         value={workout.videoUrl}
       />
-      <Button
-        type="submit"
-        disabled={isDisabled || !userId}
-        className="mt-4 w-full max-w-xs self-center"
-      >
-        {isUpdating
-          ? 'Updating...'
-          : isCreating
-          ? 'Creating...'
-          : workout.workoutId
-          ? 'Update'
-          : 'Create'}
-      </Button>
-      {workout.workoutId && (
-        <>
-          <Button
-            type="button"
-            intent="danger"
-            onClick={handleDelete}
-            disabled={isDisabled}
-            className="mt-4 w-full max-w-xs self-center"
-          >
-            {isDeleting ? 'Deleting...' : 'Delete'}
-          </Button>
-          <Link
-            href={`/workout/${workout.workoutId}`}
-            className="w-full max-w-xs self-center"
-          >
+      <div className="mt-4 flex justify-between">
+        <Button
+          type="submit"
+          disabled={isDisabled || !userId}
+          className="w-full max-w-xs self-center"
+        >
+          {isUpdating
+            ? 'Updating...'
+            : isCreating
+            ? 'Creating...'
+            : workout.workoutId
+            ? 'Update'
+            : 'Create'}
+        </Button>
+        {workout.workoutId && (
+          <>
+            <Link
+              href={`/workout/${workout.workoutId}`}
+              className="mx-2 w-full max-w-xs self-center"
+              onClick={() => dispatch(resetWorkoutId())}
+            >
+              <Button
+                type="button"
+                intent="success"
+                disabled={isDisabled}
+                className="w-full max-w-xs self-center"
+              >
+                View
+              </Button>
+            </Link>
             <Button
               type="button"
-              intent="success"
+              intent="danger"
+              onClick={handleDelete}
               disabled={isDisabled}
-              className="mt-4 w-full max-w-xs self-center"
+              className="w-full max-w-xs self-center"
             >
-              View
+              {isDeleting ? 'Deleting...' : 'Delete'}
             </Button>
-          </Link>
-        </>
-      )}
-      <Button
-        intent="warning"
-        disabled={isDisabled}
-        type="button"
-        onClick={resetForm}
-        className="mt-4 w-full max-w-xs self-center"
-      >
-        Reset
-      </Button>
+          </>
+        )}
+      </div>
       <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
     </form>
   )
