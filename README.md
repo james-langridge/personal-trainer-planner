@@ -10,7 +10,11 @@ A client management and scheduling app for personal trainers and their clients, 
 - Shared and synced calendar between the PT and each user.
 - PT controls all of the workout and appointment scheduling and management.
 
-![calendar_trainer](public/calendarTrainer.png)
+![calendar_trainer1](public/calendarTrainer1.png)
+
+![calendar_trainer2](public/calendarTrainer2.png)
+
+![calendar_trainer3](public/calendarTrainer3.png)
 
 - Users can view their calendars and workouts with description and video, and check off workouts as completed.
 - Mobile-friendly calendar list-view with infinite scroll for users.
