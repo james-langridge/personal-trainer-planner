@@ -1,5 +1,7 @@
 import React from 'react'
 
+import {CalendarDropdown} from '@/components/CalendarDropdown'
+import {UserName} from '@/components/UserName'
 import {useIsMobile} from '@/hooks'
 import {monthNames} from '@/lib/calendar'
 
@@ -40,8 +42,10 @@ export function CalendarHeading({
   }
 
   return (
-    <div className="p-5">
-      <div className="prose prose-xl flex">
+    <div className="flex w-full flex-row justify-between p-5">
+      <CalendarDropdown />
+
+      <div className="flex flex-row items-center text-2xl">
         <button
           onClick={decrementMonth}
           className="mx-1 flex transform items-center justify-center rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white rtl:-scale-x-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
@@ -61,7 +65,7 @@ export function CalendarHeading({
           </svg>
         </button>
 
-        <p data-testid={'heading'}>
+        <p data-testid={'heading'} className="mx-5">
           {monthName} {year}
         </p>
 
@@ -84,6 +88,8 @@ export function CalendarHeading({
           </svg>
         </button>
       </div>
+
+      <UserName />
     </div>
   )
 }
