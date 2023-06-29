@@ -41,7 +41,7 @@ const buttonClasses = cva(
   },
 )
 
-export interface ButtonProps
+interface ButtonProps
   extends React.ComponentPropsWithoutRef<'button'>,
     VariantProps<typeof buttonClasses> {}
 

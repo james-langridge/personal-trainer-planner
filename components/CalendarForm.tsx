@@ -1,10 +1,9 @@
 import {WORKOUT_TYPE} from '@prisma/client'
 import Link from 'next/link'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import Button from '@/components/Button'
-import Info from '@/components/Info'
-import {useCalendarForm, useStatus} from '@/hooks'
+import {useCalendarForm} from '@/hooks'
 import {
   useCreateWorkoutMutation,
   useDeleteWorkoutMutation,
@@ -16,12 +15,11 @@ export function CalendarForm({date}: {date: string}) {
   const user = useAppSelector(state => state.users.user)
   const userId = user?.id
   const [workout, setWorkout, resetForm] = useCalendarForm({date})
-  const {status, mode, setMode, error, setStatus, setError, resetStatus} =
-    useStatus()
-  const isDisabled = status !== 'idle'
-  const [createWorkout] = useCreateWorkoutMutation()
-  const [updateWorkout] = useUpdateWorkoutMutation()
-  const [deleteWorkout] = useDeleteWorkoutMutation()
+  const [error, setError] = useState<Error>()
+  const [createWorkout, {isLoading: isCreating}] = useCreateWorkoutMutation()
+  const [updateWorkout, {isLoading: isUpdating}] = useUpdateWorkoutMutation()
+  const [deleteWorkout, {isLoading: isDeleting}] = useDeleteWorkoutMutation()
+  const isDisabled = isCreating || isUpdating || isDeleting
 
   useEffect(() => {
     if (!userId) {
@@ -37,20 +35,13 @@ export function CalendarForm({date}: {date: string}) {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    setStatus('pending')
-
     try {
       if (workout.workoutId) {
-        setMode('updateWorkout')
         await updateWorkout(workout).unwrap()
       } else {
-        setMode('createWorkout')
         await createWorkout(workout).unwrap()
       }
-
-      setStatus('resolved')
     } catch (error) {
-      setStatus('rejected')
       setError(error as Error)
     } finally {
       resetForm()
@@ -58,12 +49,9 @@ export function CalendarForm({date}: {date: string}) {
   }
 
   async function handleDelete() {
-    if (status !== 'idle' || !workout.workoutId) {
+    if (isDisabled || !workout.workoutId) {
       return
     }
-
-    setMode('deleteWorkout')
-    setStatus('pending')
 
     try {
       await deleteWorkout({
@@ -71,10 +59,7 @@ export function CalendarForm({date}: {date: string}) {
         ownerId: workout.ownerId,
         workoutId: workout.workoutId,
       }).unwrap()
-
-      setStatus('resolved')
     } catch (error) {
-      setStatus('rejected')
       setError(error as Error)
     } finally {
       resetForm()
@@ -172,13 +157,18 @@ export function CalendarForm({date}: {date: string}) {
         className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
         value={workout.videoUrl}
       />
-      <Info status={status} reset={resetStatus} error={error} mode={mode} />
       <Button
         type="submit"
         disabled={isDisabled || !userId}
         className="mt-4 w-full max-w-xs self-center"
       >
-        {workout.workoutId ? 'Update' : 'Create'}
+        {isUpdating
+          ? 'Updating...'
+          : isCreating
+          ? 'Creating...'
+          : workout.workoutId
+          ? 'Update'
+          : 'Create'}
       </Button>
       {workout.workoutId && (
         <>
@@ -189,7 +179,7 @@ export function CalendarForm({date}: {date: string}) {
             disabled={isDisabled}
             className="mt-4 w-full max-w-xs self-center"
           >
-            Delete
+            {isDeleting ? 'Deleting...' : 'Delete'}
           </Button>
           <Link
             href={`/workout/${workout.workoutId}`}
@@ -213,8 +203,9 @@ export function CalendarForm({date}: {date: string}) {
         onClick={resetForm}
         className="mt-4 w-full max-w-xs self-center"
       >
-        Reset form
+        Reset
       </Button>
+      <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
     </form>
   )
 }
