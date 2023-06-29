@@ -1,16 +1,21 @@
 import React from 'react'
 
-import {useIsMobile} from '@/hooks'
-import {useAppSelector} from '@/redux/hooks'
+import {CalendarGrid} from '@/components/CalendarGrid'
+import {CalendarHeading} from '@/components/CalendarHeading'
+import {useCalendarData} from '@/hooks'
 
-export function CalendarMedium({children}: {children: React.ReactNode}) {
-  const {isAdmin} = useAppSelector(state => state.auth)
-  const isMobile = useIsMobile()
+export function CalendarMedium() {
+  const {monthData, year, month, setYear, setMonth} = useCalendarData()
 
-  // TODO: Admin view is not optimised for mobile
-  if (isMobile && !isAdmin) {
-    return null
-  }
-
-  return <>{children}</>
+  return (
+    <>
+      <CalendarHeading
+        year={year}
+        setYear={setYear}
+        month={month}
+        setMonth={setMonth}
+      />
+      <CalendarGrid monthData={monthData} />
+    </>
+  )
 }

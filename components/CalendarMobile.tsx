@@ -4,11 +4,9 @@ import {DayMobile} from '@/components/DayMobile'
 import {
   useMobileCalendarData,
   useCalendarIntersectionObserver,
-  useIsMobile,
   usePollForUserUpdates,
 } from '@/hooks'
 import {getWorkoutsToday, shouldScrollToThisDay} from '@/lib/calendar'
-import {useAppSelector} from '@/redux/hooks'
 
 export function CalendarMobile() {
   const workouts = usePollForUserUpdates()
@@ -22,8 +20,6 @@ export function CalendarMobile() {
     startElementRef,
     endElementRef,
   )
-  const isMobile = useIsMobile()
-  const isAdmin = useAppSelector(state => state.auth.isAdmin)
 
   useEffect(() => {
     async function loadPrev() {
@@ -44,11 +40,6 @@ export function CalendarMobile() {
   useEffect(() => {
     scrollToRef.current?.scrollIntoView()
   }, [scrollToThisDay])
-
-  // TODO: Admin view is not optimised for mobile
-  if (!isMobile || isAdmin) {
-    return null
-  }
 
   return (
     <div className="py-5">

@@ -5,20 +5,15 @@ import React, {Fragment} from 'react'
 
 import {SerialisedUser} from '@/lib/users'
 import {useGetUsersQuery} from '@/redux/apiSlice'
-import {useAppDispatch, useAppSelector} from '@/redux/hooks'
+import {useAppDispatch} from '@/redux/hooks'
 import {setUser} from '@/redux/usersSlice'
 
 export function CalendarDropdown() {
-  const isAdmin = useAppSelector(state => state.auth.isAdmin)
   const dispatch = useAppDispatch()
   const {data: users = []} = useGetUsersQuery()
 
   const onCLick = (user: SerialisedUser) => {
     dispatch(setUser(user))
-  }
-
-  if (!isAdmin) {
-    return <div></div>
   }
 
   return (
