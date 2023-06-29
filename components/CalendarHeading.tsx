@@ -2,8 +2,8 @@ import React from 'react'
 
 import {CalendarDropdown} from '@/components/CalendarDropdown'
 import {UserName} from '@/components/UserName'
-import {useIsMobile} from '@/hooks'
 import {monthNames} from '@/lib/calendar'
+import {useAppSelector} from '@/redux/hooks'
 
 export function CalendarHeading({
   year,
@@ -16,12 +16,8 @@ export function CalendarHeading({
   setYear: React.Dispatch<React.SetStateAction<number>>
   setMonth: React.Dispatch<React.SetStateAction<number>>
 }) {
+  const isAdmin = useAppSelector(state => state.auth.isAdmin)
   const monthName = monthNames[month]
-  const isMobile = useIsMobile()
-
-  if (isMobile) {
-    return null
-  }
 
   function decrementMonth() {
     if (month === 0) {
@@ -43,7 +39,7 @@ export function CalendarHeading({
 
   return (
     <div className="flex w-full flex-row justify-between p-5">
-      <CalendarDropdown />
+      {isAdmin ? <CalendarDropdown /> : <div />}
 
       <div className="flex flex-row items-center text-2xl">
         <button
@@ -89,7 +85,7 @@ export function CalendarHeading({
         </button>
       </div>
 
-      <UserName />
+      {isAdmin ? <UserName /> : <div />}
     </div>
   )
 }
