@@ -3,8 +3,6 @@
 import {useSession} from 'next-auth/react'
 import React, {useCallback, useState} from 'react'
 
-import Info from '@/components/Info'
-import {useStatus} from '@/hooks'
 import {useCreateUserMutation} from '@/redux/apiSlice'
 
 const initialForm: {
@@ -17,27 +15,23 @@ const initialForm: {
 
 export default function Register() {
   const [form, setForm] = useState({...initialForm})
-  const {status, error, setStatus, setError, resetStatus} = useStatus()
+  const [error, setError] = useState<Error>()
   const {data: session, status: sessionStatus} = useSession()
-  const [createUser] = useCreateUserMutation()
+  const [createUser, {isLoading}] = useCreateUserMutation()
 
   const handleSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
       e.preventDefault()
 
-      setStatus('pending')
-
       try {
         await createUser(form).unwrap()
 
         setForm(initialForm)
-        setStatus('resolved')
       } catch (error) {
         setError(error as Error)
-        setStatus('rejected')
       }
     },
-    [createUser, form, setError, setStatus],
+    [createUser, form, setError],
   )
 
   if (sessionStatus === 'loading') {
@@ -122,21 +116,16 @@ export default function Register() {
             />
           </div>
 
-          <Info
-            reset={resetStatus}
-            status={status}
-            error={error}
-            mode="register"
-          />
-
           <div className="mt-6">
             <button
               type="submit"
-              className="w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+              className="w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 disabled:cursor-wait"
+              disabled={isLoading}
             >
-              Create client
+              {isLoading ? 'Creating client...' : 'Create client'}
             </button>
           </div>
+          <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
         </form>
       </div>
     </section>
