@@ -49,11 +49,11 @@ export function CalendarForm({
       } else {
         await createWorkout(workout).unwrap()
       }
-    } catch (error) {
-      setError(error as Error)
-    } finally {
+
       closeModal(e)
       resetForm()
+    } catch (error) {
+      setError(error as Error)
     }
   }
 
@@ -68,11 +68,11 @@ export function CalendarForm({
         ownerId: workout.ownerId,
         workoutId: workout.workoutId,
       }).unwrap()
-    } catch (error) {
-      setError(error as Error)
-    } finally {
+
       closeModal(e)
       resetForm()
+    } catch (error) {
+      setError(error as Error)
     }
   }
 

@@ -3,8 +3,6 @@
 import React, {useEffect, useState} from 'react'
 
 import {IFormInput} from '@/@types/generated/contentful'
-import Info from '@/components/Info'
-import {useStatus} from '@/hooks'
 import {useSubmitFormMutation} from '@/redux/apiSlice'
 
 type Form = Record<string, string>
@@ -12,8 +10,8 @@ type Form = Record<string, string>
 export default function Form({inputs}: {inputs?: IFormInput[]}) {
   const [initialForm, setInitialForm] = useState<Form>()
   const [form, setForm] = useState<Form>()
-  const {status, error, setStatus, setError, resetStatus} = useStatus()
-  const [submitForm] = useSubmitFormMutation()
+  const [error, setError] = useState<Error>()
+  const [submitForm, {isLoading}] = useSubmitFormMutation()
 
   useEffect(() => {
     const initialForm: Form = {}
@@ -35,16 +33,12 @@ export default function Form({inputs}: {inputs?: IFormInput[]}) {
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
 
-    setStatus('pending')
-
     if (form) {
       try {
         await submitForm(form).unwrap()
         setForm(initialForm)
-        setStatus('resolved')
       } catch {
         setError(error as Error)
-        setStatus('rejected')
       }
     }
   }
@@ -82,18 +76,14 @@ export default function Form({inputs}: {inputs?: IFormInput[]}) {
             )
         }
       })}
-      <Info
-        reset={resetStatus}
-        status={status}
-        error={error}
-        mode="generalForm"
-      />
       <button
         type="submit"
-        className="mt-4 w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 enabled:hover:bg-blue-400"
+        className="mt-4 w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 enabled:hover:bg-blue-400 disabled:cursor-wait"
+        disabled={isLoading}
       >
-        Submit
+        {isLoading ? 'Submitting...' : 'Submit'}
       </button>
+      <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
     </form>
   )
 }

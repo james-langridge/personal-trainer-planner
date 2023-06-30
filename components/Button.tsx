@@ -13,6 +13,7 @@ const buttonClasses = cva(
     'text-white',
     'transition-colors',
     'duration-300',
+    'disabled:cursor-wait',
   ],
   {
     variants: {
