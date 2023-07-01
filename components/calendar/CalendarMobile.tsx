@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 
-import {DayMobile} from '@/components/DayMobile'
+import {DayMobile} from '@/components/calendar'
 import {
   useMobileCalendarData,
   useCalendarIntersectionObserver,

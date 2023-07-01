@@ -1,7 +1,6 @@
 import React from 'react'
 
-import {CalendarGrid} from '@/components/CalendarGrid'
-import {CalendarHeading} from '@/components/CalendarHeading'
+import {CalendarGrid, CalendarHeading} from '@/components/calendar'
 import {useCalendarData} from '@/hooks'
 
 export function CalendarMedium() {

@@ -1,7 +1,4 @@
-'use client'
-
-import {CalendarMedium} from '@/components/CalendarMedium'
-import {CalendarMobile} from '@/components/CalendarMobile'
+import {CalendarMedium, CalendarMobile} from '@/components/calendar'
 import {useIsMobile, useUser} from '@/hooks'
 import {SerialisedUser} from '@/lib/users'
 import {useAppSelector} from '@/redux/hooks'

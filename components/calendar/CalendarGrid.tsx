@@ -1,8 +1,10 @@
 import clsx from 'clsx'
 
-import {CalendarDay} from '@/components/CalendarDay'
-import {CalendarEmptyDays} from '@/components/CalendarEmptyDays'
-import {WorkoutItems} from '@/components/WorkoutItems'
+import {
+  CalendarDay,
+  CalendarEmptyDays,
+  WorkoutItems,
+} from '@/components/calendar'
 import {usePollForUserUpdates} from '@/hooks'
 import {Day, getWorkoutsToday} from '@/lib/calendar'
 
