@@ -8,7 +8,6 @@ import SortSvg from '@/components/SortSvg'
 import {useGetWorkoutsTableData} from '@/hooks'
 import {keyMap, validKeys, isValidKey} from '@/lib/workouts'
 
-
 export default function UserDetails({params}: {params: {slug: string}}) {
   const {slug} = params
   const {data: session, status} = useSession()
@@ -59,7 +58,7 @@ export default function UserDetails({params}: {params: {slug: string}}) {
                           <th
                             key={key}
                             scope="col"
-                            className="py-3.5 px-4 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
+                            className="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
                           >
                             <button
                               id={key}
@@ -72,7 +71,7 @@ export default function UserDetails({params}: {params: {slug: string}}) {
                           </th>
                         )
                       })}
-                      <th scope="col" className="relative py-3.5 px-4">
+                      <th scope="col" className="relative px-4 py-3.5">
                         <span className="sr-only">Edit</span>
                       </th>
                     </tr>

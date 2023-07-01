@@ -1,7 +1,6 @@
 import React from 'react'
 
-import {CalendarDropdown} from '@/components/CalendarDropdown'
-import {UserName} from '@/components/UserName'
+import {CalendarDropdown, UserName} from '@/components/calendar'
 import {monthNames} from '@/lib/calendar'
 import {useAppSelector} from '@/redux/hooks'
 

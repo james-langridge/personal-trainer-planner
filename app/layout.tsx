@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import React from 'react'
 
 import Providers from '@/app/Providers'
-import {CalendarNavbar} from '@/components/CalendarNavbar'
+import {CalendarNavbar} from '@/components/calendar'
 
 export const metadata = {
   title: 'Fit For Life Trainer',
