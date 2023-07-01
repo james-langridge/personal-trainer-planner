@@ -33,6 +33,7 @@ export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
           checked={status === WORKOUT_STATUS.COMPLETED}
           className="h-7 w-7 rounded"
           onChange={toggleStatus}
+          onClick={e => e.stopPropagation()}
         />
       )}
 
@@ -42,6 +43,7 @@ export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
           checked={status === WORKOUT_STATUS.COMPLETED}
           className="h-7 w-7 rounded"
           onChange={toggleStatus}
+          onClick={e => e.stopPropagation()}
         />
       )}
 
