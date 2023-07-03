@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {CalendarDropdown, UserName} from '@/components/calendar'
-import {monthNames} from '@/lib/calendar'
+import {monthNames} from '@/lib/constants'
 import {useAppSelector} from '@/redux/hooks'
 
 export function CalendarHeading({

@@ -8,7 +8,8 @@ import React from 'react'
 import Container from '@/components/Container'
 import SortSvg from '@/components/SortSvg'
 import {useGetUsersTableData} from '@/hooks'
-import {isValidKey, keyMap, validKeys} from '@/lib/users'
+import {userKeyMap, validUserKeys} from '@/lib/constants'
+import {isValidKey} from '@/lib/users'
 
 export default function Users() {
   const {users, setSortCol} = useGetUsersTableData()
@@ -41,7 +42,7 @@ export default function Users() {
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
-                      {validKeys.map(key => {
+                      {validUserKeys.map(key => {
                         return (
                           <th
                             key={key}
@@ -53,7 +54,7 @@ export default function Users() {
                               onClick={e => onClick(e)}
                               className="flex items-center justify-start gap-x-3 focus:outline-none"
                             >
-                              <span>{keyMap[key]}</span>
+                              <span>{userKeyMap[key]}</span>
                               <SortSvg />
                             </button>
                           </th>
@@ -69,7 +70,7 @@ export default function Users() {
                     {users?.map(user => {
                       return (
                         <tr key={user.id}>
-                          {validKeys.map(key => {
+                          {validUserKeys.map(key => {
                             return (
                               <td
                                 key={key}

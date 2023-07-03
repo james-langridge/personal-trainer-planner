@@ -1,28 +1,8 @@
 import {User, Workout} from '@prisma/client'
 
 import {formatDate} from '@/lib/calendar'
-import {SerialisedWorkout, serialiseWorkouts} from '@/lib/workouts'
-
-export type UserWithWorkouts = Omit<
-  User,
-  'password' | 'emailVerified' | 'image'
-> & {
-  workouts: Workout[]
-}
-
-export type SerialisedUser = {
-  appointments: string
-  appointmentsAttended: string
-  createdAt: string
-  email: string
-  id: string
-  name: string | null
-  role: string | null
-  updatedAt: string
-  workouts: SerialisedWorkout[]
-  workoutsAssigned: string
-  workoutsCompleted: string
-}
+import {validUserKeys} from '@/lib/constants'
+import {serialiseWorkouts} from '@/lib/workouts'
 
 export function serialiseUsersWithWorkouts(users: UserWithWorkouts[]) {
   return users.map(user => serialiseUserWithWorkouts(user))
@@ -97,30 +77,7 @@ export type SerialisedUserKey = keyof Omit<
 >
 
 export function isValidKey(key: string): key is SerialisedUserKey {
-  return validKeys.includes(key as SerialisedUserKey)
-}
-
-// Changing the order of validKeys will change the display order of the cols on /users
-export const validKeys: SerialisedUserKey[] = [
-  'name',
-  'email',
-  'workoutsAssigned',
-  'workoutsCompleted',
-  'appointments',
-  'appointmentsAttended',
-  'createdAt',
-  'updatedAt',
-]
-
-export const keyMap = {
-  appointments: 'Appointments',
-  appointmentsAttended: 'Appointments attended',
-  createdAt: 'Created',
-  email: 'Email',
-  name: 'Name',
-  workoutsAssigned: 'Workouts assigned',
-  workoutsCompleted: 'Workouts completed',
-  updatedAt: 'Updated',
+  return validUserKeys.includes(key as SerialisedUserKey)
 }
 
 export function sortUsers(key: SerialisedUserKey, users: SerialisedUser[]) {
