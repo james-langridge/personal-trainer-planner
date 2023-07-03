@@ -6,6 +6,7 @@ import React, {useEffect, useState} from 'react'
 import {Day} from '@/@types/types'
 import Button from '@/components/Button'
 import {useCalendarForm} from '@/hooks'
+import {getWorkoutDates} from '@/lib/calendar'
 import {
   useCreateWorkoutMutation,
   useDeleteWorkoutMutation,
@@ -47,22 +48,19 @@ export function CalendarForm({
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    if (workout.selectedDays.size === 1 && workout.weeksToRepeat === 0) {
-      try {
-        if (workout.workoutId) {
-          await updateWorkout(workout).unwrap()
-        } else {
-          await createWorkout(workout).unwrap()
-        }
-
-        closeModal(e)
-      } catch (error) {
-        setError(error as Error)
+    try {
+      if (workout.workoutId) {
+        await updateWorkout(workout).unwrap()
+      } else {
+        await createWorkout({
+          ...workout,
+          selectedDays: [...workout.selectedDays],
+        }).unwrap()
       }
-    } else {
-      console.log('need logic for repeating days')
-      // Logic to map the repeatingDays numbers to dates
-      // Logic to calculate what date would be next week, and the week after that, etc
+
+      closeModal(e)
+    } catch (error) {
+      setError(error as Error)
     }
   }
 
@@ -152,133 +150,142 @@ export function CalendarForm({
           </div>
         </fieldset>
 
-        <div className="flex flex-col">
-          <div className="mt-4 flex divide-x overflow-hidden rounded-lg border bg-white rtl:flex-row-reverse dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900">
-            <button
-              type="button"
-              onClick={() => toggleDay(1)}
-              className={clsx(
-                'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
-                {
-                  'bg-blue-300 hover:bg-blue-100': workout.selectedDays.has(1),
-                  'hover:bg-gray-100': !workout.selectedDays.has(1),
-                },
-              )}
-            >
-              M
-            </button>
+        {!workout.workoutId && (
+          <div className="flex flex-col">
+            <div className="mt-4 flex divide-x overflow-hidden rounded-lg border bg-white rtl:flex-row-reverse dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900">
+              <button
+                type="button"
+                onClick={() => toggleDay(1)}
+                className={clsx(
+                  'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
+                  {
+                    'bg-blue-300 hover:bg-blue-100':
+                      workout.selectedDays.has(1),
+                    'hover:bg-gray-100': !workout.selectedDays.has(1),
+                  },
+                )}
+              >
+                M
+              </button>
 
-            <button
-              type="button"
-              onClick={() => toggleDay(2)}
-              className={clsx(
-                'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
-                {
-                  'bg-blue-300 hover:bg-blue-100': workout.selectedDays.has(2),
-                  'hover:bg-gray-100': !workout.selectedDays.has(2),
-                },
-              )}
-            >
-              T
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleDay(2)}
+                className={clsx(
+                  'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
+                  {
+                    'bg-blue-300 hover:bg-blue-100':
+                      workout.selectedDays.has(2),
+                    'hover:bg-gray-100': !workout.selectedDays.has(2),
+                  },
+                )}
+              >
+                T
+              </button>
 
-            <button
-              type="button"
-              onClick={() => toggleDay(3)}
-              className={clsx(
-                'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
-                {
-                  'bg-blue-300 hover:bg-blue-100': workout.selectedDays.has(3),
-                  'hover:bg-gray-100': !workout.selectedDays.has(3),
-                },
-              )}
-            >
-              W
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleDay(3)}
+                className={clsx(
+                  'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
+                  {
+                    'bg-blue-300 hover:bg-blue-100':
+                      workout.selectedDays.has(3),
+                    'hover:bg-gray-100': !workout.selectedDays.has(3),
+                  },
+                )}
+              >
+                W
+              </button>
 
-            <button
-              type="button"
-              onClick={() => toggleDay(4)}
-              className={clsx(
-                'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
-                {
-                  'bg-blue-300 hover:bg-blue-100': workout.selectedDays.has(4),
-                  'hover:bg-gray-100': !workout.selectedDays.has(4),
-                },
-              )}
-            >
-              T
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleDay(4)}
+                className={clsx(
+                  'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
+                  {
+                    'bg-blue-300 hover:bg-blue-100':
+                      workout.selectedDays.has(4),
+                    'hover:bg-gray-100': !workout.selectedDays.has(4),
+                  },
+                )}
+              >
+                T
+              </button>
 
-            <button
-              type="button"
-              onClick={() => toggleDay(5)}
-              className={clsx(
-                'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
-                {
-                  'bg-blue-300 hover:bg-blue-100': workout.selectedDays.has(5),
-                  'hover:bg-gray-100': !workout.selectedDays.has(5),
-                },
-              )}
-            >
-              F
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleDay(5)}
+                className={clsx(
+                  'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
+                  {
+                    'bg-blue-300 hover:bg-blue-100':
+                      workout.selectedDays.has(5),
+                    'hover:bg-gray-100': !workout.selectedDays.has(5),
+                  },
+                )}
+              >
+                F
+              </button>
 
-            <button
-              type="button"
-              onClick={() => toggleDay(6)}
-              className={clsx(
-                'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
-                {
-                  'bg-blue-300 hover:bg-blue-100': workout.selectedDays.has(6),
-                  'hover:bg-gray-100': !workout.selectedDays.has(6),
-                },
-              )}
-            >
-              S
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleDay(6)}
+                className={clsx(
+                  'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
+                  {
+                    'bg-blue-300 hover:bg-blue-100':
+                      workout.selectedDays.has(6),
+                    'hover:bg-gray-100': !workout.selectedDays.has(6),
+                  },
+                )}
+              >
+                S
+              </button>
 
-            <button
-              type="button"
-              onClick={() => toggleDay(0)}
-              className={clsx(
-                'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
-                {
-                  'bg-blue-300 hover:bg-blue-100': workout.selectedDays.has(0),
-                  'hover:bg-gray-100': !workout.selectedDays.has(0),
-                },
-              )}
-            >
-              S
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => toggleDay(0)}
+                className={clsx(
+                  'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
+                  {
+                    'bg-blue-300 hover:bg-blue-100':
+                      workout.selectedDays.has(0),
+                    'hover:bg-gray-100': !workout.selectedDays.has(0),
+                  },
+                )}
+              >
+                S
+              </button>
+            </div>
 
-          <div className="mt-2">
-            Repeat for{' '}
-            <input
-              className="w-10"
-              type="number"
-              min="0"
-              value={workout.weeksToRepeat}
-              onChange={e =>
-                setWorkout(workout => ({
-                  ...workout,
-                  weeksToRepeat: Number(e.target.value),
-                }))
-              }
-            />{' '}
-            {workout.weeksToRepeat === 1 ? 'week.' : 'weeks.'}{' '}
-            <div className="text-sm">
-              {workout.weeksToRepeat === 0
-                ? "(Don't repeat; this week only.)"
-                : workout.weeksToRepeat === 1
-                ? '(This week and next week.)'
-                : `(${
-                    workout.weeksToRepeat + 1
-                  } weeks total starting this week.)`}
+            <div className="mt-2">
+              Repeat for{' '}
+              <input
+                className="w-10"
+                type="number"
+                min="0"
+                value={workout.weeksToRepeat}
+                onChange={e =>
+                  setWorkout(workout => ({
+                    ...workout,
+                    weeksToRepeat: Number(e.target.value),
+                  }))
+                }
+              />{' '}
+              {workout.weeksToRepeat === 1 ? 'week.' : 'weeks.'}{' '}
+              <div className="text-sm">
+                {workout.weeksToRepeat === 0
+                  ? "(Don't repeat; this week only.)"
+                  : workout.weeksToRepeat === 1
+                  ? '(This week and next week.)'
+                  : `(${
+                      workout.weeksToRepeat + 1
+                    } weeks total starting this week.)`}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <textarea
