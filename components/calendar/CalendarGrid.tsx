@@ -1,12 +1,13 @@
 import clsx from 'clsx'
 
+import {Day} from '@/@types/types'
 import {
   CalendarDay,
   CalendarEmptyDays,
   WorkoutItems,
 } from '@/components/calendar'
 import {usePollForUserUpdates} from '@/hooks'
-import {Day, getWorkoutsToday} from '@/lib/calendar'
+import {getWorkoutsToday} from '@/lib/calendar'
 
 export function CalendarGrid({monthData}: {monthData: Day[]}) {
   const workouts = usePollForUserUpdates()

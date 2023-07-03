@@ -2,7 +2,8 @@
 
 import {useCallback, useEffect, useState} from 'react'
 
-import {SerialisedUser, SerialisedUserKey, sortUsers} from '@/lib/users'
+import {SerialisedUser, SerialisedUserKey} from '@/@types/types'
+import {sortUsers} from '@/lib/users'
 import {useGetUsersQuery} from '@/redux/apiSlice'
 
 export function useGetUsersTableData() {

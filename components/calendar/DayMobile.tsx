@@ -1,12 +1,11 @@
+import {Day, SerialisedWorkout} from '@/@types/types'
 import {WorkoutItemMobile} from '@/components/calendar'
 import {
-  Day,
   getMonthName,
   getLongWeekday,
   isDayToday,
   isDayTomorrow,
 } from '@/lib/calendar'
-import {SerialisedWorkout} from '@/lib/workouts'
 
 export function DayMobile({
   dayData,

@@ -1,5 +1,11 @@
 import {User, Workout} from '@prisma/client'
 
+import {
+  SerialisedUser,
+  SerialisedUserKey,
+  UserWithWorkouts,
+  WorkoutDataFoo,
+} from '@/@types/types'
 import {formatDate} from '@/lib/calendar'
 import {validUserKeys} from '@/lib/constants'
 import {serialiseWorkouts} from '@/lib/workouts'
@@ -35,14 +41,7 @@ export function serialiseUserWithWorkouts(
   }
 }
 
-type WorkoutData = {
-  appointments: number
-  appointmentsAttended: number
-  workoutsAssigned: number
-  workoutsCompleted: number
-}
-
-function extractWorkoutData(workouts: Workout[]): WorkoutData {
+function extractWorkoutData(workouts: Workout[]): WorkoutDataFoo {
   const workoutsData = {
     appointments: 0,
     appointmentsAttended: 0,
@@ -70,11 +69,6 @@ function extractWorkoutData(workouts: Workout[]): WorkoutData {
     return acc
   }, workoutsData)
 }
-
-export type SerialisedUserKey = keyof Omit<
-  SerialisedUser,
-  'role' | 'id' | 'workouts'
->
 
 export function isValidKey(key: string): key is SerialisedUserKey {
   return validUserKeys.includes(key as SerialisedUserKey)

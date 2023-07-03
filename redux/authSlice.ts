@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-import {SerialisedUser} from '@/lib/users'
+import {SerialisedUser} from '@/@types/types'
 
 interface AuthState {
   user: SerialisedUser | null

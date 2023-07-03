@@ -1,8 +1,7 @@
 import React from 'react'
 
+import {Day, SerialisedWorkout} from '@/@types/types'
 import {WorkoutItem} from '@/components/calendar'
-import {Day} from '@/lib/calendar'
-import {SerialisedWorkout} from '@/lib/workouts'
 
 export function WorkoutItems({
   workouts,

@@ -3,7 +3,7 @@ import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 import React, {Fragment} from 'react'
 
-import {SerialisedUser} from '@/lib/users'
+import {SerialisedUser} from '@/@types/types'
 import {useGetUsersQuery} from '@/redux/apiSlice'
 import {useAppDispatch} from '@/redux/hooks'
 import {setUser} from '@/redux/usersSlice'

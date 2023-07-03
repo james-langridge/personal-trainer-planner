@@ -1,19 +1,10 @@
 import {WORKOUT_TYPE} from '@prisma/client'
 import React, {useEffect, useState} from 'react'
 
+import {CalendarFormState, Day} from '@/@types/types'
 import {useFetchWorkout} from '@/hooks'
-import {useAppDispatch, useAppSelector} from '@/redux/hooks'
-import {resetWorkoutId} from '@/redux/workoutSlice'
-
-export type CalendarFormState = {
-  date: string
-  description?: string
-  name: string
-  ownerId: string
-  workoutId: string
-  videoUrl?: string
-  type: WORKOUT_TYPE
-}
+import {getWeekday, padZero} from '@/lib/calendar'
+import {useAppSelector} from '@/redux/hooks'
 
 const initialState: CalendarFormState = {
   date: '',

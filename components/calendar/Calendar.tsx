@@ -1,6 +1,6 @@
+import {SerialisedUser} from '@/@types/types'
 import {CalendarMedium, CalendarMobile} from '@/components/calendar'
 import {useIsMobile, useUser} from '@/hooks'
-import {SerialisedUser} from '@/lib/users'
 import {useAppSelector} from '@/redux/hooks'
 
 export function Calendar({initialUser}: {initialUser: SerialisedUser}) {

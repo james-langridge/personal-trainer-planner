@@ -1,9 +1,10 @@
 import {NextRequest, NextResponse} from 'next/server'
 
+import {createWorkoutBody} from '@/@types/types'
 import {db} from '@/lib/db'
 
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  const body: createWorkoutBody = await req.json()
 
   const workout = await db.workout.create({
     data: {

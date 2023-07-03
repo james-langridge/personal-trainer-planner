@@ -1,5 +1,5 @@
+import {SerialisedUser} from '@/@types/types'
 import {padZero} from '@/lib/calendar'
-import {SerialisedUser} from '@/lib/users'
 
 const now = new Date()
 export const year = now.getFullYear()

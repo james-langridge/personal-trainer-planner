@@ -3,8 +3,8 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import React from 'react'
 
+import {SerialisedWorkout} from '@/@types/types'
 import {useWorkoutStatus} from '@/hooks'
-import {SerialisedWorkout} from '@/lib/workouts'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {setWorkoutId} from '@/redux/workoutSlice'
 
