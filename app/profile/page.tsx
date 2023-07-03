@@ -1,9 +1,10 @@
 import {getServerSession} from 'next-auth/next'
 
+import {UserWithWorkouts} from '@/@types/types'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Container from '@/components/Container'
 import {db} from '@/lib/db'
-import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
+import {serialiseUserWithWorkouts} from '@/lib/users'
 
 const getUserWithWorkouts = async (
   id?: string,

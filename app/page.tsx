@@ -2,10 +2,11 @@ import {redirect} from 'next/navigation'
 import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
+import {UserWithWorkouts} from '@/@types/types'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {Calendar} from '@/components/calendar'
 import {db} from '@/lib/db'
-import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
+import {serialiseUserWithWorkouts} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
 

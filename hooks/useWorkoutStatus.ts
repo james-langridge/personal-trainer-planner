@@ -1,7 +1,7 @@
 import {WORKOUT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
-import {SerialisedWorkout} from '@/lib/workouts'
+import {SerialisedWorkout} from '@/@types/types'
 import {useUpdateWorkoutMutation} from '@/redux/apiSlice'
 
 export function useWorkoutStatus(workout: SerialisedWorkout) {

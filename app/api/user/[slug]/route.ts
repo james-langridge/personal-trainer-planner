@@ -1,7 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server'
 
+import {UserWithWorkouts} from '@/@types/types'
 import {db} from '@/lib/db'
-import {serialiseUserWithWorkouts, UserWithWorkouts} from '@/lib/users'
+import {serialiseUserWithWorkouts} from '@/lib/users'
 
 export async function GET(
   req: NextRequest,

@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-import {SerialisedUser} from '@/lib/users'
+import {SerialisedUser} from '@/@types/types'
 import {RootState} from '@/redux/store'
 
 interface UsersState {

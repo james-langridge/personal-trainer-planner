@@ -2,8 +2,9 @@ import clsx from 'clsx'
 import React, {useState} from 'react'
 import Modal from 'react-modal'
 
+import {Day} from '@/@types/types'
 import {CalendarForm} from '@/components/calendar'
-import {Day, getShortWeekday, isDayToday, padZero} from '@/lib/calendar'
+import {getShortWeekday, isDayToday} from '@/lib/calendar'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {resetWorkoutId} from '@/redux/workoutSlice'
 

@@ -2,12 +2,12 @@
 
 import {useCallback, useEffect, useState} from 'react'
 
-import {SerialisedUser} from '@/lib/users'
 import {
+  SerialisedUser,
   SerialisedWorkout,
   SerialisedWorkoutKey,
-  sortWorkouts,
-} from '@/lib/workouts'
+} from '@/@types/types'
+import {sortWorkouts} from '@/lib/workouts'
 import {useGetUserQuery} from '@/redux/apiSlice'
 
 export function useGetWorkoutsTableData(slug: string) {

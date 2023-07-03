@@ -1,6 +1,6 @@
 import {useEffect} from 'react'
 
-import {SerialisedUser} from '@/lib/users'
+import {SerialisedUser} from '@/@types/types'
 import {useGetUserQuery} from '@/redux/apiSlice'
 import {loginSuccess} from '@/redux/authSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'

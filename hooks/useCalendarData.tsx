@@ -1,5 +1,7 @@
 import {useMemo, useState} from 'react'
-import {Day, generateCalendarMonth} from '@/lib/calendar'
+
+import {Day} from '@/@types/types'
+import {generateCalendarMonth} from '@/lib/calendar'
 
 const now = new Date()
 

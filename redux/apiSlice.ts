@@ -1,31 +1,13 @@
-import {Workout, WORKOUT_STATUS, WORKOUT_TYPE} from '@prisma/client'
+import {Workout} from '@prisma/client'
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
-import {SerialisedUser} from '@/lib/users'
-
-type deleteWorkoutBody = {deleted: boolean; ownerId: string; workoutId: string}
-
-type updateWorkoutBody = {
-  date?: string
-  description?: string
-  name?: string
-  ownerId: string
-  status?: WORKOUT_STATUS
-  type?: WORKOUT_TYPE
-  videoUrl?: string
-  workoutId: string
-}
-
-type createWorkoutBody = {
-  date: string
-  description?: string
-  name: string
-  ownerId: string
-  type: WORKOUT_TYPE
-  videoUrl?: string
-}
-
-type createUserBody = {name: string; email: string}
+import {
+  createUserBody,
+  createWorkoutBody,
+  deleteWorkoutBody,
+  SerialisedUser,
+  updateWorkoutBody,
+} from '@/@types/types'
 
 export const apiSlice = createApi({
   reducerPath: 'api',

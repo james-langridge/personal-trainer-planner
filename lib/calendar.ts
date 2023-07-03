@@ -67,13 +67,6 @@ export function getWorkoutsToday(
   return workoutsMap.filter(Boolean)
 }
 
-export type Day = {
-  day: number
-  weekDay: number
-  month: number
-  year: number
-}
-
 export function shouldScrollToThisDay(thisDay: Day, scrollToThisDay: Day) {
   const {day, month, year} = thisDay
 

@@ -1,17 +1,7 @@
-import {WORKOUT_TYPE} from '@prisma/client'
 import {useCallback, useEffect, useState} from 'react'
 
+import {WorkoutData} from '@/@types/types'
 import {useGetWorkoutQuery} from '@/redux/apiSlice'
-
-type WorkoutData = {
-  date: string
-  description?: string
-  name: string
-  ownerId: string
-  workoutId: string
-  videoUrl?: string
-  type: WORKOUT_TYPE
-}
 
 export const useFetchWorkout = (workoutId: string): WorkoutData | null => {
   const [workoutData, setWorkoutData] = useState<WorkoutData | null>(null)

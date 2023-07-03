@@ -1,7 +1,8 @@
 import {NextResponse} from 'next/server'
 
+import {UserWithWorkouts} from '@/@types/types'
 import {db} from '@/lib/db'
-import {serialiseUsersWithWorkouts, UserWithWorkouts} from '@/lib/users'
+import {serialiseUsersWithWorkouts} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
 
