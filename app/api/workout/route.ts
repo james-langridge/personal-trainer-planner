@@ -1,24 +1,37 @@
 import {NextRequest, NextResponse} from 'next/server'
 
 import {createWorkoutBody} from '@/@types/types'
+import {getWorkoutDates} from '@/lib/calendar'
 import {db} from '@/lib/db'
 
 export async function POST(req: NextRequest) {
-  const body: createWorkoutBody = await req.json()
+  const {
+    date,
+    ownerId,
+    name,
+    type,
+    description,
+    videoUrl,
+    weeksToRepeat,
+    selectedDays,
+  }: createWorkoutBody = await req.json()
 
-  const workout = await db.workout.create({
-    data: {
-      ownerId: body.ownerId,
-      name: body.name,
-      date: new Date(body.date),
-      description: body.description && body.description,
-      type: body.type,
-      videoUrl: body.videoUrl && body.videoUrl,
-    },
+  const dates = getWorkoutDates(date, selectedDays, weeksToRepeat)
+  const data = dates.map(date => {
+    return {
+      ownerId,
+      name,
+      date: new Date(date),
+      description,
+      type,
+      videoUrl,
+    }
   })
 
+  const workouts = await db.workout.createMany({data})
+
   return NextResponse.json(
-    {workout},
+    {workouts},
     {
       status: 201,
     },

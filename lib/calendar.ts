@@ -140,3 +140,23 @@ export function getWeekday(dateString: string): number {
 
   return date.getUTCDay()
 }
+
+export function getWorkoutDates(
+  dateString: string,
+  weekdays: number[],
+  weeksToRepeat: number,
+): string[] {
+  const date = new Date(dateString)
+  const dayOfWeek = date.getDay()
+  const dates: string[] = []
+
+  for (let week = 0; week <= weeksToRepeat; week++) {
+    weekdays.forEach(weekday => {
+      const newDate = new Date(date)
+      newDate.setDate(date.getDate() + weekday - dayOfWeek + week * 7)
+      dates.push(newDate.toISOString().split('T')[0])
+    })
+  }
+
+  return dates
+}
