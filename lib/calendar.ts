@@ -134,3 +134,9 @@ export function formatDate(date: Date) {
 export function padZero(num: number | string) {
   return String(num).padStart(2, '0')
 }
+
+export function getWeekday(dateString: string): number {
+  const date = new Date(dateString)
+
+  return date.getUTCDay()
+}

@@ -1,5 +1,5 @@
 import {WORKOUT_TYPE} from '@prisma/client'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 
 import {CalendarFormState, Day} from '@/@types/types'
 import {useFetchWorkout} from '@/hooks'
@@ -14,42 +14,67 @@ const initialState: CalendarFormState = {
   workoutId: '',
   videoUrl: '',
   type: WORKOUT_TYPE.TRAINING,
+  selectedDays: new Set<number>(),
+  weeksToRepeat: 0,
 }
 
 export const useCalendarForm = ({
-  date,
+  day,
 }: {
-  date: string
+  day: Day
 }): [
   CalendarFormState,
   React.Dispatch<React.SetStateAction<CalendarFormState>>,
-  () => void,
+  (weekday: number) => void,
 ] => {
   const user = useAppSelector(state => state.users.user)
   const userId = user?.id || ''
   const workoutId = useAppSelector(state => state.workout.id)
-  const dispatch = useAppDispatch()
+  const workoutData = useFetchWorkout(workoutId)
   const [workout, setWorkout] = useState<CalendarFormState>({
     ...initialState,
-    date,
+    date: `${day.year}-${padZero(day.month + 1)}-${padZero(day.day)}`,
+    selectedDays: new Set([day.weekDay]),
     ownerId: userId,
   })
 
-  const workoutData = useFetchWorkout(workoutId)
+  const toggleDay = useCallback(
+    (weekday: number) => {
+      if (getWeekday(workout.date) === weekday) {
+        return
+      }
+
+      const newSet = new Set(workout.selectedDays)
+      const isDaySelected = newSet.has(weekday)
+
+      if (isDaySelected) {
+        newSet.delete(weekday)
+      } else {
+        newSet.add(weekday)
+      }
+
+      setWorkout(workout => ({
+        ...workout,
+        selectedDays: newSet,
+      }))
+    },
+    [workout.date, workout.selectedDays],
+  )
+
+  useEffect(() => {
+    const newSet = new Set<number>([getWeekday(workout.date)])
+
+    setWorkout(workout => ({
+      ...workout,
+      selectedDays: newSet,
+    }))
+  }, [workout.date])
 
   useEffect(() => {
     if (workoutData) {
-      setWorkout(workoutData)
+      setWorkout({...workout, ...workoutData})
     }
   }, [workoutData])
 
-  function resetForm() {
-    setWorkout({
-      ...initialState,
-      ownerId: userId,
-    })
-    dispatch(resetWorkoutId())
-  }
-
-  return [workout, setWorkout, resetForm]
+  return [workout, setWorkout, toggleDay]
 }

@@ -56,10 +56,7 @@ export function CalendarDay({
         overlayClassName="bg-[rgba(0,0,0,.4)] flex justify-center items-center absolute top-0 left-0 h-screen w-screen"
         className="w-3/4 rounded-xl bg-white p-8"
       >
-        <CalendarForm
-          date={`${day.year}-${padZero(day.month + 1)}-${padZero(day.day)}`}
-          closeModal={closeModal}
-        />
+        <CalendarForm day={day} closeModal={closeModal} />
       </Modal>
       <div
         className={

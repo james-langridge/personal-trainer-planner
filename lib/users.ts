@@ -1,4 +1,4 @@
-import {User, Workout} from '@prisma/client'
+import {Workout} from '@prisma/client'
 
 import {
   SerialisedUser,
