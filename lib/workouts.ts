@@ -1,46 +1,11 @@
-import {Workout, WORKOUT_STATUS, WORKOUT_TYPE} from '@prisma/client'
+import {Workout} from '@prisma/client'
 
+import {SerialisedWorkout, SerialisedWorkoutKey} from '@/@types/types'
 import {formatDate} from '@/lib/calendar'
-
-export type SerialisedWorkout = {
-  id: string
-  createdAt: string
-  updatedAt: string
-  ownerId: string
-  status: WORKOUT_STATUS
-  name: string
-  date: string
-  description: string | null
-  videoUrl: string | null
-  type: WORKOUT_TYPE
-  deleted: string
-}
-
-export type SerialisedWorkoutKey = keyof Omit<
-  SerialisedWorkout,
-  'id' | 'ownerId' | 'createdAt' | 'updatedAt' | 'deleted'
->
+import {validWorkoutKeys} from '@/lib/constants'
 
 export function isValidKey(key: string): key is SerialisedWorkoutKey {
-  return validKeys.includes(key as SerialisedWorkoutKey)
-}
-
-export const validKeys: SerialisedWorkoutKey[] = [
-  'date',
-  'name',
-  'description',
-  'type',
-  'status',
-  'videoUrl',
-]
-
-export const keyMap = {
-  date: 'Date',
-  name: 'Name',
-  description: 'Description',
-  type: 'Type',
-  status: 'Status',
-  videoUrl: 'Video url',
+  return validWorkoutKeys.includes(key as SerialisedWorkoutKey)
 }
 
 export function sortWorkouts(

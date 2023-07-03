@@ -6,7 +6,8 @@ import React from 'react'
 
 import SortSvg from '@/components/SortSvg'
 import {useGetWorkoutsTableData} from '@/hooks'
-import {keyMap, validKeys, isValidKey} from '@/lib/workouts'
+import {validWorkoutKeys, workoutKeyMap} from '@/lib/constants'
+import {isValidKey} from '@/lib/workouts'
 
 export default function UserDetails({params}: {params: {slug: string}}) {
   const {slug} = params
@@ -53,7 +54,7 @@ export default function UserDetails({params}: {params: {slug: string}}) {
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
-                      {validKeys.map(key => {
+                      {validWorkoutKeys.map(key => {
                         return (
                           <th
                             key={key}
@@ -65,7 +66,7 @@ export default function UserDetails({params}: {params: {slug: string}}) {
                               onClick={e => onClick(e)}
                               className="flex items-center justify-start gap-x-3 focus:outline-none"
                             >
-                              <span>{keyMap[key]}</span>
+                              <span>{workoutKeyMap[key]}</span>
                               <SortSvg />
                             </button>
                           </th>
@@ -86,7 +87,7 @@ export default function UserDetails({params}: {params: {slug: string}}) {
 
                       return (
                         <tr key={workout.id}>
-                          {validKeys.map(key => {
+                          {validWorkoutKeys.map(key => {
                             return (
                               <td
                                 key={key}
