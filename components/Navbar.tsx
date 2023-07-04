@@ -1,3 +1,5 @@
+'use client'
+
 import {Disclosure} from '@headlessui/react'
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -23,7 +25,7 @@ const logo = {
   height: 138,
 }
 
-export function CalendarNavbar({isAdmin}: {isAdmin: boolean}) {
+export function Navbar({isAdmin}: {isAdmin: boolean}) {
   const navigation = isAdmin ? adminNavigation : clientNavigation
 
   return (
