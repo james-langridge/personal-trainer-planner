@@ -6,7 +6,6 @@ import React, {useEffect, useState} from 'react'
 import {Day} from '@/@types/types'
 import Button from '@/components/Button'
 import {useCalendarForm} from '@/hooks'
-import {getWorkoutDates} from '@/lib/calendar'
 import {
   useCreateWorkoutMutation,
   useDeleteWorkoutMutation,
