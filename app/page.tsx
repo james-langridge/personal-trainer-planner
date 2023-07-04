@@ -1,4 +1,3 @@
-import {redirect} from 'next/navigation'
 import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
@@ -43,12 +42,7 @@ const getUserWithWorkouts = async (
 
 export default async function TrainingStudio() {
   const session = await getServerSession(authOptions)
-
-  if (!session) {
-    redirect('/api/auth/signin')
-  }
-
-  const {user} = await getUserWithWorkouts(session.user?.id)
+  const {user} = await getUserWithWorkouts(session?.user?.id)
   const serialisedUserWithWorkouts = serialiseUserWithWorkouts(user)
 
   if (!serialisedUserWithWorkouts) {
