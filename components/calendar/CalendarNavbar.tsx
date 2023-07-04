@@ -4,8 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {signOut} from 'next-auth/react'
 
-import {useAppSelector} from '@/redux/hooks'
-
 const adminNavigation = [
   {href: '/', name: 'Training planner'},
   {href: '/users', name: 'Clients'},
@@ -25,8 +23,7 @@ const logo = {
   height: 138,
 }
 
-export function CalendarNavbar() {
-  const isAdmin = useAppSelector(state => state.auth.isAdmin)
+export function CalendarNavbar({isAdmin}: {isAdmin: boolean}) {
   const navigation = isAdmin ? adminNavigation : clientNavigation
 
   return (
