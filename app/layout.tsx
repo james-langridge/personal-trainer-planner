@@ -1,6 +1,9 @@
 import '../styles/globals.css'
+import {redirect} from 'next/navigation'
+import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
+import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Providers from '@/app/Providers'
 import {CalendarNavbar} from '@/components/calendar'
 
@@ -14,6 +17,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    redirect('/api/auth/signin')
+  }
+
   return (
     <html lang="en">
       <body>
