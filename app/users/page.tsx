@@ -7,12 +7,12 @@ import React from 'react'
 
 import Container from '@/components/Container'
 import SortSvg from '@/components/SortSvg'
-import {useGetUsersTableData} from '@/hooks'
+import {useSortUsers} from '@/hooks'
 import {userKeyMap, validUserKeys} from '@/lib/constants'
 import {isValidKey} from '@/lib/users'
 
 export default function Users() {
-  const {users, setSortCol} = useGetUsersTableData()
+  const {sortedUsers, setSortCol} = useSortUsers()
   const {data: session, status} = useSession()
 
   if (status === 'loading') {
@@ -27,7 +27,7 @@ export default function Users() {
     const key = e.currentTarget.id
 
     if (isValidKey(key)) {
-      setSortCol(key)
+      setSortCol({key})
     }
   }
 
@@ -67,7 +67,7 @@ export default function Users() {
                   </thead>
 
                   <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                    {users?.map(user => {
+                    {sortedUsers?.map(user => {
                       return (
                         <tr key={user.id}>
                           {validUserKeys.map(key => {

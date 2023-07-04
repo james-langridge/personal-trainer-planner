@@ -74,23 +74,34 @@ export function isValidKey(key: string): key is SerialisedUserKey {
   return validUserKeys.includes(key as SerialisedUserKey)
 }
 
-export function sortUsers(key: SerialisedUserKey, users: SerialisedUser[]) {
+export function sortUsers(
+  key: SerialisedUserKey,
+  users: SerialisedUser[],
+  asc = true,
+): SerialisedUser[] {
   return [...users].sort((a, b) => {
-    const keyA = a[key]?.toUpperCase()
-    const keyB = b[key]?.toUpperCase()
+    const aValue = a[key]
+    const bValue = b[key]
 
-    if (!keyA || !keyB) {
-      return 0
+    const propA =
+      aValue !== null
+        ? isNaN(Number(aValue))
+          ? aValue.toUpperCase()
+          : Number(aValue)
+        : ''
+    const propB =
+      bValue !== null
+        ? isNaN(Number(bValue))
+          ? bValue.toUpperCase()
+          : Number(bValue)
+        : ''
+
+    if (propA < propB) {
+      return asc ? -1 : 1
     }
-
-    if (keyA < keyB) {
-      return -1
+    if (propA > propB) {
+      return asc ? 1 : -1
     }
-
-    if (keyA > keyB) {
-      return 1
-    }
-
     return 0
   })
 }
