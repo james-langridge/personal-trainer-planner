@@ -28,7 +28,24 @@ export const authOptions: NextAuthOptions = {
 
       return session
     },
+    async signIn({user}) {
+      return await doesUserExistInDb(user.email)
+    },
   },
+}
+
+async function doesUserExistInDb(email: string | null | undefined) {
+  if (!email) {
+    return false
+  }
+
+  const user = await db.user.findUnique({
+    where: {
+      email: email,
+    },
+  })
+
+  return !!user
 }
 
 const handler = NextAuth(authOptions)
