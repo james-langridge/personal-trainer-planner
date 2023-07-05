@@ -53,10 +53,6 @@ export function getWorkoutsToday(
   )
 
   const workoutsMap = workouts.map(workout => {
-    if (workout.deleted === 'true') {
-      return
-    }
-
     const workoutDate = new Date(workout.date)
 
     if (areDatesEqual(calendarDate, workoutDate)) {

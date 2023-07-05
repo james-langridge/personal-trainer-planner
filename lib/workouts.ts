@@ -2,44 +2,54 @@ import {Workout} from '@prisma/client'
 
 import {SerialisedWorkout, SerialisedWorkoutKey} from '@/@types/types'
 import {formatDate} from '@/lib/calendar'
-import {validWorkoutKeys} from '@/lib/constants'
+import {workoutKeys} from '@/lib/constants'
 
 export function isValidKey(key: string): key is SerialisedWorkoutKey {
-  return validWorkoutKeys.includes(key as SerialisedWorkoutKey)
+  return workoutKeys.includes(key as SerialisedWorkoutKey)
+}
+
+export function serialiseWorkouts(
+  workouts: Omit<Workout, 'createdAt' | 'updatedAt' | 'deleted'>[],
+) {
+  return workouts.map(workout => {
+    const {date, ...rest} = workout
+
+    return {
+      ...rest,
+      date: formatDate(date),
+    }
+  })
 }
 
 export function sortWorkouts(
   key: SerialisedWorkoutKey,
   workouts: SerialisedWorkout[],
-) {
+  asc = true,
+): SerialisedWorkout[] {
   return [...workouts].sort((a, b) => {
-    switch (key) {
-      case 'status':
-      case 'name':
-      case 'date':
-      case 'type':
-        return a[key].localeCompare(b[key], undefined, {sensitivity: 'base'})
-      case 'description':
-      case 'videoUrl':
-        if (a[key] === null) return 1
-        if (b[key] === null) return -1
-        return (a[key] as string).localeCompare(b[key] as string) // Change here
-      default:
-        return 0
-    }
-  })
-}
+    const aValue = a[key] ?? ''
+    const bValue = b[key] ?? ''
 
-export function serialiseWorkouts(workouts: Workout[]) {
-  return workouts.map(workout => {
-    const {createdAt, updatedAt, date, deleted, ...rest} = workout
-
-    return {
-      ...rest,
-      deleted: deleted.toString(),
-      createdAt: formatDate(createdAt),
-      updatedAt: formatDate(updatedAt),
-      date: formatDate(date),
+    if (aValue === '') {
+      return asc ? 1 : -1
     }
+    if (bValue === '') {
+      return asc ? -1 : 1
+    }
+
+    const propA = Number.isNaN(Number(aValue))
+      ? aValue.toUpperCase()
+      : Number(aValue)
+    const propB = Number.isNaN(Number(bValue))
+      ? bValue.toUpperCase()
+      : Number(bValue)
+
+    if (propA < propB) {
+      return asc ? -1 : 1
+    }
+    if (propA > propB) {
+      return asc ? 1 : -1
+    }
+    return 0
   })
 }

@@ -9,13 +9,21 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   const users: UserWithWorkouts[] = await db.user.findMany({
     select: {
-      id: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
       email: true,
+      id: true,
       name: true,
+      role: true,
       workouts: {
+        select: {
+          date: true,
+          description: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+          type: true,
+          videoUrl: true,
+        },
         where: {
           deleted: false,
         },

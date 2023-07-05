@@ -5,15 +5,15 @@ import {useSession} from 'next-auth/react'
 import React from 'react'
 
 import SortSvg from '@/components/SortSvg'
-import {useGetWorkoutsTableData} from '@/hooks'
-import {validWorkoutKeys, workoutKeyMap} from '@/lib/constants'
+import {useSortWorkouts} from '@/hooks'
+import {workoutKeys, workoutKeyMap} from '@/lib/constants'
 import {isValidKey} from '@/lib/workouts'
 
 export default function UserDetails({params}: {params: {slug: string}}) {
   const {slug} = params
   const {data: session, status} = useSession()
 
-  const {workouts, user, setSortCol} = useGetWorkoutsTableData(slug)
+  const {sortedWorkouts, user, setSortCol} = useSortWorkouts(slug)
 
   if (status === 'loading') {
     return <p>Loading...</p>
@@ -31,7 +31,7 @@ export default function UserDetails({params}: {params: {slug: string}}) {
     const key = e.currentTarget.id
 
     if (isValidKey(key)) {
-      setSortCol(key)
+      setSortCol({key})
     }
   }
 
@@ -54,7 +54,7 @@ export default function UserDetails({params}: {params: {slug: string}}) {
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
-                      {validWorkoutKeys.map(key => {
+                      {workoutKeys.map(key => {
                         return (
                           <th
                             key={key}
@@ -79,15 +79,10 @@ export default function UserDetails({params}: {params: {slug: string}}) {
                   </thead>
 
                   <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                    {workouts?.map(workout => {
-                      // TODO implement show deleted toggle
-                      if (workout.deleted === 'true') {
-                        return
-                      }
-
+                    {sortedWorkouts?.map(workout => {
                       return (
                         <tr key={workout.id}>
-                          {validWorkoutKeys.map(key => {
+                          {workoutKeys.map(key => {
                             return (
                               <td
                                 key={key}

@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
 
-import {createWorkoutBody} from '@/@types/types'
+import {CreateWorkoutBody} from '@/@types/types'
 import {getWorkoutDates} from '@/lib/calendar'
 import {db} from '@/lib/db'
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     videoUrl,
     weeksToRepeat,
     selectedDays,
-  }: createWorkoutBody = await req.json()
+  }: CreateWorkoutBody = await req.json()
 
   const dates = getWorkoutDates(date, selectedDays, weeksToRepeat)
   const data = dates.map(date => {

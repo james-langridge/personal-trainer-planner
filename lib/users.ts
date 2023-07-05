@@ -4,44 +4,16 @@ import {
   SerialisedUser,
   SerialisedUserKey,
   UserWithWorkouts,
-  WorkoutDataFoo,
+  ComputedWorkoutData,
+  SerialisedWorkoutKey,
+  SerialisedWorkout,
 } from '@/@types/types'
-import {formatDate} from '@/lib/calendar'
-import {validUserKeys} from '@/lib/constants'
+import {userKeys} from '@/lib/constants'
 import {serialiseWorkouts} from '@/lib/workouts'
 
-export function serialiseUsersWithWorkouts(users: UserWithWorkouts[]) {
-  return users.map(user => serialiseUserWithWorkouts(user))
-}
-
-export function serialiseUserWithWorkouts(
-  user?: UserWithWorkouts | null,
-): SerialisedUser | undefined {
-  if (!user) {
-    return
-  }
-
-  const {createdAt, workouts, updatedAt, ...rest} = user
-  const {
-    appointments,
-    appointmentsAttended,
-    workoutsAssigned,
-    workoutsCompleted,
-  } = extractWorkoutData(workouts)
-
-  return {
-    ...rest,
-    appointments: appointments.toString(),
-    appointmentsAttended: appointmentsAttended.toString(),
-    createdAt: formatDate(createdAt),
-    workouts: serialiseWorkouts(workouts),
-    workoutsAssigned: workoutsAssigned.toString(),
-    workoutsCompleted: workoutsCompleted.toString(),
-    updatedAt: formatDate(updatedAt),
-  }
-}
-
-function extractWorkoutData(workouts: Workout[]): WorkoutDataFoo {
+function computeWorkoutData(
+  workouts: Omit<Workout, 'createdAt' | 'updatedAt' | 'deleted'>[],
+): ComputedWorkoutData {
   const workoutsData = {
     appointments: 0,
     appointmentsAttended: 0,
@@ -71,7 +43,36 @@ function extractWorkoutData(workouts: Workout[]): WorkoutDataFoo {
 }
 
 export function isValidKey(key: string): key is SerialisedUserKey {
-  return validUserKeys.includes(key as SerialisedUserKey)
+  return userKeys.includes(key as SerialisedUserKey)
+}
+
+export function serialiseUserWithWorkouts(
+  user?: UserWithWorkouts | null,
+): SerialisedUser | undefined {
+  if (!user) {
+    return
+  }
+
+  const {workouts, ...rest} = user
+  const {
+    appointments,
+    appointmentsAttended,
+    workoutsAssigned,
+    workoutsCompleted,
+  } = computeWorkoutData(workouts)
+
+  return {
+    ...rest,
+    appointments: appointments.toString(),
+    appointmentsAttended: appointmentsAttended.toString(),
+    workouts: serialiseWorkouts(workouts),
+    workoutsAssigned: workoutsAssigned.toString(),
+    workoutsCompleted: workoutsCompleted.toString(),
+  }
+}
+
+export function serialiseUsersWithWorkouts(users: UserWithWorkouts[]) {
+  return users.map(user => serialiseUserWithWorkouts(user))
 }
 
 export function sortUsers(

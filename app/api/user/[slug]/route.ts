@@ -11,13 +11,21 @@ export async function GET(
   const id = params.slug
   const user: UserWithWorkouts | null = await db.user.findUnique({
     select: {
-      id: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
       email: true,
+      id: true,
       name: true,
+      role: true,
       workouts: {
+        select: {
+          date: true,
+          description: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+          type: true,
+          videoUrl: true,
+        },
         where: {
           deleted: false,
         },
