@@ -2,11 +2,11 @@ import {Workout} from '@prisma/client'
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
 import {
-  createUserBody,
-  createWorkoutBody,
-  deleteWorkoutBody,
+  CreateUserBody,
+  CreateWorkoutBody,
+  DeleteWorkoutBody,
   SerialisedUser,
-  updateWorkoutBody,
+  UpdateWorkoutBody,
 } from '@/@types/types'
 
 export const apiSlice = createApi({
@@ -15,7 +15,7 @@ export const apiSlice = createApi({
   tagTypes: ['User', 'Workout'],
   endpoints: builder => ({
     createUser: builder.mutation({
-      query: (body: createUserBody) => ({
+      query: (body: CreateUserBody) => ({
         url: '/user',
         method: 'POST',
         body: body,
@@ -23,7 +23,7 @@ export const apiSlice = createApi({
       invalidatesTags: ['User'],
     }),
     createWorkout: builder.mutation({
-      query: (body: createWorkoutBody) => ({
+      query: (body: CreateWorkoutBody) => ({
         url: '/workout',
         method: 'POST',
         body: body,
@@ -33,7 +33,7 @@ export const apiSlice = createApi({
       ],
     }),
     deleteWorkout: builder.mutation({
-      query: (body: deleteWorkoutBody) => ({
+      query: (body: DeleteWorkoutBody) => ({
         url: '/workout',
         method: 'PUT',
         body: body,
@@ -64,7 +64,7 @@ export const apiSlice = createApi({
       }),
     }),
     updateWorkout: builder.mutation({
-      query: (body: updateWorkoutBody) => ({
+      query: (body: UpdateWorkoutBody) => ({
         url: '/workout',
         method: 'PUT',
         body: body,

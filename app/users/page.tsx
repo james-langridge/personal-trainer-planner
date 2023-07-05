@@ -2,13 +2,15 @@
 
 import clsx from 'clsx'
 import Link from 'next/link'
+import {redirect} from 'next/navigation'
 import {useSession} from 'next-auth/react'
 import React from 'react'
 
 import Container from '@/components/Container'
+import Loader from '@/components/Loader'
 import SortSvg from '@/components/SortSvg'
 import {useSortUsers} from '@/hooks'
-import {userKeyMap, validUserKeys} from '@/lib/constants'
+import {userKeyMap, userKeys} from '@/lib/constants'
 import {isValidKey} from '@/lib/users'
 
 export default function Users() {
@@ -16,11 +18,11 @@ export default function Users() {
   const {data: session, status} = useSession()
 
   if (status === 'loading') {
-    return <p>Loading...</p>
+    return <Loader />
   }
 
   if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
-    return <p>Access Denied</p>
+    redirect('/')
   }
 
   function onClick(e: React.MouseEvent) {
@@ -42,7 +44,10 @@ export default function Users() {
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
-                      {validUserKeys.map(key => {
+                      <th scope="col" className="relative px-4 py-3.5">
+                        <span className="sr-only">Edit</span>
+                      </th>
+                      {userKeys.map(key => {
                         return (
                           <th
                             key={key}
@@ -60,9 +65,6 @@ export default function Users() {
                           </th>
                         )
                       })}
-                      <th scope="col" className="relative px-4 py-3.5">
-                        <span className="sr-only">Edit</span>
-                      </th>
                     </tr>
                   </thead>
 
@@ -70,23 +72,6 @@ export default function Users() {
                     {sortedUsers?.map(user => {
                       return (
                         <tr key={user.id}>
-                          {validUserKeys.map(key => {
-                            return (
-                              <td
-                                key={key}
-                                className={clsx(
-                                  'whitespace-nowrap px-4 py-4 text-sm',
-                                  {capitalize: key === 'name'},
-                                )}
-                              >
-                                <div>
-                                  <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
-                                    {user[key]}
-                                  </p>
-                                </div>
-                              </td>
-                            )
-                          })}
                           <td className="whitespace-nowrap px-4 py-4 text-sm">
                             <div className="flex items-center gap-x-6">
                               <Link
@@ -110,6 +95,23 @@ export default function Users() {
                               </Link>
                             </div>
                           </td>
+                          {userKeys.map(key => {
+                            return (
+                              <td
+                                key={key}
+                                className={clsx(
+                                  'whitespace-nowrap px-4 py-4 text-sm',
+                                  {capitalize: key === 'name'},
+                                )}
+                              >
+                                <div>
+                                  <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
+                                    {user[key]}
+                                  </p>
+                                </div>
+                              </td>
+                            )
+                          })}
                         </tr>
                       )
                     })}

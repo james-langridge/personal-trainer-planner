@@ -13,7 +13,6 @@ export const user: SerialisedUser = {
   name: 'Name',
   appointments: '1',
   appointmentsAttended: '1',
-  createdAt: '2023-04-29',
   workouts: [
     {
       id: '1',
@@ -23,9 +22,6 @@ export const user: SerialisedUser = {
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
       type: 'TRAINING',
-      deleted: 'false',
-      createdAt: '2023-04-29',
-      updatedAt: '2023-04-29',
       date: `${year}-${uiMonth}-1`,
     },
     {
@@ -36,9 +32,6 @@ export const user: SerialisedUser = {
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
       type: 'TRAINING',
-      deleted: 'false',
-      createdAt: '2023-04-29',
-      updatedAt: '2023-04-29',
       date: `${year}-${uiMonth}-1`,
     },
     {
@@ -49,9 +42,6 @@ export const user: SerialisedUser = {
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
       type: 'TRAINING',
-      deleted: 'true',
-      createdAt: '2023-04-29',
-      updatedAt: '2023-04-29',
       date: `${year}-${uiMonth}-1`,
     },
     {
@@ -62,15 +52,11 @@ export const user: SerialisedUser = {
       description: 'mooooove it',
       videoUrl: '',
       type: 'APPOINTMENT',
-      deleted: 'false',
-      createdAt: '2023-04-29',
-      updatedAt: '2023-04-29',
       date: `${year}-${uiMonth}-2`,
     },
   ],
   workoutsAssigned: '1',
   workoutsCompleted: '0',
-  updatedAt: '2023-06-14',
 }
 
 export const session = {
