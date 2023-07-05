@@ -25,6 +25,8 @@ A client management and scheduling app for personal trainers and their clients, 
 
 ![clients_table](public/clientsTable.png)
 
+![clients_detail](public/clientDetail.png)
+
 - PT can create custom forms in Contentful CMS, which are rendered on dynamic page routes, and emailed to the PT when the client completes them.
 
 - [New `app` directory routing](https://nextjs.org/docs/app/building-your-application/routing).
