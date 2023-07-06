@@ -1,7 +1,7 @@
 import {WORKOUT_TYPE} from '@prisma/client'
 import clsx from 'clsx'
 import Link from 'next/link'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 
 import {Day} from '@/@types/types'
 import Button from '@/components/Button'
@@ -32,6 +32,7 @@ export function CalendarForm({
   const [updateWorkout, {isLoading: isUpdating}] = useUpdateWorkoutMutation()
   const [deleteWorkout, {isLoading: isDeleting}] = useDeleteWorkoutMutation()
   const isDisabled = isCreating || isUpdating || isDeleting
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     if (!userId) {
@@ -43,6 +44,10 @@ export function CalendarForm({
       ownerId: userId,
     }))
   }, [setWorkout, userId])
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
@@ -99,6 +104,7 @@ export function CalendarForm({
       />
       <input
         required
+        ref={inputRef}
         onChange={e =>
           setWorkout(workout => ({
             ...workout,
