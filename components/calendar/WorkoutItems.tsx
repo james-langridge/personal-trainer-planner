@@ -1,13 +1,14 @@
 import React from 'react'
 
-import {Day, SerialisedWorkout} from '@/@types/types'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {Day} from '@/@types/types'
 import {WorkoutItem} from '@/components/calendar'
 
 export function WorkoutItems({
   workouts,
   day,
 }: {
-  workouts: (SerialisedWorkout | undefined)[] | null | undefined
+  workouts?: UserWithWorkouts['workouts'] | undefined | null
   day: Day
 }) {
   if (!workouts) {

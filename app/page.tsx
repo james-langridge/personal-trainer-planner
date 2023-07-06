@@ -1,11 +1,10 @@
 import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
-import {UserWithWorkouts} from '@/@types/types'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {Calendar} from '@/components/calendar'
 import {db} from '@/lib/db'
-import {serialiseUserWithWorkouts} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,11 +50,10 @@ const getUserWithWorkouts = async (
 export default async function TrainingStudio() {
   const session = await getServerSession(authOptions)
   const {user} = await getUserWithWorkouts(session?.user?.id)
-  const serialisedUserWithWorkouts = serialiseUserWithWorkouts(user)
 
-  if (!serialisedUserWithWorkouts) {
+  if (!user) {
     return null
   }
 
-  return <Calendar initialUser={serialisedUserWithWorkouts} />
+  return <Calendar initialUser={JSON.stringify(user)} />
 }

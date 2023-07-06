@@ -1,8 +1,10 @@
 'use client'
 
+import {redirect} from 'next/navigation'
 import {useSession} from 'next-auth/react'
 import React, {useCallback, useState} from 'react'
 
+import Loader from '@/components/Loader'
 import {useCreateUserMutation} from '@/redux/apiSlice'
 
 const initialForm: {
@@ -35,11 +37,11 @@ export default function Register() {
   )
 
   if (sessionStatus === 'loading') {
-    return <p>Loading...</p>
+    return <Loader />
   }
 
   if (sessionStatus === 'unauthenticated' || session?.user?.role !== 'admin') {
-    return <p>Access Denied</p>
+    redirect('/')
   }
 
   return (

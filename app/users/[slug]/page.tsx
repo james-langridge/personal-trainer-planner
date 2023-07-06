@@ -38,13 +38,14 @@ export default function UserDetails({params}: {params: {slug: string}}) {
   return (
     <div className="p-5">
       <h1 className="mb-5 text-6xl font-bold capitalize">{user.name}</h1>
-      <div className="m-2 max-w-fit border p-2">
-        <div>Email: {user.email}</div>
-        <div>Workouts assigned: {user.workoutsAssigned}</div>
-        <div>Workouts completed: {user.workoutsCompleted}</div>
-        <div>Appointments: {user.appointments}</div>
-        <div>Appointments attended: {user.appointmentsAttended}</div>
-      </div>
+      {/*TODO: re-think this*/}
+      {/*<div className="m-2 max-w-fit border p-2">*/}
+      {/*<div>Email: {user.email}</div>*/}
+      {/*<div>Workouts assigned: {user.workoutsAssigned}</div>*/}
+      {/*<div>Workouts completed: {user.workoutsCompleted}</div>*/}
+      {/*<div>Appointments: {user.appointments}</div>*/}
+      {/*<div>Appointments attended: {user.appointmentsAttended}</div>*/}
+      {/*</div>*/}
 
       <section className="container mx-auto px-4">
         <div className="mt-6 flex flex-col">
@@ -90,7 +91,9 @@ export default function UserDetails({params}: {params: {slug: string}}) {
                               >
                                 <div>
                                   <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
-                                    {workout[key]}
+                                    {key === 'date'
+                                      ? String(workout.date).split('T')[0]
+                                      : workout[key]?.toString()}
                                   </p>
                                 </div>
                               </td>

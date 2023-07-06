@@ -1,21 +1,5 @@
-import {Day, SerialisedWorkout} from '@/@types/types'
-
-function getDaysInMonth(month: number, year: number) {
-  return new Date(year, month + 1, 0).getDate()
-}
-
-export function generateCalendarMonth(month: number, year: number) {
-  const daysInMonth = getDaysInMonth(month, year)
-  const monthData = []
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month, day)
-    const weekDay = date.getDay()
-    monthData.push({day, weekDay, month, year})
-  }
-
-  return monthData
-}
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {Day} from '@/@types/types'
 
 function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   const workoutYear = workoutDate.getFullYear()
@@ -33,6 +17,79 @@ function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   )
 }
 
+export function formatDate(date: Date) {
+  const year = date.getFullYear()
+  const month = padZero(date.getMonth() + 1)
+  const day = padZero(date.getDate())
+
+  return `${year}-${month}-${day}`
+}
+
+export function generateCalendarMonth(month: number, year: number) {
+  const daysInMonth = getDaysInMonth(month, year)
+  const monthData = []
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day)
+    const weekDay = date.getDay()
+    monthData.push({day, weekDay, month, year})
+  }
+
+  return monthData
+}
+
+function getDaysInMonth(month: number, year: number) {
+  return new Date(year, month + 1, 0).getDate()
+}
+
+export function getLongWeekday(dayData: Day) {
+  const {day, month, year} = dayData
+
+  return new Date(year, month, day).toLocaleString('default', {
+    weekday: 'long',
+  })
+}
+
+export function getMonthName(dayData: Day) {
+  const {day, month, year} = dayData
+
+  return new Date(year, month, day).toLocaleString('default', {
+    month: 'short',
+  })
+}
+
+export function getShortWeekday(dayData: Day) {
+  const {day, month, year} = dayData
+
+  return new Date(year, month, day).toLocaleString('default', {
+    weekday: 'short',
+  })
+}
+export function getWeekday(dateString: string): number {
+  const date = new Date(dateString)
+  return date.getUTCDay()
+}
+
+export function getWorkoutDates(
+  dateString: string,
+  weekdays: number[],
+  weeksToRepeat: number,
+): Date[] {
+  const date = new Date(dateString)
+  const dayOfWeek = date.getDay()
+  const dates: Date[] = []
+
+  for (let week = 0; week <= weeksToRepeat; week++) {
+    weekdays.forEach(weekday => {
+      const newDate = new Date(date)
+      newDate.setDate(date.getDate() + weekday - dayOfWeek + week * 7)
+      dates.push(newDate)
+    })
+  }
+
+  return dates
+}
+
 export function getWorkoutsToday(
   calendarDay: {
     day: number
@@ -40,12 +97,8 @@ export function getWorkoutsToday(
     month: number
     year: number
   },
-  workouts?: SerialisedWorkout[],
-) {
-  if (!workouts) {
-    return
-  }
-
+  workouts: UserWithWorkouts['workouts'] = [],
+): UserWithWorkouts['workouts'] {
   const calendarDate = new Date(
     `${calendarDay.year}-${padZero(calendarDay.month + 1)}-${padZero(
       calendarDay.day,
@@ -60,17 +113,7 @@ export function getWorkoutsToday(
     }
   })
 
-  return workoutsMap.filter(Boolean)
-}
-
-export function shouldScrollToThisDay(thisDay: Day, scrollToThisDay: Day) {
-  const {day, month, year} = thisDay
-
-  return (
-    scrollToThisDay?.month === month &&
-    scrollToThisDay.year === year &&
-    scrollToThisDay.day === day
-  )
+  return workoutsMap.filter(Boolean) as UserWithWorkouts['workouts']
 }
 
 export function isDayToday(dayData: Day) {
@@ -95,64 +138,16 @@ export function isDayTomorrow(dayData: Day) {
   )
 }
 
-export function getLongWeekday(dayData: Day) {
-  const {day, month, year} = dayData
-
-  return new Date(year, month, day).toLocaleString('default', {
-    weekday: 'long',
-  })
-}
-
-export function getShortWeekday(dayData: Day) {
-  const {day, month, year} = dayData
-
-  return new Date(year, month, day).toLocaleString('default', {
-    weekday: 'short',
-  })
-}
-
-export function getMonthName(dayData: Day) {
-  const {day, month, year} = dayData
-
-  return new Date(year, month, day).toLocaleString('default', {
-    month: 'short',
-  })
-}
-
-export function formatDate(date: Date) {
-  const year = date.getFullYear()
-  const month = padZero(date.getMonth() + 1)
-  const day = padZero(date.getDate())
-
-  return `${year}-${month}-${day}`
-}
-
 export function padZero(num: number | string) {
   return String(num).padStart(2, '0')
 }
 
-export function getWeekday(dateString: string): number {
-  const date = new Date(dateString)
+export function shouldScrollToThisDay(thisDay: Day, scrollToThisDay: Day) {
+  const {day, month, year} = thisDay
 
-  return date.getUTCDay()
-}
-
-export function getWorkoutDates(
-  dateString: string,
-  weekdays: number[],
-  weeksToRepeat: number,
-): string[] {
-  const date = new Date(dateString)
-  const dayOfWeek = date.getDay()
-  const dates: string[] = []
-
-  for (let week = 0; week <= weeksToRepeat; week++) {
-    weekdays.forEach(weekday => {
-      const newDate = new Date(date)
-      newDate.setDate(date.getDate() + weekday - dayOfWeek + week * 7)
-      dates.push(newDate.toISOString().split('T')[0])
-    })
-  }
-
-  return dates
+  return (
+    scrollToThisDay?.month === month &&
+    scrollToThisDay.year === year &&
+    scrollToThisDay.day === day
+  )
 }

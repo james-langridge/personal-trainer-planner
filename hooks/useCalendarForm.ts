@@ -2,8 +2,8 @@ import {WORKOUT_TYPE} from '@prisma/client'
 import React, {useCallback, useEffect, useState} from 'react'
 
 import {CalendarFormState, Day} from '@/@types/types'
-import {useFetchWorkout} from '@/hooks'
 import {getWeekday, padZero} from '@/lib/calendar'
+import {useGetWorkoutQuery} from '@/redux/apiSlice'
 import {useAppSelector} from '@/redux/hooks'
 
 const initialState: CalendarFormState = {
@@ -11,7 +11,7 @@ const initialState: CalendarFormState = {
   description: '',
   name: '',
   ownerId: '',
-  workoutId: '',
+  id: '',
   videoUrl: '',
   type: WORKOUT_TYPE.TRAINING,
   selectedDays: new Set<number>(),
@@ -30,7 +30,7 @@ export const useCalendarForm = ({
   const user = useAppSelector(state => state.users.user)
   const userId = user?.id || ''
   const workoutId = useAppSelector(state => state.workout.id)
-  const workoutData = useFetchWorkout(workoutId)
+  const {data: workoutData} = useGetWorkoutQuery(workoutId, {skip: !workoutId})
   const [workout, setWorkout] = useState<CalendarFormState>({
     ...initialState,
     date: `${day.year}-${padZero(day.month + 1)}-${padZero(day.day)}`,
@@ -72,7 +72,11 @@ export const useCalendarForm = ({
 
   useEffect(() => {
     if (workoutData) {
-      setWorkout({...workout, ...workoutData})
+      setWorkout({
+        ...workout,
+        ...workoutData,
+        date: String(workoutData.date).split('T')[0],
+      })
     }
   }, [workoutData])
 

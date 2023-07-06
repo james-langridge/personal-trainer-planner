@@ -1,15 +1,17 @@
-import {User, Workout, WORKOUT_STATUS, WORKOUT_TYPE} from '@prisma/client'
+import {WORKOUT_TYPE} from '@prisma/client'
+
+import {UserWithWorkouts, Workout} from '@/@types/apiResponseTypes'
 
 export type CalendarFormState = {
   date: string
-  description?: string
+  description: string | null
   name: string
   ownerId: string
   selectedDays: Set<number>
   type: WORKOUT_TYPE
-  videoUrl?: string
+  videoUrl: string | null
   weeksToRepeat: number
-  workoutId: string
+  id: string
 }
 
 export type ComputedWorkoutData = {
@@ -19,19 +21,6 @@ export type ComputedWorkoutData = {
   workoutsCompleted: number
 }
 
-export type CreateUserBody = {name: string; email: string}
-
-export type CreateWorkoutBody = {
-  date: string
-  description?: string
-  name: string
-  ownerId: string
-  selectedDays: number[]
-  type: WORKOUT_TYPE
-  videoUrl?: string
-  weeksToRepeat: number
-}
-
 export type Day = {
   day: number
   month: number
@@ -39,69 +28,20 @@ export type Day = {
   year: number
 }
 
-export type DeleteWorkoutBody = {
-  deleted: boolean
-  ownerId: string
-  workoutId: string
-}
+export type UserWithWorkoutAndAttendance = UserWithWorkouts &
+  ComputedWorkoutData
 
-export type SerialisedUser = {
-  appointments: string
-  appointmentsAttended: string
-  email: string
-  id: string
-  name: string | null
-  role: string | null
-  workouts: SerialisedWorkout[]
-  workoutsAssigned: string
-  workoutsCompleted: string
-}
-
-export type SerialisedUserKey = keyof Omit<
-  SerialisedUser,
+export type UserWithWorkoutAndAttendanceKey = keyof Omit<
+  UserWithWorkoutAndAttendance,
   'id' | 'role' | 'workouts'
 >
 
-export type SerialisedWorkout = {
-  date: string
-  description: string | null
-  id: string
-  name: string
-  ownerId: string
-  status: WORKOUT_STATUS
-  type: WORKOUT_TYPE
-  videoUrl: string | null
-}
-
-export type SerialisedWorkoutKey = keyof Omit<
-  SerialisedWorkout,
-  'createdAt' | 'deleted' | 'id' | 'ownerId' | 'updatedAt'
+export type UserWithWorkoutsKey = keyof Omit<
+  UserWithWorkouts,
+  'id' | 'role' | 'workouts'
 >
 
-export type UpdateWorkoutBody = {
-  date?: string
-  description?: string
-  name?: string
-  ownerId: string
-  status?: WORKOUT_STATUS
-  type?: WORKOUT_TYPE
-  videoUrl?: string
-  workoutId: string
-}
-
-export type UserWithWorkouts = Omit<
-  User,
-  'createdAt' | 'emailVerified' | 'image' | 'password' | 'updatedAt'
-> & {
-  workouts: Omit<Workout, 'createdAt' | 'deleted' | 'updatedAt'>[]
-}
-
-export type WorkoutData = {
-  date: string
-  description?: string
-  name: string
-  ownerId: string
-  type: WORKOUT_TYPE
-  workoutId: string
-  videoUrl?: string
-}
+export type WorkoutKey = keyof Omit<
+  Workout,
+  'createdAt' | 'deleted' | 'id' | 'ownerId' | 'updatedAt'
+>

@@ -1,4 +1,5 @@
-import {Day, SerialisedWorkout} from '@/@types/types'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {Day} from '@/@types/types'
 import {WorkoutItemMobile} from '@/components/calendar'
 import {
   getMonthName,
@@ -12,7 +13,7 @@ export function DayMobile({
   workoutsToday,
 }: {
   dayData: Day
-  workoutsToday: (SerialisedWorkout | undefined)[] | null | undefined
+  workoutsToday: UserWithWorkouts['workouts'] | null | undefined
 }) {
   const isToday = isDayToday(dayData)
   const isTomorrow = isDayTomorrow(dayData)

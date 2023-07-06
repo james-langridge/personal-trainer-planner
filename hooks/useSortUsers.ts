@@ -1,20 +1,45 @@
 import {useEffect, useRef, useState} from 'react'
 
-import {SerialisedUser, SerialisedUserKey} from '@/@types/types'
-import {sortUsers} from '@/lib/users'
+import {UserWithWorkoutsKey, UserWithWorkoutAndAttendance} from '@/@types/types'
+import {addAttendanceData, sortUsers} from '@/lib/users'
+import {filterByMonth} from '@/lib/workouts'
 import {useGetUsersQuery} from '@/redux/apiSlice'
 
-export function useSortUsers() {
-  const [sortCol, setSortCol] = useState<Record<string, SerialisedUserKey>>({
+export function useSortUsers({
+  initialMonth,
+  initialYear,
+}: {
+  initialMonth: number
+  initialYear: number
+}) {
+  const [sortCol, setSortCol] = useState<Record<string, UserWithWorkoutsKey>>({
     key: 'name',
   })
-  const [sortedUsers, setSortedUsers] = useState<SerialisedUser[] | undefined>()
+  const [sortedUsers, setSortedUsers] = useState<
+    UserWithWorkoutAndAttendance[] | undefined
+  >()
+  const [filteredUsers, setFilteredUsers] = useState<
+    UserWithWorkoutAndAttendance[] | undefined
+  >()
   const {data: users} = useGetUsersQuery()
-  const prevSortColRef = useRef<Record<string, SerialisedUserKey>>()
+  const prevSortColRef = useRef<Record<string, UserWithWorkoutsKey>>()
   const sortOrder = useRef<'asc' | 'des'>('asc')
+  const [month, setMonth] = useState(() => initialMonth)
+  const [year, setYear] = useState(() => initialYear)
 
   useEffect(() => {
     if (!users) {
+      return
+    }
+
+    const filteredUsers = filterByMonth(year, month, [...users])
+    const usersWithData = addAttendanceData(filteredUsers)
+
+    setFilteredUsers(usersWithData)
+  }, [month, users, year])
+
+  useEffect(() => {
+    if (!filteredUsers) {
       return
     }
 
@@ -26,13 +51,13 @@ export function useSortUsers() {
 
     const sorted = sortUsers(
       sortCol.key,
-      [...users],
+      [...filteredUsers],
       sortOrder.current === 'asc',
     )
 
     setSortedUsers(sorted)
     prevSortColRef.current = sortCol
-  }, [sortCol, users])
+  }, [filteredUsers, sortCol])
 
-  return {sortedUsers, setSortCol}
+  return {sortedUsers, setSortCol, month, setMonth, year, setYear}
 }

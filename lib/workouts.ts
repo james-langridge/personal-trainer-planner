@@ -1,48 +1,59 @@
-import {Workout} from '@prisma/client'
-
-import {SerialisedWorkout, SerialisedWorkoutKey} from '@/@types/types'
-import {formatDate} from '@/lib/calendar'
+import {UserWithWorkouts, Workout} from '@/@types/apiResponseTypes'
+import {WorkoutKey} from '@/@types/types'
 import {workoutKeys} from '@/lib/constants'
 
-export function isValidKey(key: string): key is SerialisedWorkoutKey {
-  return workoutKeys.includes(key as SerialisedWorkoutKey)
-}
-
-export function serialiseWorkouts(
-  workouts: Omit<Workout, 'createdAt' | 'updatedAt' | 'deleted'>[],
+export function filterByMonth(
+  year: number,
+  month: number,
+  users: UserWithWorkouts[],
 ) {
-  return workouts.map(workout => {
-    const {date, ...rest} = workout
+  return users.map(user => {
+    const filteredWorkouts = user.workouts.filter(workout => {
+      const workoutDate = new Date(workout.date)
+      const workoutYear = workoutDate.getFullYear()
+      const workoutMonth = workoutDate.getMonth()
 
-    return {
-      ...rest,
-      date: formatDate(date),
-    }
+      return workoutMonth === month && workoutYear === year
+    })
+
+    return {...user, workouts: filteredWorkouts}
   })
 }
 
-export function sortWorkouts(
-  key: SerialisedWorkoutKey,
-  workouts: SerialisedWorkout[],
-  asc = true,
-): SerialisedWorkout[] {
-  return [...workouts].sort((a, b) => {
-    const aValue = a[key] ?? ''
-    const bValue = b[key] ?? ''
+export function isValidKey(key: string): key is WorkoutKey {
+  return workoutKeys.includes(key as WorkoutKey)
+}
 
-    if (aValue === '') {
+export function sortWorkouts(
+  key: WorkoutKey,
+  workouts: Workout[],
+  asc = true,
+): Workout[] {
+  return [...workouts].sort((a, b) => {
+    const aValue = a[key]
+    const bValue = b[key]
+
+    if (aValue === null || aValue === undefined) {
       return asc ? 1 : -1
     }
-    if (bValue === '') {
+    if (bValue === null || bValue === undefined) {
       return asc ? -1 : 1
     }
 
-    const propA = Number.isNaN(Number(aValue))
-      ? aValue.toUpperCase()
-      : Number(aValue)
-    const propB = Number.isNaN(Number(bValue))
-      ? bValue.toUpperCase()
-      : Number(bValue)
+    let propA: string | number = ''
+    let propB: string | number = ''
+
+    if (typeof aValue === 'string') {
+      propA = aValue.toUpperCase()
+    } else if (aValue instanceof Date) {
+      propA = aValue.getTime()
+    }
+
+    if (typeof bValue === 'string') {
+      propB = bValue.toUpperCase()
+    } else if (bValue instanceof Date) {
+      propB = bValue.getTime()
+    }
 
     if (propA < propB) {
       return asc ? -1 : 1

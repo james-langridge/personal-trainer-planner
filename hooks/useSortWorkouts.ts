@@ -1,18 +1,17 @@
 import {useEffect, useRef, useState} from 'react'
 
-import {SerialisedWorkout, SerialisedWorkoutKey} from '@/@types/types'
+import {Workout} from '@/@types/apiResponseTypes'
+import {WorkoutKey} from '@/@types/types'
 import {sortWorkouts} from '@/lib/workouts'
 import {useGetUserQuery} from '@/redux/apiSlice'
 
 export function useSortWorkouts(slug: string) {
-  const [sortCol, setSortCol] = useState<Record<string, SerialisedWorkoutKey>>({
+  const [sortCol, setSortCol] = useState<Record<string, WorkoutKey>>({
     key: 'date',
   })
-  const [sortedWorkouts, setSortedWorkouts] = useState<
-    SerialisedWorkout[] | undefined
-  >()
+  const [sortedWorkouts, setSortedWorkouts] = useState<Workout[] | undefined>()
   const {data: user} = useGetUserQuery(slug)
-  const prevSortColRef = useRef<Record<string, SerialisedWorkoutKey>>()
+  const prevSortColRef = useRef<Record<string, WorkoutKey>>()
   const sortOrder = useRef<'asc' | 'des'>('asc')
 
   useEffect(() => {

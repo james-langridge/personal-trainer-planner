@@ -1,8 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server'
 
-import {UserWithWorkouts} from '@/@types/types'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {db} from '@/lib/db'
-import {serialiseUserWithWorkouts} from '@/lib/users'
 
 export async function GET(
   req: NextRequest,
@@ -36,7 +35,5 @@ export async function GET(
     },
   })
 
-  const serialisedUser = serialiseUserWithWorkouts(user)
-
-  return NextResponse.json(serialisedUser)
+  return NextResponse.json(user)
 }

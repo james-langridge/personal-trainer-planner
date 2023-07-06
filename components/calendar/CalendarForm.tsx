@@ -48,7 +48,7 @@ export function CalendarForm({
     e.preventDefault()
 
     try {
-      if (workout.workoutId) {
+      if (workout.id) {
         await updateWorkout(workout).unwrap()
       } else {
         await createWorkout({
@@ -64,7 +64,7 @@ export function CalendarForm({
   }
 
   async function handleDelete(e: React.SyntheticEvent) {
-    if (isDisabled || !workout.workoutId) {
+    if (isDisabled || !workout.id) {
       return
     }
 
@@ -72,7 +72,7 @@ export function CalendarForm({
       await deleteWorkout({
         deleted: true,
         ownerId: workout.ownerId,
-        workoutId: workout.workoutId,
+        id: workout.id,
       }).unwrap()
 
       closeModal(e)
@@ -83,7 +83,7 @@ export function CalendarForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
-      <input type="hidden" value={workout.workoutId} />
+      <input type="hidden" value={workout.id} />
       <input required type="hidden" value={userId} />
       <input
         required
@@ -149,7 +149,7 @@ export function CalendarForm({
           </div>
         </fieldset>
 
-        {!workout.workoutId && (
+        {!workout.id && (
           <div className="flex flex-col">
             <div className="mt-4 flex divide-x overflow-hidden rounded-lg border bg-white rtl:flex-row-reverse dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900">
               <button
@@ -298,7 +298,7 @@ export function CalendarForm({
         rows={5}
         cols={15}
         className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-        value={workout.description}
+        value={workout.description ?? ''}
       />
       <input
         onChange={e =>
@@ -310,7 +310,7 @@ export function CalendarForm({
         placeholder="Video url"
         type="url"
         className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-        value={workout.videoUrl}
+        value={workout.videoUrl ?? ''}
       />
       <div className="mt-4 flex justify-between">
         <Button
@@ -322,14 +322,14 @@ export function CalendarForm({
             ? 'Updating...'
             : isCreating
             ? 'Creating...'
-            : workout.workoutId
+            : workout.id
             ? 'Update'
             : 'Create'}
         </Button>
-        {workout.workoutId && (
+        {workout.id && (
           <>
             <Link
-              href={`/workout/${workout.workoutId}`}
+              href={`/workout/${workout.id}`}
               className="mx-2 w-full max-w-xs self-center"
               onClick={() => dispatch(resetWorkoutId())}
             >
