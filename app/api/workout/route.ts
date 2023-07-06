@@ -1,28 +1,29 @@
 import {NextRequest, NextResponse} from 'next/server'
 
-import {CreateWorkoutBody} from '@/@types/types'
+import {CreateWorkoutBody, UpdateWorkoutBody} from '@/@types/apiRequestTypes'
 import {getWorkoutDates} from '@/lib/calendar'
 import {db} from '@/lib/db'
 
 export async function POST(req: NextRequest) {
   const {
     date,
-    ownerId,
-    name,
-    type,
     description,
+    name,
+    ownerId,
+    selectedDays,
+    type,
     videoUrl,
     weeksToRepeat,
-    selectedDays,
   }: CreateWorkoutBody = await req.json()
 
   const dates = getWorkoutDates(date, selectedDays, weeksToRepeat)
+
   const data = dates.map(date => {
     return {
-      ownerId,
-      name,
-      date: new Date(date),
+      date,
       description,
+      name,
+      ownerId,
       type,
       videoUrl,
     }
@@ -39,19 +40,19 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const body = await req.json()
+  const body: UpdateWorkoutBody = await req.json()
 
   const workout = await db.workout.update({
     where: {
-      id: body.workoutId,
+      id: body.id,
     },
     data: {
-      ...(body.type !== undefined && {type: body.type}),
       ...(body.date !== undefined && {date: new Date(body.date)}),
       ...(body.deleted === true && {deleted: true}),
       ...(body.description !== undefined && {description: body.description}),
       ...(body.name !== undefined && {name: body.name}),
       ...(body.status !== undefined && {status: body.status}),
+      ...(body.type !== undefined && {type: body.type}),
       ...(body.videoUrl !== undefined && {videoUrl: body.videoUrl}),
     },
   })

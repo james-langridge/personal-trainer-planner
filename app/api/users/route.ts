@@ -1,8 +1,7 @@
 import {NextResponse} from 'next/server'
 
-import {UserWithWorkouts} from '@/@types/types'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {db} from '@/lib/db'
-import {serialiseUsersWithWorkouts} from '@/lib/users'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,7 +33,5 @@ export async function GET() {
     },
   })
 
-  const serialisedUsers = serialiseUsersWithWorkouts(users)
-
-  return NextResponse.json(serialisedUsers)
+  return NextResponse.json(users)
 }

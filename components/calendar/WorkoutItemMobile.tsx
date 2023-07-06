@@ -2,10 +2,10 @@ import {WORKOUT_STATUS} from '@prisma/client'
 import clsx from 'clsx'
 import Link from 'next/link'
 
-import {SerialisedWorkout} from '@/@types/types'
+import {Workout} from '@/@types/apiResponseTypes'
 import {useWorkoutStatus} from '@/hooks'
 
-export function WorkoutItemMobile({workout}: {workout: SerialisedWorkout}) {
+export function WorkoutItemMobile({workout}: {workout: Workout}) {
   const {status, toggleStatus} = useWorkoutStatus(workout)
   const isTrainingWorkout = workout.type === 'TRAINING'
 

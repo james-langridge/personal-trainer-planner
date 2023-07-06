@@ -10,11 +10,16 @@ import Container from '@/components/Container'
 import Loader from '@/components/Loader'
 import SortSvg from '@/components/SortSvg'
 import {useSortUsers} from '@/hooks'
-import {userKeyMap, userKeys} from '@/lib/constants'
+import {monthNames, userKeyMap, userKeys} from '@/lib/constants'
 import {isValidKey} from '@/lib/users'
 
 export default function Users() {
-  const {sortedUsers, setSortCol} = useSortUsers()
+  const now = new Date()
+  const {sortedUsers, setSortCol, setMonth, setYear, month, year} =
+    useSortUsers({
+      initialMonth: now.getMonth(),
+      initialYear: now.getFullYear(),
+    })
   const {data: session, status} = useSession()
 
   if (status === 'loading') {
@@ -33,9 +38,71 @@ export default function Users() {
     }
   }
 
+  function decrementMonth() {
+    if (month === 0) {
+      setMonth(() => 11)
+      setYear(year => year - 1)
+    } else {
+      setMonth(month => month - 1)
+    }
+  }
+
+  function incrementMonth() {
+    if (month === 11) {
+      setMonth(() => 0)
+      setYear(year => year + 1)
+    } else {
+      setMonth(month => month + 1)
+    }
+  }
+
   return (
     <Container>
-      <h1 className="prose text-6xl font-bold leading-normal">Clients</h1>
+      <div className="flex justify-center">
+        <div className="flex flex-row items-center text-2xl">
+          <button
+            onClick={decrementMonth}
+            className="mx-1 flex transform items-center justify-center rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white rtl:-scale-x-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
+            data-testid={'prevMonthBtn'}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+
+          <p data-testid={'heading'} className="mx-5">
+            {monthNames[month]} {year}
+          </p>
+
+          <button
+            onClick={incrementMonth}
+            className="mx-1 flex transform items-center justify-center rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white rtl:-scale-x-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
+            data-testid={'nextMonthBtn'}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
       <section className="container mx-auto px-4">
         <div className="mt-6 flex flex-col">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

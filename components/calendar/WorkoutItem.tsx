@@ -3,12 +3,12 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import React from 'react'
 
-import {SerialisedWorkout} from '@/@types/types'
+import {Workout} from '@/@types/apiResponseTypes'
 import {useWorkoutStatus} from '@/hooks'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {setWorkoutId} from '@/redux/workoutSlice'
 
-export function WorkoutItem({workout}: {workout: SerialisedWorkout}) {
+export function WorkoutItem({workout}: {workout: Workout}) {
   const dispatch = useAppDispatch()
   const isAdmin = useAppSelector(state => state.auth.isAdmin)
   const {status, toggleStatus} = useWorkoutStatus(workout)

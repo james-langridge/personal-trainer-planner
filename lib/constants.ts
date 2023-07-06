@@ -1,4 +1,4 @@
-import {SerialisedUserKey, SerialisedWorkoutKey} from '@/@types/types'
+import {UserWithWorkoutAndAttendanceKey, WorkoutKey} from '@/@types/types'
 
 export const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
@@ -27,7 +27,7 @@ export const userKeyMap = {
 }
 
 // Changing the order of userKeys will change the display order of the cols on /users
-export const userKeys: SerialisedUserKey[] = [
+export const userKeys: UserWithWorkoutAndAttendanceKey[] = [
   'name',
   'email',
   'workoutsAssigned',
@@ -47,7 +47,7 @@ export const workoutKeyMap = {
 
 // Changing the order of workoutKeys will change the display order of the cols on /users/${id}
 
-export const workoutKeys: SerialisedWorkoutKey[] = [
+export const workoutKeys: WorkoutKey[] = [
   'date',
   'name',
   'description',

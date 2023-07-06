@@ -3,7 +3,6 @@
 export * from './useCalendarData'
 export * from './useCalendarForm'
 export * from './useCalendarIntersectionObserver'
-export * from './useFetchWorkout'
 export * from './useIntersectionObserver'
 export * from './useIsMobile'
 export * from './useMediaQuery'

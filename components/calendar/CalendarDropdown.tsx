@@ -3,8 +3,8 @@ import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 import React, {Fragment} from 'react'
 
-import {SerialisedUser} from '@/@types/types'
-import {sortUsers} from '@/lib/users'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {sortByString} from '@/lib/users'
 import {useGetUsersQuery} from '@/redux/apiSlice'
 import {useAppDispatch} from '@/redux/hooks'
 import {setUser} from '@/redux/usersSlice'
@@ -14,9 +14,9 @@ export function CalendarDropdown() {
   const {data = []} = useGetUsersQuery()
   // Case-insensitive sorting is not possible via a Prisma query
   // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#can-i-perform-case-insensitive-sorting
-  const users = sortUsers('name', data)
+  const users = sortByString('name', data)
 
-  const onCLick = (user: SerialisedUser) => {
+  const onCLick = (user: UserWithWorkouts) => {
     dispatch(setUser(user))
   }
 

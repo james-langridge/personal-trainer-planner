@@ -1,19 +1,20 @@
 'use client'
 
 import BackButton from '@/components/BackButton'
-import {useFetchWorkout, useScrollToTop} from '@/hooks'
+import {useScrollToTop} from '@/hooks'
+import {useGetWorkoutQuery} from '@/redux/apiSlice'
 
 export default function Workout({params}: {params: {slug: string}}) {
   const {slug} = params
-  const workoutData = useFetchWorkout(slug)
+  const {data: workout} = useGetWorkoutQuery(slug)
   // TODO: Temp fix for page opening scrolled to bottom on mobile view
   useScrollToTop()
 
-  if (!workoutData) {
+  if (!workout) {
     return null
   }
 
-  const date = new Date(workoutData.date).toLocaleString('default', {
+  const date = new Date(workout.date).toLocaleString('default', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -24,13 +25,13 @@ export default function Workout({params}: {params: {slug: string}}) {
     <div className="flex justify-center p-10">
       <div className="prose w-screen text-center">
         <h1>{date}</h1>
-        <h2>{workoutData.name}</h2>
-        <p>{workoutData.description}</p>
-        {workoutData.videoUrl && (
+        <h2>{workout.name}</h2>
+        <p>{workout.description}</p>
+        {workout.videoUrl && (
           <iframe
             title="Fit For Life Trainer Intro"
             className="mt-12 h-64 min-w-full overflow-hidden rounded-xl border-none md:h-[450px]"
-            src={workoutData.videoUrl}
+            src={workout.videoUrl}
             allow="autoplay; fullscreen"
             allowFullScreen={false}
           ></iframe>

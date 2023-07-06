@@ -1,4 +1,4 @@
-import {SerialisedUser} from '@/@types/types'
+import {UserWithWorkoutAndAttendance} from '@/@types/types'
 import {padZero} from '@/lib/calendar'
 
 const now = new Date()
@@ -6,13 +6,13 @@ export const year = now.getFullYear()
 export const month = now.getMonth()
 const uiMonth = padZero(month + 1)
 
-export const user: SerialisedUser = {
+export const user: UserWithWorkoutAndAttendance = {
   id: '123',
   role: null,
   email: 'email',
   name: 'Name',
-  appointments: '1',
-  appointmentsAttended: '1',
+  appointments: 1,
+  appointmentsAttended: 1,
   workouts: [
     {
       id: '1',
@@ -22,7 +22,7 @@ export const user: SerialisedUser = {
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
       type: 'TRAINING',
-      date: `${year}-${uiMonth}-1`,
+      date: new Date(`${year}-${uiMonth}-1`),
     },
     {
       id: '2',
@@ -32,7 +32,7 @@ export const user: SerialisedUser = {
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
       type: 'TRAINING',
-      date: `${year}-${uiMonth}-1`,
+      date: new Date(`${year}-${uiMonth}-1`),
     },
     {
       id: '3',
@@ -42,7 +42,7 @@ export const user: SerialisedUser = {
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
       type: 'TRAINING',
-      date: `${year}-${uiMonth}-1`,
+      date: new Date(`${year}-${uiMonth}-1`),
     },
     {
       id: '4',
@@ -52,11 +52,11 @@ export const user: SerialisedUser = {
       description: 'mooooove it',
       videoUrl: '',
       type: 'APPOINTMENT',
-      date: `${year}-${uiMonth}-2`,
+      date: new Date(`${year}-${uiMonth}-2`),
     },
   ],
-  workoutsAssigned: '1',
-  workoutsCompleted: '0',
+  workoutsAssigned: 1,
+  workoutsCompleted: 0,
 }
 
 export const session = {

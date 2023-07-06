@@ -5,9 +5,9 @@ import {
   CreateUserBody,
   CreateWorkoutBody,
   DeleteWorkoutBody,
-  SerialisedUser,
   UpdateWorkoutBody,
-} from '@/@types/types'
+} from '@/@types/apiRequestTypes'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -38,16 +38,16 @@ export const apiSlice = createApi({
         method: 'PUT',
         body: body,
       }),
-      invalidatesTags: (result, error, {ownerId, workoutId}) => [
+      invalidatesTags: (result, error, {ownerId, id}) => [
         {type: 'User', id: ownerId},
-        {type: 'Workout', id: workoutId},
+        {type: 'Workout', id: id},
       ],
     }),
-    getUser: builder.query<SerialisedUser, string>({
+    getUser: builder.query<UserWithWorkouts, string>({
       query: id => `/user/${id}`,
       providesTags: (result, error, id) => [{type: 'User', id}],
     }),
-    getUsers: builder.query<SerialisedUser[], void>({
+    getUsers: builder.query<UserWithWorkouts[], void>({
       query: () => '/users',
       providesTags: result =>
         result ? result.map(({id}) => ({type: 'User', id})) : [],
@@ -69,9 +69,9 @@ export const apiSlice = createApi({
         method: 'PUT',
         body: body,
       }),
-      invalidatesTags: (result, error, {ownerId, workoutId}) => [
+      invalidatesTags: (result, error, {ownerId, id}) => [
         {type: 'User', id: ownerId},
-        {type: 'Workout', id: workoutId},
+        {type: 'Workout', id: id},
       ],
     }),
   }),

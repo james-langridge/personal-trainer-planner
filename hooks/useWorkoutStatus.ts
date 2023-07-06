@@ -1,10 +1,10 @@
 import {WORKOUT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
-import {SerialisedWorkout} from '@/@types/types'
+import {Workout} from '@/@types/apiResponseTypes'
 import {useUpdateWorkoutMutation} from '@/redux/apiSlice'
 
-export function useWorkoutStatus(workout: SerialisedWorkout) {
+export function useWorkoutStatus(workout: Workout) {
   const [status, setStatus] = useState(workout.status)
   const [updateWorkout] = useUpdateWorkoutMutation()
 
@@ -13,7 +13,7 @@ export function useWorkoutStatus(workout: SerialisedWorkout) {
       await updateWorkout({
         ownerId: workout.ownerId,
         status: status,
-        workoutId: workout.id,
+        id: workout.id,
       }).unwrap()
     },
     [updateWorkout, workout.id, workout.ownerId],
