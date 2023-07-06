@@ -1,9 +1,10 @@
+'use client'
+
 import {CalendarMedium, CalendarMobile} from '@/components/calendar'
-import {useIsMobile, useUser} from '@/hooks'
+import {useIsMobile} from '@/hooks'
 import {useAppSelector} from '@/redux/hooks'
 
-export function Calendar({initialUser}: {initialUser: string}) {
-  useUser(JSON.parse(initialUser))
+export default function Calendar() {
   const isMobile = useIsMobile()
   const isAdmin = useAppSelector(state => state.auth.isAdmin)
 

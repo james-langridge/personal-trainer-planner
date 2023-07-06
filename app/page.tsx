@@ -3,7 +3,7 @@ import React from 'react'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
-import {Calendar} from '@/components/calendar'
+import {Auth} from '@/components/Auth'
 import {db} from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
@@ -55,5 +55,5 @@ export default async function TrainingStudio() {
     return null
   }
 
-  return <Calendar initialUser={JSON.stringify(user)} />
+  return <Auth initialUser={JSON.stringify(user)} />
 }

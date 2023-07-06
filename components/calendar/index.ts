@@ -1,6 +1,5 @@
 'use client'
 
-export * from './Calendar'
 export * from './CalendarDay'
 export * from './CalendarDropdown'
 export * from './CalendarEmptyDays'

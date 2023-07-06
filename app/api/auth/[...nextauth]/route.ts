@@ -31,6 +31,9 @@ export const authOptions: NextAuthOptions = {
     async signIn({user}) {
       return await doesUserExistInDb(user.email)
     },
+    async redirect({baseUrl}) {
+      return baseUrl
+    },
   },
 }
 
