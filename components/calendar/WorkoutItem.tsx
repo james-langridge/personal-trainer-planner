@@ -5,12 +5,13 @@ import React from 'react'
 
 import {Workout} from '@/@types/apiResponseTypes'
 import {useWorkoutStatus} from '@/hooks'
+import {selectIsAdmin} from '@/redux/authSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {setWorkoutId} from '@/redux/workoutSlice'
 
 export function WorkoutItem({workout}: {workout: Workout}) {
   const dispatch = useAppDispatch()
-  const isAdmin = useAppSelector(state => state.auth.isAdmin)
+  const isAdmin = useAppSelector(selectIsAdmin)
   const {status, toggleStatus} = useWorkoutStatus(workout)
   const isTrainingWorkout = workout.type === 'TRAINING'
   const isAppointment = workout.type === 'APPOINTMENT'

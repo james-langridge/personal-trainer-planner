@@ -12,6 +12,7 @@ import {
   useUpdateWorkoutMutation,
 } from '@/redux/apiSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
+import {selectUser} from '@/redux/usersSlice'
 import {resetWorkoutId} from '@/redux/workoutSlice'
 
 export function CalendarForm({
@@ -21,7 +22,7 @@ export function CalendarForm({
   day: Day
   closeModal: (e: React.SyntheticEvent) => void
 }) {
-  const user = useAppSelector(state => state.users.user)
+  const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const userId = user?.id
   const [workout, setWorkout, toggleDay] = useCalendarForm({

@@ -1,5 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
+import {RootState} from '@/redux/store'
+
 interface WorkoutState {
   id: string
 }
@@ -22,5 +24,7 @@ export const workoutSlice = createSlice({
 })
 
 export const {resetWorkoutId, setWorkoutId} = workoutSlice.actions
+
+export const selectWorkoutId = (state: RootState) => state.workout.id
 
 export default workoutSlice.reducer

@@ -5,6 +5,8 @@ import {CalendarFormState, Day} from '@/@types/types'
 import {getWeekday, padZero} from '@/lib/calendar'
 import {useGetWorkoutQuery} from '@/redux/apiSlice'
 import {useAppSelector} from '@/redux/hooks'
+import {selectUser} from '@/redux/usersSlice'
+import {selectWorkoutId} from '@/redux/workoutSlice'
 
 const initialState: CalendarFormState = {
   date: '',
@@ -27,9 +29,9 @@ export const useCalendarForm = ({
   React.Dispatch<React.SetStateAction<CalendarFormState>>,
   (weekday: number) => void,
 ] => {
-  const user = useAppSelector(state => state.users.user)
+  const user = useAppSelector(selectUser)
   const userId = user?.id || ''
-  const workoutId = useAppSelector(state => state.workout.id)
+  const workoutId = useAppSelector(selectWorkoutId)
   const {data: workoutData} = useGetWorkoutQuery(workoutId, {skip: !workoutId})
   const [workout, setWorkout] = useState<CalendarFormState>({
     ...initialState,
