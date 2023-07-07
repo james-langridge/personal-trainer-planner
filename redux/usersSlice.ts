@@ -23,7 +23,6 @@ export const usersSlice = createSlice({
 
 export const {setUser} = usersSlice.actions
 
-// TODO needed?
-export const selectUsers = (state: RootState) => state.users
+export const selectUser = (state: RootState) => state.users.user
 
 export default usersSlice.reducer

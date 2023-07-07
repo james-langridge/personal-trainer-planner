@@ -2,6 +2,7 @@ import React from 'react'
 
 import {CalendarDropdown, UserName} from '@/components/calendar'
 import {monthNames} from '@/lib/constants'
+import {selectIsAdmin} from '@/redux/authSlice'
 import {useAppSelector} from '@/redux/hooks'
 
 export function CalendarHeading({
@@ -15,7 +16,7 @@ export function CalendarHeading({
   setYear: React.Dispatch<React.SetStateAction<number>>
   setMonth: React.Dispatch<React.SetStateAction<number>>
 }) {
-  const isAdmin = useAppSelector(state => state.auth.isAdmin)
+  const isAdmin = useAppSelector(selectIsAdmin)
   const monthName = monthNames[month]
 
   function decrementMonth() {

@@ -1,5 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
+import {RootState} from '@/redux/store'
+
 interface AuthState {
   isAdmin: boolean
   isLoggedIn: boolean
@@ -22,5 +24,8 @@ export const authSlice = createSlice({
 })
 
 export const {loginSuccess} = authSlice.actions
+
+export const selectIsAdmin = (state: RootState) => state.auth.isAdmin
+export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn
 
 export default authSlice.reducer
