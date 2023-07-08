@@ -60,10 +60,12 @@ export function CalendarDay({
         <CalendarForm day={day} closeModal={closeModal} />
       </Modal>
       <div
-        className={
-          'mx-auto w-6 rounded-full p-1 text-xs lg:w-8 lg:text-base' +
-          (isToday ? ` bg-blue-900 text-white` : '')
-        }
+        className={clsx(
+          'mx-auto w-6 rounded-full p-1 text-xs lg:w-8 lg:text-base',
+          {
+            'bg-blue-900 text-white': isToday,
+          },
+        )}
       >
         {day.day}
       </div>
