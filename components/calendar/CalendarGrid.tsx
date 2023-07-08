@@ -12,7 +12,7 @@ import {getWorkoutsToday} from '@/lib/calendar'
 export function CalendarGrid({monthData}: {monthData: Day[]}) {
   const workouts = usePollForUserUpdates()
   const firstDayOfMonth = monthData[0].weekDay
-  const emptyDays = Array(firstDayOfMonth).fill(null)
+  const emptyDays = Array(firstDayOfMonth - 1).fill(null)
   const calendarSquares = firstDayOfMonth + monthData.length
 
   return (
@@ -28,7 +28,7 @@ export function CalendarGrid({monthData}: {monthData: Day[]}) {
       <CalendarEmptyDays emptyDays={emptyDays} />
       {monthData.map((day, index) => {
         const workoutsToday = workouts ? getWorkoutsToday(day, workouts) : null
-        const isFirstWeek = index + firstDayOfMonth < 7
+        const isFirstWeek = index + firstDayOfMonth < 8
 
         return (
           <CalendarDay day={day} isFirstWeek={isFirstWeek} key={index}>
