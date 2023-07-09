@@ -12,6 +12,8 @@ export function useSortUsers({
   initialMonth: number
   initialYear: number
 }) {
+  const [prevMonth, setPrevMonth] = useState(() => initialMonth)
+  const [prevYear, setPrevYear] = useState(() => initialYear)
   const [sortCol, setSortCol] = useState<Record<string, UserWithWorkoutsKey>>({
     key: 'name',
   })
@@ -35,15 +37,19 @@ export function useSortUsers({
     const filteredUsers = filterByMonth(year, month, [...users])
     const usersWithData = addAttendanceData(filteredUsers)
 
-    setFilteredUsers(usersWithData)
-  }, [month, users, year])
+    //   setFilteredUsers(usersWithData)
+    // }, [month, users, year])
+    //
+    // useEffect(() => {
+    //   if (!filteredUsers) {
+    //     return
+    //   }
 
-  useEffect(() => {
-    if (!filteredUsers) {
-      return
-    }
-
-    if (prevSortColRef.current?.key === sortCol.key) {
+    if (
+      prevSortColRef.current?.key === sortCol.key &&
+      prevMonth === month &&
+      prevYear === year
+    ) {
       sortOrder.current = sortOrder.current === 'asc' ? 'des' : 'asc'
     } else {
       sortOrder.current = 'asc'
@@ -51,13 +57,15 @@ export function useSortUsers({
 
     const sorted = sortUsers(
       sortCol.key,
-      [...filteredUsers],
+      [...usersWithData],
       sortOrder.current === 'asc',
     )
 
     setSortedUsers(sorted)
     prevSortColRef.current = sortCol
-  }, [filteredUsers, sortCol])
+    setPrevMonth(month)
+    setPrevYear(year)
+  }, [month, prevMonth, prevYear, sortCol, users, year])
 
   return {sortedUsers, setSortCol, month, setMonth, year, setYear}
 }
