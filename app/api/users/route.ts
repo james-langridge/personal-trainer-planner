@@ -29,7 +29,7 @@ export async function GET() {
       },
     },
     where: {
-      role: null,
+      role: 'user',
     },
   })
 

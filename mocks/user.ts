@@ -8,7 +8,7 @@ const uiMonth = padZero(month + 1)
 
 export const user: UserWithWorkoutAndAttendance = {
   id: '123',
-  role: null,
+  role: 'user',
   email: 'email',
   name: 'Name',
   appointments: 1,
@@ -64,7 +64,7 @@ export const session = {
     name: user.name,
     email: user.email,
     image: null,
-    role: undefined,
+    role: 'user',
     id: user.id,
   },
   expires: '2023-07-15T14:46:39.270Z',
