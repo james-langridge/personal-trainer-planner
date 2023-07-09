@@ -10,40 +10,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Bootcamp {
+  attendees   User[]
+  createdAt   DateTime @default(now())
+  date        DateTime
+  deleted     Boolean  @default(false)
+  description String?
+  id          String   @id @default(uuid())
+  name        String
+  updatedAt   DateTime @updatedAt
+  videoUrl    String?
+}
+
 model User {
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  bootcamps Bootcamp[]
+  createdAt DateTime   @default(now())
+  type      String     @default("regular")
+  updatedAt DateTime   @updatedAt
   workouts  Workout[]
 
-  // Auth.js fields
+  // Fields required by NextAuth.js
   accounts      Account[]
   email         String    @unique
   emailVerified DateTime?
   id            String    @id @default(uuid())
   image         String?
   name          String?
-  // TODO: NextAuth doesn't like null for role - default to undefined
-  role          String?
+  role          String    @default("user")
   sessions      Session[]
 }
 
 model Workout {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id])
-
-  status      WORKOUT_STATUS @default(NOT_STARTED)
-  name        String
+  createdAt   DateTime       @default(now())
   date        DateTime
-  description String?
-  videoUrl    String?
-  type        WORKOUT_TYPE   @default(TRAINING)
   deleted     Boolean        @default(false)
-
-  @@index([ownerId, id])
+  description String?
+  id          String         @id @default(uuid())
+  name        String
+  owner       User           @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  status      WORKOUT_STATUS @default(NOT_STARTED)
+  type        WORKOUT_TYPE   @default(TRAINING)
+  updatedAt   DateTime       @updatedAt
+  videoUrl    String?
 }
 
 enum WORKOUT_STATUS {
@@ -55,6 +64,8 @@ enum WORKOUT_TYPE {
   TRAINING
   APPOINTMENT
 }
+
+// NextAuth.js models
 
 model Account {
   id                String  @id @default(cuid())
