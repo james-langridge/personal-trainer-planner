@@ -74,7 +74,13 @@ export function getWorkoutDates(
   for (let week = 0; week <= weeksToRepeat; week++) {
     weekdays.forEach(weekday => {
       const newDate = new Date(date)
-      newDate.setDate(date.getDate() + weekday - dayOfWeek + week * 7)
+
+      if (weekday === 0) {
+        newDate.setDate(date.getDate() + weekday - dayOfWeek + (week + 1) * 7)
+      } else {
+        newDate.setDate(date.getDate() + weekday - dayOfWeek + week * 7)
+      }
+
       dates.push(newDate)
     })
   }
