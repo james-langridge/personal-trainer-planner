@@ -17,14 +17,6 @@ function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   )
 }
 
-export function formatDate(date: Date) {
-  const year = date.getFullYear()
-  const month = padZero(date.getMonth() + 1)
-  const day = padZero(date.getDate())
-
-  return `${year}-${month}-${day}`
-}
-
 export function generateCalendarMonth(month: number, year: number) {
   const daysInMonth = getDaysInMonth(month, year)
   const monthData = []
