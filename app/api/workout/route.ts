@@ -1,10 +1,22 @@
 import {NextRequest, NextResponse} from 'next/server'
+import {getServerSession} from 'next-auth/next'
 
 import {CreateWorkoutBody, UpdateWorkoutBody} from '@/@types/apiRequestTypes'
+import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {getWorkoutDates} from '@/lib/calendar'
 import {db} from '@/lib/db'
 
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    return NextResponse.json({message: 'You must be logged in.'}, {status: 401})
+  }
+
+  if (session.user?.role !== 'admin') {
+    return NextResponse.json({message: 'Forbidden.'}, {status: 403})
+  }
+
   const {
     date,
     description,
@@ -40,6 +52,12 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    return NextResponse.json({message: 'You must be logged in.'}, {status: 401})
+  }
+
   const body: UpdateWorkoutBody = await req.json()
 
   const workout = await db.workout.update({
