@@ -15,6 +15,7 @@ export function WorkoutItem({workout}: {workout: Workout}) {
   const {status, toggleStatus} = useWorkoutStatus(workout)
   const isTrainingWorkout = workout.type === 'TRAINING'
   const isAppointment = workout.type === 'APPOINTMENT'
+  const isBootcamp = workout.type === 'BOOTCAMP'
 
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
     if (!isAdmin) {
@@ -28,7 +29,7 @@ export function WorkoutItem({workout}: {workout: Workout}) {
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
-      {isTrainingWorkout && (
+      {(isTrainingWorkout || isBootcamp) && (
         <input
           type="checkbox"
           checked={status === WORKOUT_STATUS.COMPLETED}
@@ -58,7 +59,8 @@ export function WorkoutItem({workout}: {workout: Workout}) {
             'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
             {
               'bg-emerald-400': isTrainingWorkout,
-              'bg-blue-400': !isTrainingWorkout,
+              'bg-blue-400': isAppointment,
+              'bg-yellow-400': isBootcamp,
             },
           )}
           id={workout?.id}
@@ -74,7 +76,8 @@ export function WorkoutItem({workout}: {workout: Workout}) {
             'my-1 block w-full rounded text-xs font-bold text-white lg:text-base',
             {
               'bg-emerald-400': isTrainingWorkout,
-              'bg-blue-400': !isTrainingWorkout,
+              'bg-blue-400': isAppointment,
+              'bg-yellow-400': isBootcamp,
             },
           )}
           data-testid={`${workout?.id}`}
