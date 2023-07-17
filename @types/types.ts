@@ -33,12 +33,12 @@ export type UserWithWorkoutAndAttendance = UserWithWorkouts &
 
 export type UserWithWorkoutAndAttendanceKey = keyof Omit<
   UserWithWorkoutAndAttendance,
-  'id' | 'role' | 'workouts'
+  'id' | 'role' | 'type' | 'workouts'
 >
 
 export type UserWithWorkoutsKey = keyof Omit<
   UserWithWorkouts,
-  'id' | 'role' | 'workouts'
+  'id' | 'role' | 'type' | 'workouts'
 >
 
 export type WorkoutKey = keyof Omit<

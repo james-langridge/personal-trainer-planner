@@ -1,6 +1,9 @@
 import {User, Workout as PrismaWorkout} from '@prisma/client'
 
-export type UserWithWorkouts = Pick<User, 'email' | 'id' | 'name' | 'role'> & {
+export type UserWithWorkouts = Pick<
+  User,
+  'email' | 'id' | 'name' | 'role' | 'type'
+> & {
   workouts: Pick<
     PrismaWorkout,
     | 'date'

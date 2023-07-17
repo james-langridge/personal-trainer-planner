@@ -20,6 +20,7 @@ const getUserWithWorkouts = async (
       id: true,
       name: true,
       role: true,
+      type: true,
       workouts: {
         select: {
           date: true,
