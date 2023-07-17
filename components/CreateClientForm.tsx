@@ -1,15 +1,18 @@
 'use client'
 
+import {USER_TYPE} from '@prisma/client'
 import {useCallback, useEffect, useRef, useState} from 'react'
 
 import {useCreateUserMutation} from '@/redux/apiSlice'
 
 const initialForm: {
-  name: string
   email: string
+  name: string
+  type: USER_TYPE
 } = {
-  name: '',
   email: '',
+  name: '',
+  type: USER_TYPE.INDIVIDUAL,
 }
 
 export function CreateClientForm() {
@@ -108,6 +111,29 @@ export function CreateClientForm() {
           placeholder="Email address"
           value={form.email}
         />
+      </div>
+
+      <div className="relative mt-4 flex items-center">
+        <input
+          onChange={() => {
+            if (form.type === USER_TYPE.BOOTCAMP) {
+              setForm(form => ({
+                ...form,
+                type: USER_TYPE.INDIVIDUAL,
+              }))
+            }
+            if (form.type === USER_TYPE.INDIVIDUAL) {
+              setForm(form => ({
+                ...form,
+                type: USER_TYPE.BOOTCAMP,
+              }))
+            }
+          }}
+          type="checkbox"
+          checked={form.type === USER_TYPE.BOOTCAMP}
+          className="mr-2 h-7 w-7 rounded"
+        />
+        <div className="text-lg">Bootcamper</div>
       </div>
 
       <div className="mt-6">
