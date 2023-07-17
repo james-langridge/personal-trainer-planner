@@ -25,7 +25,7 @@ model Bootcamp {
 model User {
   bootcamps Bootcamp[]
   createdAt DateTime   @default(now())
-  type      String     @default("regular")
+  type      USER_TYPE  @default(INDIVIDUAL)
   updatedAt DateTime   @updatedAt
   workouts  Workout[]
 
@@ -63,6 +63,11 @@ enum WORKOUT_STATUS {
 enum WORKOUT_TYPE {
   TRAINING
   APPOINTMENT
+}
+
+enum USER_TYPE {
+  INDIVIDUAL
+  BOOTCAMP
 }
 
 // NextAuth.js models
