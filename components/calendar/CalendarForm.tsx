@@ -154,6 +154,23 @@ export function CalendarForm({
             />
             <label htmlFor={WORKOUT_TYPE.APPOINTMENT}>Appointment</label>
           </div>
+          <div>
+            <input
+              type="radio"
+              id={WORKOUT_TYPE.BOOTCAMP}
+              name="type"
+              checked={workout.type === WORKOUT_TYPE.BOOTCAMP}
+              value={WORKOUT_TYPE.BOOTCAMP}
+              className="mr-2"
+              onChange={e =>
+                setWorkout(workout => ({
+                  ...workout,
+                  type: e.target.value as WORKOUT_TYPE,
+                }))
+              }
+            />
+            <label htmlFor={WORKOUT_TYPE.BOOTCAMP}>Bootcamp</label>
+          </div>
         </fieldset>
 
         {!workout.id && (
