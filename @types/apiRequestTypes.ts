@@ -1,6 +1,6 @@
-import {Workout} from '@prisma/client'
+import {USER_TYPE, Workout} from '@prisma/client'
 
-export type CreateUserBody = {name: string; email: string}
+export type CreateUserBody = {name: string; email: string; type: USER_TYPE}
 
 export type CreateWorkoutBody = Pick<
   Workout,
