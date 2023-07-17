@@ -24,6 +24,7 @@ export async function GET() {
       id: true,
       name: true,
       role: true,
+      type: true,
       workouts: {
         select: {
           date: true,

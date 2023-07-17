@@ -13,6 +13,7 @@ export const user: UserWithWorkoutAndAttendance = {
   name: 'Name',
   appointments: 1,
   appointmentsAttended: 1,
+  type: 'INDIVIDUAL',
   workouts: [
     {
       id: '1',
