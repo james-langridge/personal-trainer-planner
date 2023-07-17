@@ -6,11 +6,17 @@ import {
   CalendarEmptyDays,
   WorkoutItems,
 } from '@/components/calendar'
-import {usePollForUserUpdates} from '@/hooks'
+import {useBootcamps, usePollForUserUpdates} from '@/hooks'
 import {getWorkoutsToday} from '@/lib/calendar'
+import {useAppSelector} from '@/redux/hooks'
+import {selectUser} from '@/redux/usersSlice'
 
 export function CalendarGrid({monthData}: {monthData: Day[]}) {
-  const workouts = usePollForUserUpdates()
+  const user = useAppSelector(selectUser)
+  const userId = user?.id
+  const userWorkouts = usePollForUserUpdates(userId)
+  const bootcamps = useBootcamps(user?.type, userId)
+  const workouts = [...userWorkouts, ...bootcamps]
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDaysLength = firstDayOfMonth > 0 ? firstDayOfMonth - 1 : 6
   const emptyDays = Array(emptyDaysLength).fill(null)

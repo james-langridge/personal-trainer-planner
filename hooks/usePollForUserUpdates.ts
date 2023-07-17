@@ -1,13 +1,11 @@
+import {Workout} from '@/@types/apiResponseTypes'
 import {useGetUserQuery} from '@/redux/apiSlice'
-import {useAppSelector} from '@/redux/hooks'
-import {selectUser} from '@/redux/usersSlice'
 
-export function usePollForUserUpdates() {
-  const user = useAppSelector(selectUser)
-  const {data} = useGetUserQuery(user?.id || '', {
+export function usePollForUserUpdates(id = ''): Workout[] {
+  const {data} = useGetUserQuery(id, {
     pollingInterval: 60000,
-    skip: !user,
+    skip: !id,
   })
 
-  return data?.workouts
+  return data?.workouts || []
 }
