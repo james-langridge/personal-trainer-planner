@@ -1,5 +1,6 @@
 import React from 'react'
 
+import {AddButton} from '@/components/AddButton'
 import {CalendarDropdown} from '@/components/calendar'
 import {monthNames} from '@/lib/constants'
 import {selectIsAdmin} from '@/redux/authSlice'
@@ -39,7 +40,12 @@ export function CalendarHeading({
 
   return (
     <div className="flex w-full">
-      {isAdmin && <CalendarDropdown />}
+      {isAdmin && (
+        <div className="flex w-1/5 items-center">
+          <CalendarDropdown />
+          <AddButton />
+        </div>
+      )}
       <div className="flex w-full flex-row justify-center p-5">
         <div className="flex flex-row items-center text-2xl">
           <button
