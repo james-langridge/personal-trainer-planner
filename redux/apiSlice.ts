@@ -2,18 +2,29 @@ import {Workout} from '@prisma/client'
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
 import {
+  CreateBootcampBody,
   CreateUserBody,
   CreateWorkoutBody,
+  DeleteBootcampBody,
   DeleteWorkoutBody,
+  UpdateBootcampBody,
   UpdateWorkoutBody,
 } from '@/@types/apiRequestTypes'
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {Bootcamp, UserWithWorkouts} from '@/@types/apiResponseTypes'
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({baseUrl: '/api'}),
-  tagTypes: ['User', 'Workout'],
+  tagTypes: ['Bootcamp', 'User', 'Workout'],
   endpoints: builder => ({
+    createBootcamp: builder.mutation({
+      query: (body: CreateBootcampBody) => ({
+        url: '/bootcamp',
+        method: 'POST',
+        body: body,
+      }),
+      invalidatesTags: ['Bootcamp'],
+    }),
     createUser: builder.mutation({
       query: (body: CreateUserBody) => ({
         url: '/user',
@@ -32,6 +43,14 @@ export const apiSlice = createApi({
         {type: 'User', id: ownerId},
       ],
     }),
+    deleteBootcamp: builder.mutation({
+      query: (body: DeleteBootcampBody) => ({
+        url: '/bootcamp',
+        method: 'PUT',
+        body: body,
+      }),
+      invalidatesTags: (result, error, {id}) => [{type: 'Bootcamp', id: id}],
+    }),
     deleteWorkout: builder.mutation({
       query: (body: DeleteWorkoutBody) => ({
         url: '/workout',
@@ -42,6 +61,15 @@ export const apiSlice = createApi({
         {type: 'User', id: ownerId},
         {type: 'Workout', id: id},
       ],
+    }),
+    getBootcamp: builder.query<Bootcamp, string>({
+      query: id => `/bootcamp/${id}`,
+      providesTags: (result, error, id) => [{type: 'Bootcamp', id}],
+    }),
+    getBootcamps: builder.query<Bootcamp[], void>({
+      query: () => '/bootcamp',
+      providesTags: result =>
+        result ? result.map(({id}) => ({type: 'Bootcamp', id})) : [],
     }),
     getUser: builder.query<UserWithWorkouts, string>({
       query: id => `/user/${id}`,
@@ -63,6 +91,14 @@ export const apiSlice = createApi({
         body: body,
       }),
     }),
+    updateBootcamp: builder.mutation({
+      query: (body: UpdateBootcampBody) => ({
+        url: '/bootcamp',
+        method: 'PUT',
+        body: body,
+      }),
+      invalidatesTags: (result, error, {id}) => [{type: 'Bootcamp', id: id}],
+    }),
     updateWorkout: builder.mutation({
       query: (body: UpdateWorkoutBody) => ({
         url: '/workout',
@@ -78,12 +114,17 @@ export const apiSlice = createApi({
 })
 
 export const {
+  useCreateBootcampMutation,
+  useCreateUserMutation,
+  useCreateWorkoutMutation,
+  useDeleteBootcampMutation,
+  useDeleteWorkoutMutation,
+  useGetBootcampQuery,
+  useGetBootcampsQuery,
   useGetUserQuery,
   useGetUsersQuery,
-  useDeleteWorkoutMutation,
-  useUpdateWorkoutMutation,
-  useCreateWorkoutMutation,
   useGetWorkoutQuery,
-  useCreateUserMutation,
   useSubmitFormMutation,
+  useUpdateBootcampMutation,
+  useUpdateWorkoutMutation,
 } = apiSlice

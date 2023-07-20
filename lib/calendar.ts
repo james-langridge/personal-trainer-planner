@@ -62,7 +62,7 @@ export function getWeekday(dateString: string): number {
   return date.getUTCDay()
 }
 
-export function getWorkoutDates(
+export function getRepeatingDates(
   dateString: string,
   weekdays: number[],
   weeksToRepeat: number,

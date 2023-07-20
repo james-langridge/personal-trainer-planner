@@ -5,13 +5,13 @@ import {UserWithWorkouts, Workout} from '@/@types/apiResponseTypes'
 export type CalendarFormState = {
   date: string
   description: string | null
+  id: string
   name: string
   ownerId: string
   selectedDays: Set<number>
   type: WORKOUT_TYPE
   videoUrl: string | null
   weeksToRepeat: number
-  id: string
 }
 
 export type ComputedWorkoutData = {
@@ -33,12 +33,12 @@ export type UserWithWorkoutAndAttendance = UserWithWorkouts &
 
 export type UserWithWorkoutAndAttendanceKey = keyof Omit<
   UserWithWorkoutAndAttendance,
-  'id' | 'role' | 'type' | 'workouts'
+  'bootcamps' | 'id' | 'role' | 'type' | 'workouts'
 >
 
 export type UserWithWorkoutsKey = keyof Omit<
   UserWithWorkouts,
-  'id' | 'role' | 'type' | 'workouts'
+  'bootcamps' | 'id' | 'role' | 'type' | 'workouts'
 >
 
 export type WorkoutKey = keyof Omit<

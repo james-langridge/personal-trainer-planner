@@ -1,4 +1,8 @@
-import {User, Workout as PrismaWorkout} from '@prisma/client'
+import {
+  Bootcamp as PrismaBootcamp,
+  User,
+  Workout as PrismaWorkout,
+} from '@prisma/client'
 
 export type UserWithWorkouts = Pick<
   User,
@@ -15,6 +19,12 @@ export type UserWithWorkouts = Pick<
     | 'type'
     | 'videoUrl'
   >[]
+  bootcamps: Pick<
+    PrismaBootcamp,
+    'date' | 'description' | 'id' | 'name' | 'videoUrl'
+  >[]
 }
 
 export type Workout = UserWithWorkouts['workouts'][number]
+
+export type Bootcamp = UserWithWorkouts['bootcamps'][number]
