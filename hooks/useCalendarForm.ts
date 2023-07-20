@@ -11,12 +11,12 @@ import {selectWorkoutId} from '@/redux/workoutSlice'
 const initialState: CalendarFormState = {
   date: '',
   description: '',
+  id: '',
   name: '',
   ownerId: '',
-  id: '',
-  videoUrl: '',
-  type: WORKOUT_TYPE.TRAINING,
   selectedDays: new Set<number>(),
+  type: WORKOUT_TYPE.TRAINING,
+  videoUrl: '',
   weeksToRepeat: 0,
 }
 

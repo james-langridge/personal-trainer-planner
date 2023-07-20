@@ -14,6 +14,7 @@ export const user: UserWithWorkoutAndAttendance = {
   appointments: 1,
   appointmentsAttended: 1,
   type: 'INDIVIDUAL',
+  bootcamps: [],
   workouts: [
     {
       id: '1',

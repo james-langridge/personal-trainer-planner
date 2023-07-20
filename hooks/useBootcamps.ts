@@ -4,10 +4,11 @@ import {Workout} from '@/@types/apiResponseTypes'
 import {useGetUserQuery} from '@/redux/apiSlice'
 
 export function useBootcamps(type?: USER_TYPE, id = ''): Workout[] {
+  const bootcampCalendarId = String(process.env.NEXT_PUBLIC_BOOTCAMP_ID)
   const isBootcamper = type === 'BOOTCAMP'
-  const {data} = useGetUserQuery(String(process.env.NEXT_PUBLIC_BOOTCAMP_ID), {
+  const {data} = useGetUserQuery(bootcampCalendarId, {
     pollingInterval: 60000,
-    skip: !isBootcamper || id === String(process.env.NEXT_PUBLIC_BOOTCAMP_ID),
+    skip: !isBootcamper || id === bootcampCalendarId,
   })
 
   if (!isBootcamper) {

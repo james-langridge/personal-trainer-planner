@@ -5,10 +5,12 @@ import {RootState} from '@/redux/store'
 
 interface UsersState {
   user: UserWithWorkouts | null
+  users: UserWithWorkouts[] | null
 }
 
 const initialState: UsersState = {
   user: null,
+  users: null,
 }
 
 export const usersSlice = createSlice({
@@ -18,11 +20,15 @@ export const usersSlice = createSlice({
     setUser: (state, action: PayloadAction<UserWithWorkouts>) => {
       state.user = action.payload
     },
+    setUsers: (state, action: PayloadAction<UserWithWorkouts[]>) => {
+      state.users = action.payload
+    },
   },
 })
 
-export const {setUser} = usersSlice.actions
+export const {setUser, setUsers} = usersSlice.actions
 
 export const selectUser = (state: RootState) => state.users.user
+export const selectUsers = (state: RootState) => state.users.users
 
 export default usersSlice.reducer

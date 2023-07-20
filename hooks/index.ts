@@ -1,5 +1,6 @@
 'use client'
 
+export * from './useBootcamperIds'
 export * from './useBootcamps'
 export * from './useCalendarData'
 export * from './useCalendarForm'

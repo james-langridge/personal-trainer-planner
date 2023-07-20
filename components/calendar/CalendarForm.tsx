@@ -7,8 +7,11 @@ import {Day} from '@/@types/types'
 import Button from '@/components/Button'
 import {useCalendarForm} from '@/hooks'
 import {
+  useCreateBootcampMutation,
   useCreateWorkoutMutation,
+  useDeleteBootcampMutation,
   useDeleteWorkoutMutation,
+  useUpdateBootcampMutation,
   useUpdateWorkoutMutation,
 } from '@/redux/apiSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
@@ -25,14 +28,26 @@ export function CalendarForm({
   const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const userId = user?.id
-  const [workout, setWorkout, toggleDay] = useCalendarForm({
+  const [formData, setWorkout, toggleDay] = useCalendarForm({
     day,
   })
   const [error, setError] = useState<Error>()
   const [createWorkout, {isLoading: isCreating}] = useCreateWorkoutMutation()
   const [updateWorkout, {isLoading: isUpdating}] = useUpdateWorkoutMutation()
   const [deleteWorkout, {isLoading: isDeleting}] = useDeleteWorkoutMutation()
-  const isDisabled = isCreating || isUpdating || isDeleting
+  const [createBootcamp, {isLoading: isCreatingBootcamp}] =
+    useCreateBootcampMutation()
+  const [updateBootcamp, {isLoading: isUpdatingBootcamp}] =
+    useUpdateBootcampMutation()
+  const [deleteBootcamp, {isLoading: isDeletingBootcamp}] =
+    useDeleteBootcampMutation()
+  const isDisabled =
+    isCreating ||
+    isCreatingBootcamp ||
+    isUpdating ||
+    isUpdatingBootcamp ||
+    isDeleting ||
+    isDeletingBootcamp
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -53,43 +68,77 @@ export function CalendarForm({
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    try {
-      if (workout.id) {
-        await updateWorkout(workout).unwrap()
-      } else {
-        await createWorkout({
-          ...workout,
-          selectedDays: [...workout.selectedDays],
-        }).unwrap()
-      }
+    if (formData.type !== 'BOOTCAMP') {
+      try {
+        if (formData.id) {
+          await updateWorkout(formData).unwrap()
+        } else {
+          await createWorkout({
+            ...formData,
+            selectedDays: [...formData.selectedDays],
+          }).unwrap()
+        }
 
-      closeModal(e)
-    } catch (error) {
-      setError(error as Error)
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    if (formData.type === 'BOOTCAMP') {
+      try {
+        if (formData.id) {
+          await updateBootcamp(formData).unwrap()
+        } else {
+          await createBootcamp({
+            ...formData,
+            selectedDays: [...formData.selectedDays],
+          }).unwrap()
+        }
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
     }
   }
 
   async function handleDelete(e: React.SyntheticEvent) {
-    if (isDisabled || !workout.id) {
+    if (isDisabled || !formData.id) {
       return
     }
 
-    try {
-      await deleteWorkout({
-        deleted: true,
-        ownerId: workout.ownerId,
-        id: workout.id,
-      }).unwrap()
+    if (formData.type !== 'BOOTCAMP') {
+      try {
+        await deleteWorkout({
+          deleted: true,
+          ownerId: formData.ownerId,
+          id: formData.id,
+        }).unwrap()
 
-      closeModal(e)
-    } catch (error) {
-      setError(error as Error)
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    if (formData.type === 'BOOTCAMP') {
+      try {
+        await deleteBootcamp({
+          deleted: true,
+          id: formData.id,
+        }).unwrap()
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
-      <input type="hidden" value={workout.id} />
+      <input type="hidden" value={formData.id} />
       <input required type="hidden" value={userId} />
       <input
         required
@@ -101,7 +150,7 @@ export function CalendarForm({
         }
         type="date"
         className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-        value={workout.date}
+        value={formData.date}
       />
       <input
         required
@@ -114,7 +163,7 @@ export function CalendarForm({
         }
         placeholder="Workout name"
         className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-        value={workout.name}
+        value={formData.name}
       />
       <div className="flex justify-between">
         <fieldset className="mt-4">
@@ -125,7 +174,7 @@ export function CalendarForm({
               id={WORKOUT_TYPE.TRAINING}
               name="type"
               value={WORKOUT_TYPE.TRAINING}
-              checked={workout.type === WORKOUT_TYPE.TRAINING}
+              checked={formData.type === WORKOUT_TYPE.TRAINING}
               className="mr-2"
               onChange={e =>
                 setWorkout(workout => ({
@@ -142,7 +191,7 @@ export function CalendarForm({
               type="radio"
               id={WORKOUT_TYPE.APPOINTMENT}
               name="type"
-              checked={workout.type === WORKOUT_TYPE.APPOINTMENT}
+              checked={formData.type === WORKOUT_TYPE.APPOINTMENT}
               value={WORKOUT_TYPE.APPOINTMENT}
               className="mr-2"
               onChange={e =>
@@ -159,7 +208,7 @@ export function CalendarForm({
               type="radio"
               id={WORKOUT_TYPE.BOOTCAMP}
               name="type"
-              checked={workout.type === WORKOUT_TYPE.BOOTCAMP}
+              checked={formData.type === WORKOUT_TYPE.BOOTCAMP}
               value={WORKOUT_TYPE.BOOTCAMP}
               className="mr-2"
               onChange={e =>
@@ -173,7 +222,7 @@ export function CalendarForm({
           </div>
         </fieldset>
 
-        {!workout.id && (
+        {!formData.id && (
           <div className="flex flex-col">
             <div className="mt-4 flex divide-x overflow-hidden rounded-lg border bg-white rtl:flex-row-reverse dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900">
               <button
@@ -183,8 +232,8 @@ export function CalendarForm({
                   'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
                   {
                     'bg-blue-300 hover:bg-blue-100':
-                      workout.selectedDays.has(1),
-                    'hover:bg-gray-100': !workout.selectedDays.has(1),
+                      formData.selectedDays.has(1),
+                    'hover:bg-gray-100': !formData.selectedDays.has(1),
                   },
                 )}
               >
@@ -198,8 +247,8 @@ export function CalendarForm({
                   'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
                   {
                     'bg-blue-300 hover:bg-blue-100':
-                      workout.selectedDays.has(2),
-                    'hover:bg-gray-100': !workout.selectedDays.has(2),
+                      formData.selectedDays.has(2),
+                    'hover:bg-gray-100': !formData.selectedDays.has(2),
                   },
                 )}
               >
@@ -213,8 +262,8 @@ export function CalendarForm({
                   'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
                   {
                     'bg-blue-300 hover:bg-blue-100':
-                      workout.selectedDays.has(3),
-                    'hover:bg-gray-100': !workout.selectedDays.has(3),
+                      formData.selectedDays.has(3),
+                    'hover:bg-gray-100': !formData.selectedDays.has(3),
                   },
                 )}
               >
@@ -228,8 +277,8 @@ export function CalendarForm({
                   'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
                   {
                     'bg-blue-300 hover:bg-blue-100':
-                      workout.selectedDays.has(4),
-                    'hover:bg-gray-100': !workout.selectedDays.has(4),
+                      formData.selectedDays.has(4),
+                    'hover:bg-gray-100': !formData.selectedDays.has(4),
                   },
                 )}
               >
@@ -243,8 +292,8 @@ export function CalendarForm({
                   'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
                   {
                     'bg-blue-300 hover:bg-blue-100':
-                      workout.selectedDays.has(5),
-                    'hover:bg-gray-100': !workout.selectedDays.has(5),
+                      formData.selectedDays.has(5),
+                    'hover:bg-gray-100': !formData.selectedDays.has(5),
                   },
                 )}
               >
@@ -258,8 +307,8 @@ export function CalendarForm({
                   'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
                   {
                     'bg-blue-300 hover:bg-blue-100':
-                      workout.selectedDays.has(6),
-                    'hover:bg-gray-100': !workout.selectedDays.has(6),
+                      formData.selectedDays.has(6),
+                    'hover:bg-gray-100': !formData.selectedDays.has(6),
                   },
                 )}
               >
@@ -273,8 +322,8 @@ export function CalendarForm({
                   'px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 dark:text-gray-300 dark:hover:bg-gray-800 sm:text-base',
                   {
                     'bg-blue-300 hover:bg-blue-100':
-                      workout.selectedDays.has(0),
-                    'hover:bg-gray-100': !workout.selectedDays.has(0),
+                      formData.selectedDays.has(0),
+                    'hover:bg-gray-100': !formData.selectedDays.has(0),
                   },
                 )}
               >
@@ -288,7 +337,7 @@ export function CalendarForm({
                 className="w-10"
                 type="number"
                 min="0"
-                value={workout.weeksToRepeat}
+                value={formData.weeksToRepeat}
                 onChange={e =>
                   setWorkout(workout => ({
                     ...workout,
@@ -296,14 +345,14 @@ export function CalendarForm({
                   }))
                 }
               />{' '}
-              {workout.weeksToRepeat === 1 ? 'week.' : 'weeks.'}{' '}
+              {formData.weeksToRepeat === 1 ? 'week.' : 'weeks.'}{' '}
               <div className="text-sm">
-                {workout.weeksToRepeat === 0
+                {formData.weeksToRepeat === 0
                   ? "(Don't repeat; this week only.)"
-                  : workout.weeksToRepeat === 1
+                  : formData.weeksToRepeat === 1
                   ? '(This week and next week.)'
                   : `(${
-                      workout.weeksToRepeat + 1
+                      formData.weeksToRepeat + 1
                     } weeks total starting this week.)`}
               </div>
             </div>
@@ -322,7 +371,7 @@ export function CalendarForm({
         rows={5}
         cols={15}
         className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-        value={workout.description ?? ''}
+        value={formData.description ?? ''}
       />
       <input
         onChange={e =>
@@ -334,7 +383,7 @@ export function CalendarForm({
         placeholder="Video url"
         type="url"
         className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-        value={workout.videoUrl ?? ''}
+        value={formData.videoUrl ?? ''}
       />
       <div className="mt-4 flex justify-between">
         <Button
@@ -346,14 +395,14 @@ export function CalendarForm({
             ? 'Updating...'
             : isCreating
             ? 'Creating...'
-            : workout.id
+            : formData.id
             ? 'Update'
             : 'Create'}
         </Button>
-        {workout.id && (
+        {formData.id && (
           <>
             <Link
-              href={`/workout/${workout.id}`}
+              href={`/workout/${formData.id}`}
               className="mx-2 w-full max-w-xs self-center"
               onClick={() => dispatch(resetWorkoutId())}
             >
