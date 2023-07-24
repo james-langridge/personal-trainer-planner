@@ -6,8 +6,8 @@ import {Day} from '@/@types/types'
 import {CalendarForm} from '@/components/calendar'
 import {getShortWeekday, isDayToday} from '@/lib/calendar'
 import {selectIsAdmin} from '@/redux/authSlice'
+import {resetEvent} from '@/redux/eventSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
-import {resetWorkoutId} from '@/redux/workoutSlice'
 
 Modal.setAppElement('#modal')
 
@@ -25,7 +25,7 @@ export function CalendarDay({
   const [isModalOpen, setIsOpen] = useState(false)
   const closeModal = (e: React.SyntheticEvent) => {
     e.stopPropagation()
-    dispatch(resetWorkoutId())
+    dispatch(resetEvent())
     setIsOpen(false)
   }
   const openModal = () => {

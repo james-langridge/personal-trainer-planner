@@ -1,22 +1,24 @@
-import {WORKOUT_TYPE} from '@prisma/client'
 import clsx from 'clsx'
 import Link from 'next/link'
 import React, {useEffect, useRef, useState} from 'react'
 
-import {Day} from '@/@types/types'
+import {Day, EventType} from '@/@types/types'
 import Button from '@/components/Button'
 import {useCalendarForm} from '@/hooks'
 import {
+  useCreateAppointmentMutation,
   useCreateBootcampMutation,
   useCreateWorkoutMutation,
+  useDeleteAppointmentMutation,
   useDeleteBootcampMutation,
   useDeleteWorkoutMutation,
+  useUpdateAppointmentMutation,
   useUpdateBootcampMutation,
   useUpdateWorkoutMutation,
 } from '@/redux/apiSlice'
+import {resetEvent} from '@/redux/eventSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {selectUser} from '@/redux/usersSlice'
-import {resetWorkoutId} from '@/redux/workoutSlice'
 
 export function CalendarForm({
   day,
@@ -28,10 +30,16 @@ export function CalendarForm({
   const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const userId = user?.id
-  const [formData, setWorkout, toggleDay] = useCalendarForm({
+  const [formData, setForm, toggleDay] = useCalendarForm({
     day,
   })
   const [error, setError] = useState<Error>()
+  const [createAppointment, {isLoading: isCreatingAppointment}] =
+    useCreateAppointmentMutation()
+  const [updateAppointment, {isLoading: isUpdatingAppointment}] =
+    useUpdateAppointmentMutation()
+  const [deleteAppointment, {isLoading: isDeletingAppointment}] =
+    useDeleteAppointmentMutation()
   const [createWorkout, {isLoading: isCreating}] = useCreateWorkoutMutation()
   const [updateWorkout, {isLoading: isUpdating}] = useUpdateWorkoutMutation()
   const [deleteWorkout, {isLoading: isDeleting}] = useDeleteWorkoutMutation()
@@ -44,10 +52,13 @@ export function CalendarForm({
   const isDisabled =
     isCreating ||
     isCreatingBootcamp ||
+    isCreatingAppointment ||
     isUpdating ||
     isUpdatingBootcamp ||
+    isUpdatingAppointment ||
     isDeleting ||
-    isDeletingBootcamp
+    isDeletingBootcamp ||
+    isDeletingAppointment
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -55,11 +66,11 @@ export function CalendarForm({
       return
     }
 
-    setWorkout(workout => ({
-      ...workout,
+    setForm(form => ({
+      ...form,
       ownerId: userId,
     }))
-  }, [setWorkout, userId])
+  }, [setForm, userId])
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -68,12 +79,29 @@ export function CalendarForm({
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    if (formData.type !== 'BOOTCAMP') {
+    if (formData.type === 'WORKOUT') {
       try {
         if (formData.id) {
           await updateWorkout(formData).unwrap()
         } else {
           await createWorkout({
+            ...formData,
+            selectedDays: [...formData.selectedDays],
+          }).unwrap()
+        }
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    if (formData.type === 'APPOINTMENT') {
+      try {
+        if (formData.id) {
+          await updateAppointment(formData).unwrap()
+        } else {
+          await createAppointment({
             ...formData,
             selectedDays: [...formData.selectedDays],
           }).unwrap()
@@ -108,7 +136,21 @@ export function CalendarForm({
       return
     }
 
-    if (formData.type !== 'BOOTCAMP') {
+    if (formData.type === 'APPOINTMENT') {
+      try {
+        await deleteAppointment({
+          deleted: true,
+          ownerId: formData.ownerId,
+          id: formData.id,
+        }).unwrap()
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    if (formData.type === 'WORKOUT') {
       try {
         await deleteWorkout({
           deleted: true,
@@ -143,8 +185,8 @@ export function CalendarForm({
       <input
         required
         onChange={e =>
-          setWorkout(workout => ({
-            ...workout,
+          setForm(form => ({
+            ...form,
             date: e.target.value,
           }))
         }
@@ -156,8 +198,8 @@ export function CalendarForm({
         required
         ref={inputRef}
         onChange={e =>
-          setWorkout(workout => ({
-            ...workout,
+          setForm(form => ({
+            ...form,
             name: e.target.value,
           }))
         }
@@ -171,54 +213,54 @@ export function CalendarForm({
           <div>
             <input
               type="radio"
-              id={WORKOUT_TYPE.TRAINING}
+              id="WORKOUT"
               name="type"
-              value={WORKOUT_TYPE.TRAINING}
-              checked={formData.type === WORKOUT_TYPE.TRAINING}
+              value="WORKOUT"
+              checked={formData.type === 'WORKOUT'}
               className="mr-2"
               onChange={e =>
-                setWorkout(workout => ({
-                  ...workout,
-                  type: e.target.value as WORKOUT_TYPE,
+                setForm(form => ({
+                  ...form,
+                  type: e.target.value as EventType,
                 }))
               }
             />
-            <label htmlFor={WORKOUT_TYPE.TRAINING}>Training</label>
+            <label htmlFor="WORKOUT">Training</label>
           </div>
 
           <div>
             <input
               type="radio"
-              id={WORKOUT_TYPE.APPOINTMENT}
+              id="APPOINTMENT"
               name="type"
-              checked={formData.type === WORKOUT_TYPE.APPOINTMENT}
-              value={WORKOUT_TYPE.APPOINTMENT}
+              checked={formData.type === 'APPOINTMENT'}
+              value="APPOINTMENT"
               className="mr-2"
               onChange={e =>
-                setWorkout(workout => ({
-                  ...workout,
-                  type: e.target.value as WORKOUT_TYPE,
+                setForm(form => ({
+                  ...form,
+                  type: e.target.value as EventType,
                 }))
               }
             />
-            <label htmlFor={WORKOUT_TYPE.APPOINTMENT}>Appointment</label>
+            <label htmlFor="APPOINTMENT">Appointment</label>
           </div>
           <div>
             <input
               type="radio"
-              id={WORKOUT_TYPE.BOOTCAMP}
+              id="BOOTCAMP"
               name="type"
-              checked={formData.type === WORKOUT_TYPE.BOOTCAMP}
-              value={WORKOUT_TYPE.BOOTCAMP}
+              checked={formData.type === 'BOOTCAMP'}
+              value="BOOTCAMP"
               className="mr-2"
               onChange={e =>
-                setWorkout(workout => ({
-                  ...workout,
-                  type: e.target.value as WORKOUT_TYPE,
+                setForm(form => ({
+                  ...form,
+                  type: e.target.value as EventType,
                 }))
               }
             />
-            <label htmlFor={WORKOUT_TYPE.BOOTCAMP}>Bootcamp</label>
+            <label htmlFor="BOOTCAMP">Bootcamp</label>
           </div>
         </fieldset>
 
@@ -339,8 +381,8 @@ export function CalendarForm({
                 min="0"
                 value={formData.weeksToRepeat}
                 onChange={e =>
-                  setWorkout(workout => ({
-                    ...workout,
+                  setForm(form => ({
+                    ...form,
                     weeksToRepeat: Number(e.target.value),
                   }))
                 }
@@ -362,8 +404,8 @@ export function CalendarForm({
 
       <textarea
         onChange={e =>
-          setWorkout(workout => ({
-            ...workout,
+          setForm(form => ({
+            ...form,
             description: e.target.value,
           }))
         }
@@ -375,8 +417,8 @@ export function CalendarForm({
       />
       <input
         onChange={e =>
-          setWorkout(workout => ({
-            ...workout,
+          setForm(form => ({
+            ...form,
             videoUrl: e.target.value,
           }))
         }
@@ -404,7 +446,7 @@ export function CalendarForm({
             <Link
               href={`/workout/${formData.id}`}
               className="mx-2 w-full max-w-xs self-center"
-              onClick={() => dispatch(resetWorkoutId())}
+              onClick={() => dispatch(resetEvent())}
             >
               <Button
                 type="button"

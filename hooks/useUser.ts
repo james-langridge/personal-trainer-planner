@@ -8,7 +8,7 @@ import {setUser} from '@/redux/usersSlice'
 
 export function useUser(initialUser: UserWithWorkouts) {
   // TODO: why fetch and cache user here?
-  useGetUserQuery(initialUser.id)
+  // useGetUserQuery(initialUser.id)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
   const dispatch = useAppDispatch()
 

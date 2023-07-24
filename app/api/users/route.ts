@@ -20,6 +20,20 @@ export async function GET() {
 
   const users: UserWithWorkouts[] = await db.user.findMany({
     select: {
+      appointments: {
+        select: {
+          date: true,
+          description: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+          videoUrl: true,
+        },
+        where: {
+          deleted: false,
+        },
+      },
       bootcamps: {
         select: {
           date: true,
@@ -45,7 +59,6 @@ export async function GET() {
           name: true,
           ownerId: true,
           status: true,
-          type: true,
           videoUrl: true,
         },
         where: {

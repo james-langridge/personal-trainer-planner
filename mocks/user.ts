@@ -11,9 +11,10 @@ export const user: UserWithWorkoutAndAttendance = {
   role: 'user',
   email: 'email',
   name: 'Name',
-  appointments: 1,
+  appointmentsAssigned: 1,
   appointmentsAttended: 1,
   type: 'INDIVIDUAL',
+  appointments: [],
   bootcamps: [],
   workouts: [
     {
@@ -23,7 +24,6 @@ export const user: UserWithWorkoutAndAttendance = {
       name: 'workout 1',
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
-      type: 'TRAINING',
       date: new Date(`${year}-${uiMonth}-1`),
     },
     {
@@ -33,7 +33,6 @@ export const user: UserWithWorkoutAndAttendance = {
       name: 'workout 2',
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
-      type: 'TRAINING',
       date: new Date(`${year}-${uiMonth}-1`),
     },
     {
@@ -43,7 +42,6 @@ export const user: UserWithWorkoutAndAttendance = {
       name: 'workout 3',
       description: 'do it!!!',
       videoUrl: 'https://player.vimeo.com/video/756493570?h=6189b49779',
-      type: 'TRAINING',
       date: new Date(`${year}-${uiMonth}-1`),
     },
     {
@@ -53,7 +51,6 @@ export const user: UserWithWorkoutAndAttendance = {
       name: 'appointment 1',
       description: 'mooooove it',
       videoUrl: '',
-      type: 'APPOINTMENT',
       date: new Date(`${year}-${uiMonth}-2`),
     },
   ],

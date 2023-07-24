@@ -1,4 +1,4 @@
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {Appointment, UserWithWorkouts, Workout} from '@/@types/apiResponseTypes'
 import {
   ComputedWorkoutData,
   UserWithWorkoutsKey,
@@ -9,34 +9,37 @@ import {userKeys} from '@/lib/constants'
 
 export function addAttendanceData(users: UserWithWorkouts[]) {
   return users.map(user => {
-    return {...user, ...computeWorkoutData(user.workouts)}
+    return {
+      ...user,
+      ...computeWorkoutData([...user.workouts, ...user.appointments]),
+    }
   })
 }
 
 export function computeWorkoutData(
-  workouts: UserWithWorkouts['workouts'],
+  workouts: (Workout | Appointment)[],
 ): ComputedWorkoutData {
   const workoutsData = {
-    appointments: 0,
+    appointmentsAssigned: 0,
     appointmentsAttended: 0,
     workoutsAssigned: 0,
     workoutsCompleted: 0,
   }
 
   return workouts.reduce((acc, cur) => {
-    if (cur.type === 'TRAINING') {
+    if (cur.status === 'NOT_STARTED' || cur.status === 'COMPLETED') {
       acc.workoutsAssigned++
     }
 
-    if (cur.type === 'TRAINING' && cur.status === 'COMPLETED') {
+    if (cur.status === 'COMPLETED') {
       acc.workoutsCompleted++
     }
 
-    if (cur.type === 'APPOINTMENT') {
-      acc.appointments++
+    if (cur.status === 'NOT_ATTENDED' || cur.status === 'ATTENDED') {
+      acc.appointmentsAssigned++
     }
 
-    if (cur.type === 'APPOINTMENT' && cur.status === 'COMPLETED') {
+    if (cur.status === 'ATTENDED') {
       acc.appointmentsAttended++
     }
 

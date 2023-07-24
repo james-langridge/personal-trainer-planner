@@ -1,7 +1,10 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {getServerSession} from 'next-auth/next'
 
-import {CreateWorkoutBody, UpdateWorkoutBody} from '@/@types/apiRequestTypes'
+import {
+  CreateAppointmentBody,
+  UpdateAppointmentBody,
+} from '@/@types/apiRequestTypes'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {getRepeatingDates} from '@/lib/calendar'
 import {db} from '@/lib/db'
@@ -25,7 +28,7 @@ export async function POST(req: NextRequest) {
     selectedDays,
     videoUrl,
     weeksToRepeat,
-  }: CreateWorkoutBody = await req.json()
+  }: CreateAppointmentBody = await req.json()
 
   const dates = getRepeatingDates(date, selectedDays, weeksToRepeat)
 
@@ -39,10 +42,10 @@ export async function POST(req: NextRequest) {
     }
   })
 
-  const workouts = await db.workout.createMany({data})
+  const appointments = await db.appointment.createMany({data})
 
   return NextResponse.json(
-    {workouts},
+    {appointments},
     {
       status: 201,
     },
@@ -56,9 +59,9 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({message: 'You must be logged in.'}, {status: 401})
   }
 
-  const body: UpdateWorkoutBody = await req.json()
+  const body: UpdateAppointmentBody = await req.json()
 
-  const workout = await db.workout.update({
+  const appointment = await db.appointment.update({
     where: {
       id: body.id,
     },
@@ -73,7 +76,7 @@ export async function PUT(req: NextRequest) {
   })
 
   return NextResponse.json(
-    {workout},
+    {appointment},
     {
       status: 201,
     },

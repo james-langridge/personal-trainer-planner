@@ -8,15 +8,13 @@ import {
 } from '@/components/calendar'
 import {useWorkoutStatus} from '@/hooks'
 import {selectIsAdmin} from '@/redux/authSlice'
+import {setEvent} from '@/redux/eventSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
-import {setWorkoutId} from '@/redux/workoutSlice'
 
 export function WorkoutItem({workout}: {workout: Workout}) {
   const dispatch = useAppDispatch()
   const isAdmin = useAppSelector(selectIsAdmin)
   const {status, toggleStatus} = useWorkoutStatus(workout)
-  const isAppointment = workout.type === 'APPOINTMENT'
-  const displayCheckbox = !isAppointment || (isAppointment && isAdmin)
 
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
     if (!isAdmin) {
@@ -25,14 +23,17 @@ export function WorkoutItem({workout}: {workout: Workout}) {
 
     const workoutId = (event.target as HTMLElement).id
 
-    dispatch(setWorkoutId(workoutId))
+    dispatch(
+      setEvent({
+        id: workoutId,
+        type: 'WORKOUT',
+      }),
+    )
   }
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
-      {displayCheckbox && (
-        <WorkoutCheckbox onChange={toggleStatus} status={status} />
-      )}
+      <WorkoutCheckbox onChange={toggleStatus} status={status} />
 
       {isAdmin && <WorkoutLinkAdmin onClick={onClick} workout={workout} />}
 

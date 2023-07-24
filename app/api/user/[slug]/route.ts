@@ -18,6 +18,20 @@ export async function GET(
   const id = params.slug
   const user: UserWithWorkouts | null = await db.user.findUnique({
     select: {
+      appointments: {
+        select: {
+          date: true,
+          description: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+          videoUrl: true,
+        },
+        where: {
+          deleted: false,
+        },
+      },
       bootcamps: {
         select: {
           date: true,
@@ -43,7 +57,6 @@ export async function GET(
           name: true,
           ownerId: true,
           status: true,
-          type: true,
           videoUrl: true,
         },
         where: {

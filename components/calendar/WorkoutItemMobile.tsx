@@ -7,24 +7,24 @@ import {useWorkoutStatus} from '@/hooks'
 
 export function WorkoutItemMobile({workout}: {workout: Workout}) {
   const {status, toggleStatus} = useWorkoutStatus(workout)
-  const isTrainingWorkout = workout.type === 'TRAINING'
 
   return (
     <div className="flex items-center gap-2 text-lg">
-      {isTrainingWorkout && (
-        <input
-          type="checkbox"
-          checked={status === WORKOUT_STATUS.COMPLETED}
-          className="h-7 w-7 rounded"
-          onChange={toggleStatus}
-        />
-      )}
+      <input
+        type="checkbox"
+        checked={status === WORKOUT_STATUS.COMPLETED}
+        className="h-7 w-7 rounded"
+        onChange={toggleStatus}
+      />
+
       <Link
         href={`/workout/${workout?.id}`}
-        className={clsx('my-1 block', {
-          'line-through':
-            status === WORKOUT_STATUS.COMPLETED && isTrainingWorkout,
-        })}
+        className={clsx(
+          'p my-1 block w-full rounded bg-emerald-400 px-2 text-white',
+          {
+            'line-through': status === WORKOUT_STATUS.COMPLETED,
+          },
+        )}
       >
         {workout?.name}
       </Link>
