@@ -2,14 +2,14 @@ import {configureStore} from '@reduxjs/toolkit'
 
 import {apiSlice} from './apiSlice'
 import authReducer from './authSlice'
+import eventReducer from './eventSlice'
 import usersReducer from './usersSlice'
-import workoutReducer from './workoutSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    event: eventReducer,
     users: usersReducer,
-    workout: workoutReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: getDefaultMiddleware =>

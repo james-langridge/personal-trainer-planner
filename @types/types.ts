@@ -1,6 +1,6 @@
-import {WORKOUT_TYPE} from '@prisma/client'
-
 import {UserWithWorkouts, Workout} from '@/@types/apiResponseTypes'
+
+export type EventType = 'APPOINTMENT' | 'BOOTCAMP' | 'WORKOUT'
 
 export type CalendarFormState = {
   date: string
@@ -9,13 +9,13 @@ export type CalendarFormState = {
   name: string
   ownerId: string
   selectedDays: Set<number>
-  type: WORKOUT_TYPE
+  type?: EventType
   videoUrl: string | null
   weeksToRepeat: number
 }
 
 export type ComputedWorkoutData = {
-  appointments: number
+  appointmentsAssigned: number
   appointmentsAttended: number
   workoutsAssigned: number
   workoutsCompleted: number
@@ -33,12 +33,12 @@ export type UserWithWorkoutAndAttendance = UserWithWorkouts &
 
 export type UserWithWorkoutAndAttendanceKey = keyof Omit<
   UserWithWorkoutAndAttendance,
-  'bootcamps' | 'id' | 'role' | 'type' | 'workouts'
+  'appointments' | 'bootcamps' | 'id' | 'role' | 'type' | 'workouts'
 >
 
 export type UserWithWorkoutsKey = keyof Omit<
   UserWithWorkouts,
-  'bootcamps' | 'id' | 'role' | 'type' | 'workouts'
+  'appointments' | 'bootcamps' | 'id' | 'role' | 'type' | 'workouts'
 >
 
 export type WorkoutKey = keyof Omit<

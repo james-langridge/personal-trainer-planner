@@ -1,6 +1,7 @@
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import clsx from 'clsx'
+import React from 'react'
+
 import {Day} from '@/@types/types'
-import {WorkoutItemMobile} from '@/components/calendar'
 import {
   getMonthName,
   getLongWeekday,
@@ -9,11 +10,11 @@ import {
 } from '@/lib/calendar'
 
 export function DayMobile({
+  children,
   dayData,
-  workoutsToday,
 }: {
+  children: React.ReactNode
   dayData: Day
-  workoutsToday: UserWithWorkouts['workouts'] | null | undefined
 }) {
   const isToday = isDayToday(dayData)
   const isTomorrow = isDayTomorrow(dayData)
@@ -21,7 +22,7 @@ export function DayMobile({
   const monthName = getMonthName(dayData)
 
   return (
-    <div className={isToday ? 'scroll-mt-16' : ''}>
+    <div className={clsx({'scroll-mt-16': isToday})}>
       <hr className="my-6 h-px border-none bg-gray-900 dark:bg-gray-700" />
       <div className="mb-2 flex justify-between text-sm text-gray-500">
         <div className="font-bold">{weekday}</div>
@@ -33,17 +34,7 @@ export function DayMobile({
             : dayData.day + ' ' + monthName}
         </div>
       </div>
-      {workoutsToday &&
-        workoutsToday.map((workout, i) => {
-          return (
-            <div key={workout?.id}>
-              {workout && <WorkoutItemMobile workout={workout} />}
-              {i < workoutsToday.length - 1 && (
-                <hr className="my-4 h-px border-none bg-gray-200 dark:bg-gray-700" />
-              )}
-            </div>
-          )
-        })}
+      {children}
     </div>
   )
 }

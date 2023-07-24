@@ -1,12 +1,15 @@
-import {WORKOUT_TYPE} from '@prisma/client'
 import React, {useCallback, useEffect, useState} from 'react'
 
 import {CalendarFormState, Day} from '@/@types/types'
 import {getWeekday, padZero} from '@/lib/calendar'
-import {useGetWorkoutQuery} from '@/redux/apiSlice'
+import {
+  useGetAppointmentQuery,
+  useGetBootcampQuery,
+  useGetWorkoutQuery,
+} from '@/redux/apiSlice'
+import {selectEvent} from '@/redux/eventSlice'
 import {useAppSelector} from '@/redux/hooks'
 import {selectUser} from '@/redux/usersSlice'
-import {selectWorkoutId} from '@/redux/workoutSlice'
 
 const initialState: CalendarFormState = {
   date: '',
@@ -15,7 +18,7 @@ const initialState: CalendarFormState = {
   name: '',
   ownerId: '',
   selectedDays: new Set<number>(),
-  type: WORKOUT_TYPE.TRAINING,
+  type: 'WORKOUT',
   videoUrl: '',
   weeksToRepeat: 0,
 }
@@ -31,9 +34,18 @@ export const useCalendarForm = ({
 ] => {
   const user = useAppSelector(selectUser)
   const userId = user?.id || ''
-  const workoutId = useAppSelector(selectWorkoutId)
-  const {data: workoutData} = useGetWorkoutQuery(workoutId, {skip: !workoutId})
-  const [workout, setWorkout] = useState<CalendarFormState>({
+  const {id, type} = useAppSelector(selectEvent)
+  const {data: appointmentData} = useGetAppointmentQuery(id, {
+    skip: !id || type !== 'APPOINTMENT',
+  })
+  const {data: workoutData} = useGetWorkoutQuery(id, {
+    skip: !id || type !== 'WORKOUT',
+  })
+  const {data: bootcampData} = useGetBootcampQuery(id, {
+    skip: !id || type !== 'BOOTCAMP',
+  })
+  const formData = appointmentData || bootcampData || workoutData
+  const [form, setForm] = useState<CalendarFormState>({
     ...initialState,
     date: `${day.year}-${padZero(day.month + 1)}-${padZero(day.day)}`,
     selectedDays: new Set([day.weekDay]),
@@ -42,11 +54,11 @@ export const useCalendarForm = ({
 
   const toggleDay = useCallback(
     (weekday: number) => {
-      if (getWeekday(workout.date) === weekday) {
+      if (getWeekday(form.date) === weekday) {
         return
       }
 
-      const newSet = new Set(workout.selectedDays)
+      const newSet = new Set(form.selectedDays)
       const isDaySelected = newSet.has(weekday)
 
       if (isDaySelected) {
@@ -55,32 +67,33 @@ export const useCalendarForm = ({
         newSet.add(weekday)
       }
 
-      setWorkout(workout => ({
-        ...workout,
+      setForm(form => ({
+        ...form,
         selectedDays: newSet,
       }))
     },
-    [workout.date, workout.selectedDays],
+    [form.date, form.selectedDays],
   )
 
   useEffect(() => {
-    const newSet = new Set<number>([getWeekday(workout.date)])
+    const newSet = new Set<number>([getWeekday(form.date)])
 
-    setWorkout(workout => ({
-      ...workout,
+    setForm(form => ({
+      ...form,
       selectedDays: newSet,
     }))
-  }, [workout.date])
+  }, [form.date])
 
   useEffect(() => {
-    if (workoutData) {
-      setWorkout({
-        ...workout,
-        ...workoutData,
-        date: String(workoutData.date).split('T')[0],
+    if (formData) {
+      setForm({
+        ...form,
+        ...formData,
+        type,
+        date: String(formData.date).split('T')[0],
       })
     }
-  }, [workoutData])
+  }, [formData])
 
-  return [workout, setWorkout, toggleDay]
+  return [form, setForm, toggleDay]
 }

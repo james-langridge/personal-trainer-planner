@@ -1,19 +1,19 @@
-import {USER_TYPE} from '@prisma/client'
+import {Bootcamp} from '@/@types/apiResponseTypes'
+import {useGetBootcampsQuery} from '@/redux/apiSlice'
+import {useAppSelector} from '@/redux/hooks'
+import {selectUser} from '@/redux/usersSlice'
 
-import {Workout} from '@/@types/apiResponseTypes'
-import {useGetUserQuery} from '@/redux/apiSlice'
-
-export function useBootcamps(type?: USER_TYPE, id = ''): Workout[] {
-  const bootcampCalendarId = String(process.env.NEXT_PUBLIC_BOOTCAMP_ID)
-  const isBootcamper = type === 'BOOTCAMP'
-  const {data} = useGetUserQuery(bootcampCalendarId, {
+export function useBootcamps(): Bootcamp[] | null {
+  const user = useAppSelector(selectUser)
+  const isBootcamper = user?.type === 'BOOTCAMP'
+  const {data: bootcamps} = useGetBootcampsQuery('foo', {
     pollingInterval: 60000,
-    skip: !isBootcamper || id === bootcampCalendarId,
+    skip: !isBootcamper,
   })
 
   if (!isBootcamper) {
-    return []
+    return null
   }
 
-  return data?.workouts || []
+  return bootcamps || []
 }

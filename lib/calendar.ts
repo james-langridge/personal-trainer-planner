@@ -1,4 +1,4 @@
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {Bootcamp, Workout} from '@/@types/apiResponseTypes'
 import {Day} from '@/@types/types'
 
 function areDatesEqual(calendarDate: Date, workoutDate: Date) {
@@ -88,30 +88,30 @@ export function getRepeatingDates(
   return dates
 }
 
-export function getWorkoutsToday(
+export function getEventsToday<T extends Workout | Bootcamp>(
   calendarDay: {
     day: number
     weekDay: number
     month: number
     year: number
   },
-  workouts: UserWithWorkouts['workouts'] = [],
-): UserWithWorkouts['workouts'] {
+  items: T[] = [],
+): T[] {
   const calendarDate = new Date(
     `${calendarDay.year}-${padZero(calendarDay.month + 1)}-${padZero(
       calendarDay.day,
     )}`,
   )
 
-  const workoutsMap = workouts.map(workout => {
-    const workoutDate = new Date(workout.date)
+  const workoutsMap = items.map(item => {
+    const workoutDate = new Date(item.date)
 
     if (areDatesEqual(calendarDate, workoutDate)) {
-      return workout
+      return item
     }
   })
 
-  return workoutsMap.filter(Boolean) as UserWithWorkouts['workouts']
+  return workoutsMap.filter(Boolean) as T[]
 }
 
 export function isDayToday(dayData: Day) {

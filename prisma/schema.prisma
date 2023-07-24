@@ -10,6 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Appointment {
+  createdAt   DateTime           @default(now())
+  date        DateTime
+  deleted     Boolean            @default(false)
+  description String?
+  id          String             @id @default(uuid())
+  name        String
+  owner       User               @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  status      APPOINTMENT_STATUS @default(NOT_ATTENDED)
+  updatedAt   DateTime           @updatedAt
+  videoUrl    String?
+}
+
+enum APPOINTMENT_STATUS {
+  NOT_ATTENDED
+  ATTENDED
+}
+
 model Bootcamp {
   attendees   User[]
   createdAt   DateTime @default(now())
@@ -23,11 +42,12 @@ model Bootcamp {
 }
 
 model User {
-  bootcamps Bootcamp[]
-  createdAt DateTime   @default(now())
-  type      USER_TYPE  @default(INDIVIDUAL)
-  updatedAt DateTime   @updatedAt
-  workouts  Workout[]
+  appointments Appointment[]
+  bootcamps    Bootcamp[]
+  createdAt    DateTime      @default(now())
+  type         USER_TYPE     @default(INDIVIDUAL)
+  updatedAt    DateTime      @updatedAt
+  workouts     Workout[]
 
   // Fields required by NextAuth.js
   accounts      Account[]
@@ -40,6 +60,11 @@ model User {
   sessions      Session[]
 }
 
+enum USER_TYPE {
+  INDIVIDUAL
+  BOOTCAMP
+}
+
 model Workout {
   createdAt   DateTime       @default(now())
   date        DateTime
@@ -50,7 +75,6 @@ model Workout {
   owner       User           @relation(fields: [ownerId], references: [id])
   ownerId     String
   status      WORKOUT_STATUS @default(NOT_STARTED)
-  type        WORKOUT_TYPE   @default(TRAINING)
   updatedAt   DateTime       @updatedAt
   videoUrl    String?
 }
@@ -58,17 +82,6 @@ model Workout {
 enum WORKOUT_STATUS {
   NOT_STARTED
   COMPLETED
-}
-
-enum WORKOUT_TYPE {
-  APPOINTMENT
-  BOOTCAMP
-  TRAINING
-}
-
-enum USER_TYPE {
-  INDIVIDUAL
-  BOOTCAMP
 }
 
 // NextAuth.js models

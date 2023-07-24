@@ -1,25 +1,14 @@
 import React from 'react'
 
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
-import {Day} from '@/@types/types'
+import {Workout} from '@/@types/apiResponseTypes'
 import {WorkoutItem} from '@/components/calendar'
 
-export function WorkoutItems({
-  workouts,
-  day,
-}: {
-  workouts?: UserWithWorkouts['workouts'] | undefined | null
-  day: Day
-}) {
-  if (!workouts) {
-    return null
-  }
-
+export function WorkoutItems({workouts}: {workouts: Workout[]}) {
   return (
     <>
-      {workouts.map((workout, i) => {
+      {workouts.map(workout => {
         return (
-          <div key={day.day * day.year * day.month * i}>
+          <div key={workout.id}>
             {workout && <WorkoutItem workout={workout} />}
           </div>
         )

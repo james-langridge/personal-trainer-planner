@@ -18,7 +18,7 @@ export const monthNames = [
 ]
 
 export const userKeyMap = {
-  appointments: 'Appointments',
+  appointmentsAssigned: 'Appointments',
   appointmentsAttended: 'Appointments attended',
   email: 'Email',
   name: 'Name',
@@ -32,7 +32,7 @@ export const userKeys: UserWithWorkoutAndAttendanceKey[] = [
   'email',
   'workoutsAssigned',
   'workoutsCompleted',
-  'appointments',
+  'appointmentsAssigned',
   'appointmentsAttended',
 ]
 
@@ -41,7 +41,6 @@ export const workoutKeyMap = {
   description: 'Description',
   name: 'Name',
   status: 'Status',
-  type: 'Type',
   videoUrl: 'Video url',
 }
 
@@ -51,7 +50,6 @@ export const workoutKeys: WorkoutKey[] = [
   'date',
   'name',
   'description',
-  'type',
   'status',
   'videoUrl',
 ]

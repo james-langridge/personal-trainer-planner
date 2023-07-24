@@ -1,22 +1,39 @@
-import {Workout} from '@prisma/client'
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
 import {
+  CreateAppointmentBody,
   CreateBootcampBody,
   CreateUserBody,
   CreateWorkoutBody,
+  DeleteAppointmentBody,
   DeleteBootcampBody,
   DeleteWorkoutBody,
+  UpdateAppointmentBody,
   UpdateBootcampBody,
   UpdateWorkoutBody,
 } from '@/@types/apiRequestTypes'
-import {Bootcamp, UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {
+  Appointment,
+  Bootcamp,
+  UserWithWorkouts,
+  Workout,
+} from '@/@types/apiResponseTypes'
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({baseUrl: '/api'}),
-  tagTypes: ['Bootcamp', 'User', 'Workout'],
+  tagTypes: ['Appointment', 'Bootcamp', 'User', 'Workout'],
   endpoints: builder => ({
+    createAppointment: builder.mutation({
+      query: (body: CreateAppointmentBody) => ({
+        url: '/appointment',
+        method: 'POST',
+        body: body,
+      }),
+      invalidatesTags: (result, error, {ownerId}) => [
+        {type: 'User', id: ownerId},
+      ],
+    }),
     createBootcamp: builder.mutation({
       query: (body: CreateBootcampBody) => ({
         url: '/bootcamp',
@@ -43,6 +60,17 @@ export const apiSlice = createApi({
         {type: 'User', id: ownerId},
       ],
     }),
+    deleteAppointment: builder.mutation({
+      query: (body: DeleteAppointmentBody) => ({
+        url: '/appointment',
+        method: 'PUT',
+        body: body,
+      }),
+      invalidatesTags: (result, error, {ownerId, id}) => [
+        {type: 'User', id: ownerId},
+        {type: 'Appointment', id: id},
+      ],
+    }),
     deleteBootcamp: builder.mutation({
       query: (body: DeleteBootcampBody) => ({
         url: '/bootcamp',
@@ -62,11 +90,15 @@ export const apiSlice = createApi({
         {type: 'Workout', id: id},
       ],
     }),
+    getAppointment: builder.query<Appointment, string>({
+      query: id => `/appointment/${id}`,
+      providesTags: (result, error, id) => [{type: 'Appointment', id}],
+    }),
     getBootcamp: builder.query<Bootcamp, string>({
       query: id => `/bootcamp/${id}`,
       providesTags: (result, error, id) => [{type: 'Bootcamp', id}],
     }),
-    getBootcamps: builder.query<Bootcamp[], void>({
+    getBootcamps: builder.query<Bootcamp[], string>({
       query: () => '/bootcamp',
       providesTags: result =>
         result ? result.map(({id}) => ({type: 'Bootcamp', id})) : [],
@@ -91,13 +123,27 @@ export const apiSlice = createApi({
         body: body,
       }),
     }),
+    updateAppointment: builder.mutation({
+      query: (body: UpdateAppointmentBody) => ({
+        url: '/appointment',
+        method: 'PUT',
+        body: body,
+      }),
+      invalidatesTags: (result, error, {ownerId, id}) => [
+        {type: 'User', id: ownerId},
+        {type: 'Appointment', id: id},
+      ],
+    }),
     updateBootcamp: builder.mutation({
       query: (body: UpdateBootcampBody) => ({
         url: '/bootcamp',
         method: 'PUT',
         body: body,
       }),
-      invalidatesTags: (result, error, {id}) => [{type: 'Bootcamp', id: id}],
+      invalidatesTags: (result, error, {id, userId}) => [
+        {type: 'Bootcamp', id: id},
+        {type: 'User', id: userId},
+      ],
     }),
     updateWorkout: builder.mutation({
       query: (body: UpdateWorkoutBody) => ({
@@ -114,17 +160,21 @@ export const apiSlice = createApi({
 })
 
 export const {
+  useCreateAppointmentMutation,
   useCreateBootcampMutation,
   useCreateUserMutation,
   useCreateWorkoutMutation,
+  useDeleteAppointmentMutation,
   useDeleteBootcampMutation,
   useDeleteWorkoutMutation,
+  useGetAppointmentQuery,
   useGetBootcampQuery,
   useGetBootcampsQuery,
   useGetUserQuery,
   useGetUsersQuery,
   useGetWorkoutQuery,
   useSubmitFormMutation,
+  useUpdateAppointmentMutation,
   useUpdateBootcampMutation,
   useUpdateWorkoutMutation,
 } = apiSlice

@@ -1,9 +1,10 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {getServerSession} from 'next-auth/next'
 
-import {Bootcamp} from '@/@types/apiResponseTypes'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {db} from '@/lib/db'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(
   req: NextRequest,
@@ -16,19 +17,11 @@ export async function GET(
   }
 
   const id = params.slug
-  const bootcamp: Bootcamp | null = await db.bootcamp.findUnique({
-    select: {
-      attendees: true,
-      date: true,
-      description: true,
-      id: true,
-      name: true,
-      videoUrl: true,
-    },
+  const appointment = await db.appointment.findUnique({
     where: {
       id: id,
     },
   })
 
-  return NextResponse.json(bootcamp)
+  return NextResponse.json(appointment)
 }

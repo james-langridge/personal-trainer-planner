@@ -57,25 +57,42 @@ export async function PUT(req: NextRequest) {
 
   const body: UpdateBootcampBody = await req.json()
 
-  const bootcamp = await db.workout.update({
-    where: {
-      id: body.id,
-    },
-    data: {
-      ...(body.date !== undefined && {date: new Date(body.date)}),
-      ...(body.deleted === true && {deleted: true}),
-      ...(body.description !== undefined && {description: body.description}),
-      ...(body.name !== undefined && {name: body.name}),
-      ...(body.videoUrl !== undefined && {videoUrl: body.videoUrl}),
-    },
-  })
+  let bootcamp
 
-  return NextResponse.json(
-    {bootcamp},
-    {
-      status: 201,
-    },
-  )
+  if (body.userId !== undefined) {
+    if (body.query === 'connect') {
+      bootcamp = await db.bootcamp.update({
+        where: {id: body.id},
+        data: {
+          attendees: {
+            connect: {id: body.userId},
+          },
+        },
+      })
+    } else if (body.query === 'disconnect') {
+      bootcamp = await db.bootcamp.update({
+        where: {id: body.id},
+        data: {
+          attendees: {
+            disconnect: {id: body.userId},
+          },
+        },
+      })
+    }
+  } else {
+    bootcamp = await db.bootcamp.update({
+      where: {id: body.id},
+      data: {
+        ...(body.date !== undefined && {date: new Date(body.date)}),
+        ...(body.deleted === true && {deleted: true}),
+        ...(body.description !== undefined && {description: body.description}),
+        ...(body.name !== undefined && {name: body.name}),
+        ...(body.videoUrl !== undefined && {videoUrl: body.videoUrl}),
+      },
+    })
+  }
+
+  return NextResponse.json({bootcamp}, {status: 201})
 }
 
 export async function GET() {
@@ -83,10 +100,6 @@ export async function GET() {
 
   if (!session) {
     return NextResponse.json({message: 'You must be logged in.'}, {status: 401})
-  }
-
-  if (session.user?.role !== 'admin') {
-    return NextResponse.json({message: 'Forbidden.'}, {status: 403})
   }
 
   const bootcamps: Bootcamp[] = await db.bootcamp.findMany({
