@@ -3,7 +3,7 @@ import React from 'react'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
-import {Calendar} from '@/components/calendar'
+import {Calendar} from '@/features/calendar'
 import {db} from '@/lib/db'
 
 export const dynamic = 'force-dynamic'

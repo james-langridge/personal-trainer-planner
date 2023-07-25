@@ -3,7 +3,7 @@
 import {fireEvent, render, screen, within} from '@testing-library/react'
 import {SessionProvider} from 'next-auth/react'
 
-import {Calendar} from '@/components/calendar/Calendar'
+import {Calendar} from '@/features/calendar/Calendar'
 import {monthNames} from '@/lib/constants'
 import {user, year, month, session} from '@/mocks/user'
 
