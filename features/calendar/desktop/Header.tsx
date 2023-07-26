@@ -1,12 +1,11 @@
 import React from 'react'
 
-import {AddButton} from '@/components/AddButton'
-import {ClientDropdown} from '@/features/calendar/desktop'
+import {ClientSelect} from '@/features/calendar/desktop/ClientSelect'
 import {monthNames} from '@/lib/constants'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {useAppSelector} from '@/redux/hooks'
 
-export function Heading({
+export function Header({
   year,
   month,
   setYear,
@@ -40,12 +39,7 @@ export function Heading({
 
   return (
     <div className="flex w-full">
-      {isAdmin && (
-        <div className="flex w-1/5 items-center">
-          <ClientDropdown />
-          <AddButton />
-        </div>
-      )}
+      {isAdmin && <ClientSelect />}
       <div className="flex w-full flex-row justify-center p-5">
         <div className="flex flex-row items-center text-2xl">
           <button

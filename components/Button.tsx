@@ -32,6 +32,7 @@ const buttonClasses = cva(
         ],
       },
       size: {
+        small: [],
         medium: ['text-md', 'font-medium', 'px-6', 'py-2'],
       },
     },
