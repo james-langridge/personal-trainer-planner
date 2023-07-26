@@ -4,18 +4,12 @@ import clsx from 'clsx'
 import React, {Fragment} from 'react'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
-import {sortByString} from '@/lib/users'
-import {useGetUsersQuery} from '@/redux/apiSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {selectUser, setUser} from '@/redux/usersSlice'
 
-export function ClientDropdown() {
+export function ClientDropdown({users}: {users: UserWithWorkouts[]}) {
   const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
-  const {data = []} = useGetUsersQuery()
-  // Case-insensitive sorting is not possible via a Prisma query
-  // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#can-i-perform-case-insensitive-sorting
-  const users = sortByString('name', data)
 
   const onCLick = (user: UserWithWorkouts) => {
     dispatch(setUser(user))
@@ -24,7 +18,7 @@ export function ClientDropdown() {
   return (
     <Menu
       as="div"
-      className="relative inline-block text-left"
+      className="relative mx-1 inline-block text-left"
       title="Select a client"
     >
       <div>
