@@ -4,12 +4,12 @@ import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {RootState} from '@/redux/store'
 
 interface UsersState {
-  user: UserWithWorkouts | null
+  user: UserWithWorkouts | undefined
   users: UserWithWorkouts[] | null
 }
 
 const initialState: UsersState = {
-  user: null,
+  user: undefined,
   users: null,
 }
 
@@ -17,7 +17,7 @@ export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserWithWorkouts>) => {
+    setUser: (state, action: PayloadAction<UserWithWorkouts | undefined>) => {
       state.user = action.payload
     },
     setUsers: (state, action: PayloadAction<UserWithWorkouts[]>) => {
