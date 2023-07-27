@@ -444,7 +444,7 @@ export function CalendarForm({
         {formData.id && (
           <>
             <Link
-              href={`/workout/${formData.id}`}
+              href={`/${formData.type?.toLowerCase()}/${formData.id}`}
               className="mx-2 w-full max-w-xs self-center"
               onClick={() => dispatch(resetEvent())}
             >
