@@ -33,7 +33,7 @@ export function AppointmentItem({appointment}: {appointment: Appointment}) {
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
       {isAdmin && <Checkbox onChange={toggleStatus} status={status} />}
-      <Title appointment={appointment} isAdmin onClick={onClick} />
+      <Title appointment={appointment} isAdmin={isAdmin} onClick={onClick} />
     </div>
   )
 }
