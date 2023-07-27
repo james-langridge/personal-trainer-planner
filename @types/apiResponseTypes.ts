@@ -26,3 +26,5 @@ export type UserWithWorkouts = Pick<
 export type Appointment = UserWithWorkouts['appointments'][number]
 export type Bootcamp = UserWithWorkouts['bootcamps'][number]
 export type Workout = UserWithWorkouts['workouts'][number]
+
+export type Event = Appointment | Bootcamp | Workout
