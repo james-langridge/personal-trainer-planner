@@ -34,6 +34,15 @@ function getDaysInMonth(month: number, year: number) {
   return new Date(year, month + 1, 0).getDate()
 }
 
+export function getLongDate(date: Date) {
+  return new Date(date).toLocaleString('default', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
 export function getLongWeekday(dayData: Day) {
   const {day, month, year} = dayData
 
