@@ -29,7 +29,7 @@ export function WorkoutItem({workout}: {workout: Workout}) {
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
       <Checkbox onChange={toggleStatus} status={status} />
-      <Title isAdmin onClick={onClick} workout={workout} />
+      <Title isAdmin={isAdmin} onClick={onClick} workout={workout} />
     </div>
   )
 }

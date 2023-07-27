@@ -30,7 +30,7 @@ export function BootcampItem({bootcamp}: {bootcamp: Bootcamp}) {
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
       <Checkbox onChange={toggleAttendance} status={isAttending} />
-      <Title bootcamp={bootcamp} isAdmin onClick={onClick} />
+      <Title bootcamp={bootcamp} isAdmin={isAdmin} onClick={onClick} />
     </div>
   )
 }
