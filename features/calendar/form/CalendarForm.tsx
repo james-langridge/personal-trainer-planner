@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React, {useEffect, useRef, useState} from 'react'
 
 import {Day, EventType} from '@/@types/types'
-import Button from '@/components/Button'
+import ButtonOld from '@/components/ButtonOld'
 import {useCalendarForm} from '@/features/calendar/form'
 import {
   useCreateAppointmentMutation,
@@ -428,7 +428,7 @@ export function CalendarForm({
         value={formData.videoUrl ?? ''}
       />
       <div className="mt-4 flex justify-between">
-        <Button
+        <ButtonOld
           type="submit"
           disabled={isDisabled || !userId}
           className="w-full max-w-xs self-center"
@@ -440,7 +440,7 @@ export function CalendarForm({
             : formData.id
             ? 'Update'
             : 'Create'}
-        </Button>
+        </ButtonOld>
         {formData.id && (
           <>
             <Link
@@ -448,16 +448,16 @@ export function CalendarForm({
               className="mx-2 w-full max-w-xs self-center"
               onClick={() => dispatch(resetEvent())}
             >
-              <Button
+              <ButtonOld
                 type="button"
                 intent="success"
                 disabled={isDisabled}
                 className="w-full max-w-xs self-center"
               >
                 View
-              </Button>
+              </ButtonOld>
             </Link>
-            <Button
+            <ButtonOld
               type="button"
               intent="danger"
               onClick={handleDelete}
@@ -465,7 +465,7 @@ export function CalendarForm({
               className="w-full max-w-xs self-center"
             >
               {isDeleting ? 'Deleting...' : 'Delete'}
-            </Button>
+            </ButtonOld>
           </>
         )}
       </div>
