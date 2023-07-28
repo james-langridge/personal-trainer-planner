@@ -47,7 +47,7 @@ interface ButtonProps
   extends React.ComponentPropsWithoutRef<'button'>,
     VariantProps<typeof buttonClasses> {}
 
-const Button: FC<ButtonProps> = ({
+const ButtonOld: FC<ButtonProps> = ({
   children,
   className,
   intent,
@@ -61,4 +61,4 @@ const Button: FC<ButtonProps> = ({
   )
 }
 
-export default Button
+export default ButtonOld

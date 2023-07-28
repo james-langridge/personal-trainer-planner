@@ -1,4 +1,4 @@
-import {UserWithWorkoutAndAttendanceKey, WorkoutKey} from '@/@types/types'
+import {WorkoutKey} from '@/@types/types'
 
 export const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -15,25 +15,6 @@ export const monthNames = [
   'October',
   'November',
   'December',
-]
-
-export const userKeyMap = {
-  appointmentsAssigned: 'Appointments',
-  appointmentsAttended: 'Appointments attended',
-  email: 'Email',
-  name: 'Name',
-  workoutsAssigned: 'Workouts assigned',
-  workoutsCompleted: 'Workouts completed',
-}
-
-// Changing the order of userKeys will change the display order of the cols on /users
-export const userKeys: UserWithWorkoutAndAttendanceKey[] = [
-  'name',
-  'email',
-  'workoutsAssigned',
-  'workoutsCompleted',
-  'appointmentsAssigned',
-  'appointmentsAttended',
 ]
 
 export const workoutKeyMap = {
