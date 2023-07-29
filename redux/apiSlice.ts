@@ -26,7 +26,7 @@ export const apiSlice = createApi({
   endpoints: builder => ({
     createAppointment: builder.mutation({
       query: (body: CreateAppointmentBody) => ({
-        url: '/appointment',
+        url: '/appointments',
         method: 'POST',
         body: body,
       }),
@@ -36,7 +36,7 @@ export const apiSlice = createApi({
     }),
     createBootcamp: builder.mutation({
       query: (body: CreateBootcampBody) => ({
-        url: '/bootcamp',
+        url: '/bootcamps',
         method: 'POST',
         body: body,
       }),
@@ -44,7 +44,7 @@ export const apiSlice = createApi({
     }),
     createUser: builder.mutation({
       query: (body: CreateUserBody) => ({
-        url: '/user',
+        url: '/users',
         method: 'POST',
         body: body,
       }),
@@ -52,7 +52,7 @@ export const apiSlice = createApi({
     }),
     createWorkout: builder.mutation({
       query: (body: CreateWorkoutBody) => ({
-        url: '/workout',
+        url: '/workouts',
         method: 'POST',
         body: body,
       }),
@@ -62,7 +62,7 @@ export const apiSlice = createApi({
     }),
     deleteAppointment: builder.mutation({
       query: (body: DeleteAppointmentBody) => ({
-        url: '/appointment',
+        url: '/appointments',
         method: 'PUT',
         body: body,
       }),
@@ -73,7 +73,7 @@ export const apiSlice = createApi({
     }),
     deleteBootcamp: builder.mutation({
       query: (body: DeleteBootcampBody) => ({
-        url: '/bootcamp',
+        url: '/bootcamps',
         method: 'PUT',
         body: body,
       }),
@@ -81,7 +81,7 @@ export const apiSlice = createApi({
     }),
     deleteWorkout: builder.mutation({
       query: (body: DeleteWorkoutBody) => ({
-        url: '/workout',
+        url: '/workouts',
         method: 'PUT',
         body: body,
       }),
@@ -91,20 +91,20 @@ export const apiSlice = createApi({
       ],
     }),
     getAppointment: builder.query<Appointment, string>({
-      query: id => `/appointment/${id}`,
+      query: id => `/appointments/${id}`,
       providesTags: (result, error, id) => [{type: 'Appointment', id}],
     }),
     getBootcamp: builder.query<Bootcamp, string>({
-      query: id => `/bootcamp/${id}`,
+      query: id => `/bootcamps/${id}`,
       providesTags: (result, error, id) => [{type: 'Bootcamp', id}],
     }),
     getBootcamps: builder.query<Bootcamp[], string>({
-      query: () => '/bootcamp',
+      query: () => '/bootcamps',
       providesTags: result =>
         result ? result.map(({id}) => ({type: 'Bootcamp', id})) : [],
     }),
     getUser: builder.query<UserWithWorkouts, string>({
-      query: id => `/user/${id}`,
+      query: id => `/users/${id}`,
       providesTags: (result, error, id) => [{type: 'User', id}],
     }),
     getUsers: builder.query<UserWithWorkouts[], void>({
@@ -113,19 +113,19 @@ export const apiSlice = createApi({
         result ? result.map(({id}) => ({type: 'User', id})) : [],
     }),
     getWorkout: builder.query<Workout, string>({
-      query: id => `/workout/${id}`,
+      query: id => `/workouts/${id}`,
       providesTags: (result, error, id) => [{type: 'Workout', id}],
     }),
     submitForm: builder.mutation({
       query: (body: Record<string, string>) => ({
-        url: '/form',
+        url: '/forms',
         method: 'POST',
         body: body,
       }),
     }),
     updateAppointment: builder.mutation({
       query: (body: UpdateAppointmentBody) => ({
-        url: '/appointment',
+        url: '/appointments',
         method: 'PUT',
         body: body,
       }),
@@ -136,7 +136,7 @@ export const apiSlice = createApi({
     }),
     updateBootcamp: builder.mutation({
       query: (body: UpdateBootcampBody) => ({
-        url: '/bootcamp',
+        url: '/bootcamps',
         method: 'PUT',
         body: body,
       }),
@@ -147,7 +147,7 @@ export const apiSlice = createApi({
     }),
     updateWorkout: builder.mutation({
       query: (body: UpdateWorkoutBody) => ({
-        url: '/workout',
+        url: '/workouts',
         method: 'PUT',
         body: body,
       }),

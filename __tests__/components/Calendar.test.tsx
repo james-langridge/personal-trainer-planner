@@ -50,11 +50,11 @@ describe('Calendar', () => {
 
     expect(linkElement1).toHaveAttribute(
       'href',
-      `/workout/${user.workouts[0].id}`,
+      `/workouts/${user.workouts[0].id}`,
     )
     expect(linkElement2).toHaveAttribute(
       'href',
-      `/workout/${user.workouts[1].id}`,
+      `/workouts/${user.workouts[1].id}`,
     )
   })
 
@@ -68,7 +68,7 @@ describe('Calendar', () => {
     const linkElement3 = screen.getByTestId(`${user.workouts[3].id}`)
     expect(linkElement3).toHaveAttribute(
       'href',
-      `/workout/${user.workouts[3].id}`,
+      `/workouts/${user.workouts[3].id}`,
     )
   })
 
