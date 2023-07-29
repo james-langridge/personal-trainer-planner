@@ -16,7 +16,7 @@ export function BootcampItemMobile({bootcamp}: {bootcamp: Bootcamp}) {
       />
 
       <Link
-        href={`/bootcamp/${bootcamp?.id}`}
+        href={`/bootcamps/${bootcamp?.id}`}
         className="my-1 block w-full rounded bg-yellow-400 px-2 text-white"
       >
         {bootcamp?.name}

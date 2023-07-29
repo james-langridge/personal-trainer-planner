@@ -103,7 +103,7 @@ export default function UserDetails({params}: {params: {slug: string}}) {
                             <div className="flex items-center gap-x-6">
                               <Link
                                 className="text-gray-500 transition-colors duration-200 hover:text-yellow-500 focus:outline-none dark:text-gray-300 dark:hover:text-yellow-500"
-                                href={`/workout/${workout.id}`}
+                                href={`/workouts/${workout.id}`}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"

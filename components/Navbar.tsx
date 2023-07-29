@@ -9,7 +9,7 @@ import {signOut} from 'next-auth/react'
 const adminNavigation = [
   {href: '/', name: 'Training planner'},
   {href: '/users', name: 'Clients'},
-  {href: '/bootcamp', name: 'Bootcamps'},
+  {href: '/bootcamps', name: 'Bootcamps'},
   {href: '/profile', name: 'Profile'},
 ]
 
