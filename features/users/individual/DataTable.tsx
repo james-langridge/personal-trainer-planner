@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/table'
-import {DataTableToolbar} from '@/features/users/data-table-toolbar'
+import {DataTableToolbar} from '@/features/users/individual/data-table-toolbar'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -94,9 +94,7 @@ export function DataTable<TData, TValue>({
                     <TableCell
                       key={cell.id}
                       className={clsx({
-                        capitalize:
-                          cell.column.id === 'name' ||
-                          cell.column.id === 'type',
+                        capitalize: cell.column.id === 'status',
                       })}
                     >
                       {flexRender(

@@ -5,8 +5,8 @@ import {useSession} from 'next-auth/react'
 import React from 'react'
 
 import Loader from '@/components/Loader'
-import {columns} from '@/features/users/Columns'
-import {DataTable} from '@/features/users/DataTable'
+import {columns} from '@/features/users/summary/Columns'
+import {DataTable} from '@/features/users/summary/DataTable'
 import {useGetUsersQuery} from '@/redux/apiSlice'
 
 export default function Users() {
