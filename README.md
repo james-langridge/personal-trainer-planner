@@ -33,6 +33,8 @@ A client management and scheduling app for personal trainers (PT) and their clie
 
 ![clients_table](public/clientsTable.png)
 
+![client_table](public/clientTable.png)
+
 ![mobile_calendar](public/mobileCalendar.png) ![mobile_session](public/mobileSession.png)
 
 ## Run it locally
