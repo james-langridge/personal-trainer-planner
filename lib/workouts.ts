@@ -1,24 +1,6 @@
-import {UserWithWorkouts, Workout} from '@/@types/apiResponseTypes'
+import {Workout} from '@/@types/apiResponseTypes'
 import {WorkoutKey} from '@/@types/types'
 import {workoutKeys} from '@/lib/constants'
-
-export function filterByMonth(
-  year: number,
-  month: number,
-  users: UserWithWorkouts[],
-) {
-  return users.map(user => {
-    const filteredWorkouts = user.workouts.filter(workout => {
-      const workoutDate = new Date(workout.date)
-      const workoutYear = workoutDate.getFullYear()
-      const workoutMonth = workoutDate.getMonth()
-
-      return workoutMonth === month && workoutYear === year
-    })
-
-    return {...user, workouts: filteredWorkouts}
-  })
-}
 
 export function isValidKey(key: string): key is WorkoutKey {
   return workoutKeys.includes(key as WorkoutKey)
