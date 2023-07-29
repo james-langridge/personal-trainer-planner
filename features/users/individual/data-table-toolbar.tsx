@@ -7,20 +7,20 @@ import {Button} from '@/components/button'
 import {Input} from '@/components/input'
 import {DataTableViewOptions} from '@/features/users/data-table-view-options'
 
-import {DataTableFacetedFilter} from './data-table-faceted-filter'
+import {DataTableFacetedFilter} from '../data-table-faceted-filter'
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
 }
 
-const types = [
+const workoutStatus = [
   {
-    value: 'individual',
-    label: 'Individual',
+    value: 'not_started',
+    label: 'Not started',
   },
   {
-    value: 'bootcamp',
-    label: 'Bootcamp',
+    value: 'completed',
+    label: 'Completed',
   },
 ]
 
@@ -38,11 +38,11 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn('type') && (
+        {table.getColumn('status') && (
           <DataTableFacetedFilter
-            column={table.getColumn('type')}
-            title="Type"
-            options={types}
+            column={table.getColumn('status')}
+            title="Status"
+            options={workoutStatus}
           />
         )}
         {isFiltered && (
