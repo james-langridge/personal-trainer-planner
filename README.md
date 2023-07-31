@@ -2,7 +2,7 @@
 
 ## About The Project
 
-A client management and scheduling app for personal trainers (PT) and their clients, made with the new Next.js 13 features like the [App Router](https://nextjs.org/docs/app/building-your-application/routing) and [React Server Components](https://nextjs.org/docs/getting-started/react-essentials).
+A client management and scheduling app for personal trainers and their clients, made with the new Next.js 13 features like the [App Router](https://nextjs.org/docs/app/building-your-application/routing) and [React Server Components](https://nextjs.org/docs/getting-started/react-essentials), in collaboration with a real personal trainer (PT).
 
 ### Features
 
