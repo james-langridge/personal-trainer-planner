@@ -3,10 +3,10 @@ import React, {useCallback, useEffect, useState} from 'react'
 import {CalendarFormState, Day} from '@/@types/types'
 import {getWeekday, padZero} from '@/lib/calendar'
 import {selectEvent} from '@/redux/eventSlice'
-import {useAppSelector} from '@/redux/hooks'
 import {useGetAppointmentQuery} from '@/redux/services/appointments'
 import {useGetBootcampQuery} from '@/redux/services/bootcamps'
 import {useGetWorkoutQuery} from '@/redux/services/workouts'
+import {useAppSelector} from '@/redux/store'
 import {selectUser} from '@/redux/usersSlice'
 
 const initialState: CalendarFormState = {

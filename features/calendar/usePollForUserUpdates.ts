@@ -1,7 +1,7 @@
 import {Appointment, Workout} from '@/@types/apiResponseTypes'
 import {useIsFirstRender} from '@/hooks/useIsFirstRender'
-import {useAppSelector} from '@/redux/hooks'
 import {useGetUserQuery} from '@/redux/services/users'
+import {useAppSelector} from '@/redux/store'
 import {selectUser} from '@/redux/usersSlice'
 
 export function usePollForUserUpdates(): [Workout[], Appointment[]] {

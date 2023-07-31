@@ -4,7 +4,7 @@ import {Workout} from '@/@types/apiResponseTypes'
 import {useWorkoutStatus, Checkbox, Title} from '@/features/calendar/workout/'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {setEvent} from '@/redux/eventSlice'
-import {useAppDispatch, useAppSelector} from '@/redux/hooks'
+import {useAppDispatch, useAppSelector} from '@/redux/store'
 
 export function WorkoutItem({workout}: {workout: Workout}) {
   const dispatch = useAppDispatch()
