@@ -29,7 +29,7 @@ export const bootcampsApi = api.injectEndpoints({
       query: id => `/bootcamps/${id}`,
       providesTags: (result, error, id) => [{type: 'Bootcamps', id}],
     }),
-    getBootcamps: build.query<Bootcamp[], string>({
+    getBootcamps: build.query<Bootcamp[], void | string>({
       query: () => '/bootcamps',
       providesTags: (result = []) => [
         ...result.map(({id}) => ({type: 'Bootcamps', id} as const)),

@@ -1,8 +1,8 @@
 import {useEffect} from 'react'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
-import {useGetUserQuery} from '@/redux/apiSlice'
 import {loginSuccess, selectIsLoggedIn} from '@/redux/authSlice'
+import {useGetUserQuery} from '@/redux/services/users'
 import {useAppDispatch, useAppSelector} from '@/redux/store'
 import {setUser} from '@/redux/usersSlice'
 
