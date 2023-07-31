@@ -5,7 +5,7 @@ import React from 'react'
 
 import {columns} from '@/features/users/individual/Columns'
 import {DataTable} from '@/features/users/individual/DataTable'
-import {useGetUserQuery} from '@/redux/apiSlice'
+import {useGetUserQuery} from '@/redux/services/users'
 
 export default function UserDetails({params}: {params: {slug: string}}) {
   const {slug} = params

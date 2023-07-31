@@ -7,11 +7,15 @@ import React from 'react'
 import Loader from '@/components/Loader'
 import {columns} from '@/features/users/summary/Columns'
 import {DataTable} from '@/features/users/summary/DataTable'
-import {useGetUsersQuery} from '@/redux/apiSlice'
+import {useGetUsersQuery} from '@/redux/services/users'
 
 export default function Users() {
   const {data: session, status} = useSession()
   const {data} = useGetUsersQuery()
+
+  if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
+    redirect('/')
+  }
 
   if (!data) {
     return null
@@ -19,10 +23,6 @@ export default function Users() {
 
   if (status === 'loading') {
     return <Loader />
-  }
-
-  if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
-    redirect('/')
   }
 
   return (

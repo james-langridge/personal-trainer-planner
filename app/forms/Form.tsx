@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react'
 
 import {IFormInput} from '@/@types/generated/contentful'
-import {useSubmitFormMutation} from '@/redux/apiSlice'
+import {useSubmitFormMutation} from '@/redux/services/api'
 
 type Form = Record<string, string>
 

@@ -1,6 +1,6 @@
 import {Bootcamp} from '@/@types/apiResponseTypes'
-import {useGetBootcampsQuery} from '@/redux/apiSlice'
 import {useAppSelector} from '@/redux/hooks'
+import {useGetBootcampsQuery} from '@/redux/services/bootcamps'
 import {selectUser} from '@/redux/usersSlice'
 
 export function useBootcamps(): Bootcamp[] | null {

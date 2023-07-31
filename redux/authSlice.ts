@@ -12,7 +12,7 @@ const initialState: AuthState = {
   isLoggedIn: false,
 }
 
-export const authSlice = createSlice({
+export const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -23,9 +23,9 @@ export const authSlice = createSlice({
   },
 })
 
-export const {loginSuccess} = authSlice.actions
+export const {loginSuccess} = slice.actions
 
 export const selectIsAdmin = (state: RootState) => state.auth.isAdmin
 export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn
 
-export default authSlice.reducer
+export default slice.reducer

@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useState} from 'react'
 
 import {Bootcamp} from '@/@types/apiResponseTypes'
-import {useUpdateBootcampMutation} from '@/redux/apiSlice'
 import {useAppSelector} from '@/redux/hooks'
+import {useUpdateBootcampMutation} from '@/redux/services/bootcamps'
 import {selectUser} from '@/redux/usersSlice'
 
 export function useToggleBootcamp(bootcamp: Bootcamp) {
