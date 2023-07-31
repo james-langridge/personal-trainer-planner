@@ -7,7 +7,7 @@ import {CalendarForm} from '@/features/calendar/form'
 import {getShortWeekday, isDayToday} from '@/lib/calendar'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {resetEvent} from '@/redux/eventSlice'
-import {useAppDispatch, useAppSelector} from '@/redux/hooks'
+import {useAppDispatch, useAppSelector} from '@/redux/store'
 
 Modal.setAppElement('#modal')
 

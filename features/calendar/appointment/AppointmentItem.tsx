@@ -8,7 +8,7 @@ import {
 } from '@/features/calendar/appointment'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {setEvent} from '@/redux/eventSlice'
-import {useAppDispatch, useAppSelector} from '@/redux/hooks'
+import {useAppDispatch, useAppSelector} from '@/redux/store'
 
 export function AppointmentItem({appointment}: {appointment: Appointment}) {
   const dispatch = useAppDispatch()

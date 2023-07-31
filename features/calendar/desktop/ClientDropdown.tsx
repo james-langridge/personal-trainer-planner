@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select'
-import {useAppDispatch} from '@/redux/hooks'
+import {useAppDispatch} from '@/redux/store'
 import {setUser} from '@/redux/usersSlice'
 
 export function ClientDropdown({users}: {users: UserWithWorkouts[]}) {

@@ -3,7 +3,7 @@ import React from 'react'
 import {ClientSelect} from '@/features/calendar/desktop/ClientSelect'
 import {monthNames} from '@/lib/constants'
 import {selectIsAdmin} from '@/redux/authSlice'
-import {useAppSelector} from '@/redux/hooks'
+import {useAppSelector} from '@/redux/store'
 
 export function Header({
   year,

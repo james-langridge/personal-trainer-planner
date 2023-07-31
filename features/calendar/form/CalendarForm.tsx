@@ -6,7 +6,6 @@ import {Day, EventType} from '@/@types/types'
 import ButtonOld from '@/components/ButtonOld'
 import {useCalendarForm} from '@/features/calendar/form'
 import {resetEvent} from '@/redux/eventSlice'
-import {useAppDispatch, useAppSelector} from '@/redux/hooks'
 import {
   useCreateAppointmentMutation,
   useDeleteAppointmentMutation,
@@ -22,6 +21,7 @@ import {
   useDeleteWorkoutMutation,
   useUpdateWorkoutMutation,
 } from '@/redux/services/workouts'
+import {useAppDispatch, useAppSelector} from '@/redux/store'
 import {selectUser} from '@/redux/usersSlice'
 
 export function CalendarForm({
