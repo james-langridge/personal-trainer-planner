@@ -102,8 +102,24 @@ export async function GET() {
     return NextResponse.json({message: 'You must be logged in.'}, {status: 401})
   }
 
+  const isAdmin = session.user?.role === 'admin'
+
   const bootcamps: Bootcamp[] = await db.bootcamp.findMany({
     select: {
+      ...(isAdmin && {
+        _count: {
+          select: {attendees: true},
+        },
+        attendees: {
+          select: {
+            email: true,
+            id: true,
+            name: true,
+            role: true,
+            type: true,
+          },
+        },
+      }),
       date: true,
       description: true,
       id: true,

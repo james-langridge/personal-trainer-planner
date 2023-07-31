@@ -7,22 +7,9 @@ import {Button} from '@/components/button'
 import {DataTableViewOptions} from '@/components/data-table-view-options'
 import {Input} from '@/components/input'
 
-import {DataTableFacetedFilter} from '../../../components/data-table-faceted-filter'
-
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
 }
-
-const workoutStatus = [
-  {
-    value: 'not_started',
-    label: 'Not started',
-  },
-  {
-    value: 'completed',
-    label: 'Completed',
-  },
-]
 
 export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
@@ -38,13 +25,6 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn('status') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('status')}
-            title="Status"
-            options={workoutStatus}
-          />
-        )}
         {isFiltered && (
           <Button
             variant="ghost"

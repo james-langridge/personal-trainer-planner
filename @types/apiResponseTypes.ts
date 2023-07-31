@@ -24,7 +24,10 @@ export type UserWithWorkouts = Pick<
 }
 
 export type Appointment = UserWithWorkouts['appointments'][number]
-export type Bootcamp = UserWithWorkouts['bootcamps'][number]
+export type Bootcamp = UserWithWorkouts['bootcamps'][number] & {
+  _count?: {attendees: number}
+  attendees?: Pick<User, 'email' | 'id' | 'name' | 'role' | 'type'>[]
+}
 export type Workout = UserWithWorkouts['workouts'][number]
 
 export type Event = Appointment | Bootcamp | Workout
