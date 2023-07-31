@@ -3,7 +3,7 @@
 import {USER_TYPE} from '@prisma/client'
 import {useCallback, useEffect, useRef, useState} from 'react'
 
-import {useCreateUserMutation} from '@/redux/apiSlice'
+import {useCreateUserMutation} from '@/redux/services/users'
 
 const initialForm: {
   email: string

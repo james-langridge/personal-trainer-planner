@@ -13,8 +13,8 @@ const initialState: EventState = {
   type: undefined,
 }
 
-export const eventSlice = createSlice({
-  name: 'event',
+export const slice = createSlice({
+  name: 'events',
   initialState,
   reducers: {
     resetEvent: state => {
@@ -28,8 +28,8 @@ export const eventSlice = createSlice({
   },
 })
 
-export const {resetEvent, setEvent} = eventSlice.actions
+export const {resetEvent, setEvent} = slice.actions
 
-export const selectEvent = (state: RootState) => state.event
+export const selectEvent = (state: RootState) => state.events
 
-export default eventSlice.reducer
+export default slice.reducer

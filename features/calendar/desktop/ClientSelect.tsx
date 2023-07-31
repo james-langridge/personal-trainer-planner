@@ -5,7 +5,7 @@ import {AddButton} from '@/components/AddButton'
 import {ClientDropdown} from '@/features/calendar/desktop/ClientDropdown'
 import {ClientTypeSwitch} from '@/features/calendar/desktop/ClientTypeSwitch'
 import {sortByString} from '@/lib/users'
-import {useGetUsersQuery} from '@/redux/apiSlice'
+import {useGetUsersQuery} from '@/redux/services/users'
 
 export function ClientSelect() {
   const [clientType, setClientType] = useState<USER_TYPE>(USER_TYPE.INDIVIDUAL)

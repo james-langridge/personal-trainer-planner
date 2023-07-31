@@ -2,7 +2,7 @@ import {WORKOUT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
 import {Workout} from '@/@types/apiResponseTypes'
-import {useUpdateWorkoutMutation} from '@/redux/apiSlice'
+import {useUpdateWorkoutMutation} from '@/redux/services/workouts'
 
 export function useWorkoutStatus(workout: Workout) {
   const [status, setStatus] = useState(workout.status)

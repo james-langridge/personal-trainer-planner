@@ -1,17 +1,16 @@
-import {NextResponse} from 'next/server'
-import {getServerSession} from 'next-auth/next'
+'use client'
 
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {redirect} from 'next/navigation'
+import {useSession} from 'next-auth/react'
+
+import {useGetBootcampsQuery} from '@/redux/services/bootcamps'
 
 export default async function Bootcamps() {
-  const session = await getServerSession(authOptions)
+  const {data: session, status} = useSession()
+  // const {data} = useGetBootcampsQuery()
 
-  if (!session) {
-    return NextResponse.json({message: 'You must be logged in.'}, {status: 401})
-  }
-
-  if (session.user?.role !== 'admin') {
-    return NextResponse.json({message: 'Forbidden.'}, {status: 403})
+  if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
+    redirect('/')
   }
 
   return <div>BOOTCAMPS!</div>

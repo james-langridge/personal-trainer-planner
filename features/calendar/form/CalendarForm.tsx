@@ -5,19 +5,23 @@ import React, {useEffect, useRef, useState} from 'react'
 import {Day, EventType} from '@/@types/types'
 import ButtonOld from '@/components/ButtonOld'
 import {useCalendarForm} from '@/features/calendar/form'
-import {
-  useCreateAppointmentMutation,
-  useCreateBootcampMutation,
-  useCreateWorkoutMutation,
-  useDeleteAppointmentMutation,
-  useDeleteBootcampMutation,
-  useDeleteWorkoutMutation,
-  useUpdateAppointmentMutation,
-  useUpdateBootcampMutation,
-  useUpdateWorkoutMutation,
-} from '@/redux/apiSlice'
 import {resetEvent} from '@/redux/eventSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/hooks'
+import {
+  useCreateAppointmentMutation,
+  useDeleteAppointmentMutation,
+  useUpdateAppointmentMutation,
+} from '@/redux/services/appointments'
+import {
+  useCreateBootcampMutation,
+  useDeleteBootcampMutation,
+  useUpdateBootcampMutation,
+} from '@/redux/services/bootcamps'
+import {
+  useCreateWorkoutMutation,
+  useDeleteWorkoutMutation,
+  useUpdateWorkoutMutation,
+} from '@/redux/services/workouts'
 import {selectUser} from '@/redux/usersSlice'
 
 export function CalendarForm({

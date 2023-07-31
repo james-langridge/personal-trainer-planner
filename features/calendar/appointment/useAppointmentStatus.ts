@@ -2,7 +2,7 @@ import {APPOINTMENT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
 import {Appointment} from '@/@types/apiResponseTypes'
-import {useUpdateAppointmentMutation} from '@/redux/apiSlice'
+import {useUpdateAppointmentMutation} from '@/redux/services/appointments'
 
 export function useAppointmentStatus(appointment: Appointment) {
   const [status, setStatus] = useState(appointment.status)
