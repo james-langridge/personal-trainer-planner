@@ -1,11 +1,26 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
 
 import {CalendarFormState, Day} from '@/@types/types'
 import {getWeekday, padZero} from '@/lib/calendar'
 import {selectEvent} from '@/redux/eventSlice'
-import {useGetAppointmentQuery} from '@/redux/services/appointments'
-import {useGetBootcampQuery} from '@/redux/services/bootcamps'
-import {useGetWorkoutQuery} from '@/redux/services/workouts'
+import {
+  useCreateAppointmentMutation,
+  useDeleteAppointmentMutation,
+  useGetAppointmentQuery,
+  useUpdateAppointmentMutation,
+} from '@/redux/services/appointments'
+import {
+  useCreateBootcampMutation,
+  useDeleteBootcampMutation,
+  useGetBootcampQuery,
+  useUpdateBootcampMutation,
+} from '@/redux/services/bootcamps'
+import {
+  useCreateWorkoutMutation,
+  useDeleteWorkoutMutation,
+  useGetWorkoutQuery,
+  useUpdateWorkoutMutation,
+} from '@/redux/services/workouts'
 import {useAppSelector} from '@/redux/store'
 import {selectUser} from '@/redux/usersSlice'
 
@@ -23,15 +38,39 @@ const initialState: CalendarFormState = {
 
 export const useCalendarForm = ({
   day,
+  closeModal,
 }: {
   day: Day
-}): [
-  CalendarFormState,
-  React.Dispatch<React.SetStateAction<CalendarFormState>>,
-  (weekday: number) => void,
-] => {
+  closeModal: (e: React.SyntheticEvent) => void
+}) => {
+  const [error, setError] = useState<Error>()
+  const [createAppointment, {isLoading: isCreatingAppointment}] =
+    useCreateAppointmentMutation()
+  const [updateAppointment, {isLoading: isUpdatingAppointment}] =
+    useUpdateAppointmentMutation()
+  const [deleteAppointment, {isLoading: isDeletingAppointment}] =
+    useDeleteAppointmentMutation()
+  const [createWorkout, {isLoading: isCreatingWorkout}] =
+    useCreateWorkoutMutation()
+  const [updateWorkout, {isLoading: isUpdatingWorkout}] =
+    useUpdateWorkoutMutation()
+  const [deleteWorkout, {isLoading: isDeletingWorkout}] =
+    useDeleteWorkoutMutation()
+  const [createBootcamp, {isLoading: isCreatingBootcamp}] =
+    useCreateBootcampMutation()
+  const [updateBootcamp, {isLoading: isUpdatingBootcamp}] =
+    useUpdateBootcampMutation()
+  const [deleteBootcamp, {isLoading: isDeletingBootcamp}] =
+    useDeleteBootcampMutation()
+  const isDeleting =
+    isDeletingAppointment || isDeletingWorkout || isDeletingBootcamp
+  const isCreating =
+    isCreatingWorkout || isCreatingAppointment || isCreatingBootcamp
+  const isUpdating =
+    isUpdatingWorkout || isUpdatingBootcamp || isUpdatingAppointment
   const user = useAppSelector(selectUser)
   const userId = user?.id || ''
+  const isDisabled = isDeleting || isCreating || isUpdating || !userId
   const {id, type} = useAppSelector(selectEvent)
   const {data: appointmentData} = useGetAppointmentQuery(id, {
     skip: !id || type !== 'APPOINTMENT',
@@ -93,5 +132,136 @@ export const useCalendarForm = ({
     }
   }, [formData])
 
-  return [form, setForm, toggleDay]
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault()
+
+    if (form.type === 'WORKOUT') {
+      try {
+        if (form.id) {
+          await updateWorkout(form).unwrap()
+        } else {
+          await createWorkout({
+            ...form,
+            selectedDays: [...form.selectedDays],
+          }).unwrap()
+        }
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    if (form.type === 'APPOINTMENT') {
+      try {
+        if (form.id) {
+          await updateAppointment(form).unwrap()
+        } else {
+          await createAppointment({
+            ...form,
+            selectedDays: [...form.selectedDays],
+          }).unwrap()
+        }
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    if (form.type === 'BOOTCAMP') {
+      try {
+        if (form.id) {
+          await updateBootcamp(form).unwrap()
+        } else {
+          await createBootcamp({
+            ...form,
+            selectedDays: [...form.selectedDays],
+          }).unwrap()
+        }
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+  }
+
+  async function handleDelete(e: React.SyntheticEvent) {
+    if (isDisabled || !form.id) {
+      return
+    }
+
+    if (form.type === 'APPOINTMENT') {
+      try {
+        await deleteAppointment({
+          deleted: true,
+          ownerId: form.ownerId,
+          id: form.id,
+        }).unwrap()
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    if (form.type === 'WORKOUT') {
+      try {
+        await deleteWorkout({
+          deleted: true,
+          ownerId: form.ownerId,
+          id: form.id,
+        }).unwrap()
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    if (form.type === 'BOOTCAMP') {
+      try {
+        await deleteBootcamp({
+          deleted: true,
+          id: form.id,
+        }).unwrap()
+
+        closeModal(e)
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!userId) {
+      return
+    }
+
+    setForm(form => ({
+      ...form,
+      ownerId: userId,
+    }))
+  }, [setForm, userId])
+
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
+
+  return {
+    error,
+    form,
+    handleDelete,
+    handleSubmit,
+    inputRef,
+    isCreating,
+    isDeleting,
+    isDisabled,
+    isUpdating,
+    setForm,
+    toggleDay,
+  }
 }
