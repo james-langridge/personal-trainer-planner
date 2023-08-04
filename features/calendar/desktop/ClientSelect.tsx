@@ -15,12 +15,8 @@ export function ClientSelect() {
   // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#can-i-perform-case-insensitive-sorting
   const users = sortByString('name', filteredUsers)
 
-  function toggleClientType() {
-    if (clientType === 'BOOTCAMP') {
-      setClientType('INDIVIDUAL')
-    } else {
-      setClientType('BOOTCAMP')
-    }
+  function toggleClientType(value: string) {
+    setClientType(value as USER_TYPE)
   }
 
   return (
@@ -29,10 +25,7 @@ export function ClientSelect() {
         <AddButton />
         <ClientDropdown users={users} />
       </div>
-      <ClientTypeSwitch
-        clientType={clientType}
-        toggleClientType={toggleClientType}
-      />
+      <ClientTypeSwitch toggleClientType={toggleClientType} />
     </div>
   )
 }
