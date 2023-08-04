@@ -1,7 +1,8 @@
 import React from 'react'
 
 import {Appointment} from '@/@types/apiResponseTypes'
-import {AppointmentItem} from '@/features/calendar/appointment'
+
+import {AppointmentItem} from '.'
 
 export function AppointmentList({appointments}: {appointments: Appointment[]}) {
   return (

@@ -1,6 +1,6 @@
-export * from './Checkbox'
 export * from './BootcampItem'
 export * from './BootcampItemMobile'
 export * from './BootcampList'
+export * from './Checkbox'
 export * from './Title'
 export * from './useToggleBootcamp'

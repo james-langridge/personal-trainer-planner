@@ -1,10 +1,13 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 
 import {Day} from '@/@types/types'
-import {useCalendarForm} from '@/features/calendar/form'
-import {EventTypeSelect} from '@/features/calendar/form/EventTypeSelect'
-import {SubmitButtons} from '@/features/calendar/form/SubmitButtons'
-import {WeekdayButtonGroup} from '@/features/calendar/form/WeekdayButtonGroup'
+
+import {
+  EventTypeSelect,
+  SubmitButtons,
+  useCalendarForm,
+  WeekdayButtonGroup,
+} from '.'
 
 export function CalendarForm({
   day,

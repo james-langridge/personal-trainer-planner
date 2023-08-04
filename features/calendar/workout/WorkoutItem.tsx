@@ -1,10 +1,11 @@
 import React from 'react'
 
 import {Workout} from '@/@types/apiResponseTypes'
-import {useWorkoutStatus, Checkbox, Title} from '@/features/calendar/workout/'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {setEvent} from '@/redux/eventSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/store'
+
+import {Checkbox, Title, useWorkoutStatus} from '.'
 
 export function WorkoutItem({workout}: {workout: Workout}) {
   const dispatch = useAppDispatch()

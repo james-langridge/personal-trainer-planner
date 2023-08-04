@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
 import {Bootcamp} from '@/@types/apiResponseTypes'
-import {useToggleBootcamp} from '@/features/calendar/bootcamp'
+
+import {useToggleBootcamp} from '.'
 
 export function BootcampItemMobile({bootcamp}: {bootcamp: Bootcamp}) {
   const {isAttending, toggleAttendance} = useToggleBootcamp(bootcamp)

@@ -5,9 +5,10 @@ import {Day} from '@/@types/types'
 import {useBootcamps, usePollForUserUpdates} from '@/features/calendar'
 import {AppointmentList} from '@/features/calendar/appointment'
 import {BootcampList} from '@/features/calendar/bootcamp'
-import {CalendarDay, EmptyDays} from '@/features/calendar/desktop'
 import {WorkoutList} from '@/features/calendar/workout'
 import {getEventsToday} from '@/lib/calendar'
+
+import {CalendarDay, EmptyDays} from '.'
 
 export function Grid({monthData}: {monthData: Day[]}) {
   const bootcamps = useBootcamps()

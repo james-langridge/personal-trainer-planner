@@ -1,11 +1,11 @@
 import React from 'react'
 
 import {Bootcamp} from '@/@types/apiResponseTypes'
-import {Checkbox, Title} from '@/features/calendar/bootcamp'
-import {useToggleBootcamp} from '@/features/calendar/bootcamp/useToggleBootcamp'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {setEvent} from '@/redux/eventSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/store'
+
+import {Checkbox, Title, useToggleBootcamp} from '.'
 
 export function BootcampItem({bootcamp}: {bootcamp: Bootcamp}) {
   const dispatch = useAppDispatch()
