@@ -1,24 +1,23 @@
 import {USER_TYPE} from '@prisma/client'
 import React from 'react'
 
-import {Switch} from '@/components/Switch'
+import {Tabs, TabsList, TabsTrigger} from '@/components/tabs'
 
 export function ClientTypeSwitch({
-  clientType,
   toggleClientType,
 }: {
-  clientType: USER_TYPE
-  toggleClientType: () => void
+  toggleClientType: (value: string) => void
 }) {
   return (
-    <div className="mx-1 flex">
-      <div>Individuals</div>
-      <Switch
-        className="mx-2"
-        onCheckedChange={() => toggleClientType()}
-        checked={clientType === 'BOOTCAMP'}
-      />
-      <div>Bootcampers</div>
-    </div>
+    <Tabs
+      onValueChange={value => toggleClientType(value)}
+      defaultValue={USER_TYPE.INDIVIDUAL}
+      className="w-[400px]"
+    >
+      <TabsList>
+        <TabsTrigger value={USER_TYPE.INDIVIDUAL}>Individuals</TabsTrigger>
+        <TabsTrigger value={USER_TYPE.BOOTCAMP}>Bootcampers</TabsTrigger>
+      </TabsList>
+    </Tabs>
   )
 }
