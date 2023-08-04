@@ -24,9 +24,11 @@ export function ClientSelect() {
   }
 
   return (
-    <div className="flex w-1/3 items-center">
-      <AddButton />
-      <ClientDropdown users={users} />
+    <div className="flex flex-col pt-5">
+      <div className="mb-5 flex">
+        <AddButton />
+        <ClientDropdown users={users} />
+      </div>
       <ClientTypeSwitch
         clientType={clientType}
         toggleClientType={toggleClientType}
