@@ -1,7 +1,8 @@
 import React from 'react'
 
 import {Workout} from '@/@types/apiResponseTypes'
-import {WorkoutItem} from '@/features/calendar/workout'
+
+import {WorkoutItem} from '.'
 
 export function WorkoutList({workouts}: {workouts: Workout[]}) {
   return (

@@ -3,13 +3,10 @@ import React, {useEffect, useRef, useState} from 'react'
 import {useBootcamps, usePollForUserUpdates} from '@/features/calendar'
 import {AppointmentItemMobile} from '@/features/calendar/appointment'
 import {BootcampItemMobile} from '@/features/calendar/bootcamp'
-import {
-  Day,
-  useCalendarIntersectionObserver,
-  useMobileCalendarData,
-} from '@/features/calendar/mobile'
 import {WorkoutItemMobile} from '@/features/calendar/workout'
 import {getEventsToday, shouldScrollToThisDay} from '@/lib/calendar'
+
+import {Day, useCalendarIntersectionObserver, useMobileCalendarData} from '.'
 
 export function CalendarMobile() {
   const [workouts, appointments] = usePollForUserUpdates()

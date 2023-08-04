@@ -3,7 +3,8 @@ import clsx from 'clsx'
 import Link from 'next/link'
 
 import {Workout} from '@/@types/apiResponseTypes'
-import {useWorkoutStatus} from '@/features/calendar/workout'
+
+import {useWorkoutStatus} from '.'
 
 export function WorkoutItemMobile({workout}: {workout: Workout}) {
   const {status, toggleStatus} = useWorkoutStatus(workout)

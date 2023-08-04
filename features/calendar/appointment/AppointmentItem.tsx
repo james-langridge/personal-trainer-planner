@@ -1,14 +1,11 @@
 import React from 'react'
 
 import {Appointment} from '@/@types/apiResponseTypes'
-import {
-  Checkbox,
-  Title,
-  useAppointmentStatus,
-} from '@/features/calendar/appointment'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {setEvent} from '@/redux/eventSlice'
 import {useAppDispatch, useAppSelector} from '@/redux/store'
+
+import {Checkbox, Title, useAppointmentStatus} from '.'
 
 export function AppointmentItem({appointment}: {appointment: Appointment}) {
   const dispatch = useAppDispatch()

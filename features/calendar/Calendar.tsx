@@ -1,9 +1,10 @@
-import {useUser} from '@/features/calendar'
 import {CalendarDesktop} from '@/features/calendar/desktop'
 import {CalendarMobile} from '@/features/calendar/mobile'
 import {useIsMobile} from '@/hooks'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {useAppSelector} from '@/redux/store'
+
+import {useUser} from '.'
 
 export function Calendar({initialUser}: {initialUser: string}) {
   useUser(JSON.parse(initialUser))

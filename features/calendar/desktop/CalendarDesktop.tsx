@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Grid, Header, useCalendarData} from '@/features/calendar/desktop'
+import {Grid, Header, useCalendarData} from '.'
 
 export function CalendarDesktop() {
   const {monthData, year, month, setYear, setMonth} = useCalendarData()

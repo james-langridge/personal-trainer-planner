@@ -1,7 +1,8 @@
 import React from 'react'
 
 import {Bootcamp} from '@/@types/apiResponseTypes'
-import {BootcampItem} from '@/features/calendar/bootcamp'
+
+import {BootcampItem} from '.'
 
 export function BootcampList({bootcamps}: {bootcamps: Bootcamp[]}) {
   return (

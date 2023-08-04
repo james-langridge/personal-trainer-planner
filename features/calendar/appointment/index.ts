@@ -1,6 +1,6 @@
-export * from './Checkbox'
 export * from './AppointmentItem'
 export * from './AppointmentItemMobile'
 export * from './AppointmentList'
+export * from './Checkbox'
 export * from './Title'
 export * from './useAppointmentStatus'
