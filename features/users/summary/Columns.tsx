@@ -142,6 +142,11 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
                 View client
               </DropdownMenuItem>
             </Link>
+            <Link href={`/users/${user.id}/edit`}>
+              <DropdownMenuItem className="cursor-pointer">
+                Edit client
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       )

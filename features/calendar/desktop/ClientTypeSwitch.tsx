@@ -1,16 +1,16 @@
 import {USER_TYPE} from '@prisma/client'
-import React from 'react'
+import React, {Dispatch, SetStateAction} from 'react'
 
 import {Tabs, TabsList, TabsTrigger} from '@/components/tabs'
 
 export function ClientTypeSwitch({
   toggleClientType,
 }: {
-  toggleClientType: (value: string) => void
+  toggleClientType: Dispatch<SetStateAction<USER_TYPE>>
 }) {
   return (
     <Tabs
-      onValueChange={value => toggleClientType(value)}
+      onValueChange={value => toggleClientType(value as USER_TYPE)}
       defaultValue={USER_TYPE.INDIVIDUAL}
       className="w-[400px]"
     >

@@ -5,6 +5,7 @@ import {useSession} from 'next-auth/react'
 import React from 'react'
 
 import {DateChangeButtons} from '@/components/DateChangeButtons'
+import {Fetching} from '@/components/Fetching'
 import Loader from '@/components/Loader'
 import {useCalendarData} from '@/features/calendar/desktop'
 import {columns} from '@/features/users/summary/Columns'
@@ -39,11 +40,7 @@ export default function Users() {
           setYear={setYear}
           setMonth={setMonth}
         />
-        {isFetching && (
-          <div className="rounded bg-blue-400 px-2 py-1 text-white">
-            Fetching data...
-          </div>
-        )}
+        {isFetching && <Fetching />}
       </div>
       <DataTable columns={columns} data={users} />
     </div>
