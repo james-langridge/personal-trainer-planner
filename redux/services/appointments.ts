@@ -43,6 +43,7 @@ export const appointmentsApi = api.injectEndpoints({
       invalidatesTags: (result, error, {ownerId, id}) => [
         {type: 'Users', id: ownerId},
         {type: 'Appointments', id: id},
+        'Users',
       ],
     }),
   }),
