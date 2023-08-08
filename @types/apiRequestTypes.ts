@@ -55,6 +55,10 @@ export type UpdateBootcampBody = Partial<
   Pick<Bootcamp, 'deleted' | 'description' | 'id' | 'name' | 'videoUrl'>
 > & {date?: string; userId?: string; query?: 'connect' | 'disconnect'}
 
+export type UpdateUserBody = Partial<
+  Pick<User, 'id' | 'name' | 'email' | 'type'>
+>
+
 export type UpdateWorkoutBody = Partial<
   Pick<
     Workout,

@@ -1,4 +1,4 @@
-import {CreateUserBody} from '@/@types/apiRequestTypes'
+import {CreateUserBody, UpdateUserBody} from '@/@types/apiRequestTypes'
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 
 import {api} from './api'
@@ -27,8 +27,20 @@ export const usersApi = api.injectEndpoints({
           : [...result.map(({id}) => ({type: 'Users', id} as const))]
       },
     }),
+    updateUser: build.mutation({
+      query: (body: UpdateUserBody) => ({
+        url: '/users',
+        method: 'PUT',
+        body: body,
+      }),
+      invalidatesTags: (result, error, {id}) => [{type: 'Users', id: id}],
+    }),
   }),
 })
 
-export const {useCreateUserMutation, useGetUserQuery, useGetUsersQuery} =
-  usersApi
+export const {
+  useCreateUserMutation,
+  useGetUserQuery,
+  useGetUsersQuery,
+  useUpdateUserMutation,
+} = usersApi
