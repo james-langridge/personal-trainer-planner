@@ -8,7 +8,9 @@ import {db} from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+// Using the Request object with the GET method opts out of Route Handler caching.
+// https://nextjs.org/docs/app/building-your-application/routing/route-handlers#opting-out-of-caching
+export async function GET(request: Request) {
   const session = await getServerSession(authOptions)
 
   if (!session) {
@@ -17,6 +19,24 @@ export async function GET() {
 
   if (session.user?.role !== 'admin') {
     return NextResponse.json({message: 'Forbidden.'}, {status: 403})
+  }
+
+  const {searchParams} = new URL(request.url)
+  const month = searchParams.get('month')
+
+  let date = undefined
+
+  if (month) {
+    const thisMonth = new Date(month)
+    const nextMonth = new Date(
+      thisMonth.getFullYear(),
+      thisMonth.getMonth() + 1,
+    )
+
+    date = {
+      gte: thisMonth,
+      lt: nextMonth,
+    }
   }
 
   const users: UserWithWorkouts[] = await db.user.findMany({
@@ -33,6 +53,7 @@ export async function GET() {
         },
         where: {
           deleted: false,
+          ...(date && {date: date}),
         },
       },
       bootcamps: {
@@ -45,6 +66,7 @@ export async function GET() {
         },
         where: {
           deleted: false,
+          ...(date && {date: date}),
         },
       },
       email: true,
@@ -64,6 +86,7 @@ export async function GET() {
         },
         where: {
           deleted: false,
+          ...(date && {date: date}),
         },
       },
     },
