@@ -1,5 +1,6 @@
 'use client'
 
+import {APPOINTMENT_STATUS} from '@prisma/client'
 import {ColumnDef} from '@tanstack/react-table'
 import {ArrowUpDown, MoreHorizontal} from 'lucide-react'
 import Link from 'next/link'
@@ -47,14 +48,76 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
     },
   },
   {
-    accessorKey: 'email',
+    accessorFn: row => row.appointments.length,
+    accessorKey: 'booked',
     header: ({column}) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Email
+          Booked
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+  {
+    accessorFn: row =>
+      row.appointments.filter(
+        appointment => appointment.status === APPOINTMENT_STATUS.ATTENDED,
+      ).length,
+    accessorKey: 'attended',
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Attended
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+  {
+    accessorFn: () => Math.floor(Math.random() * 26) + 25,
+    accessorKey: 'fee',
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Fee
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+  {
+    cell: ({row}) => {
+      const fee = parseFloat(row.getValue('fee'))
+      const attended = row.original.appointments.filter(
+        appointment => appointment.status === APPOINTMENT_STATUS.ATTENDED,
+      ).length
+      const total = fee * attended
+
+      const formatted = new Intl.NumberFormat('en-UK', {
+        style: 'currency',
+        currency: 'GBP',
+      }).format(total)
+
+      return <div>{formatted}</div>
+    },
+    accessorKey: 'total',
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Total
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
