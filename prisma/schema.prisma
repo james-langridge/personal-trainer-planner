@@ -55,7 +55,7 @@ model User {
   emailVerified DateTime?
   id            String    @id @default(uuid())
   image         String?
-  name          String?
+  name          String
   role          String    @default("user")
   sessions      Session[]
 }

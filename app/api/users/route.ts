@@ -140,7 +140,7 @@ export async function PUT(req: NextRequest) {
 
   const body: UpdateUserBody = await req.json()
 
-  const user = await db.appointment.update({
+  const user = await db.user.update({
     where: {
       id: body.id,
     },

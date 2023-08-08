@@ -33,7 +33,7 @@ export const usersApi = api.injectEndpoints({
         method: 'PUT',
         body: body,
       }),
-      invalidatesTags: (result, error, {id}) => [{type: 'Users', id: id}],
+      invalidatesTags: ['Users'],
     }),
   }),
 })
