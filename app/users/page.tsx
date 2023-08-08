@@ -7,17 +7,19 @@ import React from 'react'
 import Loader from '@/components/Loader'
 import {columns} from '@/features/users/summary/Columns'
 import {DataTable} from '@/features/users/summary/DataTable'
+import {sortByString} from '@/lib/users'
 import {useGetUsersQuery} from '@/redux/services/users'
 
 export default function Users() {
   const {data: session, status} = useSession()
-  const {data} = useGetUsersQuery()
+  const {data = []} = useGetUsersQuery()
+  const users = sortByString('name', data)
 
   if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
     redirect('/')
   }
 
-  if (!data) {
+  if (!users) {
     return null
   }
 
@@ -27,7 +29,7 @@ export default function Users() {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={users} />
     </div>
   )
 }
