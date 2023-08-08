@@ -22,6 +22,7 @@ export async function GET(
         select: {
           date: true,
           description: true,
+          fee: true,
           id: true,
           name: true,
           ownerId: true,
@@ -45,6 +46,7 @@ export async function GET(
         },
       },
       email: true,
+      fee: true,
       id: true,
       name: true,
       role: true,

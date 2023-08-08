@@ -7,11 +7,18 @@ import {
 
 export type UserWithWorkouts = Pick<
   User,
-  'email' | 'id' | 'name' | 'role' | 'type'
+  'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
 > & {
   appointments: Pick<
     PrismaAppointment,
-    'date' | 'description' | 'id' | 'name' | 'ownerId' | 'status' | 'videoUrl'
+    | 'date'
+    | 'description'
+    | 'fee'
+    | 'id'
+    | 'name'
+    | 'ownerId'
+    | 'status'
+    | 'videoUrl'
   >[]
   bootcamps: Pick<
     PrismaBootcamp,

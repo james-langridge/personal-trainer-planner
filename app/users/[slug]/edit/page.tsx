@@ -27,6 +27,7 @@ import {useGetUserQuery, useUpdateUserMutation} from '@/redux/services/users'
 const formSchema = z.object({
   id: z.string(),
   email: z.string(),
+  fee: z.string(),
   name: z.string(),
   type: z.nativeEnum(USER_TYPE),
 })
@@ -43,6 +44,7 @@ export default function EditUser({params}: {params: {slug: string}}) {
     defaultValues: {
       id: user?.id || '',
       email: user?.email || '',
+      fee: user?.fee ? (user.fee / 100).toFixed(2) : '0.00',
       name: user?.name || '',
       type: user?.type || USER_TYPE.INDIVIDUAL,
     },
@@ -56,6 +58,7 @@ export default function EditUser({params}: {params: {slug: string}}) {
     form.reset({
       id: user.id || '',
       email: user.email || '',
+      fee: (user.fee / 100).toFixed(2) || '0.00',
       name: user.name || '',
       type: user.type || USER_TYPE.INDIVIDUAL,
     })
@@ -71,7 +74,10 @@ export default function EditUser({params}: {params: {slug: string}}) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await updateUser(values)
+      await updateUser({
+        ...values,
+        fee: Math.round(parseFloat(values.fee) * 100),
+      })
       router.back()
     } catch (error) {
       setError(error as Error)
@@ -109,7 +115,7 @@ export default function EditUser({params}: {params: {slug: string}}) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input type="email" placeholder="Email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -140,6 +146,19 @@ export default function EditUser({params}: {params: {slug: string}}) {
                       <FormLabel className="font-normal">Bootcamper</FormLabel>
                     </FormItem>
                   </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="fee"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Fee</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="0.00" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

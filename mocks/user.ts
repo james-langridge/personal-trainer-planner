@@ -10,6 +10,7 @@ export const user: UserWithWorkoutAndAttendance = {
   id: '123',
   role: 'user',
   email: 'email',
+  fee: 0,
   name: 'Name',
   appointmentsAssigned: 1,
   appointmentsAttended: 1,

@@ -45,6 +45,7 @@ export async function GET(request: Request) {
         select: {
           date: true,
           description: true,
+          fee: true,
           id: true,
           name: true,
           ownerId: true,
@@ -70,6 +71,7 @@ export async function GET(request: Request) {
         },
       },
       email: true,
+      fee: true,
       id: true,
       name: true,
       role: true,
@@ -146,6 +148,7 @@ export async function PUT(req: NextRequest) {
     },
     data: {
       ...(body.email && {email: body.email}),
+      ...(body.fee && {fee: body.fee}),
       ...(body.name && {name: body.name}),
       ...(body.type && {type: body.type}),
     },
