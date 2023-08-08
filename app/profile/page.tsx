@@ -20,6 +20,7 @@ const getUserWithWorkouts = async (
         select: {
           date: true,
           description: true,
+          fee: true,
           id: true,
           name: true,
           ownerId: true,
@@ -43,6 +44,7 @@ const getUserWithWorkouts = async (
         },
       },
       email: true,
+      fee: true,
       id: true,
       name: true,
       role: true,

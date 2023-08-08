@@ -15,6 +15,7 @@ model Appointment {
   date        DateTime
   deleted     Boolean            @default(false)
   description String?
+  fee         Int                @default(0)
   id          String             @id @default(uuid())
   name        String
   owner       User               @relation(fields: [ownerId], references: [id])
@@ -45,6 +46,7 @@ model User {
   appointments Appointment[]
   bootcamps    Bootcamp[]
   createdAt    DateTime      @default(now())
+  fee          Int           @default(0)
   type         USER_TYPE     @default(INDIVIDUAL)
   updatedAt    DateTime      @updatedAt
   workouts     Workout[]

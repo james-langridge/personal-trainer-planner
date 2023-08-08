@@ -81,7 +81,6 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
     },
   },
   {
-    accessorFn: () => Math.floor(Math.random() * 26) + 25,
     accessorKey: 'fee',
     header: ({column}) => {
       return (
@@ -94,10 +93,18 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
         </Button>
       )
     },
+    cell: ({row}) => {
+      const formatted = new Intl.NumberFormat('en-UK', {
+        style: 'currency',
+        currency: 'GBP',
+      }).format(row.original.fee / 100)
+
+      return <div>{formatted}</div>
+    },
   },
   {
     cell: ({row}) => {
-      const fee = parseFloat(row.getValue('fee'))
+      const fee = row.original.fee / 100
       const attended = row.original.appointments.filter(
         appointment => appointment.status === APPOINTMENT_STATUS.ATTENDED,
       ).length
