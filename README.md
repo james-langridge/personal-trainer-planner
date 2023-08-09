@@ -2,25 +2,27 @@
 
 ## About The Project
 
-A client management and scheduling app for personal trainers and their clients, made with the new Next.js 13 features like the [App Router](https://nextjs.org/docs/app/building-your-application/routing) and [React Server Components](https://nextjs.org/docs/getting-started/react-essentials), in collaboration with a real personal trainer (PT).
+A client management and scheduling app for personal trainers and their clients, made in collaboration with a real personal trainer (PT), with the new Next.js 13 features like the [App Router](https://nextjs.org/docs/app/building-your-application/routing) and [React Server Components](https://nextjs.org/docs/getting-started/react-essentials).
+
+> **Warning**
+> This app is a work in progress, and uses new Next.js 13 and React 18 features that could be unstable.
 
 ### Features
 
-- PT can create new users, who can then log in via a magic link emailed to them.
-- Shared and synced calendar between the PT and each user.
-- PT controls all of the workout and appointment scheduling and management.
-- Users can view their calendars and workouts with description and video, and check off workouts as completed.
-- Mobile-friendly calendar list-view with infinite scroll for users.
-- PT can view aggregated data for all users.
-- PT can create custom forms in Contentful CMS, which are rendered on dynamic page routes, and emailed to the PT when the client completes them.
-- [New `app` directory routing](https://nextjs.org/docs/app/building-your-application/routing).
-- [Data Fetching](https://nextjs.org/docs/app/building-your-application/data-fetching), [Caching](https://nextjs.org/docs/app/building-your-application/data-fetching/caching) and [Mutation](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions).
-- [Route handlers](https://nextjs.org/docs/app/building-your-application/routing/router-handlers).
-- [Server and Client Components](https://nextjs.org/docs/getting-started/react-essentials).
+- Shared calendar between PT and each user, which is editable by PT only.
+- Three event types:
+  - Workouts, which user can check as done.
+  - Appointments, with fees.
+  - Bootcamps, which users can check to say they are attending.
+- Dashboard calculates monthly total fees to invoice for each user.
+- Password-less login via email magic link.
+- Mobile-friendly calendar list-view for users with infinite scroll.
+- Custom forms via Contentful CMS, emailed to the PT when the user completes them.
 - Authentication using **[NextAuth.js](https://next-auth.js.org/)**.
 - ORM using **[Prisma](https://www.prisma.io/)**.
 - Database on **[Railway](https://railway.app/)**.
-- Styled using **[Tailwind CSS](https://tailwindcss.com/)**.
+- Styled using **[Tailwind CSS](https://tailwindcss.com/)**, **[Meraki UI](https://merakiui.com/)**, and **[shadcn/ui](https://ui.shadcn.com/)** (Radix UI, TanStack Table).
+- State management with **[Redux Toolkit](https://redux-toolkit.js.org/)** and **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)**.
 - Written in **TypeScript**.
 
 ### Showcase
