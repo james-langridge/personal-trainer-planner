@@ -34,7 +34,7 @@ export function CalendarForm({
   })
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col">
+    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
       <input
         required
         onChange={e =>
@@ -44,25 +44,45 @@ export function CalendarForm({
           }))
         }
         type="date"
-        className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+        className="block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
         value={formData.date}
       />
-      <input
-        required
-        ref={inputRef}
-        onChange={e =>
-          setForm(form => ({
-            ...form,
-            name: e.target.value,
-          }))
-        }
-        placeholder="Workout name"
-        className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-        value={formData.name}
-      />
+      <div className="flex items-center justify-between">
+        <input
+          required
+          ref={inputRef}
+          onChange={e =>
+            setForm(form => ({
+              ...form,
+              name: e.target.value,
+            }))
+          }
+          placeholder="Event name"
+          className="block w-1/2 rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+          value={formData.name}
+        />
+
+        {formData.type === 'APPOINTMENT' && (
+          <div className="flex items-center space-x-2">
+            <label htmlFor="fee">Fee:</label>
+            <input
+              id="fee"
+              className="block w-1/2 rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+              placeholder="0.00"
+              value={formData.fee}
+              onChange={e =>
+                setForm(form => ({
+                  ...form,
+                  fee: e.target.value,
+                }))
+              }
+            />
+          </div>
+        )}
+      </div>
 
       {!formData.id && (
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between">
           <EventTypeSelect form={formData} setForm={setForm} />
           <WeekdayButtonGroup
             form={formData}
@@ -82,7 +102,7 @@ export function CalendarForm({
         placeholder="Description"
         rows={5}
         cols={15}
-        className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+        className="block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
         value={formData.description ?? ''}
       />
       <input
@@ -94,7 +114,7 @@ export function CalendarForm({
         }
         placeholder="Video url"
         type="url"
-        className="mt-4 block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+        className="block w-full rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
         value={formData.videoUrl ?? ''}
       />
       <SubmitButtons

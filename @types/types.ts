@@ -5,6 +5,7 @@ export type EventType = 'APPOINTMENT' | 'BOOTCAMP' | 'WORKOUT'
 export type CalendarFormState = {
   date: string
   description: string | null
+  fee: string
   id: string
   name: string
   ownerId: string

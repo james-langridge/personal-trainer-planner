@@ -10,16 +10,15 @@ export function EventTypeSelect({
   setForm: React.Dispatch<React.SetStateAction<CalendarFormState>>
 }) {
   return (
-    <fieldset className="mt-4">
+    <fieldset>
       <legend>Event Type:</legend>
-      <div>
+      <div className="space-x-2">
         <input
           type="radio"
           id="WORKOUT"
           name="type"
           value="WORKOUT"
           checked={form.type === 'WORKOUT'}
-          className="mr-2"
           onChange={e =>
             setForm(form => ({
               ...form,
@@ -30,14 +29,13 @@ export function EventTypeSelect({
         <label htmlFor="WORKOUT">Training</label>
       </div>
 
-      <div>
+      <div className="space-x-2">
         <input
           type="radio"
           id="APPOINTMENT"
           name="type"
           checked={form.type === 'APPOINTMENT'}
           value="APPOINTMENT"
-          className="mr-2"
           onChange={e =>
             setForm(form => ({
               ...form,
@@ -47,14 +45,13 @@ export function EventTypeSelect({
         />
         <label htmlFor="APPOINTMENT">Appointment</label>
       </div>
-      <div>
+      <div className="space-x-2">
         <input
           type="radio"
           id="BOOTCAMP"
           name="type"
           checked={form.type === 'BOOTCAMP'}
           value="BOOTCAMP"
-          className="mr-2"
           onChange={e =>
             setForm(form => ({
               ...form,
