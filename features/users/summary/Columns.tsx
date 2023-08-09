@@ -104,11 +104,13 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
   },
   {
     cell: ({row}) => {
-      const fee = row.original.fee / 100
-      const attended = row.original.appointments.filter(
-        appointment => appointment.status === APPOINTMENT_STATUS.ATTENDED,
-      ).length
-      const total = fee * attended
+      const total = row.original.appointments.reduce((acc, appointment) => {
+        if (appointment.status === APPOINTMENT_STATUS.ATTENDED) {
+          return acc + appointment.fee / 100
+        }
+
+        return acc
+      }, 0)
 
       const formatted = new Intl.NumberFormat('en-UK', {
         style: 'currency',
