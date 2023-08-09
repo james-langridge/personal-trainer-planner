@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
   const {
     date,
     description,
+    fee,
     name,
     ownerId,
     selectedDays,
@@ -36,6 +37,7 @@ export async function POST(req: NextRequest) {
     return {
       date,
       description,
+      fee,
       name,
       ownerId,
       videoUrl,
@@ -67,6 +69,7 @@ export async function PUT(req: NextRequest) {
     },
     data: {
       ...(body.date !== undefined && {date: new Date(body.date)}),
+      ...(body.fee && {fee: body.fee}),
       ...(body.deleted === true && {deleted: true}),
       ...(body.description !== undefined && {description: body.description}),
       ...(body.name !== undefined && {name: body.name}),

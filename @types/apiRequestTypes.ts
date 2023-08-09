@@ -2,7 +2,7 @@ import {Workout, Bootcamp, User, Appointment} from '@prisma/client'
 
 export type CreateAppointmentBody = Pick<
   Appointment,
-  'description' | 'name' | 'ownerId' | 'videoUrl'
+  'description' | 'fee' | 'name' | 'ownerId' | 'videoUrl'
 > & {
   date: string
   selectedDays: number[]
@@ -43,6 +43,7 @@ export type UpdateAppointmentBody = Partial<
     Appointment,
     | 'deleted'
     | 'description'
+    | 'fee'
     | 'id'
     | 'name'
     | 'ownerId'

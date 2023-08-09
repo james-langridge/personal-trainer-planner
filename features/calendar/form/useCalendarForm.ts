@@ -27,6 +27,7 @@ import {selectUser} from '@/redux/usersSlice'
 const initialState: CalendarFormState = {
   date: '',
   description: '',
+  fee: '0.00',
   id: '',
   name: '',
   ownerId: '',
@@ -71,66 +72,23 @@ export const useCalendarForm = ({
   const user = useAppSelector(selectUser)
   const userId = user?.id || ''
   const isDisabled = isDeleting || isCreating || isUpdating || !userId
-  const {id, type} = useAppSelector(selectEvent)
-  const {data: appointmentData} = useGetAppointmentQuery(id, {
-    skip: !id || type !== 'APPOINTMENT',
+  const {id: eventId, type} = useAppSelector(selectEvent)
+  const {data: appointmentData} = useGetAppointmentQuery(eventId, {
+    skip: !eventId || type !== 'APPOINTMENT',
   })
-  const {data: workoutData} = useGetWorkoutQuery(id, {
-    skip: !id || type !== 'WORKOUT',
+  const {data: workoutData} = useGetWorkoutQuery(eventId, {
+    skip: !eventId || type !== 'WORKOUT',
   })
-  const {data: bootcampData} = useGetBootcampQuery(id, {
-    skip: !id || type !== 'BOOTCAMP',
+  const {data: bootcampData} = useGetBootcampQuery(eventId, {
+    skip: !eventId || type !== 'BOOTCAMP',
   })
-  const formData = appointmentData || bootcampData || workoutData
+  const eventData = appointmentData || bootcampData || workoutData
   const [form, setForm] = useState<CalendarFormState>({
     ...initialState,
     date: `${day.year}-${padZero(day.month + 1)}-${padZero(day.day)}`,
     selectedDays: new Set([day.weekDay]),
     ownerId: userId,
   })
-
-  const toggleDay = useCallback(
-    (weekday: number) => {
-      if (getWeekday(form.date) === weekday) {
-        return
-      }
-
-      const newSet = new Set(form.selectedDays)
-      const isDaySelected = newSet.has(weekday)
-
-      if (isDaySelected) {
-        newSet.delete(weekday)
-      } else {
-        newSet.add(weekday)
-      }
-
-      setForm(form => ({
-        ...form,
-        selectedDays: newSet,
-      }))
-    },
-    [form.date, form.selectedDays],
-  )
-
-  useEffect(() => {
-    const newSet = new Set<number>([getWeekday(form.date)])
-
-    setForm(form => ({
-      ...form,
-      selectedDays: newSet,
-    }))
-  }, [form.date])
-
-  useEffect(() => {
-    if (formData) {
-      setForm({
-        ...form,
-        ...formData,
-        type,
-        date: String(formData.date).split('T')[0],
-      })
-    }
-  }, [formData])
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
@@ -153,12 +111,18 @@ export const useCalendarForm = ({
     }
 
     if (form.type === 'APPOINTMENT') {
+      const fee = Math.round(parseFloat(form.fee) * 100)
+
       try {
         if (form.id) {
-          await updateAppointment(form).unwrap()
+          await updateAppointment({
+            ...form,
+            fee,
+          }).unwrap()
         } else {
           await createAppointment({
             ...form,
+            fee,
             selectedDays: [...form.selectedDays],
           }).unwrap()
         }
@@ -234,17 +198,74 @@ export const useCalendarForm = ({
     }
   }
 
+  // Create event
   useEffect(() => {
-    if (!userId) {
+    if (!user || eventId) {
       return
     }
 
+    const formattedFee = (user.fee / 100).toFixed(2)
+
     setForm(form => ({
       ...form,
+      fee: formattedFee,
       ownerId: userId,
     }))
-  }, [setForm, userId])
+  }, [eventId, user, userId])
 
+  useEffect(() => {
+    const newSet = new Set<number>([getWeekday(form.date)])
+
+    setForm(form => ({
+      ...form,
+      selectedDays: newSet,
+    }))
+  }, [form.date])
+
+  const toggleDay = useCallback(
+    (weekday: number) => {
+      if (getWeekday(form.date) === weekday) {
+        return
+      }
+
+      const newSet = new Set(form.selectedDays)
+      const isDaySelected = newSet.has(weekday)
+
+      if (isDaySelected) {
+        newSet.delete(weekday)
+      } else {
+        newSet.add(weekday)
+      }
+
+      setForm(form => ({
+        ...form,
+        selectedDays: newSet,
+      }))
+    },
+    [form.date, form.selectedDays],
+  )
+
+  // Edit event
+  useEffect(() => {
+    if (!eventData) {
+      return
+    }
+
+    setForm({
+      ...form,
+      date: String(eventData.date).split('T')[0],
+      description: eventData.description,
+      ...(appointmentData && {fee: (appointmentData.fee / 100).toFixed(2)}),
+      id: eventData.id,
+      name: eventData.name,
+      ...(appointmentData && {ownerId: appointmentData?.ownerId}),
+      ...(workoutData && {ownerId: workoutData?.ownerId}),
+      videoUrl: eventData.videoUrl,
+      type,
+    })
+  }, [appointmentData, eventData, type, workoutData])
+
+  // Focus on event name field
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
