@@ -1,6 +1,6 @@
 'use client'
 
-import {APPOINTMENT_STATUS} from '@prisma/client'
+import {APPOINTMENT_STATUS, USER_TYPE} from '@prisma/client'
 import {ColumnDef} from '@tanstack/react-table'
 import {ArrowUpDown, MoreHorizontal} from 'lucide-react'
 import Link from 'next/link'
@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/dropdown-menu'
+import {SendInvoiceButton} from '@/features/users/summary/SendInvoiceButton'
 
 export const columns: ColumnDef<UserWithWorkouts>[] = [
   {
@@ -103,8 +104,8 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
     },
   },
   {
-    cell: ({row}) => {
-      const total = row.original.appointments.reduce((acc, appointment) => {
+    accessorFn: row => {
+      const total = row.appointments.reduce((acc, appointment) => {
         if (appointment.status === APPOINTMENT_STATUS.ATTENDED) {
           return acc + appointment.fee / 100
         }
@@ -112,12 +113,10 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
         return acc
       }, 0)
 
-      const formatted = new Intl.NumberFormat('en-UK', {
+      return new Intl.NumberFormat('en-UK', {
         style: 'currency',
         currency: 'GBP',
       }).format(total)
-
-      return <div>{formatted}</div>
     },
     accessorKey: 'total',
     header: ({column}) => {
@@ -130,6 +129,32 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
+    },
+  },
+  {
+    accessorKey: 'invoice',
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Invoice
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({row}) => {
+      if (row.original.type === USER_TYPE.INDIVIDUAL) {
+        return (
+          <SendInvoiceButton
+            appointments={row.getValue('attended')}
+            email={row.original.email}
+            total={row.getValue('total')}
+            user={row.original.name}
+          />
+        )
+      }
     },
   },
   {
