@@ -6,6 +6,7 @@ import React from 'react'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Providers from '@/app/Providers'
 import {Navbar} from '@/components/Navbar'
+import {Toaster} from '@/components/toaster'
 
 export const metadata = {
   title: 'Fit For Life Trainer',
@@ -35,6 +36,7 @@ export default async function RootLayout({
           </div>
         </div>
         <div id="modal"></div>
+        <Toaster />
       </body>
     </html>
   )

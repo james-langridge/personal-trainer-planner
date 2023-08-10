@@ -38,6 +38,13 @@ export type DeleteBootcampBody = Pick<Bootcamp, 'deleted' | 'id'>
 
 export type DeleteWorkoutBody = Pick<Workout, 'deleted' | 'id' | 'ownerId'>
 
+export type InvoiceData = {
+  appointments: string
+  email: string
+  total: string
+  user: string
+}
+
 export type UpdateAppointmentBody = Partial<
   Pick<
     Appointment,

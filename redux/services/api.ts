@@ -12,7 +12,14 @@ export const api = createApi({
         body: body,
       }),
     }),
+    sendInvoice: builder.mutation({
+      query: (body: Record<string, string>) => ({
+        url: '/invoices',
+        method: 'POST',
+        body: body,
+      }),
+    }),
   }),
 })
 
-export const {useSubmitFormMutation} = api
+export const {useSendInvoiceMutation, useSubmitFormMutation} = api
