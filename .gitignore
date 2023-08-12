@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 .idea/
+/backups
 .vscode/
 
 # debug

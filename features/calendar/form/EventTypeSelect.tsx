@@ -26,7 +26,7 @@ export function EventTypeSelect({
             }))
           }
         />
-        <label htmlFor="WORKOUT">Training</label>
+        <label htmlFor="WORKOUT">Workout</label>
       </div>
 
       <div className="space-x-2">

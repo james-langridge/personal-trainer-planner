@@ -8,15 +8,15 @@ import {DateChangeButtons} from '@/components/DateChangeButtons'
 import {Fetching} from '@/components/Fetching'
 import Loader from '@/components/Loader'
 import {useCalendarData} from '@/features/calendar/desktop'
-import {columns} from '@/features/users/summary/Columns'
-import {DataTable} from '@/features/users/summary/DataTable'
+import {columns, DataTable, DateContext} from '@/features/users/summary'
 import {sortByString} from '@/lib/users'
 import {useGetUsersQuery} from '@/redux/services/users'
 
 export default function Users() {
   const {data: session, status} = useSession()
   const {year, month, setYear, setMonth} = useCalendarData()
-  const {data = [], isFetching} = useGetUsersQuery(`${year}-${month + 1}`)
+  const date = `${year}-${month + 1}`
+  const {data = [], isFetching} = useGetUsersQuery(date)
   const users = sortByString('name', data)
 
   if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
@@ -42,7 +42,9 @@ export default function Users() {
         />
         {isFetching && <Fetching />}
       </div>
-      <DataTable columns={columns} data={users} />
+      <DateContext.Provider value={date}>
+        <DataTable columns={columns} data={users} />
+      </DateContext.Provider>
     </div>
   )
 }

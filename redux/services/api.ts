@@ -1,5 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
+import {InvoiceData} from '@/@types/apiRequestTypes'
+
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({baseUrl: '/api'}),
@@ -13,7 +15,7 @@ export const api = createApi({
       }),
     }),
     sendInvoice: builder.mutation({
-      query: (body: Record<string, string>) => ({
+      query: (body: InvoiceData) => ({
         url: '/invoices',
         method: 'POST',
         body: body,

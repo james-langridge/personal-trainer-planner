@@ -18,8 +18,9 @@ export const usersApi = api.injectEndpoints({
       providesTags: (result, error, id) => [{type: 'Users', id}],
     }),
     getUsers: build.query<UserWithWorkouts[], void | string>({
-      query: (arg?: string) => {
-        return arg ? `/users/?month=${arg}` : '/users/'
+      // date must be in the format `${year}-${month + 1}` (not zero-based).
+      query: (date?: string) => {
+        return date ? `/users/?date=${date}` : '/users/'
       },
       providesTags: (result = [], error, arg) => {
         return arg

@@ -4,6 +4,8 @@ import nodemailer from 'nodemailer'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {monthNames} from '@/lib/constants'
+import {db} from '@/lib/db'
 
 const sendInvoice = async (body: InvoiceData) => {
   const transporter = nodemailer.createTransport({
@@ -22,12 +24,16 @@ const sendInvoice = async (body: InvoiceData) => {
     return
   }
 
+  const month = monthNames[new Date(body.date).getMonth()]
+  const total = new Intl.NumberFormat('en-UK', {
+    style: 'currency',
+    currency: 'GBP',
+  }).format(body.total / 100)
+
   const bodyString = `
-      Hi ${body.user.split(' ')[0]},
+      Hi ${body.name.split(' ')[0]},
       
-      We have done ${body.appointments} sessions this month - total ${
-    body.total
-  }.
+      We have done ${body.appointments} sessions in ${month} - total ${total}.
 
       Many thanks,
       --
@@ -39,7 +45,7 @@ const sendInvoice = async (body: InvoiceData) => {
       from: `${process.env.PT_FIRST_NAME} ${process.env.PT_SURNAME} ${process.env.EMAIL_FROM}`,
       // to: `${body.email}`,
       to: process.env.EMAIL_TO,
-      subject: `This month's invoice from ${process.env.PT_BRAND_NAME}`,
+      subject: `${month}'s invoice from ${process.env.PT_BRAND_NAME}`,
       text: bodyString,
     })
 
@@ -62,7 +68,29 @@ export async function POST(req: NextRequest) {
 
   const body: InvoiceData = await req.json()
 
+  const invoice = await db.invoice.create({
+    data: {
+      appointments: body.appointments,
+      date: getLastDayOfMonth(body.date),
+      ownerId: body.id,
+      total: body.total,
+    },
+  })
+
   await sendInvoice(body)
 
-  return NextResponse.json(body)
+  return NextResponse.json(
+    {invoice},
+    {
+      status: 201,
+    },
+  )
+}
+
+function getLastDayOfMonth(dateString: string) {
+  const date = new Date(dateString)
+  date.setMonth(date.getMonth() + 1)
+  date.setDate(date.getDate() - 1)
+
+  return date
 }

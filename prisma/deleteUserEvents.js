@@ -33,6 +33,17 @@ async function main() {
     throw new Error('Missing process.env.DEMO_USER')
   }
 
+  const answer1 = await askForConfirmation(
+    `\nHave you backed up the DB? (N/y): `,
+  )
+
+  if (answer1.toLowerCase() === 'yes' || answer1.toLowerCase() === 'y') {
+    console.log('\nProceeding...')
+  } else {
+    console.log('\nAborted!')
+    throw new Error('Back up the database first.')
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       id: userIdToDelete,
@@ -62,12 +73,12 @@ async function main() {
 
   console.log('User: ', user)
 
-  const answer = await askForConfirmation(
+  const answer2 = await askForConfirmation(
     `\nAbout to delete all of the ${appointmentsCount} appointments and ${workoutsCount} workouts for the above user ${user.id}.
     \nThis cannot be undone. Proceed? (N/y): `,
   )
 
-  if (answer.toLowerCase() === 'yes' || answer.toLowerCase() === 'y') {
+  if (answer2.toLowerCase() === 'yes' || answer2.toLowerCase() === 'y') {
     console.log('Proceeding...')
 
     progressBar.start(totalCount, 0)

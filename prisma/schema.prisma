@@ -42,11 +42,24 @@ model Bootcamp {
   videoUrl    String?
 }
 
+model Invoice {
+  appointments Int
+  createdAt    DateTime @default(now())
+  date         DateTime
+  deleted      Boolean  @default(false)
+  id           String   @id @default(uuid())
+  owner        User     @relation(fields: [ownerId], references: [id])
+  ownerId      String
+  total        Int
+  updatedAt    DateTime @updatedAt
+}
+
 model User {
   appointments Appointment[]
   bootcamps    Bootcamp[]
   createdAt    DateTime      @default(now())
   fee          Int           @default(0)
+  invoices     Invoice[]
   type         USER_TYPE     @default(INDIVIDUAL)
   updatedAt    DateTime      @updatedAt
   workouts     Workout[]

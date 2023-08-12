@@ -32,6 +32,17 @@ async function main() {
     throw new Error('Missing environment variables!')
   }
 
+  const answer1 = await askForConfirmation(
+    `\nHave you backed up the DB? (N/y): `,
+  )
+
+  if (answer1.toLowerCase() === 'yes' || answer1.toLowerCase() === 'y') {
+    console.log('\nProceeding...')
+  } else {
+    console.log('\nAborted!')
+    throw new Error('Back up the database first.')
+  }
+
   const userToCopy = await prisma.user.findUnique({
     where: {
       id: userIdToCopy,
@@ -52,12 +63,12 @@ async function main() {
 
   console.log('User: ', userToCopy)
 
-  const answer = await askForConfirmation(
+  const answer2 = await askForConfirmation(
     `\nAbout to copy the above ${appointmentsCount} appointments and ${workoutsCount} workouts from user ${userToCopy.id} to ${demoUserId}.
     \nThis cannot be undone. Proceed? (N/y): `,
   )
 
-  if (answer.toLowerCase() === 'yes' || answer.toLowerCase() === 'y') {
+  if (answer2.toLowerCase() === 'yes' || answer2.toLowerCase() === 'y') {
     console.log('Proceeding...')
 
     progressBar.start(totalCount, 0)

@@ -49,6 +49,14 @@ const getUserWithWorkouts = async (
       email: true,
       fee: true,
       id: true,
+      invoices: {
+        select: {
+          date: true,
+        },
+        where: {
+          deleted: false,
+        },
+      },
       name: true,
       role: true,
       type: true,
