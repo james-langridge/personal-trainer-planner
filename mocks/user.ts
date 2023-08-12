@@ -1,4 +1,3 @@
-import {UserWithWorkoutAndAttendance} from '@/@types/types'
 import {padZero} from '@/lib/calendar'
 
 const now = new Date()
@@ -6,14 +5,12 @@ export const year = now.getFullYear()
 export const month = now.getMonth()
 const uiMonth = padZero(month + 1)
 
-export const user: UserWithWorkoutAndAttendance = {
+export const user = {
   id: '123',
   role: 'user',
   email: 'email',
   fee: 0,
   name: 'Name',
-  appointmentsAssigned: 1,
-  appointmentsAttended: 1,
   type: 'INDIVIDUAL',
   appointments: [],
   bootcamps: [],
@@ -55,8 +52,6 @@ export const user: UserWithWorkoutAndAttendance = {
       date: new Date(`${year}-${uiMonth}-2`),
     },
   ],
-  workoutsAssigned: 1,
-  workoutsCompleted: 0,
 }
 
 export const session = {

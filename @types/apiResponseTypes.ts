@@ -1,6 +1,7 @@
 import {
   Appointment as PrismaAppointment,
   Bootcamp as PrismaBootcamp,
+  Invoice as PrismaInvoice,
   User,
   Workout as PrismaWorkout,
 } from '@prisma/client'
@@ -24,6 +25,7 @@ export type UserWithWorkouts = Pick<
     PrismaBootcamp,
     'date' | 'description' | 'id' | 'name' | 'videoUrl'
   >[]
+  invoices: Pick<PrismaInvoice, 'date'>[]
   workouts: Pick<
     PrismaWorkout,
     'date' | 'description' | 'id' | 'name' | 'ownerId' | 'status' | 'videoUrl'

@@ -13,7 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/dropdown-menu'
-import {SendInvoiceButton} from '@/features/users/summary/SendInvoiceButton'
+
+import {SendInvoiceButton} from './SendInvoiceButton'
 
 export const columns: ColumnDef<UserWithWorkouts>[] = [
   {
@@ -105,18 +106,13 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
   },
   {
     accessorFn: row => {
-      const total = row.appointments.reduce((acc, appointment) => {
+      return row.appointments.reduce((acc, appointment) => {
         if (appointment.status === APPOINTMENT_STATUS.ATTENDED) {
-          return acc + appointment.fee / 100
+          return acc + appointment.fee
         }
 
         return acc
       }, 0)
-
-      return new Intl.NumberFormat('en-UK', {
-        style: 'currency',
-        currency: 'GBP',
-      }).format(total)
     },
     accessorKey: 'total',
     header: ({column}) => {
@@ -129,6 +125,20 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
+    },
+    cell: ({row}) => {
+      const total = row.original.appointments.reduce((acc, appointment) => {
+        if (appointment.status === APPOINTMENT_STATUS.ATTENDED) {
+          return acc + appointment.fee / 100
+        }
+
+        return acc
+      }, 0)
+
+      return new Intl.NumberFormat('en-UK', {
+        style: 'currency',
+        currency: 'GBP',
+      }).format(total)
     },
   },
   {
@@ -150,8 +160,9 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
           <SendInvoiceButton
             appointments={row.getValue('attended')}
             email={row.original.email}
+            id={row.original.id}
+            name={row.original.name}
             total={row.getValue('total')}
-            user={row.original.name}
           />
         )
       }

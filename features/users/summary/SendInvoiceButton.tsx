@@ -1,5 +1,5 @@
 import {ReloadIcon} from '@radix-ui/react-icons'
-import {useState} from 'react'
+import {useContext, useState} from 'react'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
 import {
@@ -16,26 +16,37 @@ import {Button} from '@/components/button'
 import {useToast} from '@/components/use-toast'
 import {useSendInvoiceMutation} from '@/redux/services/api'
 
+import {DateContext} from '.'
+
 export function SendInvoiceButton({
   appointments,
   email,
+  id,
+  name,
   total,
-  user,
 }: {
   appointments: number
   email: string
-  total: string
-  user: string
+  id: string
+  name: string
+  total: number
 }) {
   const [sendInvoice, {isLoading}] = useSendInvoiceMutation()
   const [open, setOpen] = useState(false)
   const {toast} = useToast()
+  const date = useContext(DateContext)
+  const formattedTotal = new Intl.NumberFormat('en-UK', {
+    style: 'currency',
+    currency: 'GBP',
+  }).format(total / 100)
 
   const invoiceData: InvoiceData = {
-    appointments: appointments.toString(),
+    appointments,
+    date,
     email,
+    id,
+    name,
     total,
-    user,
   }
 
   async function onClick() {
@@ -66,7 +77,8 @@ export function SendInvoiceButton({
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will email an invoice to{' '}
-            <span className="capitalize">{user}</span> at {email} for {total}.
+            <span className="capitalize">{name}</span> at {email} for{' '}
+            {formattedTotal}.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

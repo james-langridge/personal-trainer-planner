@@ -22,18 +22,18 @@ export async function GET(request: Request) {
   }
 
   const {searchParams} = new URL(request.url)
-  const month = searchParams.get('month')
+  const dateQuery = searchParams.get('date')
 
-  let date = undefined
+  let dateFilter = undefined
 
-  if (month) {
-    const thisMonth = new Date(month)
+  if (dateQuery) {
+    const thisMonth = new Date(dateQuery)
     const nextMonth = new Date(
       thisMonth.getFullYear(),
       thisMonth.getMonth() + 1,
     )
 
-    date = {
+    dateFilter = {
       gte: thisMonth,
       lt: nextMonth,
     }
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
         },
         where: {
           deleted: false,
-          ...(date && {date: date}),
+          ...(dateFilter && {date: dateFilter}),
         },
       },
       bootcamps: {
@@ -67,12 +67,20 @@ export async function GET(request: Request) {
         },
         where: {
           deleted: false,
-          ...(date && {date: date}),
+          ...(dateFilter && {date: dateFilter}),
         },
       },
       email: true,
       fee: true,
       id: true,
+      invoices: {
+        select: {
+          date: true,
+        },
+        where: {
+          deleted: false,
+        },
+      },
       name: true,
       role: true,
       type: true,
@@ -88,7 +96,7 @@ export async function GET(request: Request) {
         },
         where: {
           deleted: false,
-          ...(date && {date: date}),
+          ...(dateFilter && {date: dateFilter}),
         },
       },
     },
