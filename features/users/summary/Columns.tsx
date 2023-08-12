@@ -1,6 +1,7 @@
 'use client'
 
 import {APPOINTMENT_STATUS, USER_TYPE} from '@prisma/client'
+import {CheckIcon} from '@radix-ui/react-icons'
 import {ColumnDef} from '@tanstack/react-table'
 import {ArrowUpDown, MoreHorizontal} from 'lucide-react'
 import Link from 'next/link'
@@ -155,6 +156,15 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
       )
     },
     cell: ({row}) => {
+      if (row.original.invoices.length) {
+        return (
+          <div className="flex items-center">
+            <CheckIcon />
+            Done
+          </div>
+        )
+      }
+
       if (row.original.type === USER_TYPE.INDIVIDUAL) {
         return (
           <SendInvoiceButton
