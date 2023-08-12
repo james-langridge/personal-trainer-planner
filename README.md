@@ -9,15 +9,18 @@ A client management and scheduling app for personal trainers and their clients, 
 
 ### Features
 
-- Shared calendar between PT and each user, which is editable by PT only.
+Client in this context means the customer of the PT.
+
+- Shared calendar between PT and each client, editable by PT only.
 - Three event types:
-  - Workouts, which user can check as done.
-  - Appointments, with fees.
-  - Bootcamps, which users can check to say they are attending.
-- Dashboard calculates monthly total fees to invoice for each user.
+  - Workouts, which clients can check as done.
+  - Appointments, with fees for billing.
+  - Bootcamps, which clients can check to confirm attendance.
+- Appointment attendance and fee data is viewable in a monthly table.
+- Invoices can be generated and emailed to clients with a button click.
+- Mobile-friendly calendar list-view for clients with infinite scroll.
 - Password-less login via email magic link.
-- Mobile-friendly calendar list-view for users with infinite scroll.
-- Custom forms via Contentful CMS, emailed to the PT when the user completes them.
+- Custom forms via Contentful CMS, emailed to the PT when the client completes them.
 - Authentication using **[NextAuth.js](https://next-auth.js.org/)**.
 - ORM using **[Prisma](https://www.prisma.io/)**.
 - Database on **[Railway](https://railway.app/)**.
