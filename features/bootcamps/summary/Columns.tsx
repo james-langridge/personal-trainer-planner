@@ -49,34 +49,6 @@ export const columns: ColumnDef<Bootcamp>[] = [
     },
   },
   {
-    accessorKey: 'description',
-    header: ({column}) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Description
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-  },
-  {
-    accessorKey: 'videoUrl',
-    header: ({column}) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Video URL
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-  },
-  {
     accessorFn: row => row._count?.attendees,
     accessorKey: 'attendees',
     header: ({column}) => {
@@ -88,6 +60,33 @@ export const columns: ColumnDef<Bootcamp>[] = [
           Attendees
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      )
+    },
+    cell: ({row}) => {
+      const attendees = row.original.attendees
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">View attendees</span>
+              {attendees?.length}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {attendees?.length ? (
+              attendees.map(attendee => (
+                <Link key={attendee.id} href={`/users/${attendee.id}`}>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <span className="capitalize">{attendee.name}</span>
+                  </DropdownMenuItem>
+                </Link>
+              ))
+            ) : (
+              <div>No attendees</div>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       )
     },
   },
