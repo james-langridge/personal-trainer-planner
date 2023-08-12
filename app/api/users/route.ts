@@ -79,6 +79,7 @@ export async function GET(request: Request) {
         },
         where: {
           deleted: false,
+          ...(dateFilter && {date: dateFilter}),
         },
       },
       name: true,
