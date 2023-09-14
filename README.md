@@ -46,45 +46,48 @@ Client in this context means the customer of the PT.
 
 ### Prerequisites
 
-- You will need a database.  I used a PostgreSQL database on [Railway](https://railway.app/).
-- You will need to setup an email account to work with NextAuth.js. I used Gmail.  See the [NextAuth.js](https://next-auth.js.org/providers/email) docs and the [nodemailer docs](https://nodemailer.com/usage/using-gmail/).
+- You will need a PostgreSQL database.
+- You will need to set up an email account to work with NextAuth.js. I used Gmail.  See the [NextAuth.js](https://next-auth.js.org/providers/email) docs and the [nodemailer docs](https://nodemailer.com/usage/using-gmail/).
 - The app uses Contentful as a CMS for the personal trainer to create forms for their clients, which are emailed to the PT on completion.  To use this feature you will need a [Contentful](https://www.contentful.com/sign-up/) account.
 
 ### Installation
 
 1. Clone the repo
-   ```sh
-   git clone https://github.com/james-langridge/personal-trainer-planner.git
-   ```
-
+    ```sh
+    git clone https://github.com/james-langridge/personal-trainer-planner.git
+    ```
 2. Install NPM packages
-   ```sh
-   npm install
-   ```
-
-3. Copy `.env.example` to `.env.local` and update the variables.
     ```sh
-    cp .env.example .env.local
+    npm install
     ```
-
-4. Generate the Prisma Client from `prisma/schema.prisma`:
+3. Copy the environment variable files and update the variables.
     ```sh
-    npx prisma generate
+    cp .env.example .env
+    cp .env.local.example .env.local
     ```
-
-5. Seed the database (check comments in `prisma/seed.ts` about changing the emails):
+4. Once you have a Postgres DB running somewhere, and the `DATABASE_URL` env var set, run the [Prisma Migrate command](https://www.prisma.io/docs/reference/api-reference/command-reference#migrate-dev):
+    ```sh
+    npx prisma migrate dev
+    ```
+5. Change the emails in `prisma/seed.ts` so you will be able to log into the app.
+6. Seed the database:
     ```sh
     npx prisma db seed
     ```
-
-6. Start the development server:
+7. You can check seeding the database worked with this command:
+    ```sh
+    npx prisma studio
+    ```
+    You can also edit data using this UI in the browser if needed.
+8. Start the development server:
     ```sh
     npm run dev
     ```
+9. Open up http://localhost:3000 in a browser and log in.  You must have set up an email account and set the environment variables before you can log in.  See the [NextAuth.js](https://next-auth.js.org/providers/email) docs and the [nodemailer docs](https://nodemailer.com/usage/using-gmail/).  You will be admin and can create other users.  The seed script added demo workouts etc to your admin account.
 
 ## Deploy your own
 
-You should be able to clone and deploy this project on Vercel using the button below, provided you have completed the prerequisites above (database, email, Contentful CMS).
+You should be able to clone and deploy this project on Vercel using the button below, provided you have completed the prerequisites above (database and email).
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjames-langridge%2Fpersonal-trainer-planner&env=DATABASE_URL,NEXTAUTH_SECRET,SMTP_PASSWORD,SMTP_USER,SMTP_HOST,SMTP_PORT,EMAIL_FROM,EMAIL_TO,CONTENTFUL_SPACE_ID,CONTENTFUL_ACCESS_TOKEN)
 
