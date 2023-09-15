@@ -28,19 +28,13 @@ Client in this context means the customer of the PT.
 - State management with **[Redux Toolkit](https://redux-toolkit.js.org/)** and **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)**.
 - Written in **TypeScript**.
 
-### Showcase
+### Screenshots
 
-![calendar_trainer1](public/calendarTrainer1.png)
+|                                                                                                                                                        |                                                                                                                                                  |                                                         |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------: |:-------------------------------------------------------:|
+|           <img src="public/calendarTrainer1.png">           |                 <img src="public/calendarTrainer2.png">                 |         <img src="public/calendarTrainer3.png">         |
+| <img src="public/clientsTable.png"> | <img src="public/clientTable.png"> | <img src="public/mobileCalendar.png"> |
 
-![calendar_trainer2](public/calendarTrainer2.png)
-
-![calendar_trainer3](public/calendarTrainer3.png)
-
-![clients_table](public/clientsTable.png)
-
-![client_table](public/clientTable.png)
-
-![mobile_calendar](public/mobileCalendar.png) ![mobile_session](public/mobileSession.png)
 
 ## Run it locally
 
