@@ -47,6 +47,17 @@ Client in this context means the customer of the PT.
 ### Prerequisites
 
 - You will need a PostgreSQL database.
+  - With Railway go to https://railway.app/new and click `Provision PostgreSQL`, then click on the new Postgres project, and grab the `DATABASE_URL` from the `Connect` tab.
+  - Assuming you have [PostgreSQL installed](https://www.postgresql.org/download/), you could instead create a local database for development with this command:
+    - ```sh
+      createdb mydatabase
+      ```
+    - Then you can connect to it: `DATABASE_URL=postgresql://postgres:[YOUR_PASSWORD]@localhost:5432/mydatabase`
+  - Assuming you have [Docker installed](https://docs.docker.com/get-docker/), you could [run Postgres in a Docker container](https://hub.docker.com/_/postgres):
+    - ```sh
+      docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=mydatabase -p 5432:5432 -d postgres
+      ```
+    - Then you can connect to it: `DATABASE_URL=postgresql://postgres:mysecretpassword@localhost:5432/mydatabase`
 - You will need to set up an email account to work with NextAuth.js. I used Gmail.  See the [NextAuth.js](https://next-auth.js.org/providers/email) docs and the [nodemailer docs](https://nodemailer.com/usage/using-gmail/).
 - The app uses Contentful as a CMS for the personal trainer to create forms for their clients, which are emailed to the PT on completion.  To use this feature you will need a [Contentful](https://www.contentful.com/sign-up/) account.
 
@@ -84,6 +95,7 @@ Client in this context means the customer of the PT.
     npm run dev
     ```
 9. Open up http://localhost:3000 in a browser and log in.  You must have set up an email account and set the environment variables before you can log in.  See the [NextAuth.js](https://next-auth.js.org/providers/email) docs and the [nodemailer docs](https://nodemailer.com/usage/using-gmail/).  You will be admin and can create other users.  The seed script added demo workouts etc to your admin account.
+10. As a Next.js app, deploying to Vercel is simple: https://vercel.com/new
 
 ## Deploy your own
 
