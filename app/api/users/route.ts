@@ -101,9 +101,6 @@ export async function GET(request: Request) {
         },
       },
     },
-    where: {
-      role: 'user',
-    },
   })
 
   return NextResponse.json(users)
