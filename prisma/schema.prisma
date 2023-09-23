@@ -58,6 +58,7 @@ model User {
   appointments Appointment[]
   bootcamps    Bootcamp[]
   createdAt    DateTime      @default(now())
+  credits      Int           @default(0)
   fee          Int           @default(0)
   invoices     Invoice[]
   type         USER_TYPE     @default(INDIVIDUAL)
