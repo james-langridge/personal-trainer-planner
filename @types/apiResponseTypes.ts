@@ -6,9 +6,10 @@ import {
   Workout as PrismaWorkout,
 } from '@prisma/client'
 
+// TODO: rename this to User
 export type UserWithWorkouts = Pick<
   User,
-  'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
+  'credits' | 'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
 > & {
   appointments: Pick<
     PrismaAppointment,

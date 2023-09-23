@@ -25,8 +25,9 @@ import {RadioGroup, RadioGroupItem} from '@/components/radio-group'
 import {useGetUserQuery, useUpdateUserMutation} from '@/redux/services/users'
 
 const formSchema = z.object({
-  id: z.string(),
+  credits: z.string(),
   email: z.string(),
+  id: z.string(),
   fee: z.string(),
   name: z.string(),
   type: z.nativeEnum(USER_TYPE),
@@ -42,8 +43,9 @@ export default function EditUser({params}: {params: {slug: string}}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: user?.id || '',
+      credits: user?.credits.toString(),
       email: user?.email || '',
+      id: user?.id || '',
       fee: user?.fee ? (user.fee / 100).toFixed(2) : '0.00',
       name: user?.name || '',
       type: user?.type || USER_TYPE.INDIVIDUAL,
@@ -56,8 +58,9 @@ export default function EditUser({params}: {params: {slug: string}}) {
     }
 
     form.reset({
-      id: user.id || '',
+      credits: user.credits.toString(),
       email: user.email || '',
+      id: user.id || '',
       fee: (user.fee / 100).toFixed(2) || '0.00',
       name: user.name || '',
       type: user.type || USER_TYPE.INDIVIDUAL,
@@ -76,6 +79,7 @@ export default function EditUser({params}: {params: {slug: string}}) {
     try {
       await updateUser({
         ...values,
+        credits: Number(values.credits),
         fee: Math.round(parseFloat(values.fee) * 100),
       })
       router.back()
@@ -159,6 +163,19 @@ export default function EditUser({params}: {params: {slug: string}}) {
                 <FormLabel>Fee</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="0.00" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="credits"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Credits</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="0" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
