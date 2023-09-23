@@ -70,6 +70,7 @@ export async function GET(request: Request) {
           ...(dateFilter && {date: dateFilter}),
         },
       },
+      credits: true,
       email: true,
       fee: true,
       id: true,
@@ -154,6 +155,7 @@ export async function PUT(req: NextRequest) {
       id: body.id,
     },
     data: {
+      ...(body.credits && {credits: body.credits}),
       ...(body.email && {email: body.email}),
       ...(body.fee && {fee: body.fee}),
       ...(body.name && {name: body.name}),

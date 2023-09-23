@@ -45,6 +45,7 @@ export async function GET(
           deleted: false,
         },
       },
+      credits: true,
       email: true,
       fee: true,
       id: true,

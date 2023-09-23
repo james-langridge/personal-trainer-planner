@@ -66,7 +66,7 @@ export type UpdateBootcampBody = Partial<
 > & {date?: string; userId?: string; query?: 'connect' | 'disconnect'}
 
 export type UpdateUserBody = Partial<
-  Pick<User, 'email' | 'fee' | 'id' | 'name' | 'type'>
+  Pick<User, 'credits' | 'email' | 'fee' | 'id' | 'name' | 'type'>
 >
 
 export type UpdateWorkoutBody = Partial<
