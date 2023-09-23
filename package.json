@@ -14,6 +14,7 @@
     "seed": "ts-node -P tsconfig-seed.json -r tsconfig-paths/register --transpileOnly prisma/seed.ts"
   },
   "scripts": {
+    "backup": "./scripts/backup.sh",
     "dev": "next dev",
     "build": "prisma generate && next build",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output @types/generated/contentful.d.ts",
