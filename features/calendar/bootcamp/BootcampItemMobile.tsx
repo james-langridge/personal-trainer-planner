@@ -5,11 +5,12 @@ import {Bootcamp} from '@/@types/apiResponseTypes'
 import {useToggleBootcamp} from '.'
 
 export function BootcampItemMobile({bootcamp}: {bootcamp: Bootcamp}) {
-  const {isAttending, toggleAttendance} = useToggleBootcamp(bootcamp)
+  const {isAttending, isLoading, toggleAttendance} = useToggleBootcamp(bootcamp)
 
   return (
     <div className="flex items-center gap-2 text-lg">
       <input
+        disabled={isLoading}
         type="checkbox"
         checked={isAttending}
         className="h-7 w-7 rounded"

@@ -10,8 +10,7 @@ import {Checkbox, Title, useToggleBootcamp} from '.'
 export function BootcampItem({bootcamp}: {bootcamp: Bootcamp}) {
   const dispatch = useAppDispatch()
   const isAdmin = useAppSelector(selectIsAdmin)
-  const {isAttending, toggleAttendance} = useToggleBootcamp(bootcamp)
-
+  const {isAttending, isLoading, toggleAttendance} = useToggleBootcamp(bootcamp)
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
     if (!isAdmin) {
       return
@@ -29,7 +28,11 @@ export function BootcampItem({bootcamp}: {bootcamp: Bootcamp}) {
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
-      <Checkbox onChange={toggleAttendance} status={isAttending} />
+      <Checkbox
+        onChange={toggleAttendance}
+        status={isAttending}
+        disabled={isLoading}
+      />
       <Title bootcamp={bootcamp} isAdmin={isAdmin} onClick={onClick} />
     </div>
   )
