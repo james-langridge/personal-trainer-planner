@@ -61,6 +61,12 @@ export type UpdateAppointmentBody = Partial<
   >
 > & {date?: string}
 
+export type UpdateBootcampAttendanceBody = {
+  bootcampId: string
+  isAttending: boolean
+  userId: string
+}
+
 export type UpdateBootcampBody = Partial<
   Pick<Bootcamp, 'deleted' | 'description' | 'id' | 'name' | 'videoUrl'>
 > & {date?: string; userId?: string; query?: 'connect' | 'disconnect'}

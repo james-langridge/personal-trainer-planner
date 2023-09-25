@@ -1,4 +1,8 @@
-import {CreateUserBody, UpdateUserBody} from '@/@types/apiRequestTypes'
+import {
+  CreateUserBody,
+  UpdateBootcampAttendanceBody,
+  UpdateUserBody,
+} from '@/@types/apiRequestTypes'
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 
 import {api} from './api'
@@ -34,7 +38,21 @@ export const usersApi = api.injectEndpoints({
         method: 'PUT',
         body: body,
       }),
-      invalidatesTags: ['Users'],
+      invalidatesTags: (result, error, {id}) => [
+        {type: 'Users', id},
+        {type: 'Users'},
+      ],
+    }),
+    updateBootcampAttendance: build.mutation({
+      query: (body: UpdateBootcampAttendanceBody) => ({
+        url: '/users/bootcamps',
+        method: 'PUT',
+        body: body,
+      }),
+      invalidatesTags: (result, error, {bootcampId, userId}) => [
+        {type: 'Bootcamps', id: bootcampId},
+        {type: 'Users', id: userId},
+      ],
     }),
   }),
 })
@@ -43,5 +61,6 @@ export const {
   useCreateUserMutation,
   useGetUserQuery,
   useGetUsersQuery,
+  useUpdateBootcampAttendanceMutation,
   useUpdateUserMutation,
 } = usersApi

@@ -155,7 +155,7 @@ export async function PUT(req: NextRequest) {
       id: body.id,
     },
     data: {
-      ...(body.credits && {credits: body.credits}),
+      ...(body.credits !== undefined && {credits: body.credits}),
       ...(body.email && {email: body.email}),
       ...(body.fee && {fee: body.fee}),
       ...(body.name && {name: body.name}),
