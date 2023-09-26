@@ -39,7 +39,9 @@ export function useToggleBootcamp(bootcamp: Bootcamp) {
 
   async function toggleAttendance() {
     if (!user?.credits && !isAttending) {
-      toast('No credits remaining! Please contact me.')
+      toast(
+        `No credits remaining! Please contact ${process.env.NEXT_PUBLIC_PT_FIRST_NAME}.`,
+      )
 
       return
     }
@@ -49,9 +51,22 @@ export function useToggleBootcamp(bootcamp: Bootcamp) {
 
       setIsAttending(prevState => !prevState)
 
-      const toastMessage = isAttending
-        ? 'Attendance cancelled.'
-        : 'See you at the bootcamp!'
+      let toastMessage
+      const credits = user?.credits
+
+      if (isAttending) {
+        toastMessage =
+          credits !== undefined
+            ? `Attendance cancelled. Credits remaining: ${credits + 1}`
+            : 'Attendance cancelled.'
+      }
+
+      if (!isAttending) {
+        toastMessage =
+          credits !== undefined
+            ? `See you at the bootcamp! Credits remaining: ${credits - 1}`
+            : 'See you at the bootcamp!'
+      }
 
       toast.success(toastMessage)
     } catch (error) {
