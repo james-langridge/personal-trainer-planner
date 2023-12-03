@@ -21,9 +21,7 @@ export function DataTableViewOptions<TData>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="ml-auto">
-          Columns
-        </Button>
+        <Button variant="outline">Columns</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {table

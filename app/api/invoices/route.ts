@@ -37,14 +37,13 @@ const sendInvoice = async (body: InvoiceData) => {
 
       Many thanks,
       --
-      ${process.env.PT_FIRST_NAME}
+      ${process.env.NEXT_PUBLIC_PT_FIRST_NAME}
       `
 
   try {
     await transporter.sendMail({
-      from: `${process.env.PT_FIRST_NAME} ${process.env.PT_SURNAME} ${process.env.EMAIL_FROM}`,
-      // to: `${body.email}`,
-      to: process.env.EMAIL_TO,
+      from: `${process.env.NEXT_PUBLIC_PT_FIRST_NAME} ${process.env.PT_SURNAME} ${process.env.EMAIL_FROM}`,
+      to: `${body.email}`,
       subject: `${month}'s invoice from ${process.env.PT_BRAND_NAME}`,
       text: bodyString,
     })

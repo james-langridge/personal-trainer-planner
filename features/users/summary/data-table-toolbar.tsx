@@ -1,12 +1,28 @@
 'use client'
 
-import {Cross2Icon} from '@radix-ui/react-icons'
-import {Table} from '@tanstack/react-table'
+import {Cross2Icon, ReloadIcon} from '@radix-ui/react-icons'
+import {Row, Table} from '@tanstack/react-table'
+import React, {useContext, useState} from 'react'
 
+import {InvoiceData} from '@/@types/apiRequestTypes'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/alert-dialog'
 import {Button} from '@/components/button'
 import {DataTableFacetedFilter} from '@/components/data-table-faceted-filter'
 import {DataTableViewOptions} from '@/components/data-table-view-options'
 import {Input} from '@/components/input'
+import {useToast} from '@/components/use-toast'
+import {DateContext} from '@/features/users/summary/DateContext'
+import {useSendInvoiceMutation} from '@/redux/services/api'
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -25,6 +41,46 @@ const types = [
 
 export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
+  const selectedRows = table.getFilteredSelectedRowModel()
+    .rows as unknown as Row<UserWithWorkouts>[]
+  const [sendInvoice, {isLoading}] = useSendInvoiceMutation()
+  const [open, setOpen] = useState(false)
+  const {toast} = useToast()
+  const date = useContext(DateContext)
+
+  function invoiceAll() {
+    selectedRows.forEach((row: Row<UserWithWorkouts>) => {
+      const invoiceData: InvoiceData = {
+        appointments: row.getValue('attended'),
+        date,
+        email: row.original.email,
+        id: row.original.id,
+        name: row.getValue('name'),
+        total: row.getValue('total'),
+      }
+
+      const formattedTotal = new Intl.NumberFormat('en-UK', {
+        style: 'currency',
+        currency: 'GBP',
+      }).format(invoiceData.total / 100)
+
+      sendInvoice(invoiceData)
+        .unwrap()
+        .then(() => {
+          toast({
+            description: `Invoice sent to ${invoiceData.email} for ${formattedTotal}.`,
+          })
+        })
+        .catch(error => {
+          toast({
+            variant: 'destructive',
+            title: `Error invoicing ${invoiceData.email}...`,
+            description: error.message,
+          })
+        })
+        .finally(() => setOpen(false))
+    })
+  }
 
   return (
     <div className="flex items-center justify-between">
@@ -55,7 +111,37 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
+      <div className="space-x-2">
+        {!!selectedRows.length && (
+          <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline">Invoice selected</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will email invoices to{' '}
+                  {selectedRows.length} clients.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                {isLoading ? (
+                  <Button disabled>
+                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Sending...
+                  </Button>
+                ) : (
+                  <Button onClick={invoiceAll}>Continue</Button>
+                )}
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   )
 }
