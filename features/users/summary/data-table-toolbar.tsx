@@ -1,5 +1,6 @@
 'use client'
 
+import {USER_TYPE} from '@prisma/client'
 import {Cross2Icon, ReloadIcon} from '@radix-ui/react-icons'
 import {Row, Table} from '@tanstack/react-table'
 import React, {useContext, useState} from 'react'
@@ -49,7 +50,14 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
   const date = useContext(DateContext)
 
   function invoiceAll() {
-    selectedRows.forEach((row: Row<UserWithWorkouts>) => {
+    for (const row of selectedRows) {
+      if (
+        row.original.type !== USER_TYPE.INDIVIDUAL ||
+        row.original.invoices.length
+      ) {
+        continue
+      }
+
       const invoiceData: InvoiceData = {
         appointments: row.getValue('attended'),
         date,
@@ -79,7 +87,7 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
           })
         })
         .finally(() => setOpen(false))
-    })
+    }
   }
 
   return (
@@ -121,8 +129,9 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will email invoices to{' '}
-                  {selectedRows.length} clients.
+                  This action cannot be undone. This will email invoices to the
+                  selected individuals (non-bootcampers) who have not yet been
+                  invoiced this month.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
