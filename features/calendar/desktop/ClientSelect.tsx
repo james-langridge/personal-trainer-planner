@@ -12,6 +12,7 @@ export function ClientSelect() {
   const {data = []} = useGetUsersQuery()
   const filteredUsers = data.filter(user => user.type === clientType)
   // Case-insensitive sorting is not possible via a Prisma query
+  // TODO: sanitise the names before saving in the DB
   // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#can-i-perform-case-insensitive-sorting
   const users = sortByString('name', filteredUsers)
 
