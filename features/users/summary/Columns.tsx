@@ -229,12 +229,12 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link href={`/users/${user.id}`}>
+            <Link href={`/user/${user.id}`}>
               <DropdownMenuItem className="cursor-pointer">
                 View client
               </DropdownMenuItem>
             </Link>
-            <Link href={`/users/${user.id}/edit`}>
+            <Link href={`/user/${user.id}/edit`}>
               <DropdownMenuItem className="cursor-pointer">
                 Edit client
               </DropdownMenuItem>

@@ -7,6 +7,7 @@ import React, {useContext, useState} from 'react'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {DateContext} from '@/app/users/[year]/[month]/DateProvider'
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -22,7 +23,6 @@ import {DataTableFacetedFilter} from '@/components/data-table-faceted-filter'
 import {DataTableViewOptions} from '@/components/data-table-view-options'
 import {Input} from '@/components/input'
 import {useToast} from '@/components/use-toast'
-import {DateContext} from '@/features/users/summary/DateContext'
 import {useSendInvoiceMutation} from '@/redux/services/api'
 
 interface DataTableToolbarProps<TData> {

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 import {NextMonthBtn} from '@/components/NextMonthBtn'
@@ -7,38 +8,50 @@ import {monthNames} from '@/lib/constants'
 export function DateChangeButtons({
   month,
   year,
-  setMonth,
-  setYear,
 }: {
-  year: number
-  month: number
-  setYear: React.Dispatch<React.SetStateAction<number>>
-  setMonth: React.Dispatch<React.SetStateAction<number>>
+  year: string
+  month: string
 }) {
-  const monthName = monthNames[month]
+  const monthNumber = Number(month)
+  const yearNumber = Number(year)
+  const monthName = monthNames[Number(month) - 1]
 
-  function decrementMonth() {
-    if (month === 0) {
-      setMonth(() => 11)
-      setYear(year => year - 1)
+  function next() {
+    let nextMonth = monthNumber
+    let nextYear = yearNumber
+
+    if (monthNumber === 12) {
+      nextMonth = 1
+      nextYear = yearNumber + 1
     } else {
-      setMonth(month => month - 1)
+      nextMonth = nextMonth + 1
     }
+
+    return `${nextYear}/${nextMonth}`
   }
 
-  function incrementMonth() {
-    if (month === 11) {
-      setMonth(() => 0)
-      setYear(year => year + 1)
+  function prev() {
+    let prevMonth = monthNumber
+    let prevYear = yearNumber
+
+    if (monthNumber === 1) {
+      prevMonth = 12
+      prevYear = yearNumber - 1
     } else {
-      setMonth(month => month + 1)
+      prevMonth = prevMonth - 1
     }
+
+    return `${prevYear}/${prevMonth}`
   }
 
   return (
     <div className="flex flex-row items-center py-5 text-2xl">
-      <PrevMonthBtn onClick={decrementMonth} />
-      <NextMonthBtn onClick={incrementMonth} />
+      <Link href={`/users/${prev()}`}>
+        <PrevMonthBtn />
+      </Link>
+      <Link href={`/users/${next()}`}>
+        <NextMonthBtn />
+      </Link>
       <p data-testid={'heading'}>
         {monthName} {year}
       </p>

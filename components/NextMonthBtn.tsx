@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function NextMonthBtn({onClick}: {onClick: () => void}) {
+export function NextMonthBtn({onClick}: {onClick?: () => void}) {
   return (
     <button
       onClick={onClick}
