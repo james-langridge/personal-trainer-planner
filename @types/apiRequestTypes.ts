@@ -18,7 +18,10 @@ export type CreateBootcampBody = Pick<
   weeksToRepeat: number
 }
 
-export type CreateUserBody = Pick<User, 'email' | 'fee' | 'name' | 'type'>
+export type CreateUserBody = Pick<
+  User,
+  'billingEmail' | 'email' | 'fee' | 'name' | 'type'
+>
 
 export type CreateWorkoutBody = Pick<
   Workout,

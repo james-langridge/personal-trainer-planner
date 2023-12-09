@@ -134,6 +134,7 @@ export async function POST(req: NextRequest) {
 
     const user = await db.user.create({
       data: {
+        billingEmail: body.billingEmail || body.email,
         email: body.email,
         fee: body.fee,
         name: body.name,

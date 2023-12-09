@@ -56,6 +56,7 @@ model Invoice {
 
 model User {
   appointments Appointment[]
+  billingEmail String?
   bootcamps    Bootcamp[]
   createdAt    DateTime      @default(now())
   credits      Int           @default(0)

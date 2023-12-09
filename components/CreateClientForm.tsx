@@ -6,11 +6,13 @@ import {useCallback, useEffect, useRef, useState} from 'react'
 import {useCreateUserMutation} from '@/redux/services/users'
 
 const initialForm: {
+  billingEmail: string
   email: string
   fee: string
   name: string
   type: USER_TYPE
 } = {
+  billingEmail: '',
   email: '',
   fee: '0.00',
   name: '',
@@ -109,12 +111,46 @@ export function CreateClientForm() {
             setForm(form => ({
               ...form,
               email: e.target.value,
+              billingEmail: e.target.value,
             }))
           }
           type="email"
           className="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
           placeholder="Email address"
           value={form.email}
+        />
+      </div>
+
+      <div className="relative mt-4 flex items-center">
+        <span className="absolute">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
+          </svg>
+        </span>
+
+        <input
+          required
+          onChange={e =>
+            setForm(form => ({
+              ...form,
+              billingEmail: e.target.value,
+            }))
+          }
+          type="email"
+          className="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+          placeholder="Billing email address"
+          value={form.billingEmail}
         />
       </div>
 

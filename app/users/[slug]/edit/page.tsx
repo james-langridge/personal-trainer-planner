@@ -23,7 +23,6 @@ import {
 import {Input} from '@/components/input'
 import {RadioGroup, RadioGroupItem} from '@/components/radio-group'
 import {useToast} from '@/components/use-toast'
-import {getErrorMessage} from '@/lib/errors'
 import {useGetUserQuery, useUpdateUserMutation} from '@/redux/services/users'
 
 const formSchema = z.object({
