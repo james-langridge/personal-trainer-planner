@@ -176,6 +176,9 @@ export async function PUT(req: NextRequest) {
         id: body.id,
       },
       data: {
+        ...(body.billingEmail !== undefined && {
+          billingEmail: body.billingEmail,
+        }),
         ...(body.credits !== undefined && {credits: body.credits}),
         ...(body.email && {email: body.email}),
         ...(body.fee && {fee: body.fee}),

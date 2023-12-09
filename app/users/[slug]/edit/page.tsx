@@ -26,11 +26,30 @@ import {useToast} from '@/components/use-toast'
 import {useGetUserQuery, useUpdateUserMutation} from '@/redux/services/users'
 
 const formSchema = z.object({
-  credits: z.string(),
-  email: z.string(),
+  billingEmail: z.string().email().optional(),
+  credits: z.string().refine(
+    data => {
+      const number = Number(data)
+
+      return !isNaN(number) && isFinite(number) && number >= 0
+    },
+    {
+      message: 'The credits must be a valid number',
+    },
+  ),
+  email: z.string().email(),
   id: z.string(),
-  fee: z.string(),
-  name: z.string(),
+  fee: z.string().refine(
+    data => {
+      const number = Number(data)
+
+      return !isNaN(number) && isFinite(number) && number >= 0
+    },
+    {
+      message: 'The fee must be a valid number',
+    },
+  ),
+  name: z.string().min(1),
   type: z.nativeEnum(USER_TYPE),
 })
 
@@ -44,12 +63,13 @@ export default function EditUser({params}: {params: {slug: string}}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      billingEmail: user?.billingEmail || undefined,
       credits: user?.credits.toString(),
-      email: user?.email || '',
-      id: user?.id || '',
+      email: user?.email,
+      id: user?.id,
       fee: user?.fee ? (user.fee / 100).toFixed(2) : '0.00',
-      name: user?.name || '',
-      type: user?.type || USER_TYPE.INDIVIDUAL,
+      name: user?.name,
+      type: user?.type,
     },
   })
   const {toast} = useToast()
@@ -60,12 +80,13 @@ export default function EditUser({params}: {params: {slug: string}}) {
     }
 
     form.reset({
+      billingEmail: user?.billingEmail || undefined,
       credits: user.credits.toString(),
-      email: user.email || '',
-      id: user.id || '',
+      email: user.email,
+      id: user.id,
       fee: (user.fee / 100).toFixed(2) || '0.00',
-      name: user.name || '',
-      type: user.type || USER_TYPE.INDIVIDUAL,
+      name: user.name,
+      type: user.type,
     })
   }, [user])
 
@@ -140,6 +161,19 @@ export default function EditUser({params}: {params: {slug: string}}) {
           />
           <FormField
             control={form.control}
+            name="billingEmail"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Billing email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="Billing email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="type"
             render={({field}) => (
               <FormItem className="space-y-3">
@@ -200,7 +234,10 @@ export default function EditUser({params}: {params: {slug: string}}) {
             </Button>
             <Button
               variant="destructive"
-              onClick={() => router.back()}
+              onClick={e => {
+                e.preventDefault()
+                router.back()
+              }}
               disabled={isLoading || isFetching}
             >
               Cancel
