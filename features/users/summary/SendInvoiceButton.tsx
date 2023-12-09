@@ -2,6 +2,7 @@ import {ReloadIcon} from '@radix-ui/react-icons'
 import {useContext, useState} from 'react'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
+import {DateContext} from '@/app/users/[year]/[month]/DateProvider'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -15,8 +16,6 @@ import {
 import {Button} from '@/components/button'
 import {useToast} from '@/components/use-toast'
 import {useSendInvoiceMutation} from '@/redux/services/api'
-
-import {DateContext} from '.'
 
 export function SendInvoiceButton({
   appointments,
