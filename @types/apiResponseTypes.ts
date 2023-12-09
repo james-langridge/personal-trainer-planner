@@ -9,7 +9,7 @@ import {
 // TODO: rename this to User
 export type UserWithWorkouts = Pick<
   User,
-  'credits' | 'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
+  'billingEmail' | 'credits' | 'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
 > & {
   appointments: Pick<
     PrismaAppointment,

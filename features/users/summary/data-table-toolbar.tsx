@@ -61,7 +61,7 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
       const invoiceData: InvoiceData = {
         appointments: row.getValue('attended'),
         date,
-        email: row.original.email,
+        email: row.original.billingEmail || row.original.email,
         id: row.original.id,
         name: row.getValue('name'),
         total: row.getValue('total'),

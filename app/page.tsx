@@ -46,6 +46,7 @@ const getUserWithWorkouts = async (
           deleted: false,
         },
       },
+      billingEmail: true,
       credits: true,
       email: true,
       fee: true,

@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {Button} from '@/components/button'
-import {Checkbox} from "@/components/checkbox";
+import {Checkbox} from '@/components/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,26 +18,25 @@ import {
 
 import {SendInvoiceButton} from './SendInvoiceButton'
 
-
 export const columns: ColumnDef<UserWithWorkouts>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-        <Checkbox
-            checked={
-                table.getIsAllPageRowsSelected() ||
-                (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-        />
+    id: 'select',
+    header: ({table}) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
     ),
-    cell: ({ row }) => (
-        <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-        />
+    cell: ({row}) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={value => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
     ),
     enableSorting: false,
     enableHiding: false,
@@ -207,7 +206,7 @@ export const columns: ColumnDef<UserWithWorkouts>[] = [
         return (
           <SendInvoiceButton
             appointments={row.getValue('attended')}
-            email={row.original.email}
+            email={row.original.billingEmail || row.original.email}
             id={row.original.id}
             name={row.original.name}
             total={row.getValue('total')}

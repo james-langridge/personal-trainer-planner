@@ -50,6 +50,7 @@ export async function GET(
             deleted: false,
           },
         },
+        billingEmail: true,
         credits: true,
         email: true,
         fee: true,

@@ -75,6 +75,7 @@ export async function GET(request: Request) {
             ...(dateFilter && {date: dateFilter}),
           },
         },
+        billingEmail: true,
         credits: true,
         email: true,
         fee: true,
