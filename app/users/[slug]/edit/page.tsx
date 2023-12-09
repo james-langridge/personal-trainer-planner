@@ -22,6 +22,8 @@ import {
 } from '@/components/form'
 import {Input} from '@/components/input'
 import {RadioGroup, RadioGroupItem} from '@/components/radio-group'
+import {useToast} from '@/components/use-toast'
+import {getErrorMessage} from '@/lib/errors'
 import {useGetUserQuery, useUpdateUserMutation} from '@/redux/services/users'
 
 const formSchema = z.object({
@@ -34,7 +36,7 @@ const formSchema = z.object({
 })
 
 export default function EditUser({params}: {params: {slug: string}}) {
-  const [error, setError] = useState<Error>()
+  const [error, setError] = useState('')
   const router = useRouter()
   const {slug} = params
   const {data: session, status} = useSession()
@@ -51,6 +53,7 @@ export default function EditUser({params}: {params: {slug: string}}) {
       type: user?.type || USER_TYPE.INDIVIDUAL,
     },
   })
+  const {toast} = useToast()
 
   useEffect(() => {
     if (!user) {
@@ -76,16 +79,27 @@ export default function EditUser({params}: {params: {slug: string}}) {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      await updateUser({
-        ...values,
-        credits: Number(values.credits),
-        fee: Math.round(parseFloat(values.fee) * 100),
+    updateUser({
+      ...values,
+      credits: Number(values.credits),
+      fee: Math.round(parseFloat(values.fee) * 100),
+    })
+      .unwrap()
+      .then(() => {
+        toast({
+          description: 'Client updated successfully.',
+        })
+
+        router.back()
       })
-      router.back()
-    } catch (error) {
-      setError(error as Error)
-    }
+      .catch(error => {
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: error.data.message,
+        })
+        setError(error.data.message)
+      })
   }
 
   return (
@@ -199,7 +213,7 @@ export default function EditUser({params}: {params: {slug: string}}) {
         <Alert variant="destructive">
           <ExclamationTriangleIcon className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error?.message}</AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
     </div>

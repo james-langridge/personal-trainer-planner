@@ -1,3 +1,4 @@
+import {Prisma} from '.prisma/client'
 import {NextRequest, NextResponse} from 'next/server'
 import {getServerSession} from 'next-auth/next'
 
@@ -5,6 +6,7 @@ import {CreateUserBody, UpdateUserBody} from '@/@types/apiRequestTypes'
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {db} from '@/lib/db'
+import {getErrorMessage} from '@/lib/errors'
 
 export const dynamic = 'force-dynamic'
 
@@ -138,35 +140,65 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const session = await getServerSession(authOptions)
+  try {
+    const session = await getServerSession(authOptions)
 
-  if (!session) {
-    return NextResponse.json({message: 'You must be logged in.'}, {status: 401})
+    if (!session) {
+      return NextResponse.json(
+        {message: 'You must be logged in.'},
+        {status: 401},
+      )
+    }
+
+    if (session.user?.role !== 'admin') {
+      return NextResponse.json({message: 'Forbidden.'}, {status: 403})
+    }
+
+    const body: UpdateUserBody = await req.json()
+
+    const user = await db.user.update({
+      where: {
+        id: body.id,
+      },
+      data: {
+        ...(body.credits !== undefined && {credits: body.credits}),
+        ...(body.email && {email: body.email}),
+        ...(body.fee && {fee: body.fee}),
+        ...(body.name && {name: body.name}),
+        ...(body.type && {type: body.type}),
+      },
+    })
+
+    return NextResponse.json(
+      {user},
+      {
+        status: 201,
+      },
+    )
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      return NextResponse.json(
+        {message: `${e.code}: ${e.message}`},
+        {
+          status: 500,
+        },
+      )
+    }
+
+    if (e instanceof Prisma.PrismaClientUnknownRequestError) {
+      return NextResponse.json(
+        {message: e.message},
+        {
+          status: 500,
+        },
+      )
+    }
+
+    return NextResponse.json(
+      {message: getErrorMessage(e)},
+      {
+        status: 500,
+      },
+    )
   }
-
-  if (session.user?.role !== 'admin') {
-    return NextResponse.json({message: 'Forbidden.'}, {status: 403})
-  }
-
-  const body: UpdateUserBody = await req.json()
-
-  const user = await db.user.update({
-    where: {
-      id: body.id,
-    },
-    data: {
-      ...(body.credits !== undefined && {credits: body.credits}),
-      ...(body.email && {email: body.email}),
-      ...(body.fee && {fee: body.fee}),
-      ...(body.name && {name: body.name}),
-      ...(body.type && {type: body.type}),
-    },
-  })
-
-  return NextResponse.json(
-    {user},
-    {
-      status: 201,
-    },
-  )
 }
