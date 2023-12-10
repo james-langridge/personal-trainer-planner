@@ -9,9 +9,10 @@ import React, {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import revalidate from '@/app/user/[id]/edit/actions'
 import {Alert, AlertDescription, AlertTitle} from '@/components/alert'
 import {Button} from '@/components/button'
-import {Fetching} from '@/components/Fetching'
 import {
   Form,
   FormControl,
@@ -23,7 +24,8 @@ import {
 import {Input} from '@/components/input'
 import {RadioGroup, RadioGroupItem} from '@/components/radio-group'
 import {useToast} from '@/components/use-toast'
-import {useGetUserQuery, useUpdateUserMutation} from '@/redux/services/users'
+import {getErrorMessage} from '@/lib/errors'
+import {useUpdateUserMutation} from '@/redux/services/users'
 
 const formSchema = z.object({
   billingEmail: z.string().email().optional(),
@@ -53,12 +55,10 @@ const formSchema = z.object({
   type: z.nativeEnum(USER_TYPE),
 })
 
-export default function EditUser({params}: {params: {slug: string}}) {
+export default function EditUser({user}: {user: UserWithWorkouts}) {
   const [error, setError] = useState('')
   const router = useRouter()
-  const {slug} = params
   const {data: session, status} = useSession()
-  const {data: user, isFetching} = useGetUserQuery(slug)
   const [updateUser, {isLoading}] = useUpdateUserMutation()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -109,10 +109,9 @@ export default function EditUser({params}: {params: {slug: string}}) {
         toast({
           description: 'Client updated successfully.',
         })
-
-        router.back()
       })
       .catch(error => {
+        console.error(error)
         toast({
           variant: 'destructive',
           title: 'Uh oh! Something went wrong.',
@@ -120,17 +119,23 @@ export default function EditUser({params}: {params: {slug: string}}) {
         })
         setError(error.data.message)
       })
+      .then(() => {
+        // route refresh here
+        revalidate()
+        router.back()
+      })
+      .catch(error => {
+        console.error(error)
+        setError(getErrorMessage(error))
+      })
   }
 
   return (
     <div className="container space-y-8 p-5">
-      {isFetching ? (
-        <Fetching />
-      ) : (
-        <h2 className="text-2xl font-bold capitalize leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-          Editing {user?.name}
-        </h2>
-      )}
+      <h2 className="text-2xl font-bold capitalize leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+        Editing {user?.name}
+      </h2>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -229,7 +234,7 @@ export default function EditUser({params}: {params: {slug: string}}) {
             )}
           />
           <div className="space-x-2">
-            <Button type="submit" disabled={isLoading || isFetching}>
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? 'Updating...' : 'Submit'}
             </Button>
             <Button
@@ -238,7 +243,7 @@ export default function EditUser({params}: {params: {slug: string}}) {
                 e.preventDefault()
                 router.back()
               }}
-              disabled={isLoading || isFetching}
+              disabled={isLoading}
             >
               Cancel
             </Button>
