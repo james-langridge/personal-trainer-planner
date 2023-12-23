@@ -1,17 +1,37 @@
+'use client'
+
 import Link from 'next/link'
 import React from 'react'
 
 import {Bootcamp} from '@/@types/apiResponseTypes'
+import {setEvent} from '@/redux/eventSlice'
+import {useAppDispatch} from '@/redux/store'
 
 export function Title({
   bootcamp,
   isAdmin,
-  onClick,
 }: {
   bootcamp: Bootcamp
   isAdmin: boolean
-  onClick: (event: React.MouseEvent | React.KeyboardEvent) => void
 }) {
+  const dispatch = useAppDispatch()
+
+  function onClick(event: React.MouseEvent | React.KeyboardEvent) {
+    if (!isAdmin) {
+      return
+    }
+
+    const id = (event.target as HTMLElement).id
+
+    // FIXME: this is supposed to open modal when clicked - now broken
+    dispatch(
+      setEvent({
+        id,
+        type: 'BOOTCAMP',
+      }),
+    )
+  }
+
   if (isAdmin) {
     return (
       <div

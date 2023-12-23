@@ -1,3 +1,5 @@
+'use client'
+
 import {WORKOUT_STATUS} from '@prisma/client'
 import clsx from 'clsx'
 import Link from 'next/link'
