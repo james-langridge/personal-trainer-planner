@@ -1,17 +1,36 @@
+'use client'
+
 import Link from 'next/link'
 import React from 'react'
 
 import {Workout} from '@/@types/apiResponseTypes'
+import {setEvent} from '@/redux/eventSlice'
+import {useAppDispatch} from '@/redux/store'
 
 export function Title({
   isAdmin,
-  onClick,
   workout,
 }: {
   isAdmin: boolean
-  onClick: (event: React.MouseEvent | React.KeyboardEvent) => void
   workout: Workout
 }) {
+  const dispatch = useAppDispatch()
+
+  function onClick(event: React.MouseEvent | React.KeyboardEvent) {
+    if (!isAdmin) {
+      return
+    }
+
+    const workoutId = (event.target as HTMLElement).id
+
+    dispatch(
+      setEvent({
+        id: workoutId,
+        type: 'WORKOUT',
+      }),
+    )
+  }
+
   if (isAdmin) {
     return (
       <div

@@ -1,3 +1,5 @@
+import {redirect} from 'next/navigation'
+
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {
   Select,
@@ -6,18 +8,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select'
-import {useAppDispatch} from '@/redux/store'
-import {setUser} from '@/redux/usersSlice'
+// import {useAppDispatch} from '@/redux/store'
+// import {setUser} from '@/redux/usersSlice'
 
-export function ClientDropdown({users}: {users: UserWithWorkouts[]}) {
-  const dispatch = useAppDispatch()
+export function ClientDropdown({
+  users,
+  year,
+  month,
+}: {
+  users: UserWithWorkouts[]
+  year: string
+  month: string
+}) {
+  // const dispatch = useAppDispatch()
 
-  const onSelect = (userName: string) => {
-    dispatch(setUser(users.find(user => user.name === userName)))
+  const onSelect = (userId: string) => {
+    // dispatch(setUser(users.find(user => user.name === userName)))
+    redirect(`/calendar/${year}/${month}/${userId}`)
+
+    // TODO need to change the month prev next btns too
   }
 
   return (
-    <Select onValueChange={userName => onSelect(userName)}>
+    <Select onValueChange={userId => onSelect(userId)}>
       <SelectTrigger className="w-[180px] capitalize">
         <SelectValue placeholder="Select a client" />
       </SelectTrigger>
@@ -26,7 +39,7 @@ export function ClientDropdown({users}: {users: UserWithWorkouts[]}) {
           return (
             <SelectItem
               key={user.id}
-              value={user.name || ''}
+              value={user.id || ''}
               className="capitalize"
             >
               {user.name}

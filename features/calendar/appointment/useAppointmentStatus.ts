@@ -1,3 +1,5 @@
+'use client'
+
 import {APPOINTMENT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 

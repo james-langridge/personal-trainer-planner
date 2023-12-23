@@ -1,17 +1,37 @@
+'use client'
+
 import Link from 'next/link'
 import React from 'react'
 
 import {Appointment} from '@/@types/apiResponseTypes'
+import {setEvent} from '@/redux/eventSlice'
+import {useAppDispatch} from '@/redux/store'
 
 export function Title({
   appointment,
   isAdmin,
-  onClick,
 }: {
   appointment: Appointment
   isAdmin: boolean
-  onClick: (event: React.MouseEvent | React.KeyboardEvent) => void
 }) {
+  const dispatch = useAppDispatch()
+
+  function onClick(event: React.MouseEvent | React.KeyboardEvent) {
+    if (!isAdmin) {
+      return
+    }
+
+    const id = (event.target as HTMLElement).id
+
+    // FIXME: this is supposed to open modal when clicked - now broken
+    dispatch(
+      setEvent({
+        id,
+        type: 'APPOINTMENT',
+      }),
+    )
+  }
+
   if (isAdmin) {
     return (
       <div

@@ -8,9 +8,13 @@ import {monthNames} from '@/lib/constants'
 export function DateChangeButtons({
   month,
   year,
+  route,
+  userId,
 }: {
   year: string
   month: string
+  route: string
+  userId?: string
 }) {
   const monthNumber = Number(month)
   const yearNumber = Number(year)
@@ -27,7 +31,7 @@ export function DateChangeButtons({
       nextMonth = nextMonth + 1
     }
 
-    return `${nextYear}/${nextMonth}`
+    return `${nextYear}/${nextMonth}/${userId ?? ''}`
   }
 
   function prev() {
@@ -41,15 +45,15 @@ export function DateChangeButtons({
       prevMonth = prevMonth - 1
     }
 
-    return `${prevYear}/${prevMonth}`
+    return `${prevYear}/${prevMonth}/${userId ?? ''}`
   }
 
   return (
     <div className="flex flex-row items-center py-5 text-2xl">
-      <Link href={`/users/${prev()}`}>
+      <Link href={`/${route}/${prev()}`}>
         <PrevMonthBtn />
       </Link>
-      <Link href={`/users/${next()}`}>
+      <Link href={`/${route}/${next()}`}>
         <NextMonthBtn />
       </Link>
       <p data-testid={'heading'}>

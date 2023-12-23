@@ -5,14 +5,17 @@ import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import {db} from '@/lib/db'
 import {errorHandler} from '@/lib/errors'
 
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 export async function GET(
   req: NextRequest,
   {params}: {params: {slug: string}},
 ) {
+  console.log('----------------------------')
   try {
     const session = await getServerSession(authOptions)
+
+    console.log({session})
 
     if (!session) {
       return NextResponse.json(

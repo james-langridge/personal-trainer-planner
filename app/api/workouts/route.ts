@@ -31,6 +31,15 @@ export async function POST(req: NextRequest) {
       videoUrl,
       weeksToRepeat,
     }: CreateWorkoutBody = await req.json()
+    console.log({
+      date,
+      description,
+      name,
+      ownerId,
+      selectedDays,
+      videoUrl,
+      weeksToRepeat,
+    })
 
     const dates = getRepeatingDates(date, selectedDays, weeksToRepeat)
 
@@ -44,10 +53,12 @@ export async function POST(req: NextRequest) {
       }
     })
 
+    console.log({data})
+
     const workouts = await db.workout.createMany({data})
 
     return NextResponse.json(
-      {workouts},
+      {data: workouts},
       {
         status: 201,
       },
@@ -85,7 +96,7 @@ export async function PUT(req: NextRequest) {
     })
 
     return NextResponse.json(
-      {workout},
+      {data: workout},
       {
         status: 201,
       },

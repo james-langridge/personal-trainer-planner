@@ -109,7 +109,7 @@ export default async function Users({
   return (
     <div className="container mx-auto py-10">
       <div className="flex items-center space-x-2">
-        <DateChangeButtons year={year} month={month} />
+        <DateChangeButtons year={year} month={month} route="users" />
       </div>
       <DateProvider date={date}>
         <DataTable columns={columns} data={users} />

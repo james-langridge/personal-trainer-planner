@@ -1,51 +1,32 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React from 'react'
 
-import {useBootcamps, usePollForUserUpdates} from '@/features/calendar'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {DateChangeButtons} from '@/components/DateChangeButtons'
 import {AppointmentItemMobile} from '@/features/calendar/appointment'
 import {BootcampItemMobile} from '@/features/calendar/bootcamp'
 import {WorkoutItemMobile} from '@/features/calendar/workout'
-import {getEventsToday, shouldScrollToThisDay} from '@/lib/calendar'
+import {generateCalendarMonth, getEventsToday} from '@/lib/calendar'
 
-import {Day, useCalendarIntersectionObserver, useMobileCalendarData} from '.'
+import {Day} from '.'
 
-export function CalendarMobile() {
-  const [workouts, appointments] = usePollForUserUpdates()
-  const bootcamps = useBootcamps()
-  const [isFrozen, setIsFrozen] = useState(false)
-  const {data, scrollToThisDay, loadNextMonth, loadPreviousMonth} =
-    useMobileCalendarData()
-  const startElementRef = useRef<HTMLDivElement>(null)
-  const endElementRef = useRef(null)
-  const scrollToRef = useRef<HTMLDivElement>(null)
-  const {isStartVisible, isEndVisible} = useCalendarIntersectionObserver(
-    startElementRef,
-    endElementRef,
-  )
-
-  useEffect(() => {
-    async function loadPrev() {
-      setIsFrozen(true)
-      await loadPreviousMonth()
-      setIsFrozen(false)
-    }
-
-    if (isStartVisible && !isFrozen) {
-      void loadPrev()
-    }
-  }, [isFrozen, isStartVisible, loadPreviousMonth])
-
-  useEffect(() => {
-    if (isEndVisible) loadNextMonth()
-  }, [isEndVisible, loadNextMonth])
-
-  useEffect(() => {
-    scrollToRef.current?.scrollIntoView()
-  }, [scrollToThisDay])
+export function CalendarMobile({
+  user,
+  date,
+}: {
+  user: UserWithWorkouts
+  date: string
+}) {
+  const dates = date.split('-')
+  const year = dates[0]
+  const month = dates[1]
+  const workouts = user.workouts
+  const appointments = user.appointments
+  const bootcamps = user.bootcamps
+  const monthData = generateCalendarMonth(month, year)
 
   return (
     <div className="py-5">
-      <div ref={startElementRef}></div>
-      {data.map(day => {
+      {monthData.map(day => {
         const appointmentsToday = appointments
           ? getEventsToday(day, appointments)
           : null
@@ -53,12 +34,7 @@ export function CalendarMobile() {
         const workoutsToday = workouts ? getEventsToday(day, workouts) : null
 
         return (
-          <div
-            ref={
-              shouldScrollToThisDay(day, scrollToThisDay) ? scrollToRef : null
-            }
-            key={`${day.day}-${day.month}-${day.year}`}
-          >
+          <div key={`${day.day}-${day.month}-${day.year}`}>
             <Day dayData={day}>
               {appointmentsToday &&
                 appointmentsToday.map((appointment, i) => {
@@ -101,7 +77,9 @@ export function CalendarMobile() {
           </div>
         )
       })}
-      <div ref={endElementRef}></div>
+      <footer className="sticky bottom-0 left-0 flex w-full justify-center p-4">
+        <DateChangeButtons year={year} month={month} route="calendar/m" />
+      </footer>
     </div>
   )
 }
