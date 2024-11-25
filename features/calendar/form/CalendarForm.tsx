@@ -1,5 +1,6 @@
 import React from 'react'
 
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {Day} from '@/@types/types'
 
 import {
@@ -12,9 +13,11 @@ import {
 export function CalendarForm({
   day,
   closeModal,
+  user,
 }: {
   day: Day
   closeModal: (e: React.SyntheticEvent) => void
+  user: UserWithWorkouts
 }) {
   const {
     error,
@@ -31,6 +34,7 @@ export function CalendarForm({
   } = useCalendarForm({
     day,
     closeModal,
+    user,
   })
 
   return (
@@ -125,7 +129,7 @@ export function CalendarForm({
         isDeleting={isDeleting}
         isUpdating={isUpdating}
       />
-      <pre style={{whiteSpace: 'normal'}}>{error?.message}</pre>
+      <pre style={{whiteSpace: 'normal'}}>{error}</pre>
     </form>
   )
 }

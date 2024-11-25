@@ -1,14 +1,31 @@
-'use client'
-
+import {Workout} from '@/@types/apiResponseTypes'
 import {EventPage} from '@/components/EventPage'
-import {useGetWorkoutQuery} from '@/redux/services/workouts'
+import {db} from '@/lib/db'
 
-export default function Workout({params}: {params: {slug: string}}) {
-  const {data} = useGetWorkoutQuery(params.slug)
+const getWorkout = async (
+  id: string,
+): Promise<{
+  workout: Workout | null
+}> => {
+  const workout = await db.workout.findUnique({
+    where: {
+      id: id,
+    },
+  })
 
-  if (!data) {
+  return {workout}
+}
+
+export default async function Workout({params}: {params: {slug: string}}) {
+  console.log('foooooooooooooooo')
+  const {workout} = await getWorkout(params.slug)
+  console.log('bar***********************')
+
+  console.log({workout})
+
+  if (!workout) {
     return null
   }
 
-  return <EventPage event={data} />
+  return <EventPage event={workout} />
 }

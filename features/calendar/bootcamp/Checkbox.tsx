@@ -1,21 +1,20 @@
+'use client'
+
 import React from 'react'
 
-export function Checkbox({
-  disabled,
-  onChange,
-  status,
-}: {
-  disabled: boolean
-  onChange: () => void
-  status: boolean
-}) {
+import {Bootcamp} from '@/@types/apiResponseTypes'
+import {useToggleBootcamp} from '@/features/calendar/bootcamp/useToggleBootcamp'
+
+export function Checkbox({bootcamp}: {bootcamp: Bootcamp}) {
+  const {isAttending, isLoading, toggleAttendance} = useToggleBootcamp(bootcamp)
+
   return (
     <input
-      disabled={disabled}
+      disabled={isLoading}
       type="checkbox"
-      checked={status}
+      checked={isAttending}
       className="h-7 w-7 rounded"
-      onChange={onChange}
+      onChange={toggleAttendance}
       onClick={e => e.stopPropagation()}
     />
   )

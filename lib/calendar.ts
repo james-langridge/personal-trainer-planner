@@ -17,21 +17,19 @@ function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   )
 }
 
-export function generateCalendarMonth(month: number, year: number) {
-  const daysInMonth = getDaysInMonth(month, year)
+export function generateCalendarMonth(month: string, year: string) {
+  const monthNum = Number(month) - 1
+  const yearNum = Number(year)
+  const daysInMonth = new Date(yearNum, monthNum + 1, 0).getDate()
   const monthData = []
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month, day)
+    const date = new Date(yearNum, monthNum, day)
     const weekDay = date.getDay()
-    monthData.push({day, weekDay, month, year})
+    monthData.push({day, weekDay, month: monthNum, year: yearNum})
   }
 
   return monthData
-}
-
-function getDaysInMonth(month: number, year: number) {
-  return new Date(year, month + 1, 0).getDate()
 }
 
 export function getLongDate(date: Date) {
