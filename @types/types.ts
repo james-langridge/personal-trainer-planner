@@ -14,8 +14,8 @@ export type CalendarFormState = {
 }
 
 export type Day = {
-  day: number
-  month: number
-  weekDay: number
+  day: number // Date, not day of week
+  month: number // January is 0
+  weekDay: number // Monday is 1
   year: number
 }
