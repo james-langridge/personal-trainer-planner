@@ -18,7 +18,7 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output @types/generated/contentful.d.ts",
-    "format": "prettier --write \"app/**/*.{ts,tsx}\" \"components/**/*.{ts,tsx}\"",
+    "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "next lint --fix",
     "prisma:copy-dev": "node prisma/copyUserToDemo.js",
