@@ -1,0 +1,31 @@
+name: Daily Database Backup
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # Run at 5 AM UTC daily
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+          pg_dump --version
+
+      - name: Backup database
+        env:
+          SOURCE_DB_URL: ${{ secrets.PROD_DATABASE_URL }}
+          DEST_DB_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+        run: |
+          echo "Starting backup at $(date)"
+          if pg_dump "$SOURCE_DB_URL" | psql "$DEST_DB_URL"; then
+            echo "Backup completed successfully at $(date)"
+          else
+            echo "Backup failed!"
+            exit 1
+          fi
