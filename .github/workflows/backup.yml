@@ -17,12 +17,23 @@ jobs:
           sudo apt-get install -y postgresql-client
           pg_dump --version
 
+      - name: Setup TimescaleDB on backup database
+        env:
+          DEST_DB_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+        run: |
+          # Create extension if it doesn't exist
+          psql "$DEST_DB_URL" -c 'CREATE EXTENSION IF NOT EXISTS timescaledb;'
+          psql "$DEST_DB_URL" -c 'CREATE EXTENSION IF NOT EXISTS timescaledb_toolkit;'
+
       - name: Backup database
         env:
           SOURCE_DB_URL: ${{ secrets.PROD_DATABASE_URL }}
           DEST_DB_URL: ${{ secrets.BACKUP_DATABASE_URL }}
         run: |
           echo "Starting backup at $(date)"
+          # Drop all tables first to avoid conflicts
+          psql "$DEST_DB_URL" -c 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
+          # Then perform the backup
           if pg_dump "$SOURCE_DB_URL" | psql "$DEST_DB_URL"; then
             echo "Backup completed successfully at $(date)"
           else
