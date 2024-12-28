@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: timescale/timescaledb:2.13.1-pg15
+    container_name: pt-planner-db
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: localdev
+      POSTGRES_DB: railway
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - pt_planner_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres && psql -U postgres -d railway -c 'SELECT 1 FROM pg_extension WHERE extname IN (''timescaledb'', ''timescaledb_toolkit'')' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pt_planner_data:
+    driver: local

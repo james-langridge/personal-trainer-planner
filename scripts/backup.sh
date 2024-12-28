@@ -1,24 +1,60 @@
 #!/bin/bash
 
-backup() {
-    local backup_dir
-    backup_dir="backups"
+set -euo pipefail
 
-    local backup_file
-    backup_file="$backup_dir/dbbackup$(date +"%y%m%d")"
+BACKUP_DIR="backups"
+RETENTION_DAYS=30
+DATE=$(date +"%y%m%d_%H%M%S")
+BACKUP_FILE="${BACKUP_DIR}/db_backup_${DATE}.tar.gz"
 
-    # Check if backups directory exists; if not, create it
-    if [[ ! -d "$backup_dir" ]]; then
-        mkdir -p "$backup_dir"
-    fi
-
-    # Perform the database dump and handle potential errors
-    if pg_dump -U postgres -h containers-us-west-204.railway.app -p 7058 -W -F t railway > "$backup_file"; then
-        echo "Backup successful: $backup_file"
-    else
-        echo "Error during backup!" >&2
-        exit 1
-    fi
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
 }
 
-backup
+if [ ! -f .env ]; then
+    log "Error: .env file not found"
+    exit 1
+fi
+
+set -a
+source .env
+set +a
+
+if [ -z "${DATABASE_URL:-}" ]; then
+    log "Error: DATABASE_URL not set in .env file"
+    exit 1
+fi
+
+if [[ ! -d "$BACKUP_DIR" ]]; then
+    mkdir -p "$BACKUP_DIR"
+    log "Created backup directory: $BACKUP_DIR"
+fi
+
+log "Starting backup..."
+
+TEMP_BACKUP_FILE="${BACKUP_FILE}.tmp"
+
+if PGPASSWORD="${DATABASE_URL#*:*:}" \
+   pg_dump "${DATABASE_URL}" \
+   -Fc \
+   --clean \
+   --if-exists \
+   --no-owner \
+   --no-privileges \
+   --disable-triggers > "${TEMP_BACKUP_FILE}"; then
+
+    gzip -c "${TEMP_BACKUP_FILE}" > "${BACKUP_FILE}"
+    rm "${TEMP_BACKUP_FILE}"
+
+    BACKUP_SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
+    log "Backup successful: $BACKUP_FILE (Size: $BACKUP_SIZE)"
+else
+    log "Error: Backup failed!"
+    rm -f "${TEMP_BACKUP_FILE}" "${BACKUP_FILE}"
+    exit 1
+fi
+
+log "Cleaning up backups older than $RETENTION_DAYS days..."
+find "$BACKUP_DIR" -name "db_backup_*.tar.gz" -mtime +$RETENTION_DAYS -delete
+
+log "Backup process completed successfully"
