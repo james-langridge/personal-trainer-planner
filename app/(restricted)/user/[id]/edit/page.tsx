@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
-import EditForm from '@/app/user/[id]/edit/edit-form'
+import EditForm from '@/app/(restricted)/user/[id]/edit/edit-form'
 import {db} from '@/lib/db'
 
 const getUser = async (

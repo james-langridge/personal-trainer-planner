@@ -113,7 +113,7 @@ export const columns: ColumnDef<Workout>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link href={`/workouts/${workout.id}`}>
+            <Link href={`/app/(restricted)/workouts/${workout.id}`}>
               <DropdownMenuItem className="cursor-pointer">
                 View workout
               </DropdownMenuItem>
