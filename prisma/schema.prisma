@@ -10,6 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum EVENT_TYPE {
+  APPOINTMENT
+  BOOTCAMP
+  WORKOUT
+}
+
 model Appointment {
   createdAt   DateTime           @default(now())
   date        DateTime
@@ -22,6 +28,7 @@ model Appointment {
   ownerId     String
   status      APPOINTMENT_STATUS @default(NOT_ATTENDED)
   updatedAt   DateTime           @updatedAt
+  type        EVENT_TYPE @default(APPOINTMENT)
   videoUrl    String?
 }
 
@@ -39,6 +46,7 @@ model Bootcamp {
   id          String   @id @default(uuid())
   name        String
   updatedAt   DateTime @updatedAt
+  type        EVENT_TYPE @default(BOOTCAMP)
   videoUrl    String?
 }
 
@@ -93,6 +101,7 @@ model Workout {
   ownerId     String
   status      WORKOUT_STATUS @default(NOT_STARTED)
   updatedAt   DateTime       @updatedAt
+  type        EVENT_TYPE @default(WORKOUT)
   videoUrl    String?
 }
 
