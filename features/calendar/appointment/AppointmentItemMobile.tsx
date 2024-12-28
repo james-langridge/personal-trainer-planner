@@ -10,7 +10,7 @@ export function AppointmentItemMobile({
   return (
     <div className="flex items-center gap-2 text-lg">
       <Link
-        href={`/appointments/${appointment?.id}`}
+        href={`/app/(restricted)/appointments/${appointment?.id}`}
         className="p my-1 block w-full rounded bg-blue-400 px-2 text-white"
       >
         {appointment?.name}

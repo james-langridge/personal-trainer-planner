@@ -2,7 +2,7 @@ import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
 import {notFound} from 'next/navigation'
 import React from 'react'
 
-import Form from '@/app/forms/Form'
+import Form from '@/app/(restricted)/forms/Form'
 import Container from '@/components/Container'
 import {getByContentTypeId} from '@/lib/contentful'
 

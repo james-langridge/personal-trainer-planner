@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
-import DateProvider from '@/app/users/[year]/[month]/DateProvider'
+import DateProvider from '@/app/(restricted)/users/[year]/[month]/DateProvider'
 import {DateChangeButtons} from '@/components/DateChangeButtons'
 import {columns, DataTable} from '@/features/users/summary'
 import {db} from '@/lib/db'

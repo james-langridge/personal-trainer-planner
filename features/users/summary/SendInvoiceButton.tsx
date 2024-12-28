@@ -2,7 +2,7 @@ import {ReloadIcon} from '@radix-ui/react-icons'
 import {useContext, useState} from 'react'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
-import {DateContext} from '@/app/users/[year]/[month]/DateProvider'
+import {DateContext} from '@/app/(restricted)/users/[year]/[month]/DateProvider'
 import {
   AlertDialog,
   AlertDialogCancel,

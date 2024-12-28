@@ -1,53 +1,79 @@
 import {PrismaAdapter} from '@next-auth/prisma-adapter'
+import {compare} from 'bcryptjs'
 import NextAuth, {NextAuthOptions} from 'next-auth'
-import Email from 'next-auth/providers/email'
+import CredentialsProvider from 'next-auth/providers/credentials'
 
+import {Role} from '@/@types/next-auth'
 import {db} from '@/lib/db'
+
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error('Please provide process.env.NEXTAUTH_SECRET')
+}
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
-    Email({
-      server: {
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT),
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
-        },
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: {label: 'Email', type: 'email'},
+        password: {label: 'Password', type: 'password'},
       },
-      from: process.env.EMAIL_FROM,
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials.password) {
+          throw new Error('Please enter your email and password')
+        }
+
+        const user = await db.user.findUnique({
+          where: {email: credentials.email},
+        })
+
+        if (!user || !user.password) {
+          throw new Error('No user found with this email')
+        }
+
+        const isPasswordValid = await compare(
+          credentials.password,
+          user.password,
+        )
+
+        if (!isPasswordValid) {
+          throw new Error('Invalid password')
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role as Role,
+        }
+      },
     }),
   ],
+  pages: {
+    signIn: '/auth/signin',
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   callbacks: {
-    session({session, user}) {
+    session({session, token}) {
       if (session.user) {
-        session.user.role = user.role
-        session.user.id = user.id
+        session.user.role = token.role as Role
+        session.user.id = token.sub as string
       }
-
       return session
     },
-    async signIn({user}) {
-      return await doesUserExistInDb(user.email)
+    jwt({token, user}) {
+      if (user) {
+        token.role = user.role as Role
+      }
+      return token
     },
   },
 }
 
-async function doesUserExistInDb(email: string | null | undefined) {
-  if (!email) {
-    return false
-  }
-
-  const user = await db.user.findUnique({
-    where: {
-      email: email,
-    },
-  })
-
-  return !!user
-}
-
 const handler = NextAuth(authOptions)
-
 export {handler as GET, handler as POST}

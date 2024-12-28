@@ -10,7 +10,7 @@ import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
-import revalidate from '@/app/user/[id]/edit/actions'
+import revalidate from '@/app/(restricted)/user/[id]/edit/actions'
 import {Alert, AlertDescription, AlertTitle} from '@/components/alert'
 import {Button} from '@/components/button'
 import {

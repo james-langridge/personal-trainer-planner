@@ -1,4 +1,6 @@
+import {redirect} from 'next/navigation'
 import {getServerSession} from 'next-auth/next'
+import {getSession} from 'next-auth/react'
 import React from 'react'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
@@ -89,8 +91,8 @@ export default async function TrainingStudio() {
   const session = await getServerSession(authOptions)
   const {user} = await getUserWithWorkouts(session?.user?.id)
 
-  if (!user) {
-    return null
+  if (!session) {
+    redirect('/api/auth/signin')
   }
 
   return <Calendar initialUser={JSON.stringify(user)} />

@@ -74,6 +74,10 @@ model User {
   updatedAt    DateTime      @updatedAt
   workouts     Workout[]
 
+  password String?
+  resetToken String?
+  resetTokenExpiry DateTime?
+
   // Fields required by NextAuth.js
   accounts      Account[]
   email         String    @unique
