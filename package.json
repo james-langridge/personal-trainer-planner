@@ -15,8 +15,8 @@
   },
   "scripts": {
     "backup": "./scripts/backup.sh",
-    "dev": "next dev",
-    "build": "prisma generate && next build",
+    "dev": "dotenv -e .env.local -- npx prisma generate && next dev",
+    "build": "dotenv -e .env.local -- npx prisma generate && next build",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output @types/generated/contentful.d.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -55,6 +55,7 @@
     "cmdk": "^0.2.0",
     "contentful": "^9.3.3",
     "contentful-management": "^10.30.0",
+    "dotenv-cli": "^8.0.0",
     "lucide-react": "^0.263.1",
     "next": "^13.5.6",
     "next-auth": "^4.22.1",

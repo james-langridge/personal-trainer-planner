@@ -86,8 +86,7 @@ Client in this context means the customer of the PT.
    ```
 3. Copy the environment variable files and update the variables.
    ```sh
-   cp .env.example .env
-   cp .env.local.example .env.local
+   cp .env .env.local
    ```
 4. Once you have a Postgres DB running somewhere, and the `DATABASE_URL` env var
    set, run the
@@ -127,8 +126,8 @@ below, provided you have completed the prerequisites above (database and email).
 
 Check the deployed project has all the required environment variables, as the
 button generator says there cannot be more than 10 Environment Variables per
-project, so you will need to manually add the ones from the `.env.example` that
-are missing.
+project, so you will need to manually add the ones from the `.env` that are
+missing.
 
 See the [Next.js deployment documentation](https://nextjs.org/docs/deployment)
 for more details.
