@@ -1,0 +1,23 @@
+name: Deploy Migrations to Production Database
+on:
+  push:
+    paths:
+      - prisma/migrations/**
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - run: npm ci
+      - name: Apply all pending migrations to the production database
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
