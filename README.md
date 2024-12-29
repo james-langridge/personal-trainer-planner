@@ -2,8 +2,10 @@
 
 ## Personal Trainer Planner
 
-A client management and scheduling app for personal trainers and their clients,
-made in collaboration with a real personal trainer (PT).
+A single-tenant Next.js app for personal trainers to schedule and track events,
+and manage and invoice clients. Made in collaboration with and used in
+production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
+(**PT**).
 
 > **Warning** `Client` in this context means the customer of the PT.
 
@@ -22,12 +24,12 @@ made in collaboration with a real personal trainer (PT).
 
 ### Technology
 
-- Written in **TypeScript**.
-- **[Next.js 13](https://nextjs.org/)**.
-- **[React 18](https://react.dev/)**.
+- Written in **[TypeScript](https://www.typescriptlang.org/)**.
+- Built with **[Next.js 13](https://nextjs.org/)** and
+  **[React 18](https://react.dev/)**.
 - State management with **[Redux Toolkit](https://redux-toolkit.js.org/)** and
   **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)**.
-- [PostgreSQL](https://www.postgresql.org/) databases.
+- Data persistence with **[PostgreSQL](https://www.postgresql.org/)**.
 - ORM using **[Prisma](https://www.prisma.io/)**.
 - Authentication using **[NextAuth.js](https://next-auth.js.org/)**.
 - Styled using **[Tailwind CSS](https://tailwindcss.com/)**,
@@ -40,6 +42,10 @@ made in collaboration with a real personal trainer (PT).
 - Production and staging databases on **[Railway](https://railway.app/)**.
 - Automated database backups, testing and code quality with
   **[GitHub Actions](https://github.com/features/actions)**.
+
+### Roadmap
+
+- Migrate to multi-tenancy.
 
 ### Screenshots
 
