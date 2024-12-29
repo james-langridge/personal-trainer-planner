@@ -19,7 +19,7 @@ jobs:
 
       - name: Backup database
         env:
-          SOURCE_DB_URL: ${{ secrets.PROD_DATABASE_URL }}
+          SOURCE_DB_URL: ${{ secrets.DATABASE_URL }}
           DEST_DB_URL: ${{ secrets.BACKUP_DATABASE_URL }}
         run: |
           echo "Starting backup at $(date)"
