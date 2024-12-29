@@ -1,11 +1,10 @@
 import {redirect} from 'next/navigation'
-import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {auth} from '@/auth'
 
 export default async function Layout({children}: {children: React.ReactNode}) {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
 
   if (session?.user?.role !== 'admin') {
     redirect('/')

@@ -1,7 +1,5 @@
-import {getServerSession} from 'next-auth/next'
-
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {auth} from '@/auth'
 import Container from '@/components/Container'
 import {db} from '@/lib/db'
 
@@ -83,7 +81,7 @@ const getUserWithWorkouts = async (
 }
 
 export default async function Profile() {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const {user} = await getUserWithWorkouts(session?.user?.id)
 
   return (

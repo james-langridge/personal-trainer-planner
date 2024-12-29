@@ -1,15 +1,14 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {getServerSession} from 'next-auth/next'
 
 import {CreateWorkoutBody, UpdateWorkoutBody} from '@/@types/apiRequestTypes'
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {auth} from '@/auth'
 import {getRepeatingDates} from '@/lib/calendar'
 import {db} from '@/lib/db'
 import {errorHandler} from '@/lib/errors'
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session) {
       return NextResponse.json(
@@ -59,7 +58,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session) {
       return NextResponse.json(

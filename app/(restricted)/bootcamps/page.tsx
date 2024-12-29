@@ -9,7 +9,7 @@ import {columns} from '@/features/bootcamps/summary/Columns'
 import {DataTable} from '@/features/bootcamps/summary/DataTable'
 import {useGetBootcampsQuery} from '@/redux/services/bootcamps'
 
-export default async function Bootcamps() {
+export default function Bootcamps() {
   const {data: session, status} = useSession()
   const {data} = useGetBootcampsQuery()
 

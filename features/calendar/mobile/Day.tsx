@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import React from 'react'
 
-import {Day} from '@/@types/types'
+import {type Day} from '@/@types/types'
 import {
   getMonthName,
   getLongWeekday,
