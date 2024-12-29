@@ -46,10 +46,10 @@ export function DateChangeButtons({
 
   return (
     <div className="flex flex-row items-center py-5 text-2xl">
-      <Link href={`/app/(restricted)/users/${prev()}`}>
+      <Link href={`/users/${prev()}`}>
         <PrevMonthBtn />
       </Link>
-      <Link href={`/app/(restricted)/users/${next()}`}>
+      <Link href={`/users/${next()}`}>
         <NextMonthBtn />
       </Link>
       <p data-testid={'heading'}>

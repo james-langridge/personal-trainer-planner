@@ -29,7 +29,7 @@ export function Title({
 
   return (
     <Link
-      href={`/app/(restricted)/workouts/${workout?.id}`}
+      href={`/workouts/${workout?.id}`}
       className="my-1 block w-full rounded bg-emerald-400 text-xs font-bold text-white lg:text-base"
       data-testid={`${workout?.id}`}
     >
