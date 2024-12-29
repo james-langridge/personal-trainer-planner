@@ -1,40 +1,45 @@
 [![Tests](https://github.com/james-langridge/personal-trainer-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/james-langridge/personal-trainer-planner/actions/workflows/ci.yml)
 
-## About The Project
+## Personal Trainer Planner
 
 A client management and scheduling app for personal trainers and their clients,
-made in collaboration with a real personal trainer (PT), with the new Next.js 13
-features like the
-[App Router](https://nextjs.org/docs/app/building-your-application/routing) and
-[React Server Components](https://nextjs.org/docs/getting-started/react-essentials).
+made in collaboration with a real personal trainer (PT).
 
-> **Warning** This app is a work in progress, and uses new Next.js 13 and React
-> 18 features that could be unstable.
+> **Warning** `Client` in this context means the customer of the PT.
 
 ### Features
 
-Client in this context means the customer of the PT.
-
 - Shared calendar between PT and each client, editable by PT only.
-- Three event types:
-  - Workouts, which clients can check as done.
-  - Appointments, with fees for billing.
-  - Bootcamps, which clients can check to confirm attendance.
+- Three calendar event types:
+  - `Workouts`, created by PT, which clients can check as done.
+  - `Appointments`, with fees for billing.
+  - `Bootcamps`, which clients can check to confirm attendance.
 - Appointment attendance and fee data is viewable in a monthly table.
 - Invoices can be generated and emailed to clients with a button click.
 - Mobile-friendly calendar list-view for clients with infinite scroll.
-- Password-less login via email magic link.
 - Custom forms via Contentful CMS, emailed to the PT when the client completes
   them.
-- Authentication using **[NextAuth.js](https://next-auth.js.org/)**.
+
+### Technology
+
+- Written in **TypeScript**.
+- **[Next.js 13](https://nextjs.org/)**.
+- **[React 18](https://react.dev/)**.
+- State management with **[Redux Toolkit](https://redux-toolkit.js.org/)** and
+  **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)**.
+- [PostgreSQL](https://www.postgresql.org/) databases.
 - ORM using **[Prisma](https://www.prisma.io/)**.
-- Database on **[Railway](https://railway.app/)**.
+- Authentication using **[NextAuth.js](https://next-auth.js.org/)**.
 - Styled using **[Tailwind CSS](https://tailwindcss.com/)**,
   **[Meraki UI](https://merakiui.com/)**, and
   **[shadcn/ui](https://ui.shadcn.com/)** (Radix UI, TanStack Table).
-- State management with **[Redux Toolkit](https://redux-toolkit.js.org/)** and
-  **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)**.
-- Written in **TypeScript**.
+
+### DevOps
+
+- Deployed on **[Vercel](https://vercel.com/home)**.
+- Production and staging databases on **[Railway](https://railway.app/)**.
+- Automated database backups, testing and code quality with
+  **[GitHub Actions](https://github.com/features/actions)**.
 
 ### Screenshots
 
@@ -74,7 +79,7 @@ Client in this context means the customer of the PT.
   their clients, which are emailed to the PT on completion. To use this feature
   you will need a [Contentful](https://www.contentful.com/sign-up/) account.
 
-### Installation
+### Installation (basic)
 
 1. Clone the repo
    ```sh
