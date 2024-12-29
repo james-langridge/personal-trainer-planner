@@ -1,9 +1,8 @@
 import '../styles/globals.css'
-import {getServerSession} from 'next-auth/next'
 import React from 'react'
 
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
 import Providers from '@/app/Providers'
+import {auth} from '@/auth'
 import {Navbar} from '@/components/Navbar'
 import {Toaster} from '@/components/toaster'
 
@@ -17,7 +16,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
 
   return (
     <html lang="en">

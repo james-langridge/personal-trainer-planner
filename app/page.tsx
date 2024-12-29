@@ -1,10 +1,8 @@
 import {redirect} from 'next/navigation'
-import {getServerSession} from 'next-auth/next'
-import {getSession} from 'next-auth/react'
 import React from 'react'
 
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {auth} from '@/auth'
 import {Calendar} from '@/features/calendar'
 import {db} from '@/lib/db'
 
@@ -88,7 +86,7 @@ const getUserWithWorkouts = async (
 }
 
 export default async function TrainingStudio() {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const {user} = await getUserWithWorkouts(session?.user?.id)
 
   if (!session) {

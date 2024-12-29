@@ -1,9 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {getServerSession} from 'next-auth/next'
 import nodemailer from 'nodemailer'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {auth} from '@/auth'
 import {monthNames} from '@/lib/constants'
 import {db} from '@/lib/db'
 
@@ -55,7 +54,7 @@ const sendInvoice = async (body: InvoiceData) => {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
 
   if (!session) {
     return NextResponse.json({message: 'You must be logged in.'}, {status: 401})

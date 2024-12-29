@@ -1,8 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {getServerSession} from 'next-auth/next'
 import nodemailer from 'nodemailer'
 
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
+import {auth} from '@/auth'
 
 const sendForm = async (body: Record<string, string>) => {
   const transporter = nodemailer.createTransport({
@@ -42,7 +41,7 @@ const sendForm = async (body: Record<string, string>) => {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
 
   if (!session) {
     return NextResponse.json({message: 'You must be logged in.'}, {status: 401})
