@@ -19,7 +19,7 @@ export function WorkoutItemMobile({workout}: {workout: Workout}) {
       />
 
       <Link
-        href={`/app/(restricted)/workouts/${workout?.id}`}
+        href={`/workouts/${workout?.id}`}
         className={clsx(
           'p my-1 block w-full rounded bg-emerald-400 px-2 text-white',
           {
