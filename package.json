@@ -36,7 +36,7 @@
     "@heroicons/react": "^2.0.16",
     "@hookform/resolvers": "^3.2.0",
     "@next-auth/prisma-adapter": "^1.0.6",
-    "@prisma/client": "^4.16.2",
+    "@prisma/client": "^6.1.0",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.4",
@@ -63,7 +63,6 @@
     "next": "^14.2.22",
     "next-auth": "^4.22.1",
     "nodemailer": "^6.9.1",
-    "prisma": "^4.16.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.4",
@@ -104,10 +103,11 @@
     "p-map": "^6.0.0",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
+    "prisma": "^6.1.0",
     "tailwindcss": "^3.2.7",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.2",
-    "typescript": "^5.0.4",
+    "typescript": "^5.7.2",
     "whatwg-fetch": "^3.6.2"
   }
 }
