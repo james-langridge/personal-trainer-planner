@@ -24,14 +24,14 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
 
 ### Technology
 
+- Built with **[Next.js 15](https://nextjs.org/)** and
+  **[React 19](https://react.dev/)**.
 - Written in **[TypeScript](https://www.typescriptlang.org/)**.
-- Built with **[Next.js 13](https://nextjs.org/)** and
-  **[React 18](https://react.dev/)**.
 - State management with **[Redux Toolkit](https://redux-toolkit.js.org/)** and
   **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)**.
 - Data persistence with **[PostgreSQL](https://www.postgresql.org/)**.
 - ORM using **[Prisma](https://www.prisma.io/)**.
-- Authentication using **[NextAuth.js](https://next-auth.js.org/)**.
+- Authentication using **[Auth.js](https://authjs.dev/)**.
 - Styled using **[Tailwind CSS](https://tailwindcss.com/)**,
   **[Meraki UI](https://merakiui.com/)**, and
   **[shadcn/ui](https://ui.shadcn.com/)** (Radix UI, TanStack Table).
@@ -78,9 +78,9 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
       ```
     - Then you can connect to it:
       `DATABASE_URL=postgresql://postgres:mysecretpassword@localhost:5432/mydatabase`
-- You will need to set up an email account to work with NextAuth.js. I used
-  Gmail. See the [NextAuth.js](https://next-auth.js.org/providers/email) docs
-  and the [nodemailer docs](https://nodemailer.com/usage/using-gmail/).
+- You will need to set up an email account to work with Auth.js. I used Gmail.
+  See the [Auth.js](https://next-auth.js.org/providers/email) docs and the
+  [nodemailer docs](https://nodemailer.com/usage/using-gmail/).
 - The app uses Contentful as a CMS for the personal trainer to create forms for
   their clients, which are emailed to the PT on completion. To use this feature
   you will need a [Contentful](https://www.contentful.com/sign-up/) account.
@@ -122,7 +122,7 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
    ```
 9. Open up http://localhost:3000 in a browser and log in. You must have set up
    an email account and set the environment variables before you can log in. See
-   the [NextAuth.js](https://next-auth.js.org/providers/email) docs and the
+   the [Auth.js](https://next-auth.js.org/providers/email) docs and the
    [nodemailer docs](https://nodemailer.com/usage/using-gmail/). You will be
    admin and can create other users. The seed script added demo workouts etc to
    your admin account.
