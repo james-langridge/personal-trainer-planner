@@ -27,11 +27,10 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function FormContainer({
-  params,
-}: {
-  params: {slug: string}
+export default async function FormContainer(props: {
+  params: Promise<{slug: string}>
 }) {
+  const params = await props.params
   const {slug} = params
   const {items} = await getByContentTypeId('form', {
     'fields.slug': slug,

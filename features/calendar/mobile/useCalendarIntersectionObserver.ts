@@ -3,8 +3,8 @@ import {RefObject} from 'react'
 import {useIntersectionObserver} from '@/hooks'
 
 export function useCalendarIntersectionObserver(
-  startElementRef: RefObject<Element>,
-  endElementRef: RefObject<Element>,
+  startElementRef: RefObject<Element | null>,
+  endElementRef: RefObject<Element | null>,
 ) {
   const startEntry = useIntersectionObserver(startElementRef, {})
   const endEntry = useIntersectionObserver(endElementRef, {})

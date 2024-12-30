@@ -79,11 +79,10 @@ async function getUsers(dateFilter: {gte: Date; lt: Date}): Promise<{
   return {users}
 }
 
-export default async function Users({
-  params,
-}: {
-  params: {year: string; month: string}
+export default async function Users(props: {
+  params: Promise<{year: string; month: string}>
 }) {
+  const params = await props.params
   const {year, month} = params
   let dateFilter = undefined
   const date = `${year}-${month}`
