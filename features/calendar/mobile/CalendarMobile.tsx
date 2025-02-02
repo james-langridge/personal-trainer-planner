@@ -8,7 +8,7 @@ import {getEventsToday, shouldScrollToThisDay} from '@/lib/calendar'
 
 import {Day, useCalendarIntersectionObserver, useMobileCalendarData} from '.'
 
-export function CalendarMobile() {
+export default function CalendarMobile() {
   const [workouts, appointments] = usePollForUserUpdates()
   const bootcamps = useBootcamps()
   const [isFrozen, setIsFrozen] = useState(false)
