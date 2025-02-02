@@ -6,7 +6,9 @@ import {monthNames} from '@/lib/constants'
 import {selectIsAdmin} from '@/redux/authSlice'
 import {useAppSelector} from '@/redux/store'
 
-import {ClientSelect} from '.'
+import dynamic from 'next/dynamic'
+
+const ClientSelect = dynamic(() => import('./ClientSelect'))
 
 export function Header({
   year,

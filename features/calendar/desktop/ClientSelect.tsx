@@ -7,7 +7,7 @@ import {useGetUsersQuery} from '@/redux/services/users'
 
 import {ClientDropdown, ClientTypeSwitch} from '.'
 
-export function ClientSelect() {
+export default function ClientSelect() {
   const [clientType, setClientType] = useState<USER_TYPE>(USER_TYPE.INDIVIDUAL)
   const {data = []} = useGetUsersQuery()
   const filteredUsers = data.filter(user => user.type === clientType)
