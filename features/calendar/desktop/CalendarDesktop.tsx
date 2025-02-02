@@ -2,7 +2,7 @@ import React from 'react'
 
 import {Grid, Header, useCalendarData} from '.'
 
-export function CalendarDesktop() {
+export default function CalendarDesktop() {
   const {monthData, year, month, setYear, setMonth} = useCalendarData()
 
   return (
