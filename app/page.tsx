@@ -17,7 +17,7 @@ const getUserWithWorkouts = async (
     return {user: undefined}
   }
 
-  const user: UserWithWorkouts | null = await db.user.findUnique({
+  const prismaUser = await db.user.findUnique({
     select: {
       appointments: {
         select: {
@@ -82,16 +82,40 @@ const getUserWithWorkouts = async (
     },
   })
 
-  return {user: user}
+  if (!prismaUser) {
+    return {user: null}
+  }
+
+  const serializedUser: UserWithWorkouts = {
+    ...prismaUser,
+    appointments: prismaUser.appointments.map(apt => ({
+      ...apt,
+      date: apt.date.toISOString(),
+    })),
+    bootcamps: prismaUser.bootcamps.map(bc => ({
+      ...bc,
+      date: bc.date.toISOString(),
+    })),
+    invoices: prismaUser.invoices.map(inv => ({
+      ...inv,
+      date: inv.date.toISOString(),
+    })),
+    workouts: prismaUser.workouts.map(w => ({
+      ...w,
+      date: w.date.toISOString(),
+    })),
+  }
+
+  return {user: serializedUser}
 }
 
 export default async function TrainingStudio() {
   const session = await auth()
   const {user} = await getUserWithWorkouts(session?.user?.id)
 
-  if (!session) {
+  if (!user) {
     redirect('/api/auth/signin')
   }
 
-  return <Calendar initialUser={JSON.stringify(user)} />
+  return <Calendar initialUser={user} />
 }

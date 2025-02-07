@@ -6,31 +6,50 @@ import {
   Workout as PrismaWorkout,
 } from '@prisma/client'
 
+type SerializedDate<T> = {
+  [K in keyof T]: T[K] extends Date ? string : T[K]
+}
+
 // TODO: rename this to User
 export type UserWithWorkouts = Pick<
   User,
   'billingEmail' | 'credits' | 'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
 > & {
-  appointments: Pick<
-    PrismaAppointment,
-    | 'date'
-    | 'description'
-    | 'fee'
-    | 'id'
-    | 'name'
-    | 'ownerId'
-    | 'status'
-    | 'videoUrl'
-  >[]
-  bootcamps: Pick<
-    PrismaBootcamp,
-    'date' | 'description' | 'id' | 'name' | 'videoUrl'
-  >[]
-  invoices: Pick<PrismaInvoice, 'date'>[]
-  workouts: Pick<
-    PrismaWorkout,
-    'date' | 'description' | 'id' | 'name' | 'ownerId' | 'status' | 'videoUrl'
-  >[]
+  appointments: Array<
+    SerializedDate<
+      Pick<
+        PrismaAppointment,
+        | 'date'
+        | 'description'
+        | 'fee'
+        | 'id'
+        | 'name'
+        | 'ownerId'
+        | 'status'
+        | 'videoUrl'
+      >
+    >
+  >
+  bootcamps: Array<
+    SerializedDate<
+      Pick<PrismaBootcamp, 'date' | 'description' | 'id' | 'name' | 'videoUrl'>
+    >
+  >
+  invoices: Array<SerializedDate<Pick<PrismaInvoice, 'date'>>>
+  workouts: Array<
+    SerializedDate<
+      Pick<
+        PrismaWorkout,
+        | 'date'
+        | 'description'
+        | 'id'
+        | 'name'
+        | 'ownerId'
+        | 'status'
+        | 'videoUrl'
+      >
+    >
+  >
 }
 
 export type Appointment = UserWithWorkouts['appointments'][number]
