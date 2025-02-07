@@ -1,10 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 import {RootState} from '@/redux/store'
 
 interface UsersState {
-  user: UserWithWorkouts | undefined
+  user: SerialisedUser | undefined
 }
 
 const initialState: UsersState = {
@@ -15,7 +15,7 @@ export const slice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserWithWorkouts | undefined>) => {
+    setUser: (state, action: PayloadAction<SerialisedUser | undefined>) => {
       state.user = action.payload
     },
   },

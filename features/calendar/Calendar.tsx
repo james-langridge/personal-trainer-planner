@@ -2,12 +2,12 @@ import {useIsMobile} from '@/hooks'
 
 import {useUser} from '.'
 import dynamic from 'next/dynamic'
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 
 const CalendarMobile = dynamic(() => import('./mobile/CalendarMobile'))
 const CalendarDesktop = dynamic(() => import('./desktop/CalendarDesktop'))
 
-export function Calendar({initialUser}: {initialUser: UserWithWorkouts}) {
+export function Calendar({initialUser}: {initialUser: SerialisedUser}) {
   useUser(initialUser)
   const isMobile = useIsMobile()
 

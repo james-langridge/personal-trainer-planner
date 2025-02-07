@@ -1,10 +1,11 @@
 import {NextRequest, NextResponse} from 'next/server'
 
 import {CreateUserBody, UpdateUserBody} from '@/@types/apiRequestTypes'
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
 import {errorHandler} from '@/lib/errors'
+import {getSerialisedUsers} from '@/prisma/api'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,71 +44,7 @@ export async function GET(request: Request) {
       }
     }
 
-    const users: UserWithWorkouts[] = await db.user.findMany({
-      select: {
-        appointments: {
-          select: {
-            date: true,
-            description: true,
-            fee: true,
-            id: true,
-            name: true,
-            ownerId: true,
-            status: true,
-            videoUrl: true,
-          },
-          where: {
-            deleted: false,
-            ...(dateFilter && {date: dateFilter}),
-          },
-        },
-        bootcamps: {
-          select: {
-            date: true,
-            description: true,
-            id: true,
-            name: true,
-            videoUrl: true,
-          },
-          where: {
-            deleted: false,
-            ...(dateFilter && {date: dateFilter}),
-          },
-        },
-        billingEmail: true,
-        credits: true,
-        email: true,
-        fee: true,
-        id: true,
-        invoices: {
-          select: {
-            date: true,
-          },
-          where: {
-            deleted: false,
-            ...(dateFilter && {date: dateFilter}),
-          },
-        },
-        name: true,
-        role: true,
-        type: true,
-        workouts: {
-          select: {
-            date: true,
-            description: true,
-            id: true,
-            name: true,
-            ownerId: true,
-            status: true,
-            videoUrl: true,
-          },
-          where: {
-            deleted: false,
-            ...(dateFilter && {date: dateFilter}),
-          },
-        },
-      },
-    })
+    const {users} = await getSerialisedUsers(dateFilter)
 
     return NextResponse.json(users)
   } catch (e) {

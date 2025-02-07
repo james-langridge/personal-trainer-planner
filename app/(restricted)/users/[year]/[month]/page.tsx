@@ -1,83 +1,10 @@
 import React from 'react'
 
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import DateProvider from '@/app/(restricted)/users/[year]/[month]/DateProvider'
 import {DateChangeButtons} from '@/components/DateChangeButtons'
 import {columns, DataTable} from '@/features/users/summary'
-import {db} from '@/lib/db'
 import {sortByString} from '@/lib/users'
-
-async function getUsers(dateFilter: {gte: Date; lt: Date}): Promise<{
-  users: UserWithWorkouts[]
-}> {
-  const users: UserWithWorkouts[] = await db.user.findMany({
-    select: {
-      appointments: {
-        select: {
-          date: true,
-          description: true,
-          fee: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      bootcamps: {
-        select: {
-          date: true,
-          description: true,
-          id: true,
-          name: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      billingEmail: true,
-      credits: true,
-      email: true,
-      fee: true,
-      id: true,
-      invoices: {
-        select: {
-          date: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      name: true,
-      role: true,
-      type: true,
-      workouts: {
-        select: {
-          date: true,
-          description: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-    },
-  })
-
-  return {users}
-}
+import {getSerialisedUsers} from '@/prisma/api'
 
 export default async function Users(props: {
   params: Promise<{year: string; month: string}>
@@ -94,7 +21,7 @@ export default async function Users(props: {
     lt: nextMonth,
   }
 
-  const {users: data} = await getUsers(dateFilter)
+  const {users: data} = await getSerialisedUsers(dateFilter)
 
   // Case-insensitive sorting is not possible via a Prisma query
   // TODO: sanitise the names before saving in the DB

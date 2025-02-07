@@ -7,16 +7,14 @@ import {selectUser} from '@/redux/usersSlice'
 export function usePollForUserUpdates(): [Workout[], Appointment[]] {
   const isFirstRender = useIsFirstRender()
   const user = useAppSelector(selectUser)
-  const userId = user?.id || ''
-  const {data} = useGetUserQuery(userId, {
+  const userId = user?.id
+  const {data} = useGetUserQuery(userId!, {
     pollingInterval: 60000,
-    // Skip first render to use ssr data instead of fetching
     skip: !userId || isFirstRender,
   })
 
-  if (isFirstRender) {
-    return [user?.workouts || [], user?.appointments || []]
-  }
-
-  return [data?.workouts || [], data?.appointments || []]
+  return [
+    data?.workouts || user?.workouts || [],
+    data?.appointments || user?.appointments || [],
+  ]
 }

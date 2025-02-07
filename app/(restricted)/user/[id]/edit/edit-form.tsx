@@ -9,7 +9,7 @@ import React, {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 import revalidate from '@/app/(restricted)/user/[id]/edit/actions'
 import {Alert, AlertDescription, AlertTitle} from '@/components/alert'
 import {Button} from '@/components/button'
@@ -55,7 +55,7 @@ const formSchema = z.object({
   type: z.nativeEnum(USER_TYPE),
 })
 
-export default function EditUser({user}: {user: UserWithWorkouts}) {
+export default function EditUser({user}: {user: SerialisedUser}) {
   const [error, setError] = useState('')
   const router = useRouter()
   const {data: session, status} = useSession()

@@ -1,9 +1,9 @@
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 
 export function sortByString(
-  key: keyof UserWithWorkouts,
-  array: UserWithWorkouts[],
-): UserWithWorkouts[] {
+  key: keyof SerialisedUser,
+  array: SerialisedUser[],
+): SerialisedUser[] {
   return [...array].sort((a, b) => {
     const aValue = a[key]
     const bValue = b[key]

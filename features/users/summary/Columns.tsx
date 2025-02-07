@@ -6,7 +6,7 @@ import {ColumnDef} from '@tanstack/react-table'
 import {ArrowUpDown, MoreHorizontal} from 'lucide-react'
 import Link from 'next/link'
 
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 import {Button} from '@/components/button'
 import {Checkbox} from '@/components/checkbox'
 import {
@@ -18,7 +18,7 @@ import {
 
 import {SendInvoiceButton} from './SendInvoiceButton'
 
-export const columns: ColumnDef<UserWithWorkouts>[] = [
+export const columns: ColumnDef<SerialisedUser>[] = [
   {
     id: 'select',
     header: ({table}) => (

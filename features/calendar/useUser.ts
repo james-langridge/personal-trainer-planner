@@ -1,12 +1,12 @@
 import {useEffect} from 'react'
 
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 import {loginSuccess, selectIsLoggedIn} from '@/redux/authSlice'
 import {useGetUserQuery} from '@/redux/services/users'
 import {useAppDispatch, useAppSelector} from '@/redux/store'
 import {setUser} from '@/redux/usersSlice'
 
-export function useUser(initialUser: UserWithWorkouts) {
+export function useUser(initialUser: SerialisedUser) {
   // TODO: why fetch and cache user here?
   // So it's cached by RTK Query and updated when mutated
   // TODO: then why save user in redux below?

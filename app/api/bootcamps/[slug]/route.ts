@@ -23,7 +23,7 @@ export async function GET(
     const isAdmin = session.user?.role === 'admin'
 
     const id = params.slug
-    const bootcamp: Bootcamp | null = await db.bootcamp.findUnique({
+    const bootcamp = await db.bootcamp.findUnique({
       select: {
         ...(isAdmin && {
           _count: {

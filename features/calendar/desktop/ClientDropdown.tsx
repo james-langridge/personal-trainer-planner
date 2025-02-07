@@ -1,4 +1,4 @@
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 import {
   Select,
   SelectContent,
@@ -9,7 +9,7 @@ import {
 import {useAppDispatch} from '@/redux/store'
 import {setUser} from '@/redux/usersSlice'
 
-export function ClientDropdown({users}: {users: UserWithWorkouts[]}) {
+export function ClientDropdown({users}: {users: SerialisedUser[]}) {
   const dispatch = useAppDispatch()
 
   const onSelect = (userName: string) => {

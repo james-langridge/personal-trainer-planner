@@ -124,7 +124,7 @@ export async function GET() {
 
     const isAdmin = session.user?.role === 'admin'
 
-    const bootcamps: Bootcamp[] = await db.bootcamp.findMany({
+    const bootcamps = await db.bootcamp.findMany({
       select: {
         ...(isAdmin && {
           _count: {

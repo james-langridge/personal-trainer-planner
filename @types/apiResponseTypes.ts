@@ -10,8 +10,7 @@ type SerializedDate<T> = {
   [K in keyof T]: T[K] extends Date ? string : T[K]
 }
 
-// TODO: rename this to User
-export type UserWithWorkouts = Pick<
+export type SerialisedUser = Pick<
   User,
   'billingEmail' | 'credits' | 'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
 > & {
@@ -52,11 +51,38 @@ export type UserWithWorkouts = Pick<
   >
 }
 
-export type Appointment = UserWithWorkouts['appointments'][number]
-export type Bootcamp = UserWithWorkouts['bootcamps'][number] & {
+export type PrimsaUser = Pick<
+  User,
+  'billingEmail' | 'credits' | 'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
+> & {
+  appointments: Pick<
+    PrismaAppointment,
+    | 'date'
+    | 'description'
+    | 'fee'
+    | 'id'
+    | 'name'
+    | 'ownerId'
+    | 'status'
+    | 'videoUrl'
+  >[]
+  bootcamps: Pick<
+    PrismaBootcamp,
+    'date' | 'description' | 'id' | 'name' | 'videoUrl'
+  >[]
+
+  invoices: Pick<PrismaInvoice, 'date'>[]
+  workouts: Pick<
+    PrismaWorkout,
+    'date' | 'description' | 'id' | 'name' | 'ownerId' | 'status' | 'videoUrl'
+  >[]
+}
+
+export type Appointment = SerialisedUser['appointments'][number]
+export type Bootcamp = SerialisedUser['bootcamps'][number] & {
   _count?: {attendees: number}
   attendees?: Pick<User, 'email' | 'id' | 'name' | 'role' | 'type'>[]
 }
-export type Workout = UserWithWorkouts['workouts'][number]
+export type Workout = SerialisedUser['workouts'][number]
 
 export type Event = Appointment | Bootcamp | Workout

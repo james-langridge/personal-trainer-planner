@@ -3,7 +3,7 @@ import {
   UpdateBootcampAttendanceBody,
   UpdateUserBody,
 } from '@/@types/apiRequestTypes'
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {SerialisedUser} from '@/@types/apiResponseTypes'
 
 import {api} from './api'
 
@@ -17,11 +17,11 @@ export const usersApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Users'],
     }),
-    getUser: build.query<UserWithWorkouts, string>({
+    getUser: build.query<SerialisedUser, string>({
       query: id => `/users/${id}`,
       providesTags: (result, error, id) => [{type: 'Users', id}],
     }),
-    getUsers: build.query<UserWithWorkouts[], void | string>({
+    getUsers: build.query<SerialisedUser[], void | string>({
       // date must be in the format `${year}-${month + 1}` (not zero-based).
       query: (date?: string) => {
         return date ? `/users/?date=${date}` : '/users/'

@@ -34,7 +34,7 @@ function getDaysInMonth(month: number, year: number) {
   return new Date(year, month + 1, 0).getDate()
 }
 
-export function getLongDate(date: Date) {
+export function getLongDate(date: string) {
   return new Date(date).toLocaleString('default', {
     weekday: 'long',
     year: 'numeric',
