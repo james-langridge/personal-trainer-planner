@@ -23,7 +23,7 @@ import {DataTableFacetedFilter} from '@/components/data-table-faceted-filter'
 import {DataTableViewOptions} from '@/components/data-table-view-options'
 import {Input} from '@/components/input'
 import {useToast} from '@/components/use-toast'
-import {useSendInvoiceMutation} from '@/redux/services/api'
+import {createInvoice} from '@/app/actions/invoices'
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -44,12 +44,13 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const selectedRows = table.getFilteredSelectedRowModel()
     .rows as unknown as Row<UserWithWorkouts>[]
-  const [sendInvoice, {isLoading}] = useSendInvoiceMutation()
+  const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const {toast} = useToast()
   const date = useContext(DateContext)
 
   function invoiceAll() {
+    setIsLoading(true)
     for (const row of selectedRows) {
       if (
         row.original.type !== USER_TYPE.INDIVIDUAL ||
@@ -72,8 +73,7 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
         currency: 'GBP',
       }).format(invoiceData.total / 100)
 
-      sendInvoice(invoiceData)
-        .unwrap()
+      createInvoice(invoiceData)
         .then(() => {
           toast({
             description: `Invoice sent to ${invoiceData.email} for ${formattedTotal}.`,
@@ -88,6 +88,7 @@ export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
         })
         .finally(() => setOpen(false))
     }
+    setIsLoading(false)
   }
 
   return (

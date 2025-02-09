@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {dayNames} from '@/lib/constants'
 
 export function EmptyDays({emptyDays}: {emptyDays: null[]}) {

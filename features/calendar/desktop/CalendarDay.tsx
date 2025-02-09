@@ -1,3 +1,5 @@
+'use client'
+
 import clsx from 'clsx'
 import React, {useState} from 'react'
 import Modal from 'react-modal'
@@ -5,9 +7,6 @@ import Modal from 'react-modal'
 import {Day} from '@/@types/types'
 import {CalendarForm} from '@/features/calendar/form'
 import {getShortWeekday, isDayToday} from '@/lib/calendar'
-import {selectIsAdmin} from '@/redux/authSlice'
-import {resetEvent} from '@/redux/eventSlice'
-import {useAppDispatch, useAppSelector} from '@/redux/store'
 
 Modal.setAppElement('#modal')
 
@@ -15,17 +14,18 @@ export function CalendarDay({
   day,
   isFirstWeek,
   children,
+  isAdmin,
+  userId,
 }: {
   day: Day
   isFirstWeek: boolean
   children: React.ReactNode
+  isAdmin: boolean
+  userId: string
 }) {
-  const dispatch = useAppDispatch()
-  const isAdmin = useAppSelector(selectIsAdmin)
   const [isModalOpen, setIsOpen] = useState(false)
   const closeModal = (e: React.SyntheticEvent) => {
     e.stopPropagation()
-    dispatch(resetEvent())
     setIsOpen(false)
   }
   const openModal = () => {
@@ -57,7 +57,7 @@ export function CalendarDay({
         overlayClassName="bg-[rgba(0,0,0,.4)] flex justify-center items-center absolute top-0 left-0 h-screen w-screen"
         className="w-3/4 rounded-xl bg-white p-8"
       >
-        <CalendarForm day={day} closeModal={closeModal} />
+        <CalendarForm day={day} closeModal={closeModal} userId={userId} />
       </Modal>
       <div
         className={clsx(

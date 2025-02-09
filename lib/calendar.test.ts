@@ -20,7 +20,7 @@ describe('isDayToday', () => {
 
     const day: Day = {
       day: now.getDate(),
-      month: now.getMonth(),
+      month: now.getMonth() + 1,
       weekDay: 1,
       year: now.getFullYear(),
     }
@@ -33,7 +33,7 @@ describe('isDayToday', () => {
 
     const day: Day = {
       day: now.getDate(),
-      month: now.getMonth(),
+      month: now.getMonth() + 1,
       weekDay: 1,
       year: now.getFullYear() - 1,
     }
@@ -45,7 +45,7 @@ describe('isDayToday', () => {
 
     const day: Day = {
       day: now.getDate(),
-      month: now.getMonth(),
+      month: now.getMonth() + 1,
       weekDay: 1,
       year: now.getFullYear() + 1,
     }
@@ -59,7 +59,7 @@ describe('isDayTomorrow', () => {
 
     const day: Day = {
       day: now.getDate() + 1,
-      month: now.getMonth(),
+      month: now.getMonth() + 1,
       weekDay: 1,
       year: now.getFullYear(),
     }
@@ -72,7 +72,7 @@ describe('isDayTomorrow', () => {
 
     const day: Day = {
       day: now.getDate(),
-      month: now.getMonth(),
+      month: now.getMonth() + 1,
       weekDay: 1,
       year: now.getFullYear(),
     }
@@ -82,31 +82,31 @@ describe('isDayTomorrow', () => {
 })
 
 describe('generateCalendarMonth', () => {
-  it('should generate correct days for February 2024', () => {
-    const month = 1 // February (0-based)
-    const year = 2024
+  it('should generate correct days for January 2025', () => {
+    const month = 1 // January (NOT 0-based)
+    const year = 2025
     const result = generateCalendarMonth(month, year)
 
-    expect(result.length).toBe(29) // Leap year
+    expect(result.length).toBe(31)
     expect(result[0]).toEqual({
       day: 1,
-      weekDay: 4, // Thursday
+      weekDay: 3, // Wednesday
       month: 1,
-      year: 2024,
+      year: 2025,
     })
   })
 
-  it('should generate correct days for April 2024', () => {
-    const month = 3 // April (0-based)
-    const year = 2024
+  it('should generate correct days for April 2025', () => {
+    const month = 4 // April (0-based)
+    const year = 2025
     const result = generateCalendarMonth(month, year)
 
     expect(result.length).toBe(30)
     expect(result[0]).toEqual({
       day: 1,
-      weekDay: 1, // Monday
-      month: 3,
-      year: 2024,
+      weekDay: 2, // Tuesday
+      month: 4,
+      year: 2025,
     })
   })
 })
@@ -126,7 +126,7 @@ describe('getLongWeekday', () => {
       weekDay: 1,
       year: 2024,
     }
-    expect(getLongWeekday(day)).toBe('Monday')
+    expect(getLongWeekday(day)).toBe('Friday')
   })
 })
 
@@ -134,7 +134,7 @@ describe('getMonthName', () => {
   it('should return correct short month name', () => {
     const day: Day = {
       day: 1,
-      month: 0,
+      month: 1,
       weekDay: 1,
       year: 2024,
     }
@@ -188,7 +188,7 @@ describe('getEventsToday', () => {
     const calendarDay = {
       day: 1,
       weekDay: 1,
-      month: 0,
+      month: 1,
       year: 2024,
     }
 

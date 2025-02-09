@@ -1,58 +1,59 @@
+'use client'
+
 import {useCallback, useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
 
 import {Bootcamp} from '@/@types/apiResponseTypes'
-import {
-  useGetUserQuery,
-  useUpdateBootcampAttendanceMutation,
-} from '@/redux/services/users'
-import {useAppSelector} from '@/redux/store'
-import {selectUser} from '@/redux/usersSlice'
+import {toggleBootcampAttendance} from '@/app/actions/bootcamps'
 
-export function useToggleBootcamp(bootcamp: Bootcamp) {
-  const userData = useAppSelector(selectUser)
-  const {data: user} = useGetUserQuery(userData?.id || '', {
-    skip: !userData,
-  })
-  const userBootcamps = user?.bootcamps
+export function useToggleBootcamp(
+  userBootcamps: Bootcamp[],
+  bootcamp: Bootcamp,
+  userId: string,
+) {
   const [isAttending, setIsAttending] = useState<boolean>(
     !!userBootcamps?.find(b => b.id === bootcamp.id),
   )
-  const [updateBootcampAttendance, {isLoading}] =
-    useUpdateBootcampAttendanceMutation()
+  const [isLoading, setIsLoading] = useState(false)
 
   const updateAttendee = useCallback(async () => {
-    if (!user || isLoading) {
+    if (!userId || isLoading) {
       return
     }
+    setIsLoading(true)
 
-    await updateBootcampAttendance({
+    const res = await toggleBootcampAttendance({
       bootcampId: bootcamp.id,
       isAttending,
-      userId: user?.id,
-    }).unwrap()
-  }, [bootcamp.id, isAttending, isLoading, updateBootcampAttendance, user])
+      userId,
+    })
+
+    setIsLoading(false)
+
+    return res
+  }, [])
 
   useEffect(() => {
-    setIsAttending(!!userBootcamps?.find(b => b.id === bootcamp.id))
+    setIsAttending(!!userBootcamps.find(b => b.id === bootcamp.id))
   }, [bootcamp.id, userBootcamps])
 
   async function toggleAttendance() {
-    if (!user?.credits && !isAttending) {
-      toast(
-        `No credits remaining! Please contact ${process.env.NEXT_PUBLIC_PT_FIRST_NAME}.`,
-      )
-
-      return
-    }
-
     try {
-      await updateAttendee()
+      const res = await updateAttendee()
+
+      if (!res?.OK) {
+        toast(
+          `No credits remaining! Please contact ${process.env.NEXT_PUBLIC_PT_FIRST_NAME}.`,
+        )
+
+        return
+      }
 
       setIsAttending(prevState => !prevState)
 
       let toastMessage
-      const credits = user?.credits
+      // todo confirm correct credits calculation
+      const credits = res.credits
 
       if (isAttending) {
         toastMessage =

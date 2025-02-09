@@ -25,7 +25,7 @@ import {Input} from '@/components/input'
 import {RadioGroup, RadioGroupItem} from '@/components/radio-group'
 import {useToast} from '@/components/use-toast'
 import {getErrorMessage} from '@/lib/errors'
-import {useUpdateUserMutation} from '@/redux/services/users'
+import {updateUser} from '@/app/actions/users'
 
 const formSchema = z.object({
   billingEmail: z.string().email().optional(),
@@ -59,7 +59,7 @@ export default function EditUser({user}: {user: UserWithWorkouts}) {
   const [error, setError] = useState('')
   const router = useRouter()
   const {data: session, status} = useSession()
-  const [updateUser, {isLoading}] = useUpdateUserMutation()
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -99,12 +99,12 @@ export default function EditUser({user}: {user: UserWithWorkouts}) {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true)
     updateUser({
       ...values,
       credits: Number(values.credits),
       fee: Math.round(parseFloat(values.fee) * 100),
     })
-      .unwrap()
       .then(() => {
         toast({
           description: 'Client updated successfully.',
@@ -128,6 +128,7 @@ export default function EditUser({user}: {user: UserWithWorkouts}) {
         console.error(error)
         setError(getErrorMessage(error))
       })
+    setIsLoading(false)
   }
 
   return (

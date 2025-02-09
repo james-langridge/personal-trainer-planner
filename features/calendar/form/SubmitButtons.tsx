@@ -3,8 +3,6 @@ import React from 'react'
 
 import {CalendarFormState} from '@/@types/types'
 import ButtonOld from '@/components/ButtonOld'
-import {resetEvent} from '@/redux/eventSlice'
-import {useAppDispatch} from '@/redux/store'
 
 export function SubmitButtons({
   form,
@@ -21,7 +19,6 @@ export function SubmitButtons({
   isDisabled: boolean
   isUpdating: boolean
 }) {
-  const dispatch = useAppDispatch()
   return (
     <div className="mt-4 flex justify-between">
       <ButtonOld
@@ -42,7 +39,6 @@ export function SubmitButtons({
           <Link
             href={`/${form.type?.toLowerCase()}s/${form.id}`}
             className="mx-2 w-full max-w-xs self-center"
-            onClick={() => dispatch(resetEvent())}
           >
             <ButtonOld
               type="button"

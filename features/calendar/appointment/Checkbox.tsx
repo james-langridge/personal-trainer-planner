@@ -1,5 +1,4 @@
 import {APPOINTMENT_STATUS} from '@prisma/client'
-import React from 'react'
 
 export function Checkbox({
   onChange,

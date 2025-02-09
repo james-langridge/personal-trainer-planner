@@ -1,36 +1,25 @@
-import React from 'react'
+'use client'
 
 import {Workout} from '@/@types/apiResponseTypes'
-import {selectIsAdmin} from '@/redux/authSlice'
-import {setEvent} from '@/redux/eventSlice'
-import {useAppDispatch, useAppSelector} from '@/redux/store'
 
 import {Checkbox, Title, useWorkoutStatus} from '.'
+import {Day} from '@/@types/types'
 
-export function WorkoutItem({workout}: {workout: Workout}) {
-  const dispatch = useAppDispatch()
-  const isAdmin = useAppSelector(selectIsAdmin)
+export function WorkoutItem({
+  workout,
+  day,
+  userId,
+}: {
+  workout: Workout
+  day: Day
+  userId: string
+}) {
   const {status, toggleStatus} = useWorkoutStatus(workout)
-
-  function onClick(event: React.MouseEvent | React.KeyboardEvent) {
-    if (!isAdmin) {
-      return
-    }
-
-    const workoutId = (event.target as HTMLElement).id
-
-    dispatch(
-      setEvent({
-        id: workoutId,
-        type: 'WORKOUT',
-      }),
-    )
-  }
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
       <Checkbox onChange={toggleStatus} status={status} />
-      <Title isAdmin={isAdmin} onClick={onClick} workout={workout} />
+      <Title workout={workout} day={day} userId={userId} />
     </div>
   )
 }

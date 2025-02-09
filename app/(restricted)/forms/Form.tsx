@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react'
 
 import {IFormInput} from '@/@types/generated/contentful'
-import {useSubmitFormMutation} from '@/redux/services/api'
+import {submitForm} from '@/app/actions/forms'
 
 type Form = Record<string, string>
 
@@ -11,7 +11,7 @@ export default function Form({inputs}: {inputs?: IFormInput[]}) {
   const [initialForm, setInitialForm] = useState<Form>()
   const [form, setForm] = useState<Form>()
   const [error, setError] = useState<Error>()
-  const [submitForm, {isLoading}] = useSubmitFormMutation()
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const initialForm: Form = {}
@@ -34,12 +34,14 @@ export default function Form({inputs}: {inputs?: IFormInput[]}) {
     e.preventDefault()
 
     if (form) {
+      setIsLoading(true)
       try {
-        await submitForm(form).unwrap()
+        await submitForm(form)
         setForm(initialForm)
       } catch {
         setError(error as Error)
       }
+      setIsLoading(false)
     }
   }
 

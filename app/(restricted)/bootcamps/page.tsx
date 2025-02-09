@@ -1,33 +1,17 @@
-'use client'
-
-import {redirect} from 'next/navigation'
-import {useSession} from 'next-auth/react'
-import React from 'react'
-
-import Loader from '@/components/Loader'
 import {columns} from '@/features/bootcamps/summary/Columns'
 import {DataTable} from '@/features/bootcamps/summary/DataTable'
-import {useGetBootcampsQuery} from '@/redux/services/bootcamps'
+import {getBootcamps} from '@/app/actions/bootcamps'
 
-export default function Bootcamps() {
-  const {data: session, status} = useSession()
-  const {data} = useGetBootcampsQuery()
+export default async function Bootcamps() {
+  const bootcamps = await getBootcamps()
 
-  if (status === 'unauthenticated' || session?.user?.role !== 'admin') {
-    redirect('/')
-  }
-
-  if (!data) {
+  if (!bootcamps) {
     return null
-  }
-
-  if (status === 'loading') {
-    return <Loader />
   }
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={bootcamps} />
     </div>
   )
 }

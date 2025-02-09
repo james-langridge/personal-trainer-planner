@@ -3,7 +3,7 @@
 import {USER_TYPE} from '@prisma/client'
 import {useCallback, useEffect, useRef, useState} from 'react'
 
-import {useCreateUserMutation} from '@/redux/services/users'
+import {createUser} from '@/app/actions/users'
 
 const initialForm: {
   billingEmail: string
@@ -22,7 +22,7 @@ const initialForm: {
 export function CreateClientForm() {
   const [form, setForm] = useState({...initialForm})
   const [error, setError] = useState<Error>()
-  const [createUser, {isLoading}] = useCreateUserMutation()
+  const [isLoading, setIsLoading] = useState(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -33,16 +33,20 @@ export function CreateClientForm() {
     async (e: React.SyntheticEvent) => {
       e.preventDefault()
 
+      setIsLoading(true)
+
       try {
         await createUser({
           ...form,
           fee: Math.round(parseFloat(form.fee) * 100),
-        }).unwrap()
+        })
 
         setForm(initialForm)
       } catch (error) {
         setError(error as Error)
       }
+
+      setIsLoading(false)
     },
     [createUser, form, setError],
   )

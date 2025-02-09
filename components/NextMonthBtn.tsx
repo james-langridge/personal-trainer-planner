@@ -1,4 +1,4 @@
-import React from 'react'
+'use client'
 
 export function NextMonthBtn({onClick}: {onClick?: () => void}) {
   return (

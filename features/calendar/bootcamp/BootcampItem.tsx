@@ -1,30 +1,26 @@
-import React from 'react'
+'use client'
 
 import {Bootcamp} from '@/@types/apiResponseTypes'
-import {selectIsAdmin} from '@/redux/authSlice'
-import {setEvent} from '@/redux/eventSlice'
-import {useAppDispatch, useAppSelector} from '@/redux/store'
 
 import {Checkbox, Title, useToggleBootcamp} from '.'
+import {Day} from '@/@types/types'
 
-export function BootcampItem({bootcamp}: {bootcamp: Bootcamp}) {
-  const dispatch = useAppDispatch()
-  const isAdmin = useAppSelector(selectIsAdmin)
-  const {isAttending, isLoading, toggleAttendance} = useToggleBootcamp(bootcamp)
-  function onClick(event: React.MouseEvent | React.KeyboardEvent) {
-    if (!isAdmin) {
-      return
-    }
-
-    const id = (event.target as HTMLElement).id
-
-    dispatch(
-      setEvent({
-        id,
-        type: 'BOOTCAMP',
-      }),
-    )
-  }
+export function BootcampItem({
+  userBootcamps,
+  bootcamp,
+  day,
+  userId,
+}: {
+  userBootcamps: Bootcamp[]
+  bootcamp: Bootcamp
+  day: Day
+  userId: string
+}) {
+  const {isAttending, isLoading, toggleAttendance} = useToggleBootcamp(
+    userBootcamps,
+    bootcamp,
+    userId,
+  )
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
@@ -33,7 +29,7 @@ export function BootcampItem({bootcamp}: {bootcamp: Bootcamp}) {
         status={isAttending}
         disabled={isLoading}
       />
-      <Title bootcamp={bootcamp} isAdmin={isAdmin} onClick={onClick} />
+      <Title bootcamp={bootcamp} day={day} userId={userId} />
     </div>
   )
 }

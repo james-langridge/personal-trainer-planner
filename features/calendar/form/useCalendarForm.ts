@@ -1,28 +1,27 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react'
+'use client'
 
+import {useCallback, useEffect, useRef, useState} from 'react'
 import {CalendarFormState, Day} from '@/@types/types'
 import {getWeekday, padZero} from '@/lib/calendar'
-import {selectEvent} from '@/redux/eventSlice'
 import {
-  useCreateAppointmentMutation,
-  useDeleteAppointmentMutation,
-  useGetAppointmentQuery,
-  useUpdateAppointmentMutation,
-} from '@/redux/services/appointments'
+  createWorkout,
+  updateWorkout,
+  deleteWorkout,
+  getWorkout,
+} from '@/app/actions/workouts'
 import {
-  useCreateBootcampMutation,
-  useDeleteBootcampMutation,
-  useGetBootcampQuery,
-  useUpdateBootcampMutation,
-} from '@/redux/services/bootcamps'
+  createAppointment,
+  updateAppointment,
+  deleteAppointment,
+  getAppointment,
+} from '@/app/actions/appointments'
 import {
-  useCreateWorkoutMutation,
-  useDeleteWorkoutMutation,
-  useGetWorkoutQuery,
-  useUpdateWorkoutMutation,
-} from '@/redux/services/workouts'
-import {useAppSelector} from '@/redux/store'
-import {selectUser} from '@/redux/usersSlice'
+  createBootcamp,
+  updateBootcamp,
+  deleteBootcamp,
+  getBootcamp,
+} from '@/app/actions/bootcamps'
+import {useRouter} from 'next/navigation'
 
 const initialState: CalendarFormState = {
   date: '',
@@ -37,55 +36,31 @@ const initialState: CalendarFormState = {
   weeksToRepeat: 0,
 }
 
-export const useCalendarForm = ({
+export function useCalendarForm({
   day,
   closeModal,
+  userId,
+  eventId,
+  eventType,
 }: {
   day: Day
   closeModal: (e: React.SyntheticEvent) => void
-}) => {
+  userId: string
+  eventId?: string
+  eventType?: 'WORKOUT' | 'APPOINTMENT' | 'BOOTCAMP'
+}) {
   const [error, setError] = useState<Error>()
-  const [createAppointment, {isLoading: isCreatingAppointment}] =
-    useCreateAppointmentMutation()
-  const [updateAppointment, {isLoading: isUpdatingAppointment}] =
-    useUpdateAppointmentMutation()
-  const [deleteAppointment, {isLoading: isDeletingAppointment}] =
-    useDeleteAppointmentMutation()
-  const [createWorkout, {isLoading: isCreatingWorkout}] =
-    useCreateWorkoutMutation()
-  const [updateWorkout, {isLoading: isUpdatingWorkout}] =
-    useUpdateWorkoutMutation()
-  const [deleteWorkout, {isLoading: isDeletingWorkout}] =
-    useDeleteWorkoutMutation()
-  const [createBootcamp, {isLoading: isCreatingBootcamp}] =
-    useCreateBootcampMutation()
-  const [updateBootcamp, {isLoading: isUpdatingBootcamp}] =
-    useUpdateBootcampMutation()
-  const [deleteBootcamp, {isLoading: isDeletingBootcamp}] =
-    useDeleteBootcampMutation()
-  const isDeleting =
-    isDeletingAppointment || isDeletingWorkout || isDeletingBootcamp
-  const isCreating =
-    isCreatingWorkout || isCreatingAppointment || isCreatingBootcamp
-  const isUpdating =
-    isUpdatingWorkout || isUpdatingBootcamp || isUpdatingAppointment
-  const user = useAppSelector(selectUser)
-  const userId = user?.id || ''
-  const isDisabled = isDeleting || isCreating || isUpdating || !userId
-  const {id: eventId, type} = useAppSelector(selectEvent)
-  const {data: appointmentData} = useGetAppointmentQuery(eventId, {
-    skip: !eventId || type !== 'APPOINTMENT',
+  const [isLoading, setIsLoading] = useState({
+    creating: false,
+    updating: false,
+    deleting: false,
   })
-  const {data: workoutData} = useGetWorkoutQuery(eventId, {
-    skip: !eventId || type !== 'WORKOUT',
-  })
-  const {data: bootcampData} = useGetBootcampQuery(eventId, {
-    skip: !eventId || type !== 'BOOTCAMP',
-  })
-  const eventData = appointmentData || bootcampData || workoutData
+  const router = useRouter()
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const [form, setForm] = useState<CalendarFormState>({
     ...initialState,
-    date: `${day.year}-${padZero(day.month + 1)}-${padZero(day.day)}`,
+    date: `${day.year}-${padZero(day.month)}-${padZero(day.day)}`,
     selectedDays: new Set([day.weekDay]),
     ownerId: userId,
   })
@@ -93,134 +68,103 @@ export const useCalendarForm = ({
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
-    if (form.type === 'WORKOUT') {
-      try {
-        if (form.id) {
-          await updateWorkout(form).unwrap()
-        } else {
-          await createWorkout({
-            ...form,
-            selectedDays: [...form.selectedDays],
-          }).unwrap()
-        }
+    try {
+      setIsLoading(prev => ({
+        ...prev,
+        [form.id ? 'updating' : 'creating']: true,
+      }))
 
-        closeModal(e)
-      } catch (error) {
-        setError(error as Error)
+      switch (form.type) {
+        case 'WORKOUT':
+          if (form.id) {
+            await updateWorkout(form)
+          } else {
+            await createWorkout({
+              ...form,
+              selectedDays: [...form.selectedDays],
+            })
+          }
+          break
+
+        case 'APPOINTMENT':
+          const fee = Math.round(parseFloat(form.fee) * 100)
+          if (form.id) {
+            await updateAppointment({
+              ...form,
+              fee,
+            })
+          } else {
+            await createAppointment({
+              ...form,
+              fee,
+              selectedDays: [...form.selectedDays],
+            })
+          }
+          break
+
+        case 'BOOTCAMP':
+          if (form.id) {
+            await updateBootcamp(form)
+          } else {
+            await createBootcamp({
+              ...form,
+              selectedDays: [...form.selectedDays],
+            })
+          }
+          break
       }
-    }
 
-    if (form.type === 'APPOINTMENT') {
-      const fee = Math.round(parseFloat(form.fee) * 100)
-
-      try {
-        if (form.id) {
-          await updateAppointment({
-            ...form,
-            fee,
-          }).unwrap()
-        } else {
-          await createAppointment({
-            ...form,
-            fee,
-            selectedDays: [...form.selectedDays],
-          }).unwrap()
-        }
-
-        closeModal(e)
-      } catch (error) {
-        setError(error as Error)
-      }
-    }
-
-    if (form.type === 'BOOTCAMP') {
-      try {
-        if (form.id) {
-          await updateBootcamp(form).unwrap()
-        } else {
-          await createBootcamp({
-            ...form,
-            selectedDays: [...form.selectedDays],
-          }).unwrap()
-        }
-
-        closeModal(e)
-      } catch (error) {
-        setError(error as Error)
-      }
+      router.refresh()
+      closeModal(e)
+    } catch (error) {
+      setError(error as Error)
+    } finally {
+      setIsLoading(prev => ({
+        ...prev,
+        [form.id ? 'updating' : 'creating']: false,
+      }))
     }
   }
 
-  async function handleDelete(e: React.SyntheticEvent) {
-    if (isDisabled || !form.id) {
-      return
-    }
+  const handleDelete = async (e: React.SyntheticEvent) => {
+    if (!form.id) return
 
-    if (form.type === 'APPOINTMENT') {
-      try {
-        await deleteAppointment({
-          deleted: true,
-          ownerId: form.ownerId,
-          id: form.id,
-        }).unwrap()
+    try {
+      setIsLoading(prev => ({...prev, deleting: true}))
 
-        closeModal(e)
-      } catch (error) {
-        setError(error as Error)
+      switch (form.type) {
+        case 'WORKOUT':
+          await deleteWorkout({
+            deleted: true,
+            ownerId: form.ownerId,
+            id: form.id,
+          })
+          break
+
+        case 'APPOINTMENT':
+          await deleteAppointment({
+            deleted: true,
+            ownerId: form.ownerId,
+            id: form.id,
+          })
+          break
+
+        case 'BOOTCAMP':
+          await deleteBootcamp({
+            deleted: true,
+            id: form.id,
+          })
+          break
       }
-    }
 
-    if (form.type === 'WORKOUT') {
-      try {
-        await deleteWorkout({
-          deleted: true,
-          ownerId: form.ownerId,
-          id: form.id,
-        }).unwrap()
-
-        closeModal(e)
-      } catch (error) {
-        setError(error as Error)
-      }
-    }
-
-    if (form.type === 'BOOTCAMP') {
-      try {
-        await deleteBootcamp({
-          deleted: true,
-          id: form.id,
-        }).unwrap()
-
-        closeModal(e)
-      } catch (error) {
-        setError(error as Error)
-      }
+      router.refresh()
+      closeModal(e)
+    } catch (error) {
+      setError(error as Error)
+    } finally {
+      setIsLoading(prev => ({...prev, deleting: false}))
     }
   }
-
-  // Create event
-  useEffect(() => {
-    if (!user || eventId) {
-      return
-    }
-
-    const formattedFee = (user.fee / 100).toFixed(2)
-
-    setForm(form => ({
-      ...form,
-      fee: formattedFee,
-      ownerId: userId,
-    }))
-  }, [eventId, user, userId])
-
-  useEffect(() => {
-    const newSet = new Set<number>([getWeekday(form.date)])
-
-    setForm(form => ({
-      ...form,
-      selectedDays: newSet,
-    }))
-  }, [form.date])
 
   const toggleDay = useCallback(
     (weekday: number) => {
@@ -245,29 +189,71 @@ export const useCalendarForm = ({
     [form.date, form.selectedDays],
   )
 
-  // Edit event
+  // Effect to update selected days when date changes
   useEffect(() => {
-    if (!eventData) {
+    const newSet = new Set<number>([getWeekday(form.date)])
+
+    setForm(form => ({
+      ...form,
+      selectedDays: newSet,
+    }))
+  }, [form.date])
+
+  // Effect to set default user fee
+  useEffect(() => {
+    if (!userId || form.id) {
       return
     }
 
-    setForm({
+    setForm(form => ({
       ...form,
-      date: String(eventData.date).split('T')[0],
-      description: eventData.description,
-      ...(appointmentData && {fee: (appointmentData.fee / 100).toFixed(2)}),
-      id: eventData.id,
-      name: eventData.name,
-      ...(appointmentData && {ownerId: appointmentData?.ownerId}),
-      ...(workoutData && {ownerId: workoutData?.ownerId}),
-      videoUrl: eventData.videoUrl,
-      type,
-    })
-  }, [appointmentData, eventData, type, workoutData])
+      ownerId: userId,
+    }))
+  }, [userId, form.id])
 
-  // Focus on event name field
-  const inputRef = useRef<HTMLInputElement | null>(null)
+  // Effect to load existing event data
+  useEffect(() => {
+    const loadEventData = async () => {
+      if (!eventId || !eventType) return
 
+      try {
+        let eventData
+        switch (eventType) {
+          case 'BOOTCAMP':
+            eventData = await getBootcamp(eventId)
+            break
+          case 'WORKOUT':
+            eventData = await getWorkout(eventId)
+            break
+          case 'APPOINTMENT':
+            eventData = await getAppointment(eventId)
+            break
+        }
+
+        if (eventData) {
+          setForm({
+            ...form,
+            // date: String(eventData.date).split('T')[0],
+            description: eventData.description || '',
+            ...(eventType === 'APPOINTMENT' && {
+              fee: ((eventData as any).fee / 100).toFixed(2),
+            }),
+            id: eventData.id,
+            name: eventData.name,
+            ownerId: (eventData as any).ownerId || '',
+            videoUrl: eventData.videoUrl || '',
+            type: eventType,
+          })
+        }
+      } catch (error) {
+        setError(error as Error)
+      }
+    }
+
+    loadEventData()
+  }, [])
+
+  // Focus on name input when form opens
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
@@ -278,10 +264,10 @@ export const useCalendarForm = ({
     handleDelete,
     handleSubmit,
     inputRef,
-    isCreating,
-    isDeleting,
-    isDisabled,
-    isUpdating,
+    isCreating: isLoading.creating,
+    isDeleting: isLoading.deleting,
+    isDisabled: Object.values(isLoading).some(Boolean) || !userId,
+    isUpdating: isLoading.updating,
     setForm,
     toggleDay,
   }

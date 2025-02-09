@@ -1,14 +1,12 @@
-import React from 'react'
+import {redirect} from 'next/navigation'
+import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 
-import {Grid, Header, useCalendarData} from '.'
+export default function CalendarDesktop({user}: {user: UserWithWorkouts}) {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
 
-export default function CalendarDesktop() {
-  const {monthData, year, month, setYear, setMonth} = useCalendarData()
+  redirect(`/${user.id}/${year}/${month}`)
 
-  return (
-    <>
-      <Header year={year} setYear={setYear} month={month} setMonth={setMonth} />
-      <Grid monthData={monthData} />
-    </>
-  )
+  return <div>Foobar</div>
 }

@@ -22,16 +22,21 @@ export function generateCalendarMonth(month: number, year: number) {
   const monthData = []
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month, day)
+    const date = new Date(year, month - 1, day)
     const weekDay = date.getDay()
-    monthData.push({day, weekDay, month, year})
+    monthData.push({
+      day,
+      weekDay,
+      month,
+      year,
+    })
   }
 
   return monthData
 }
 
 function getDaysInMonth(month: number, year: number) {
-  return new Date(year, month + 1, 0).getDate()
+  return new Date(year, month, 0).getDate()
 }
 
 export function getLongDate(date: Date) {
@@ -46,7 +51,7 @@ export function getLongDate(date: Date) {
 export function getLongWeekday(dayData: Day) {
   const {day, month, year} = dayData
 
-  return new Date(year, month, day).toLocaleString('default', {
+  return new Date(year, month - 1, day).toLocaleString('default', {
     weekday: 'long',
   })
 }
@@ -54,7 +59,7 @@ export function getLongWeekday(dayData: Day) {
 export function getMonthName(dayData: Day) {
   const {day, month, year} = dayData
 
-  return new Date(year, month, day).toLocaleString('default', {
+  return new Date(year, month - 1, day).toLocaleString('default', {
     month: 'short',
   })
 }
@@ -107,7 +112,7 @@ export function getEventsToday<T extends Workout | Bootcamp>(
   items: T[] = [],
 ): T[] {
   const calendarDate = new Date(
-    `${calendarDay.year}-${padZero(calendarDay.month + 1)}-${padZero(
+    `${calendarDay.year}-${padZero(calendarDay.month)}-${padZero(
       calendarDay.day,
     )}`,
   )
@@ -129,7 +134,7 @@ export function isDayToday(dayData: Day) {
 
   return (
     day === now.getDate() &&
-    month === now.getMonth() &&
+    month - 1 === now.getMonth() &&
     year === now.getFullYear()
   )
 }
@@ -140,7 +145,7 @@ export function isDayTomorrow(dayData: Day) {
 
   return (
     day === now.getDate() + 1 &&
-    month === now.getMonth() &&
+    month - 1 === now.getMonth() &&
     year === now.getFullYear()
   )
 }

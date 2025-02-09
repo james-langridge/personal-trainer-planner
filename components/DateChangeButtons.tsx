@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import React from 'react'
 
 import {NextMonthBtn} from '@/components/NextMonthBtn'
 import {PrevMonthBtn} from '@/components/PrevMonthBtn'

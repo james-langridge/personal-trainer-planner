@@ -1,16 +1,15 @@
-'use client'
-import {use} from 'react'
-
 import {EventPage} from '@/components/EventPage'
-import {useGetAppointmentQuery} from '@/redux/services/appointments'
+import {getAppointment} from '@/app/actions/appointments'
 
-export default function Appointment(props: {params: Promise<{slug: string}>}) {
-  const params = use(props.params)
-  const {data} = useGetAppointmentQuery(params.slug)
+type Params = Promise<{id: string}>
 
-  if (!data) {
+export default async function Appointment({params}: {params: Params}) {
+  const {id} = await params
+  const appointment = await getAppointment(id)
+
+  if (!appointment) {
     return null
   }
 
-  return <EventPage event={data} />
+  return <EventPage event={appointment} />
 }
