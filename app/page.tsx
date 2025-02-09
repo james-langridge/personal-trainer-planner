@@ -1,97 +1,38 @@
 import {redirect} from 'next/navigation'
-import React from 'react'
 
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import {auth} from '@/auth'
-import {Calendar} from '@/features/calendar'
-import {db} from '@/lib/db'
+import CalendarDesktop from '@/features/calendar/desktop/CalendarDesktop'
+import {headers} from 'next/headers'
+import CalendarMobileContainer from '@/features/calendar/mobile/CalendarMobileContainer'
+import {getUser} from '@/app/actions/users'
 
-export const dynamic = 'force-dynamic'
-
-const getUserWithWorkouts = async (
-  id?: string,
-): Promise<{
-  user: UserWithWorkouts | null | undefined
-}> => {
-  if (!id) {
-    return {user: undefined}
-  }
-
-  const user: UserWithWorkouts | null = await db.user.findUnique({
-    select: {
-      appointments: {
-        select: {
-          date: true,
-          description: true,
-          fee: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-        },
-      },
-      bootcamps: {
-        select: {
-          date: true,
-          description: true,
-          id: true,
-          name: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-        },
-      },
-      billingEmail: true,
-      credits: true,
-      email: true,
-      fee: true,
-      id: true,
-      invoices: {
-        select: {
-          date: true,
-        },
-        where: {
-          deleted: false,
-        },
-      },
-      name: true,
-      role: true,
-      type: true,
-      workouts: {
-        select: {
-          date: true,
-          description: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-        },
-      },
-    },
-    where: {
-      id: id,
-    },
-  })
-
-  return {user: user}
+function isMobileViewport(userAgent: string): boolean {
+  return /Mobile|Android|iPhone/i.test(userAgent)
 }
 
 export default async function TrainingStudio() {
   const session = await auth()
-  const {user} = await getUserWithWorkouts(session?.user?.id)
+  // todo only need user id here?
+  const {user} = await getUser(session?.user?.id)
+  const headersList = await headers()
+  const userAgent = headersList.get('user-agent') || ''
+  const isMobile = isMobileViewport(userAgent)
 
-  if (!session) {
+  if (!user) {
     redirect('/api/auth/signin')
   }
 
-  return <Calendar initialUser={JSON.stringify(user)} />
+  return (
+    <div className="flex h-[90vh]">
+      {isMobile ? (
+        <div className="flex w-full flex-col px-5 sm:hidden">
+          <CalendarMobileContainer user={user} />
+        </div>
+      ) : (
+        <div className="hidden w-full flex-col px-5 sm:flex">
+          <CalendarDesktop user={user} />
+        </div>
+      )}
+    </div>
+  )
 }

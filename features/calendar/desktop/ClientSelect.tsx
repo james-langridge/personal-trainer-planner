@@ -1,28 +1,47 @@
-import {USER_TYPE} from '@prisma/client'
-import {useState} from 'react'
-
 import {AddButton} from '@/components/AddButton'
-import {sortByString} from '@/lib/users'
-import {useGetUsersQuery} from '@/redux/services/users'
 
-import {ClientDropdown, ClientTypeSwitch} from '.'
+import {db} from '@/lib/db'
+import {ClientDropdown} from '@/features/calendar/desktop/ClientDropdown'
 
-export default function ClientSelect() {
-  const [clientType, setClientType] = useState<USER_TYPE>(USER_TYPE.INDIVIDUAL)
-  const {data = []} = useGetUsersQuery()
-  const filteredUsers = data.filter(user => user.type === clientType)
+async function getUsers(): Promise<{
+  users: {name: string; id: string}[]
+}> {
+  const users = await db.user.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  })
+
+  return {users}
+}
+
+const sortByName = (
+  arr: {name: string; id: string}[],
+): {name: string; id: string}[] => {
+  return [...arr].sort((a, b) => a.name.localeCompare(b.name))
+}
+
+export default async function ClientSelect({
+  year,
+  month,
+}: {
+  year: number
+  month: number
+}) {
+  const {users} = await getUsers()
   // Case-insensitive sorting is not possible via a Prisma query
   // TODO: sanitise the names before saving in the DB
   // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#can-i-perform-case-insensitive-sorting
-  const users = sortByString('name', filteredUsers)
+  const sortedUsers = sortByName(users)
 
   return (
     <div className="flex flex-col pt-5">
       <div className="mb-5 flex">
         <AddButton />
-        <ClientDropdown users={users} />
+        <ClientDropdown users={sortedUsers} year={year} month={month} />
       </div>
-      <ClientTypeSwitch toggleClientType={setClientType} />
+      {/*<ClientTypeSwitch toggleClientType={setClientType} />*/}
     </div>
   )
 }

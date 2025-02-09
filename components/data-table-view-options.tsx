@@ -2,7 +2,6 @@
 
 import {DropdownMenuTrigger} from '@radix-ui/react-dropdown-menu'
 import {Table} from '@tanstack/react-table'
-import React from 'react'
 
 import {Button} from '@/components/button'
 import {

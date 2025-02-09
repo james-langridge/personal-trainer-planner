@@ -4,8 +4,20 @@ import {Bootcamp} from '@/@types/apiResponseTypes'
 
 import {useToggleBootcamp} from '.'
 
-export function BootcampItemMobile({bootcamp}: {bootcamp: Bootcamp}) {
-  const {isAttending, isLoading, toggleAttendance} = useToggleBootcamp(bootcamp)
+export function BootcampItemMobile({
+  userBootcamps,
+  bootcamp,
+  userId,
+}: {
+  userBootcamps: Bootcamp[]
+  bootcamp: Bootcamp
+  userId: string
+}) {
+  const {isAttending, isLoading, toggleAttendance} = useToggleBootcamp(
+    userBootcamps,
+    bootcamp,
+    userId,
+  )
 
   return (
     <div className="flex items-center gap-2 text-lg">

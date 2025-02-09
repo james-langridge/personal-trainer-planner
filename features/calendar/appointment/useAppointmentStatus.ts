@@ -1,12 +1,13 @@
+'use client'
+
 import {APPOINTMENT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
 import {Appointment} from '@/@types/apiResponseTypes'
-import {useUpdateAppointmentMutation} from '@/redux/services/appointments'
+import {updateAppointment} from '@/app/actions/appointments'
 
 export function useAppointmentStatus(appointment: Appointment) {
   const [status, setStatus] = useState(appointment.status)
-  const [updateAppointment] = useUpdateAppointmentMutation()
 
   const updateStatus = useCallback(
     async (status: APPOINTMENT_STATUS) => {
@@ -14,7 +15,7 @@ export function useAppointmentStatus(appointment: Appointment) {
         ownerId: appointment.ownerId,
         status: status,
         id: appointment.id,
-      }).unwrap()
+      })
     },
     [updateAppointment, appointment.id, appointment.ownerId],
   )

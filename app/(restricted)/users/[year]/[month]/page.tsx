@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import DateProvider from '@/app/(restricted)/users/[year]/[month]/DateProvider'
 import {DateChangeButtons} from '@/components/DateChangeButtons'

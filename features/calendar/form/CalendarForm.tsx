@@ -1,20 +1,21 @@
 import React from 'react'
-
 import {Day} from '@/@types/types'
-
-import {
-  EventTypeSelect,
-  SubmitButtons,
-  useCalendarForm,
-  WeekdayButtonGroup,
-} from '.'
+import {EventTypeSelect, SubmitButtons, WeekdayButtonGroup} from '.'
+import {useCalendarForm} from '@/features/calendar/form/useCalendarForm'
+import Loader from '@/components/Loader'
 
 export function CalendarForm({
   day,
   closeModal,
+  userId,
+  eventId,
+  eventType,
 }: {
   day: Day
   closeModal: (e: React.SyntheticEvent) => void
+  userId: string
+  eventId?: string
+  eventType?: 'WORKOUT' | 'APPOINTMENT' | 'BOOTCAMP'
 }) {
   const {
     error,
@@ -31,7 +32,17 @@ export function CalendarForm({
   } = useCalendarForm({
     day,
     closeModal,
+    userId,
+    eventId,
+    eventType,
   })
+
+  if (eventId && !formData.id)
+    return (
+      <div className="flex h-20 w-20 items-center justify-center">
+        <Loader />
+      </div>
+    )
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">

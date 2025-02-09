@@ -1,12 +1,13 @@
+'use client'
+
 import {WORKOUT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
 import {Workout} from '@/@types/apiResponseTypes'
-import {useUpdateWorkoutMutation} from '@/redux/services/workouts'
+import {updateWorkout} from '@/app/actions/workouts'
 
 export function useWorkoutStatus(workout: Workout) {
   const [status, setStatus] = useState(workout.status)
-  const [updateWorkout] = useUpdateWorkoutMutation()
 
   const updateStatus = useCallback(
     async (status: WORKOUT_STATUS) => {
@@ -14,7 +15,7 @@ export function useWorkoutStatus(workout: Workout) {
         ownerId: workout.ownerId,
         status: status,
         id: workout.id,
-      }).unwrap()
+      })
     },
     [updateWorkout, workout.id, workout.ownerId],
   )

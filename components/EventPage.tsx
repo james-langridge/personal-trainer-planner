@@ -1,3 +1,5 @@
+'use client'
+
 import {Event} from '@/@types/apiResponseTypes'
 import BackButton from '@/components/BackButton'
 import {useScrollToTop} from '@/hooks'

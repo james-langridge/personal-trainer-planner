@@ -14,7 +14,6 @@ import {
   getFacetedUniqueValues,
 } from '@tanstack/react-table'
 import clsx from 'clsx'
-import React from 'react'
 
 import {
   Table,
@@ -25,6 +24,7 @@ import {
   TableRow,
 } from '@/components/table'
 import {DataTableToolbar} from '@/features/bootcamps/summary/data-table-toolbar'
+import React from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

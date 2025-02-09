@@ -15,7 +15,7 @@ import {
 } from '@/components/alert-dialog'
 import {Button} from '@/components/button'
 import {useToast} from '@/components/use-toast'
-import {useSendInvoiceMutation} from '@/redux/services/api'
+import {createInvoice} from '@/app/actions/invoices'
 
 export function SendInvoiceButton({
   appointments,
@@ -30,7 +30,7 @@ export function SendInvoiceButton({
   name: string
   total: number
 }) {
-  const [sendInvoice, {isLoading}] = useSendInvoiceMutation()
+  const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const {toast} = useToast()
   const date = useContext(DateContext)
@@ -49,8 +49,8 @@ export function SendInvoiceButton({
   }
 
   async function onClick() {
-    sendInvoice(invoiceData)
-      .unwrap()
+    setIsLoading(true)
+    createInvoice(invoiceData)
       .then(() => {
         toast({
           description: 'The invoice has been sent.',
@@ -64,6 +64,7 @@ export function SendInvoiceButton({
         })
       })
       .finally(() => setOpen(false))
+    setIsLoading(false)
   }
 
   return (

@@ -1,4 +1,5 @@
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+'use client'
+
 import {
   Select,
   SelectContent,
@@ -6,14 +7,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select'
-import {useAppDispatch} from '@/redux/store'
-import {setUser} from '@/redux/usersSlice'
+import {useRouter} from 'next/navigation'
 
-export function ClientDropdown({users}: {users: UserWithWorkouts[]}) {
-  const dispatch = useAppDispatch()
-
+export function ClientDropdown({
+  users,
+  year,
+  month,
+}: {
+  users: {name: string; id: string}[]
+  year: number
+  month: number
+}) {
+  const router = useRouter()
   const onSelect = (userName: string) => {
-    dispatch(setUser(users.find(user => user.name === userName)))
+    const user = users.find(user => user.name === userName)
+    if (!user) return
+    router.push(`/${user.id}/${year}/${month}`)
   }
 
   return (
