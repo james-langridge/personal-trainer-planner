@@ -2,13 +2,15 @@
 
 import {Event} from '@/@types/apiResponseTypes'
 import BackButton from '@/components/BackButton'
-import {useScrollToTop} from '@/hooks'
 import {getLongDate} from '@/lib/calendar'
+import {useEffect} from 'react'
 
 export function EventPage({event}: {event: Event}) {
   const date = getLongDate(event.date)
   // TODO: Temp fix for page opening scrolled to bottom on mobile view
-  useScrollToTop()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div className="flex justify-center p-10">
