@@ -5,5 +5,5 @@ export function CalendarDesktop({userId}: {userId: string}) {
   const year = now.getFullYear()
   const month = now.getMonth() + 1
 
-  return redirect(`/${userId}/${year}/${month}`)
+  return redirect(`/calendar/${userId}/${year}/${month}`)
 }

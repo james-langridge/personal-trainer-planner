@@ -79,7 +79,10 @@ export function useCalendarForm({
       switch (form.type) {
         case 'WORKOUT':
           if (form.id) {
-            await updateWorkout(form)
+            await updateWorkout({
+              ...form,
+              date: new Date(form.date),
+            })
           } else {
             await createWorkout({
               ...form,
@@ -93,6 +96,7 @@ export function useCalendarForm({
           if (form.id) {
             await updateAppointment({
               ...form,
+              date: new Date(form.date),
               fee,
             })
           } else {
@@ -140,6 +144,7 @@ export function useCalendarForm({
             deleted: true,
             ownerId: form.ownerId,
             id: form.id,
+            date: new Date(form.date),
           })
           break
 
@@ -148,6 +153,7 @@ export function useCalendarForm({
             deleted: true,
             ownerId: form.ownerId,
             id: form.id,
+            date: new Date(form.date),
           })
           break
 

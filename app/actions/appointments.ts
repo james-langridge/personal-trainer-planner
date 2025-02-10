@@ -2,12 +2,13 @@
 
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
-import {getRepeatingDates} from '@/lib/calendar'
+import {getRepeatingDates, getUniqueMonthPaths} from '@/lib/calendar'
 import {
   CreateAppointmentBody,
   DeleteAppointmentBody,
   UpdateAppointmentBody,
 } from '@/@types/apiRequestTypes'
+import {revalidatePath} from 'next/cache'
 
 export async function createAppointment(body: CreateAppointmentBody) {
   const session = await auth()
@@ -39,8 +40,11 @@ export async function createAppointment(body: CreateAppointmentBody) {
 
   const appointments = await db.appointment.createMany({data})
 
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
+  const pathsToRevalidate = getUniqueMonthPaths(dates, ownerId)
+  pathsToRevalidate.forEach(path => {
+    console.log(`Revalidating ${path}`)
+    revalidatePath(path)
+  })
 
   return appointments
 }
@@ -66,8 +70,11 @@ export async function updateAppointment(body: UpdateAppointmentBody) {
     },
   })
 
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
+  const year = body.date.getFullYear()
+  const month = body.date.getMonth() + 1
+  const path = `/calendar/${body.ownerId}/${year}/${month}`
+  console.log(`Revalidating ${path}`)
+  revalidatePath(path)
 
   return appointment
 }
@@ -87,8 +94,11 @@ export async function deleteAppointment(body: DeleteAppointmentBody) {
     },
   })
 
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
+  const year = body.date.getFullYear()
+  const month = body.date.getMonth() + 1
+  const path = `/calendar/${body.ownerId}/${year}/${month}`
+  console.log(`Revalidating ${path}`)
+  revalidatePath(path)
 
   return appointment
 }
