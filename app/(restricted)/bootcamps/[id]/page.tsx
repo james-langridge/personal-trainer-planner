@@ -1,5 +1,5 @@
 import {EventPage} from '@/components/EventPage'
-import {getBootcamp} from '@/app/actions/bootcamps'
+import {db} from '@/lib/db'
 
 type Params = Promise<{id: string}>
 
@@ -12,4 +12,19 @@ export default async function Bootcamp({params}: {params: Params}) {
   }
 
   return <EventPage event={bootcamp} />
+}
+
+async function getBootcamp(id: string) {
+  return db.bootcamp.findUnique({
+    select: {
+      date: true,
+      description: true,
+      id: true,
+      name: true,
+      videoUrl: true,
+    },
+    where: {
+      id: id,
+    },
+  })
 }

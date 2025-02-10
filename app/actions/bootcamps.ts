@@ -10,9 +10,6 @@ import {
   DeleteBootcampBody,
   UpdateBootcampAttendanceBody,
 } from '@/@types/apiRequestTypes'
-import {Bootcamp} from '@/@types/apiResponseTypes'
-import {NextResponse} from 'next/server'
-import {errorHandler} from '@/lib/errors'
 
 export async function createBootcamp(body: CreateBootcampBody) {
   const session = await auth()
@@ -142,44 +139,6 @@ export async function getBootcamp(id: string) {
   }
 
   return bootcamp
-}
-
-export async function getBootcamps() {
-  const session = await auth()
-  if (!session) {
-    throw new Error('You must be logged in.')
-  }
-
-  const isAdmin = session.user?.role === 'admin'
-
-  const bootcamps: Bootcamp[] = await db.bootcamp.findMany({
-    select: {
-      ...(isAdmin && {
-        _count: {
-          select: {attendees: true},
-        },
-        attendees: {
-          select: {
-            email: true,
-            id: true,
-            name: true,
-            role: true,
-            type: true,
-          },
-        },
-      }),
-      date: true,
-      description: true,
-      id: true,
-      name: true,
-      videoUrl: true,
-    },
-    where: {
-      deleted: false,
-    },
-  })
-
-  return bootcamps
 }
 
 export async function toggleBootcampAttendance(
