@@ -10,9 +10,11 @@ export default async function Page({params}: {params: Params}) {
   const monthData = generateCalendarMonth(month, year)
 
   return (
-    <>
-      <Header year={year} month={month} userId={userid} />
-      <Grid monthData={monthData} year={year} month={month} userId={userid} />
-    </>
+    <div className="flex h-[90vh]">
+      <div className="hidden w-full flex-col px-5 sm:flex sm:items-center">
+        <Header year={year} month={month} userId={userid} />
+        <Grid monthData={monthData} year={year} month={month} userId={userid} />
+      </div>
+    </div>
   )
 }

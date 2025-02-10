@@ -1,7 +1,7 @@
 import {redirect} from 'next/navigation'
 
 import {auth} from '@/auth'
-import CalendarDesktop from '@/features/calendar/desktop/CalendarDesktop'
+import {CalendarDesktop} from '@/features/calendar/desktop/CalendarDesktop'
 import {headers} from 'next/headers'
 import CalendarMobileContainer from '@/features/calendar/mobile/CalendarMobileContainer'
 import {getUser} from '@/app/actions/users'
@@ -29,9 +29,7 @@ export default async function TrainingStudio() {
           <CalendarMobileContainer user={user} />
         </div>
       ) : (
-        <div className="hidden w-full flex-col px-5 sm:flex">
-          <CalendarDesktop user={user} />
-        </div>
+        <CalendarDesktop userId={user.id} />
       )}
     </div>
   )

@@ -8,81 +8,10 @@ import {WorkoutItem} from '@/features/calendar/workout'
 import {getEventsToday} from '@/lib/calendar'
 
 import {CalendarDay, EmptyDays} from '.'
-import {db} from '@/lib/db'
-import {redirect} from 'next/navigation'
 import {auth} from '@/auth'
 import {getBootcamps} from '@/app/actions/bootcamps'
 import {USER_TYPE} from '@prisma/client'
-
-const getUserWithWorkouts = async (
-  dateFilter: {gte: Date; lt: Date},
-  id?: string,
-): Promise<{
-  user: any // fixme
-}> => {
-  if (!id) {
-    return {user: undefined}
-  }
-
-  const user = await db.user.findUnique({
-    select: {
-      appointments: {
-        select: {
-          date: true,
-          description: true,
-          fee: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      bootcamps: {
-        select: {
-          date: true,
-          description: true,
-          id: true,
-          name: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      fee: true,
-      id: true,
-      // name: true,
-      // role: true,
-      type: true,
-      workouts: {
-        select: {
-          date: true,
-          description: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-    },
-    where: {
-      id: id,
-    },
-  })
-
-  return {user}
-}
+import {getUser} from '@/app/actions/users'
 
 export async function Grid({
   monthData,
@@ -109,15 +38,13 @@ export async function Grid({
     gte: thisMonth,
     lt: nextMonth,
   }
-  const {user} = await getUserWithWorkouts(dateFilter, userId)
 
-  // todo remove redirect?
-  if (!user) {
-    redirect('/api/auth/signin')
-  }
+  const {user} = await getUser(userId, dateFilter)
 
-  const allBootcamps = await getBootcamps()
+  if (!user) return null
+
   const {workouts, appointments, bootcamps} = user
+  const allBootcamps = await getBootcamps()
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDaysLength = firstDayOfMonth > 0 ? firstDayOfMonth - 1 : 6
   const emptyDays = Array(emptyDaysLength).fill(null)

@@ -1,4 +1,4 @@
-import {useCallback, useState, useEffect} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {useRouter, useSearchParams} from 'next/navigation'
 import {Day} from '@/@types/types'
 import {generateCalendarMonth} from '@/lib/calendar'
@@ -14,23 +14,19 @@ export function useCalendarData({
   onTopVisible,
   onBottomVisible,
 }: UseCalendarDataProps) {
-  // Initialize with current date if no initial data
   const now = new Date()
   const today = now.getDate()
   const jsMonth = now.getMonth()
   const currentMonth = jsMonth + 1
   const currentYear = now.getFullYear()
 
-  // Initialize state with either provided data or generate current month
   const [data, setData] = useState<Day[]>(() => {
     if (initialData?.length) {
       return initialData
     }
-    const foo = generateCalendarMonth(currentMonth, currentYear)
-    return foo
+    return generateCalendarMonth(currentMonth, currentYear)
   })
 
-  // Track the date range of our loaded calendar data
   const [dateRange, setDateRange] = useState(() => {
     if (initialData?.length) {
       return {
@@ -41,14 +37,13 @@ export function useCalendarData({
       }
     }
     return {
-      startMonth: currentMonth, // Add 1 here too
+      startMonth: currentMonth,
       startYear: currentYear,
-      endMonth: currentMonth, // And here
+      endMonth: currentMonth,
       endYear: currentYear,
     }
   })
 
-  // Scroll position tracking
   const [scrollToThisDay, setScrollToThisDay] = useState<Day>({
     day: today,
     weekDay: 0,
@@ -56,14 +51,11 @@ export function useCalendarData({
     year: currentYear,
   })
 
-  // Loading state
   const [isLoading, setIsLoading] = useState(false)
 
-  // Router for URL updates
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // Load next month data
   const loadNextMonth = useCallback(async () => {
     if (isLoading) return
     setIsLoading(true)
@@ -80,16 +72,13 @@ export function useCalendarData({
         newYear = dateRange.endYear
       }
 
-      // Generate new month's data
       const newMonthData = generateCalendarMonth(newMonth, newYear)
 
-      // Update URL to reflect new date range
       const params = new URLSearchParams(searchParams)
       params.set('endMonth', newMonth.toString())
       params.set('endYear', newYear.toString())
       router.push(`?${params.toString()}`, {scroll: false})
 
-      // Update state
       setData(prevData => [...prevData, ...newMonthData])
       setDateRange(prev => ({
         ...prev,
@@ -103,7 +92,6 @@ export function useCalendarData({
     }
   }, [dateRange, isLoading, router, searchParams])
 
-  // Load previous month data with the delay handling from your original implementation
   const loadPreviousMonth = useCallback(async () => {
     if (isLoading) return
     setIsLoading(true)
@@ -120,19 +108,15 @@ export function useCalendarData({
         newYear = dateRange.startYear
       }
 
-      // Generate previous month's data
       const prevMonthData = generateCalendarMonth(newMonth, newYear)
 
-      // Set scroll position to last day of new month
       setScrollToThisDay(prevMonthData[prevMonthData.length - 1])
 
-      // Update URL
       const params = new URLSearchParams(searchParams)
       params.set('startMonth', newMonth.toString())
       params.set('startYear', newYear.toString())
       router.push(`?${params.toString()}`, {scroll: false})
 
-      // Update state
       setData(prevData => [...prevMonthData, ...prevData])
       setDateRange(prev => ({
         ...prev,
@@ -140,7 +124,6 @@ export function useCalendarData({
         startYear: newYear,
       }))
 
-      // Implement the delay from your original code
       await new Promise(resolve => setTimeout(resolve, 500))
     } catch (error) {
       console.error('Error loading previous month:', error)
@@ -149,7 +132,6 @@ export function useCalendarData({
     }
   }, [dateRange, isLoading, router, searchParams])
 
-  // Handle intersection observer triggers
   useEffect(() => {
     if (onTopVisible && !isLoading) {
       void loadPreviousMonth()

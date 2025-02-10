@@ -6,7 +6,7 @@ import {Row, Table} from '@tanstack/react-table'
 import React, {useContext, useState} from 'react'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
+import {User} from '@/@types/apiResponseTypes'
 import {DateContext} from '@/app/(restricted)/users/[year]/[month]/DateProvider'
 import {
   AlertDialog,
@@ -43,7 +43,7 @@ const types = [
 export function DataTableToolbar<TData>({table}: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const selectedRows = table.getFilteredSelectedRowModel()
-    .rows as unknown as Row<UserWithWorkouts>[]
+    .rows as unknown as Row<User>[]
   const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const {toast} = useToast()
