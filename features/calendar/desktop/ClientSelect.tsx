@@ -1,7 +1,7 @@
 import {AddButton} from '@/components/AddButton'
 
 import {ClientDropdown} from '@/features/calendar/desktop/ClientDropdown'
-import {getUserIdsAndNames} from '@/app/actions/users'
+import {db} from '@/lib/db'
 
 const sortByName = (
   arr: {name: string; id: string}[],
@@ -31,4 +31,17 @@ export default async function ClientSelect({
       {/*<ClientTypeSwitch toggleClientType={setClientType} />*/}
     </div>
   )
+}
+
+async function getUserIdsAndNames(): Promise<{
+  users: {name: string; id: string}[]
+}> {
+  const users = await db.user.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  })
+
+  return {users}
 }

@@ -1,6 +1,6 @@
 import {auth} from '@/auth'
 import Container from '@/components/Container'
-import {getUser} from '@/app/actions/users'
+import {db} from '@/lib/db'
 
 export default async function Profile() {
   const session = await auth()
@@ -16,4 +16,21 @@ export default async function Profile() {
       </section>
     </Container>
   )
+}
+
+async function getUser(id?: string) {
+  if (!id) {
+    return {user: undefined}
+  }
+
+  const user = await db.user.findUnique({
+    select: {
+      name: true,
+    },
+    where: {
+      id: id,
+    },
+  })
+
+  return {user}
 }

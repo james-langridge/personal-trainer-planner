@@ -8,7 +8,10 @@ import {getEventsToday, shouldScrollToThisDay} from '@/lib/calendar'
 import {AppointmentItemMobile} from '@/features/calendar/appointment'
 import {BootcampItemMobile} from '@/features/calendar/bootcamp'
 import {WorkoutItemMobile} from '@/features/calendar/workout'
-import {Bootcamp, User} from '@/@types/apiResponseTypes'
+import {
+  UserEvents,
+  Bootcamp,
+} from '@/features/calendar/mobile/CalendarMobileContainer'
 
 function LoadingIndicator({position}: {position: 'top' | 'bottom'}) {
   return (
@@ -53,10 +56,12 @@ function EventList({
 export function CalendarMobile({
   initialData,
   user,
+  userId,
   allBootcamps,
 }: {
   initialData?: any
-  user: User
+  user: UserEvents
+  userId: string
   allBootcamps: Bootcamp[]
 }) {
   const {ref: topRef, inView: isTopVisible} = useInView({
@@ -130,7 +135,7 @@ export function CalendarMobile({
                   renderItem={bootcamp => (
                     <BootcampItemMobile
                       bootcamp={bootcamp}
-                      userId={user.id}
+                      userId={userId}
                       userBootcamps={bootcamps}
                     />
                   )}
