@@ -1,5 +1,5 @@
-import {Bootcamp, Workout} from '@/@types/apiResponseTypes'
 import {Day} from '@/@types/types'
+import {APPOINTMENT_STATUS, WORKOUT_STATUS} from '@prisma/client'
 
 function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   const workoutYear = workoutDate.getFullYear()
@@ -102,7 +102,29 @@ export function getRepeatingDates(
   return dates
 }
 
-export function getEventsToday<T extends Workout | Bootcamp>(
+export type Workout = {
+  id: string
+  name: string
+  date: Date
+  ownerId: string
+  status: WORKOUT_STATUS
+}
+
+export type Appointment = {
+  id: string
+  name: string
+  date: Date
+  ownerId: string
+  status: APPOINTMENT_STATUS
+}
+
+export type Bootcamp = {
+  id: string
+  name: string
+  date: Date
+}
+
+export function getEventsToday<T extends Workout | Appointment | Bootcamp>(
   calendarDay: {
     day: number
     weekDay: number

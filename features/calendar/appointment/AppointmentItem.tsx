@@ -1,10 +1,9 @@
 'use client'
 
-import {Appointment} from '@/@types/apiResponseTypes'
-
 import {Checkbox, Title, useAppointmentStatus} from '.'
 import {Day} from '@/@types/types'
 import {useSession} from 'next-auth/react'
+import {Appointment} from '@/lib/calendar'
 
 export function AppointmentItem({
   appointment,

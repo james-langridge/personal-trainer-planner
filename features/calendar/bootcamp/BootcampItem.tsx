@@ -1,6 +1,6 @@
 'use client'
 
-import {Bootcamp} from '@/@types/apiResponseTypes'
+import {Bootcamp} from '@/lib/calendar'
 
 import {Checkbox, Title, useToggleBootcamp} from '.'
 import {Day} from '@/@types/types'
@@ -11,7 +11,7 @@ export function BootcampItem({
   day,
   userId,
 }: {
-  userBootcamps: Bootcamp[]
+  userBootcamps: {id: string}[]
   bootcamp: Bootcamp
   day: Day
   userId: string

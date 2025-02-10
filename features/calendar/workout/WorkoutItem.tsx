@@ -1,6 +1,6 @@
 'use client'
 
-import {Workout} from '@/@types/apiResponseTypes'
+import {Workout} from '@/lib/calendar'
 
 import {Checkbox, Title, useWorkoutStatus} from '.'
 import {Day} from '@/@types/types'

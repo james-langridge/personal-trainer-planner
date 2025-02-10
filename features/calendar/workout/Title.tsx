@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import React, {useState} from 'react'
 
-import {Workout} from '@/@types/apiResponseTypes'
+import {Workout} from '@/lib/calendar'
 import {CalendarForm} from '@/features/calendar/form'
 import Modal from 'react-modal'
 import {useSession} from 'next-auth/react'
