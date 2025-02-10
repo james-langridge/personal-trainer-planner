@@ -3,7 +3,7 @@
 import {WORKOUT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
-import {Workout} from '@/@types/apiResponseTypes'
+import {Workout} from '@/lib/calendar'
 import {updateWorkout} from '@/app/actions/workouts'
 
 export function useWorkoutStatus(workout: Workout) {

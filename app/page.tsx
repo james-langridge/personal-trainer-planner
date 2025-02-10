@@ -12,7 +12,6 @@ function isMobileViewport(userAgent: string): boolean {
 
 export default async function TrainingStudio() {
   const session = await auth()
-  // todo only need user id here?
   const {user} = await getUser(session?.user?.id)
   const headersList = await headers()
   const userAgent = headersList.get('user-agent') || ''

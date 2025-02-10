@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import React, {useState} from 'react'
 
-import {Bootcamp} from '@/@types/apiResponseTypes'
+import {Bootcamp} from '@/lib/calendar'
 import {useSession} from 'next-auth/react'
 import {Day} from '@/@types/types'
 import {CalendarForm} from '@/features/calendar/form'

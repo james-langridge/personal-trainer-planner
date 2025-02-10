@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import React, {useState} from 'react'
 
-import {Appointment} from '@/@types/apiResponseTypes'
+import {Appointment} from '@/lib/calendar'
 import {Day} from '@/@types/types'
 import {useSession} from 'next-auth/react'
 import {CalendarForm} from '@/features/calendar/form'

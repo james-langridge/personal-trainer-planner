@@ -1,31 +1,25 @@
 import clsx from 'clsx'
 
-import {Appointment, Bootcamp, Workout} from '@/@types/apiResponseTypes'
-import {Day} from '@/@types/types'
 import {AppointmentItem} from '@/features/calendar/appointment'
 import {BootcampItem} from '@/features/calendar/bootcamp'
 import {WorkoutItem} from '@/features/calendar/workout'
-import {getEventsToday} from '@/lib/calendar'
+import {generateCalendarMonth, getEventsToday} from '@/lib/calendar'
 
 import {CalendarDay, EmptyDays} from '.'
 import {auth} from '@/auth'
-import {getBootcamps} from '@/app/actions/bootcamps'
 import {USER_TYPE} from '@prisma/client'
-import {getUser} from '@/app/actions/users'
+import {db} from '@/lib/db'
+import {Workout, Bootcamp, Appointment} from '@/lib/calendar'
 
 export async function Grid({
-  monthData,
   year,
   month,
   userId,
 }: {
-  monthData: Day[]
   year: number
   month: number
   userId: string
 }) {
-  const session = await auth()
-  const isAdmin = session?.user?.role === 'admin'
   let dateFilter: {
     gte: Date
     lt: Date
@@ -33,29 +27,31 @@ export async function Grid({
   const date = `${year}-${month}`
   const thisMonth = new Date(date)
   const nextMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 1)
-
   dateFilter = {
     gte: thisMonth,
     lt: nextMonth,
   }
-
-  const {user} = await getUser(userId, dateFilter)
+  const {user} = await getUserEvents(userId, dateFilter)
 
   if (!user) return null
 
+  const session = await auth()
+  const isAdmin = session?.user?.role === 'admin'
   const {workouts, appointments, bootcamps} = user
-  const allBootcamps = await getBootcamps()
+  const allBootcamps = await getAllBootcamps(dateFilter)
+  const monthData = generateCalendarMonth(month, year)
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDaysLength = firstDayOfMonth > 0 ? firstDayOfMonth - 1 : 6
   const emptyDays = Array(emptyDaysLength).fill(null)
-  const calendarSquares = firstDayOfMonth + monthData.length
+  const totalSpaces = emptyDaysLength + monthData.length
+  const rows = Math.ceil(totalSpaces / 7)
 
   return (
     <div
       className={clsx(
         {
-          'grid-rows-calendar-6': calendarSquares > 35,
-          'grid-rows-calendar-5': calendarSquares <= 35,
+          'grid-rows-calendar-6': rows === 6,
+          'grid-rows-calendar-5': rows === 5,
         },
         'grid h-full w-full grid-cols-calendar ring-offset-1',
       )}
@@ -130,4 +126,66 @@ export async function Grid({
       })}
     </div>
   )
+}
+
+async function getUserEvents(id: string, dateFilter: {gte: Date; lt: Date}) {
+  const user = await db.user.findUnique({
+    select: {
+      appointments: {
+        select: {
+          date: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+        },
+        where: {
+          deleted: false,
+          date: dateFilter,
+        },
+      },
+      bootcamps: {
+        select: {
+          id: true,
+        },
+        where: {
+          deleted: false,
+          date: dateFilter,
+        },
+      },
+      type: true,
+      workouts: {
+        select: {
+          date: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+        },
+        where: {
+          deleted: false,
+          date: dateFilter,
+        },
+      },
+    },
+    where: {
+      id: id,
+    },
+  })
+
+  return {user}
+}
+
+async function getAllBootcamps(dateFilter: {gte: Date; lt: Date}) {
+  return db.bootcamp.findMany({
+    select: {
+      date: true,
+      id: true,
+      name: true,
+    },
+    where: {
+      deleted: false,
+      date: dateFilter,
+    },
+  })
 }
