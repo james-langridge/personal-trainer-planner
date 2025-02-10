@@ -76,6 +76,7 @@ export async function Grid({
             key={index}
             isAdmin={isAdmin}
             userId={userId}
+            userFee={user.fee}
           >
             {appointmentsToday &&
               appointmentsToday.map(appointment => {
@@ -153,6 +154,7 @@ async function getUserEvents(id: string, dateFilter: {gte: Date; lt: Date}) {
           date: dateFilter,
         },
       },
+      fee: true,
       type: true,
       workouts: {
         select: {
