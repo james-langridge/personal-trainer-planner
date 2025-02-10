@@ -27,8 +27,6 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
 - Built with **[Next.js 15](https://nextjs.org/)** and
   **[React 19](https://react.dev/)**.
 - Written in **[TypeScript](https://www.typescriptlang.org/)**.
-- State management with **[Redux Toolkit](https://redux-toolkit.js.org/)** and
-  **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)**.
 - Data persistence with **[PostgreSQL](https://www.postgresql.org/)**.
 - ORM using **[Prisma](https://www.prisma.io/)**.
 - Authentication using **[Auth.js](https://authjs.dev/)**.
