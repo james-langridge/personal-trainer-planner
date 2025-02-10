@@ -34,12 +34,15 @@ export type CreateWorkoutBody = Pick<
 
 export type DeleteAppointmentBody = Pick<
   Appointment,
-  'deleted' | 'id' | 'ownerId'
+  'deleted' | 'id' | 'ownerId' | 'date'
 >
 
 export type DeleteBootcampBody = Pick<Bootcamp, 'deleted' | 'id'>
 
-export type DeleteWorkoutBody = Pick<Workout, 'deleted' | 'id' | 'ownerId'>
+export type DeleteWorkoutBody = Pick<
+  Workout,
+  'deleted' | 'id' | 'ownerId' | 'date'
+>
 
 export type InvoiceData = {
   appointments: number
@@ -62,7 +65,7 @@ export type UpdateAppointmentBody = Partial<
     | 'status'
     | 'videoUrl'
   >
-> & {date?: string}
+> & {date: Date}
 
 export type UpdateBootcampAttendanceBody = {
   bootcampId: string
@@ -92,4 +95,4 @@ export type UpdateWorkoutBody = Partial<
     | 'status'
     | 'videoUrl'
   >
-> & {date?: string}
+> & {date: Date}

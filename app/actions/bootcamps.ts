@@ -3,12 +3,11 @@
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
 import {getRepeatingDates} from '@/lib/calendar'
-import {revalidatePath} from 'next/cache'
 import {
   CreateBootcampBody,
-  UpdateBootcampBody,
   DeleteBootcampBody,
   UpdateBootcampAttendanceBody,
+  UpdateBootcampBody,
 } from '@/@types/apiRequestTypes'
 
 export async function createBootcamp(body: CreateBootcampBody) {
@@ -28,12 +27,7 @@ export async function createBootcamp(body: CreateBootcampBody) {
     videoUrl,
   }))
 
-  const bootcamps = await db.bootcamp.createMany({data})
-
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
-
-  return bootcamps
+  return db.bootcamp.createMany({data})
 }
 
 export async function updateBootcamp(body: UpdateBootcampBody) {
@@ -77,9 +71,6 @@ export async function updateBootcamp(body: UpdateBootcampBody) {
     })
   }
 
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
-
   return bootcamp
 }
 
@@ -89,15 +80,10 @@ export async function deleteBootcamp(body: DeleteBootcampBody) {
     throw new Error('Forbidden.')
   }
 
-  const bootcamp = await db.bootcamp.update({
+  return db.bootcamp.update({
     where: {id: body.id},
     data: {deleted: true},
   })
-
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
-
-  return bootcamp
 }
 
 export async function getBootcamp(id: string) {

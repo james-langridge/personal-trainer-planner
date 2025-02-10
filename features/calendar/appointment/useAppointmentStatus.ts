@@ -15,6 +15,7 @@ export function useAppointmentStatus(appointment: Appointment) {
         ownerId: appointment.ownerId,
         status: status,
         id: appointment.id,
+        date: appointment.date,
       })
     },
     [updateAppointment, appointment.id, appointment.ownerId],

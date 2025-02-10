@@ -15,6 +15,7 @@ export function useWorkoutStatus(workout: Workout) {
         ownerId: workout.ownerId,
         status: status,
         id: workout.id,
+        date: workout.date,
       })
     },
     [updateWorkout, workout.id, workout.ownerId],

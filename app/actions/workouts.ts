@@ -2,7 +2,7 @@
 
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
-import {getRepeatingDates} from '@/lib/calendar'
+import {getRepeatingDates, getUniqueMonthPaths} from '@/lib/calendar'
 import {revalidatePath} from 'next/cache'
 import {
   CreateWorkoutBody,
@@ -38,8 +38,11 @@ export async function createWorkout(body: CreateWorkoutBody) {
 
   const workouts = await db.workout.createMany({data})
 
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
+  const pathsToRevalidate = getUniqueMonthPaths(dates, ownerId)
+  pathsToRevalidate.forEach(path => {
+    console.log(`Revalidating ${path}`)
+    revalidatePath(path)
+  })
 
   return workouts
 }
@@ -65,8 +68,11 @@ export async function updateWorkout(body: UpdateWorkoutBody) {
     },
   })
 
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
+  const year = body.date.getFullYear()
+  const month = body.date.getMonth() + 1
+  const path = `/calendar/${body.ownerId}/${year}/${month}`
+  console.log(`Revalidating ${path}`)
+  revalidatePath(path)
 
   return workout
 }
@@ -86,8 +92,11 @@ export async function deleteWorkout(body: DeleteWorkoutBody) {
     },
   })
 
-  // TODO consider which pages to revalidate
-  // revalidatePath('/calendar')
+  const year = body.date.getFullYear()
+  const month = body.date.getMonth() + 1
+  const path = `/calendar/${body.ownerId}/${year}/${month}`
+  console.log(`Revalidating ${path}`)
+  revalidatePath(path)
 
   return workout
 }

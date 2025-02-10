@@ -22,7 +22,7 @@ export function ClientDropdown({
   const onSelect = (userName: string) => {
     const user = users.find(user => user.name === userName)
     if (!user) return
-    router.push(`/${user.id}/${year}/${month}`)
+    router.push(`/calendar/${user.id}/${year}/${month}`)
   }
 
   return (

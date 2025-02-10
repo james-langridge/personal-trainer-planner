@@ -102,6 +102,21 @@ export function getRepeatingDates(
   return dates
 }
 
+export function getUniqueMonthPaths(dates: Date[], userId: string) {
+  const uniqueMonths = new Set(
+    dates.map(date => {
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      return `${year}-${month.toString()}`
+    }),
+  )
+
+  return Array.from(uniqueMonths).map(yearMonth => {
+    const [year, month] = yearMonth.split('-')
+    return `/calendar/${userId}/${year}/${month}`
+  })
+}
+
 export type Workout = {
   id: string
   name: string

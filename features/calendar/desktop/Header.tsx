@@ -39,17 +39,17 @@ function DateChangeButtons({
 
   function decrementMonth() {
     if (month === 1) {
-      return `/${userId}/${year - 1}/${12}`
+      return `/calendar/${userId}/${year - 1}/${12}`
     } else {
-      return `/${userId}/${year}/${month - 1}`
+      return `/calendar/${userId}/${year}/${month - 1}`
     }
   }
 
   function incrementMonth() {
     if (month === 11) {
-      return `/${userId}/${year + 1}/${1}`
+      return `/calendar/${userId}/${year + 1}/${1}`
     } else {
-      return `/${userId}/${year}/${month + 1}`
+      return `/calendar/${userId}/${year}/${month + 1}`
     }
   }
 
