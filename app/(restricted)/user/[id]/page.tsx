@@ -1,6 +1,6 @@
 import {columns} from '@/features/users/individual/Columns'
 import {DataTable} from '@/features/users/individual/DataTable'
-import {getUser} from '@/app/actions/users'
+import {db} from '@/lib/db'
 
 export default async function UserDetails(props: {
   params: Promise<{id: string}>
@@ -30,4 +30,31 @@ export default async function UserDetails(props: {
       </div>
     </div>
   )
+}
+
+async function getUser(id: string) {
+  const user = await db.user.findUnique({
+    select: {
+      name: true,
+      workouts: {
+        select: {
+          date: true,
+          description: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+          videoUrl: true,
+        },
+        where: {
+          deleted: false,
+        },
+      },
+    },
+    where: {
+      id: id,
+    },
+  })
+
+  return {user}
 }

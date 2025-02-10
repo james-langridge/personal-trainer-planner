@@ -2,7 +2,8 @@ import DateProvider from '@/app/(restricted)/users/[year]/[month]/DateProvider'
 import {DateChangeButtons} from '@/components/DateChangeButtons'
 import {columns, DataTable} from '@/features/users/summary'
 import {sortByString} from '@/lib/users'
-import {getUsers} from '@/app/actions/users'
+import {User} from '@/@types/apiResponseTypes'
+import {db} from '@/lib/db'
 
 export default async function Users(props: {
   params: Promise<{year: string; month: string}>
@@ -43,4 +44,77 @@ export default async function Users(props: {
       </DateProvider>
     </div>
   )
+}
+
+// TODO confirm we need all the selected data
+async function getUsers(dateFilter: {gte: Date; lt: Date}): Promise<{
+  users: User[]
+}> {
+  const users: User[] = await db.user.findMany({
+    select: {
+      appointments: {
+        select: {
+          date: true,
+          description: true,
+          fee: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+          videoUrl: true,
+        },
+        where: {
+          deleted: false,
+          date: dateFilter,
+        },
+      },
+      bootcamps: {
+        select: {
+          date: true,
+          description: true,
+          id: true,
+          name: true,
+          videoUrl: true,
+        },
+        where: {
+          deleted: false,
+          date: dateFilter,
+        },
+      },
+      billingEmail: true,
+      credits: true,
+      email: true,
+      fee: true,
+      id: true,
+      invoices: {
+        select: {
+          date: true,
+        },
+        where: {
+          deleted: false,
+          date: dateFilter,
+        },
+      },
+      name: true,
+      role: true,
+      type: true,
+      workouts: {
+        select: {
+          date: true,
+          description: true,
+          id: true,
+          name: true,
+          ownerId: true,
+          status: true,
+          videoUrl: true,
+        },
+        where: {
+          deleted: false,
+          date: dateFilter,
+        },
+      },
+    },
+  })
+
+  return {users}
 }

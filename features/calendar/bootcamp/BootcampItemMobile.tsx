@@ -9,7 +9,7 @@ export function BootcampItemMobile({
   bootcamp,
   userId,
 }: {
-  userBootcamps: Bootcamp[]
+  userBootcamps: {id: string}[]
   bootcamp: Bootcamp
   userId: string
 }) {
