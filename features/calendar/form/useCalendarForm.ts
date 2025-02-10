@@ -40,12 +40,14 @@ export function useCalendarForm({
   day,
   closeModal,
   userId,
+  userFee,
   eventId,
   eventType,
 }: {
   day: Day
   closeModal: (e: React.SyntheticEvent) => void
   userId: string
+  userFee?: number
   eventId?: string
   eventType?: 'WORKOUT' | 'APPOINTMENT' | 'BOOTCAMP'
 }) {
@@ -201,12 +203,15 @@ export function useCalendarForm({
 
   // Effect to set default user fee
   useEffect(() => {
-    if (!userId || form.id) {
+    if (form.id || !userFee) {
       return
     }
 
+    const formattedFee = (userFee / 100).toFixed(2)
+
     setForm(form => ({
       ...form,
+      fee: formattedFee,
       ownerId: userId,
     }))
   }, [userId, form.id])
@@ -266,7 +271,7 @@ export function useCalendarForm({
     inputRef,
     isCreating: isLoading.creating,
     isDeleting: isLoading.deleting,
-    isDisabled: Object.values(isLoading).some(Boolean) || !userId,
+    isDisabled: Object.values(isLoading).some(Boolean),
     isUpdating: isLoading.updating,
     setForm,
     toggleDay,
