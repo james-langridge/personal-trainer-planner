@@ -1,5 +1,5 @@
 import {EventPage} from '@/components/EventPage'
-import {getWorkout} from '@/app/actions/workouts'
+import {db} from '@/lib/db'
 
 type Params = Promise<{id: string}>
 
@@ -12,4 +12,10 @@ export default async function Workout({params}: {params: Params}) {
   }
 
   return <EventPage event={workout} />
+}
+
+async function getWorkout(id: string) {
+  return db.workout.findUnique({
+    where: {id},
+  })
 }

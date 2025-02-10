@@ -1,5 +1,5 @@
 import {EventPage} from '@/components/EventPage'
-import {getAppointment} from '@/app/actions/appointments'
+import {db} from '@/lib/db'
 
 type Params = Promise<{id: string}>
 
@@ -12,4 +12,10 @@ export default async function Appointment({params}: {params: Params}) {
   }
 
   return <EventPage event={appointment} />
+}
+
+async function getAppointment(id: string) {
+  return db.appointment.findUnique({
+    where: {id},
+  })
 }
