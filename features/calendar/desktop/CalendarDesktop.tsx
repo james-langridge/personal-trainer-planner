@@ -1,12 +1,9 @@
 import {redirect} from 'next/navigation'
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 
-export default function CalendarDesktop({user}: {user: UserWithWorkouts}) {
+export function CalendarDesktop({userId}: {userId: string}) {
   const now = new Date()
   const year = now.getFullYear()
   const month = now.getMonth() + 1
 
-  redirect(`/${user.id}/${year}/${month}`)
-
-  return <div>Foobar</div>
+  return redirect(`/${userId}/${year}/${month}`)
 }

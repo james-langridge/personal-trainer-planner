@@ -2,13 +2,12 @@ import {
   Appointment as PrismaAppointment,
   Bootcamp as PrismaBootcamp,
   Invoice as PrismaInvoice,
-  User,
+  User as PrismaUser,
   Workout as PrismaWorkout,
 } from '@prisma/client'
 
-// TODO: rename this to User
-export type UserWithWorkouts = Pick<
-  User,
+export type User = Pick<
+  PrismaUser,
   'billingEmail' | 'credits' | 'email' | 'fee' | 'id' | 'name' | 'role' | 'type'
 > & {
   appointments: Pick<
@@ -33,11 +32,11 @@ export type UserWithWorkouts = Pick<
   >[]
 }
 
-export type Appointment = UserWithWorkouts['appointments'][number]
-export type Bootcamp = UserWithWorkouts['bootcamps'][number] & {
+export type Appointment = User['appointments'][number]
+export type Bootcamp = User['bootcamps'][number] & {
   _count?: {attendees: number}
-  attendees?: Pick<User, 'email' | 'id' | 'name' | 'role' | 'type'>[]
+  attendees?: Pick<PrismaUser, 'email' | 'id' | 'name' | 'role' | 'type'>[]
 }
-export type Workout = UserWithWorkouts['workouts'][number]
+export type Workout = User['workouts'][number]
 
 export type Event = Appointment | Bootcamp | Workout

@@ -1,88 +1,18 @@
-import {UserWithWorkouts} from '@/@types/apiResponseTypes'
 import DateProvider from '@/app/(restricted)/users/[year]/[month]/DateProvider'
 import {DateChangeButtons} from '@/components/DateChangeButtons'
 import {columns, DataTable} from '@/features/users/summary'
-import {db} from '@/lib/db'
 import {sortByString} from '@/lib/users'
-
-async function getUsers(dateFilter: {gte: Date; lt: Date}): Promise<{
-  users: UserWithWorkouts[]
-}> {
-  const users: UserWithWorkouts[] = await db.user.findMany({
-    select: {
-      appointments: {
-        select: {
-          date: true,
-          description: true,
-          fee: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      bootcamps: {
-        select: {
-          date: true,
-          description: true,
-          id: true,
-          name: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      billingEmail: true,
-      credits: true,
-      email: true,
-      fee: true,
-      id: true,
-      invoices: {
-        select: {
-          date: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      name: true,
-      role: true,
-      type: true,
-      workouts: {
-        select: {
-          date: true,
-          description: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-          videoUrl: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-    },
-  })
-
-  return {users}
-}
+import {getUsers} from '@/app/actions/users'
 
 export default async function Users(props: {
   params: Promise<{year: string; month: string}>
 }) {
   const params = await props.params
   const {year, month} = params
-  let dateFilter = undefined
+  let dateFilter: {
+    gte: Date
+    lt: Date
+  }
   const date = `${year}-${month}`
   const thisMonth = new Date(date)
   const nextMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 1)

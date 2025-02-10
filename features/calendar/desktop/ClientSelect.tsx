@@ -1,20 +1,7 @@
 import {AddButton} from '@/components/AddButton'
 
-import {db} from '@/lib/db'
 import {ClientDropdown} from '@/features/calendar/desktop/ClientDropdown'
-
-async function getUsers(): Promise<{
-  users: {name: string; id: string}[]
-}> {
-  const users = await db.user.findMany({
-    select: {
-      id: true,
-      name: true,
-    },
-  })
-
-  return {users}
-}
+import {getUserIdsAndNames} from '@/app/actions/users'
 
 const sortByName = (
   arr: {name: string; id: string}[],
@@ -29,7 +16,7 @@ export default async function ClientSelect({
   year: number
   month: number
 }) {
-  const {users} = await getUsers()
+  const {users} = await getUserIdsAndNames()
   // Case-insensitive sorting is not possible via a Prisma query
   // TODO: sanitise the names before saving in the DB
   // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#can-i-perform-case-insensitive-sorting
