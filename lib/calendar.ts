@@ -17,17 +17,17 @@ function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   )
 }
 
-export function generateCalendarMonth(month: number, year: number) {
-  const daysInMonth = getDaysInMonth(month, year)
+export function generateCalendarMonth(jsMonth: number, year: number) {
+  const daysInMonth = getDaysInMonth(jsMonth, year)
   const monthData = []
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month - 1, day)
+    const date = new Date(year, jsMonth, day)
     const weekDay = date.getDay()
     monthData.push({
       day,
       weekDay,
-      month,
+      month: jsMonth,
       year,
     })
   }
@@ -35,8 +35,8 @@ export function generateCalendarMonth(month: number, year: number) {
   return monthData
 }
 
-function getDaysInMonth(month: number, year: number) {
-  return new Date(year, month, 0).getDate()
+function getDaysInMonth(jsMonth: number, year: number) {
+  return new Date(year, jsMonth + 1, 0).getDate()
 }
 
 export function getLongDate(date: Date) {
@@ -59,7 +59,7 @@ export function getLongWeekday(dayData: Day) {
 export function getMonthName(dayData: Day) {
   const {day, month, year} = dayData
 
-  return new Date(year, month - 1, day).toLocaleString('default', {
+  return new Date(year, month, day).toLocaleString('default', {
     month: 'short',
   })
 }
@@ -149,9 +149,7 @@ export function getEventsToday<T extends Workout | Appointment | Bootcamp>(
   items: T[] = [],
 ): T[] {
   const calendarDate = new Date(
-    `${calendarDay.year}-${padZero(calendarDay.month)}-${padZero(
-      calendarDay.day,
-    )}`,
+    `${calendarDay.year}-${calendarDay.month + 1}-${calendarDay.day}`,
   )
 
   const workoutsMap = items.map(item => {
@@ -171,7 +169,7 @@ export function isDayToday(dayData: Day) {
 
   return (
     day === now.getDate() &&
-    month - 1 === now.getMonth() &&
+    month === now.getMonth() &&
     year === now.getFullYear()
   )
 }
@@ -182,7 +180,7 @@ export function isDayTomorrow(dayData: Day) {
 
   return (
     day === now.getDate() + 1 &&
-    month - 1 === now.getMonth() &&
+    month === now.getMonth() &&
     year === now.getFullYear()
   )
 }

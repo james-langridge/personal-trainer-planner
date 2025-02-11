@@ -12,16 +12,17 @@ import {useRouter} from 'next/navigation'
 export function ClientDropdown({
   users,
   year,
-  month,
+  jsMonth,
 }: {
   users: {name: string; id: string}[]
   year: number
-  month: number
+  jsMonth: number
 }) {
   const router = useRouter()
   const onSelect = (userName: string) => {
     const user = users.find(user => user.name === userName)
     if (!user) return
+    const month = jsMonth + 1
     router.push(`/calendar/${user.id}/${year}/${month}`)
   }
 

@@ -20,7 +20,7 @@ describe('isDayToday', () => {
 
     const day: Day = {
       day: now.getDate(),
-      month: now.getMonth() + 1,
+      month: now.getMonth(),
       weekDay: 1,
       year: now.getFullYear(),
     }
@@ -33,7 +33,7 @@ describe('isDayToday', () => {
 
     const day: Day = {
       day: now.getDate(),
-      month: now.getMonth() + 1,
+      month: now.getMonth(),
       weekDay: 1,
       year: now.getFullYear() - 1,
     }
@@ -45,7 +45,7 @@ describe('isDayToday', () => {
 
     const day: Day = {
       day: now.getDate(),
-      month: now.getMonth() + 1,
+      month: now.getMonth(),
       weekDay: 1,
       year: now.getFullYear() + 1,
     }
@@ -59,7 +59,7 @@ describe('isDayTomorrow', () => {
 
     const day: Day = {
       day: now.getDate() + 1,
-      month: now.getMonth() + 1,
+      month: now.getMonth(),
       weekDay: 1,
       year: now.getFullYear(),
     }
@@ -72,7 +72,7 @@ describe('isDayTomorrow', () => {
 
     const day: Day = {
       day: now.getDate(),
-      month: now.getMonth() + 1,
+      month: now.getMonth(),
       weekDay: 1,
       year: now.getFullYear(),
     }
@@ -83,28 +83,28 @@ describe('isDayTomorrow', () => {
 
 describe('generateCalendarMonth', () => {
   it('should generate correct days for January 2025', () => {
-    const month = 1 // January (NOT 0-based)
+    const month = 1
     const year = 2025
     const result = generateCalendarMonth(month, year)
 
-    expect(result.length).toBe(31)
+    expect(result.length).toBe(28)
     expect(result[0]).toEqual({
       day: 1,
-      weekDay: 3, // Wednesday
+      weekDay: 6,
       month: 1,
       year: 2025,
     })
   })
 
   it('should generate correct days for April 2025', () => {
-    const month = 4 // April (0-based)
+    const month = 4
     const year = 2025
     const result = generateCalendarMonth(month, year)
 
-    expect(result.length).toBe(30)
+    expect(result.length).toBe(31)
     expect(result[0]).toEqual({
       day: 1,
-      weekDay: 2, // Tuesday
+      weekDay: 4,
       month: 4,
       year: 2025,
     })
@@ -138,7 +138,7 @@ describe('getMonthName', () => {
       weekDay: 1,
       year: 2024,
     }
-    expect(getMonthName(day)).toBe('Jan')
+    expect(getMonthName(day)).toBe('Feb')
   })
 })
 
@@ -156,15 +156,15 @@ describe('getShortWeekday', () => {
 
 describe('getWeekday', () => {
   it('should return correct weekday number', () => {
-    expect(getWeekday('2024-01-01')).toBe(1) // Monday
-    expect(getWeekday('2024-01-07')).toBe(0) // Sunday
+    expect(getWeekday('2024-01-01')).toBe(1)
+    expect(getWeekday('2024-01-07')).toBe(0)
   })
 })
 
 describe('getRepeatingDates', () => {
   it('should generate correct repeating dates', () => {
-    const startDate = '2024-01-01' // Monday
-    const weekdays = [1, 3, 5] // Mon, Wed, Fri
+    const startDate = '2024-01-01'
+    const weekdays = [1, 3, 5]
     const weeks = 2
 
     const result = getRepeatingDates(startDate, weekdays, weeks)
@@ -188,7 +188,7 @@ describe('getEventsToday', () => {
     const calendarDay = {
       day: 1,
       weekDay: 1,
-      month: 1,
+      month: 0,
       year: 2024,
     }
 

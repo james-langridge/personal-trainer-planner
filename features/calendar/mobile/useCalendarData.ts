@@ -4,42 +4,41 @@ import {Day} from '@/@types/types'
 import {generateCalendarMonth} from '@/lib/calendar'
 
 interface UseCalendarDataProps {
-  initialData?: Day[]
+  initialMonthData?: Day[]
   onTopVisible: boolean
   onBottomVisible: boolean
 }
 
 export function useCalendarData({
-  initialData,
+  initialMonthData,
   onTopVisible,
   onBottomVisible,
 }: UseCalendarDataProps) {
   const now = new Date()
   const today = now.getDate()
   const jsMonth = now.getMonth()
-  const currentMonth = jsMonth + 1
   const currentYear = now.getFullYear()
 
   const [data, setData] = useState<Day[]>(() => {
-    if (initialData?.length) {
-      return initialData
+    if (initialMonthData?.length) {
+      return initialMonthData
     }
-    return generateCalendarMonth(currentMonth, currentYear)
+    return generateCalendarMonth(jsMonth, currentYear)
   })
 
   const [dateRange, setDateRange] = useState(() => {
-    if (initialData?.length) {
+    if (initialMonthData?.length) {
       return {
-        startMonth: initialData[0].month,
-        startYear: initialData[0].year,
-        endMonth: initialData[initialData.length - 1].month,
-        endYear: initialData[initialData.length - 1].year,
+        startMonth: initialMonthData[0].month,
+        startYear: initialMonthData[0].year,
+        endMonth: initialMonthData[initialMonthData.length - 1].month,
+        endYear: initialMonthData[initialMonthData.length - 1].year,
       }
     }
     return {
-      startMonth: currentMonth,
+      startMonth: jsMonth,
       startYear: currentYear,
-      endMonth: currentMonth,
+      endMonth: jsMonth,
       endYear: currentYear,
     }
   })

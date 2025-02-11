@@ -9,7 +9,7 @@ import {
   isDayTomorrow,
 } from '@/lib/calendar'
 
-export function Day({
+export function DayMobile({
   children,
   dayData,
 }: {

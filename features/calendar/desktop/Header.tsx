@@ -8,11 +8,11 @@ import Link from 'next/link'
 
 export async function Header({
   year,
-  month,
+  jsMonth,
   userId,
 }: {
   year: number
-  month: number
+  jsMonth: number
   userId: string
 }) {
   const session = await auth()
@@ -20,25 +20,26 @@ export async function Header({
 
   return (
     <div className="flex w-full flex-col">
-      {isAdmin && <ClientSelect year={year} month={month} />}
-      <DateChangeButtons userId={userId} year={year} month={month} />
+      {isAdmin && <ClientSelect year={year} jsMonth={jsMonth} />}
+      <DateChangeButtons userId={userId} year={year} jsMonth={jsMonth} />
     </div>
   )
 }
 
 function DateChangeButtons({
   userId,
-  month,
+  jsMonth,
   year,
 }: {
   userId: string
   year: number
-  month: number
+  jsMonth: number
 }) {
-  const monthName = monthNames[month - 1]
+  const monthName = monthNames[jsMonth]
+  const month = jsMonth + 1
 
   function decrementMonth() {
-    if (month === 1) {
+    if (jsMonth === 0) {
       return `/calendar/${userId}/${year - 1}/${12}`
     } else {
       return `/calendar/${userId}/${year}/${month - 1}`
@@ -46,7 +47,7 @@ function DateChangeButtons({
   }
 
   function incrementMonth() {
-    if (month === 11) {
+    if (jsMonth === 11) {
       return `/calendar/${userId}/${year + 1}/${1}`
     } else {
       return `/calendar/${userId}/${year}/${month + 1}`
