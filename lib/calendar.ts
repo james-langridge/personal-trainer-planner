@@ -149,11 +149,14 @@ export function getEventsToday<T extends Workout | Appointment | Bootcamp>(
   items: T[] = [],
 ): T[] {
   const calendarDate = new Date(
-    `${calendarDay.year}-${calendarDay.month + 1}-${calendarDay.day}`,
+    calendarDay.year,
+    calendarDay.month,
+    calendarDay.day,
   )
 
   const workoutsMap = items.map(item => {
-    const workoutDate = new Date(item.date)
+    const workoutDate =
+      item.date instanceof Date ? item.date : new Date(item.date)
 
     if (areDatesEqual(calendarDate, workoutDate)) {
       return item
