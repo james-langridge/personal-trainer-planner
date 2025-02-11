@@ -51,7 +51,7 @@ export function getLongDate(date: Date) {
 export function getLongWeekday(dayData: Day) {
   const {day, month, year} = dayData
 
-  return new Date(year, month - 1, day).toLocaleString('default', {
+  return new Date(year, month, day).toLocaleString('default', {
     weekday: 'long',
   })
 }

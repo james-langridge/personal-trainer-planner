@@ -126,7 +126,7 @@ describe('getLongWeekday', () => {
       weekDay: 1,
       year: 2024,
     }
-    expect(getLongWeekday(day)).toBe('Friday')
+    expect(getLongWeekday(day)).toBe('Monday')
   })
 })
 
