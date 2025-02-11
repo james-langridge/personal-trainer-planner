@@ -3,7 +3,8 @@
 import React from 'react'
 import {useInView} from 'react-intersection-observer'
 import {useCalendarData} from './useCalendarData'
-import {Day} from './Day'
+import {DayMobile} from './DayMobile'
+import {Day} from '@/@types/types'
 import {getEventsToday, shouldScrollToThisDay} from '@/lib/calendar'
 import {AppointmentItemMobile} from '@/features/calendar/appointment'
 import {BootcampItemMobile} from '@/features/calendar/bootcamp'
@@ -54,12 +55,12 @@ function EventList({
 }
 
 export function CalendarMobile({
-  initialData,
+  initialMonthData,
   user,
   userId,
   allBootcamps,
 }: {
-  initialData?: any
+  initialMonthData?: Day[]
   user: UserEvents
   userId: string
   allBootcamps: Bootcamp[]
@@ -76,7 +77,7 @@ export function CalendarMobile({
   })
 
   const {data, scrollToThisDay, isLoading} = useCalendarData({
-    initialData,
+    initialMonthData,
     onTopVisible: isTopVisible,
     onBottomVisible: isBottomVisible,
   })
@@ -122,7 +123,7 @@ export function CalendarMobile({
                 shouldScrollToThisDay(day, scrollToThisDay) ? 'scroll-mt-4' : ''
               }
             >
-              <Day dayData={day}>
+              <DayMobile dayData={day}>
                 <EventList
                   events={appointmentsToday}
                   renderItem={appointment => (
@@ -147,7 +148,7 @@ export function CalendarMobile({
                     <WorkoutItemMobile workout={workout} />
                   )}
                 />
-              </Day>
+              </DayMobile>
             </div>
           )
         })}

@@ -13,16 +13,16 @@ export default async function CalendarMobileContainer({
   if (!user) return null
   const allBootcamps = await getAllBootcamps()
   const now = new Date()
-  const currentMonth = now.getMonth() + 1
+  const currentJsMonth = now.getMonth()
   const currentYear = now.getFullYear()
-  const monthData = generateCalendarMonth(currentMonth, currentYear)
+  const monthData = generateCalendarMonth(currentJsMonth, currentYear)
 
   return (
     <CalendarMobile
       userId={userId}
       user={user}
       allBootcamps={allBootcamps}
-      initialData={monthData}
+      initialMonthData={monthData}
     />
   )
 }

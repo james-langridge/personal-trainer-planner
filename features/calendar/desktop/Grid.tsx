@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import {AppointmentItem} from '@/features/calendar/appointment'
 import {BootcampItem} from '@/features/calendar/bootcamp'
 import {WorkoutItem} from '@/features/calendar/workout'
-import {generateCalendarMonth, getEventsToday} from '@/lib/calendar'
+import {generateCalendarMonth, getEventsToday, padZero} from '@/lib/calendar'
 
 import {CalendarDay, EmptyDays} from '.'
 import {auth} from '@/auth'
@@ -13,18 +13,18 @@ import {Workout, Bootcamp, Appointment} from '@/lib/calendar'
 
 export async function Grid({
   year,
-  month,
+  jsMonth,
   userId,
 }: {
   year: number
-  month: number
+  jsMonth: number
   userId: string
 }) {
   let dateFilter: {
     gte: Date
     lt: Date
   }
-  const date = `${year}-${month}`
+  const date = `${year}-${padZero(jsMonth + 1)}`
   const thisMonth = new Date(date)
   const nextMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 1)
   dateFilter = {
@@ -39,7 +39,7 @@ export async function Grid({
   const isAdmin = session?.user?.role === 'admin'
   const {workouts, appointments, bootcamps} = user
   const allBootcamps = await getAllBootcamps(dateFilter)
-  const monthData = generateCalendarMonth(month, year)
+  const monthData = generateCalendarMonth(jsMonth, year)
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDaysLength = firstDayOfMonth > 0 ? firstDayOfMonth - 1 : 6
   const emptyDays = Array(emptyDaysLength).fill(null)

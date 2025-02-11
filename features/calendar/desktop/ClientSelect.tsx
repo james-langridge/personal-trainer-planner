@@ -11,10 +11,10 @@ const sortByName = (
 
 export default async function ClientSelect({
   year,
-  month,
+  jsMonth,
 }: {
   year: number
-  month: number
+  jsMonth: number
 }) {
   const {users} = await getUserIdsAndNames()
   // Case-insensitive sorting is not possible via a Prisma query
@@ -26,7 +26,7 @@ export default async function ClientSelect({
     <div className="flex flex-col pt-5">
       <div className="mb-5 flex">
         <AddButton />
-        <ClientDropdown users={sortedUsers} year={year} month={month} />
+        <ClientDropdown users={sortedUsers} year={year} jsMonth={jsMonth} />
       </div>
       {/*<ClientTypeSwitch toggleClientType={setClientType} />*/}
     </div>
