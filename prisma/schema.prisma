@@ -28,7 +28,7 @@ model Appointment {
   ownerId     String
   status      APPOINTMENT_STATUS @default(NOT_ATTENDED)
   updatedAt   DateTime           @updatedAt
-  type        EVENT_TYPE @default(APPOINTMENT)
+  type        EVENT_TYPE         @default(APPOINTMENT)
   videoUrl    String?
 }
 
@@ -39,13 +39,13 @@ enum APPOINTMENT_STATUS {
 
 model Bootcamp {
   attendees   User[]
-  createdAt   DateTime @default(now())
+  createdAt   DateTime   @default(now())
   date        DateTime
-  deleted     Boolean  @default(false)
+  deleted     Boolean    @default(false)
   description String?
-  id          String   @id @default(uuid())
+  id          String     @id @default(uuid())
   name        String
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime   @updatedAt
   type        EVENT_TYPE @default(BOOTCAMP)
   videoUrl    String?
 }
@@ -74,8 +74,8 @@ model User {
   updatedAt    DateTime      @updatedAt
   workouts     Workout[]
 
-  password String?
-  resetToken String?
+  password         String?
+  resetToken       String?
   resetTokenExpiry DateTime?
 
   // Fields required by NextAuth.js
@@ -105,7 +105,7 @@ model Workout {
   ownerId     String
   status      WORKOUT_STATUS @default(NOT_STARTED)
   updatedAt   DateTime       @updatedAt
-  type        EVENT_TYPE @default(WORKOUT)
+  type        EVENT_TYPE     @default(WORKOUT)
   videoUrl    String?
 }
 
