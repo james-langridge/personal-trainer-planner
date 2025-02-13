@@ -38,6 +38,8 @@ export function CreateClientForm() {
       try {
         await createUser({
           ...form,
+          email: form.email.toLowerCase(),
+          billingEmail: form.billingEmail.toLowerCase(),
           fee: Math.round(parseFloat(form.fee) * 100),
         })
 

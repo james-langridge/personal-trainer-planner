@@ -28,7 +28,11 @@ import {getErrorMessage} from '@/lib/errors'
 import {updateUser} from '@/app/actions/users'
 
 const formSchema = z.object({
-  billingEmail: z.string().email().optional(),
+  billingEmail: z
+    .string()
+    .email()
+    .optional()
+    .transform(email => email?.toLowerCase()),
   credits: z.string().refine(
     data => {
       const number = Number(data)
@@ -39,7 +43,10 @@ const formSchema = z.object({
       message: 'The credits must be a valid number',
     },
   ),
-  email: z.string().email(),
+  email: z
+    .string()
+    .email()
+    .transform(email => email.toLowerCase()),
   id: z.string(),
   fee: z.string().refine(
     data => {
@@ -102,6 +109,8 @@ export default function EditUser({user}: {user: User}) {
     setIsLoading(true)
     updateUser({
       ...values,
+      email: values.email.toLowerCase(),
+      billingEmail: values.billingEmail?.toLowerCase(),
       credits: Number(values.credits),
       fee: Math.round(parseFloat(values.fee) * 100),
     })

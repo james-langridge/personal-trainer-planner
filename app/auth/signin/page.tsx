@@ -10,8 +10,6 @@ export default function SignIn() {
   const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-
-  // Show success message if returning from password reset
   const resetSuccess = searchParams.get('resetSuccess')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -20,20 +18,22 @@ export default function SignIn() {
     setIsLoading(true)
 
     const formData = new FormData(e.currentTarget)
+    const email = formData.get('email') as string
+
     const result = await signIn('credentials', {
-      email: formData.get('email') as string,
+      email: email.toLowerCase(),
       password: formData.get('password') as string,
       redirect: false,
     })
 
     if (result?.error) {
-      setError(result.error)
+      setError('Something went wrong. Please check your email or password.')
       setIsLoading(false)
       return
     }
 
     router.push('/')
-    router.refresh() // Refresh server components
+    router.refresh()
   }
 
   return (
