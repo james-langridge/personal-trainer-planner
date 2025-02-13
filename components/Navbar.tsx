@@ -75,7 +75,7 @@ export function Navbar({isAdmin}: {isAdmin: boolean}) {
                       </Link>
                     ))}
                     <button
-                      onClick={() => signOut()}
+                      onClick={() => signOut({redirectTo: '/'})}
                       className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                     >
                       Log out
@@ -100,7 +100,7 @@ export function Navbar({isAdmin}: {isAdmin: boolean}) {
                 </Disclosure.Button>
               ))}
               <Disclosure.Button
-                onClick={() => signOut()}
+                onClick={() => signOut({redirectTo: '/'})}
                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 aria-current={undefined}
               >
