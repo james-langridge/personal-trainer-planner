@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const resetTokenExpiry = new Date(Date.now() + 3600000) // 1 hour
 
     await db.user.update({
-      where: {email},
+      where: {email: email.toLowerCase()},
       data: {
         resetToken,
         resetTokenExpiry,

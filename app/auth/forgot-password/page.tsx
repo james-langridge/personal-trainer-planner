@@ -15,12 +15,12 @@ export default function ForgotPassword() {
 
     try {
       const formData = new FormData(e.currentTarget)
-      const email = formData.get('email')
+      const email = formData.get('email') as string
 
       const res = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email}),
+        body: JSON.stringify({email: email.toLowerCase()}),
       })
 
       if (!res.ok) throw new Error('Failed to send reset email')
