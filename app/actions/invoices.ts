@@ -1,5 +1,5 @@
 'use server'
-
+// todo consider if revalidation needed
 import {db} from '@/lib/db'
 import {InvoiceData} from '@/@types/apiRequestTypes'
 import nodemailer from 'nodemailer'

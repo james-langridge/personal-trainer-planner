@@ -2,7 +2,7 @@
 
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
-import {getRepeatingDates, getUniqueMonthPaths} from '@/lib/calendar'
+import {getRepeatingDates, getUniqueCalendarPaths} from '@/lib/calendar'
 import {revalidatePath} from 'next/cache'
 import {
   CreateWorkoutBody,
@@ -38,11 +38,12 @@ export async function createWorkout(body: CreateWorkoutBody) {
 
   const workouts = await db.workout.createMany({data})
 
-  const pathsToRevalidate = getUniqueMonthPaths(dates, ownerId)
+  const pathsToRevalidate = getUniqueCalendarPaths(dates, ownerId)
   pathsToRevalidate.forEach(path => {
     console.log(`Revalidating ${path}`)
     revalidatePath(path)
   })
+  revalidatePath(`/user/${ownerId}`)
 
   return workouts
 }
@@ -70,9 +71,9 @@ export async function updateWorkout(body: UpdateWorkoutBody) {
 
   const year = body.date.getFullYear()
   const month = body.date.getMonth() + 1
-  const path = `/calendar/${body.ownerId}/${year}/${month}`
-  console.log(`Revalidating ${path}`)
-  revalidatePath(path)
+  revalidatePath(`/calendar/${body.ownerId}/${year}/${month}`)
+  revalidatePath(`/workouts/${body.id}`)
+  revalidatePath(`/user/${body.ownerId}`)
 
   return workout
 }
@@ -94,9 +95,8 @@ export async function deleteWorkout(body: DeleteWorkoutBody) {
 
   const year = body.date.getFullYear()
   const month = body.date.getMonth() + 1
-  const path = `/calendar/${body.ownerId}/${year}/${month}`
-  console.log(`Revalidating ${path}`)
-  revalidatePath(path)
+  revalidatePath(`/calendar/${body.ownerId}/${year}/${month}`)
+  revalidatePath(`/user/${body.ownerId}`)
 
   return workout
 }

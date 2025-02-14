@@ -2,6 +2,8 @@ import {columns} from '@/features/users/individual/Columns'
 import {DataTable} from '@/features/users/individual/DataTable'
 import {db} from '@/lib/db'
 
+export const dynamic = 'force-static'
+
 export default async function UserDetails(props: {
   params: Promise<{id: string}>
 }) {

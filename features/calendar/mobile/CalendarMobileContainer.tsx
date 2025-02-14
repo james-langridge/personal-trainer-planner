@@ -3,6 +3,8 @@ import {Appointment, generateCalendarMonth, Workout} from '@/lib/calendar'
 import {db} from '@/lib/db'
 import {USER_TYPE} from '@prisma/client'
 
+// todo make mobile client component and use react query for infinite scroll
+
 export default async function CalendarMobileContainer({
   userId,
 }: {

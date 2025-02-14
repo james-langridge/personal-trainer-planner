@@ -2,7 +2,11 @@
 
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
-import {getRepeatingDates, getUniqueMonthPaths} from '@/lib/calendar'
+import {
+  getRepeatingDates,
+  getUniqueCalendarPaths,
+  getUniqueUsersPaths,
+} from '@/lib/calendar'
 import {
   CreateAppointmentBody,
   DeleteAppointmentBody,
@@ -40,11 +44,19 @@ export async function createAppointment(body: CreateAppointmentBody) {
 
   const appointments = await db.appointment.createMany({data})
 
-  const pathsToRevalidate = getUniqueMonthPaths(dates, ownerId)
-  pathsToRevalidate.forEach(path => {
+  const calendarPaths = getUniqueCalendarPaths(dates, ownerId)
+  calendarPaths.forEach(path => {
     console.log(`Revalidating ${path}`)
     revalidatePath(path)
   })
+
+  const userPaths = getUniqueUsersPaths(dates)
+  userPaths.forEach(path => {
+    console.log(`Revalidating ${path}`)
+    revalidatePath(path)
+  })
+
+  revalidatePath(`/user/${ownerId}`)
 
   return appointments
 }
@@ -72,9 +84,10 @@ export async function updateAppointment(body: UpdateAppointmentBody) {
 
   const year = body.date.getFullYear()
   const month = body.date.getMonth() + 1
-  const path = `/calendar/${body.ownerId}/${year}/${month}`
-  console.log(`Revalidating ${path}`)
-  revalidatePath(path)
+  revalidatePath(`/calendar/${body.ownerId}/${year}/${month}`)
+  revalidatePath(`/appointments/${body.id}`)
+  revalidatePath(`/users/${year}/${month}`)
+  revalidatePath(`/user/${body.ownerId}`)
 
   return appointment
 }
@@ -96,9 +109,9 @@ export async function deleteAppointment(body: DeleteAppointmentBody) {
 
   const year = body.date.getFullYear()
   const month = body.date.getMonth() + 1
-  const path = `/calendar/${body.ownerId}/${year}/${month}`
-  console.log(`Revalidating ${path}`)
-  revalidatePath(path)
+  revalidatePath(`/calendar/${body.ownerId}/${year}/${month}`)
+  revalidatePath(`/users/${year}/${month}`)
+  revalidatePath(`/user/${body.ownerId}`)
 
   return appointment
 }

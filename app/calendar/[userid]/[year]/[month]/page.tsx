@@ -1,4 +1,7 @@
 import {Grid, Header} from '@/features/calendar/desktop'
+import {AuthCheck} from '@/app/AuthCheck'
+
+export const dynamic = 'force-static'
 
 type Params = Promise<{userid: string; year: string; month: string}>
 
@@ -8,11 +11,13 @@ export default async function Page({params}: {params: Params}) {
   const jsMonth = Number(monthStr) - 1
 
   return (
-    <div className="flex h-[90vh]">
-      <div className="hidden w-full flex-col px-5 sm:flex sm:items-center">
-        <Header year={year} jsMonth={jsMonth} userId={userid} />
-        <Grid year={year} jsMonth={jsMonth} userId={userid} />
+    <AuthCheck userIdParam={userid}>
+      <div className="flex h-[90vh]">
+        <div className="hidden w-full flex-col px-5 sm:flex sm:items-center">
+          <Header year={year} jsMonth={jsMonth} userId={userid} />
+          <Grid year={year} jsMonth={jsMonth} userId={userid} />
+        </div>
       </div>
-    </div>
+    </AuthCheck>
   )
 }

@@ -2,6 +2,9 @@ import {auth} from '@/auth'
 import Container from '@/components/Container'
 import {db} from '@/lib/db'
 
+// todo maybe can't be static with auth()
+export const dynamic = 'force-static'
+
 export default async function Profile() {
   const session = await auth()
   const {user} = await getUser(session?.user?.id)

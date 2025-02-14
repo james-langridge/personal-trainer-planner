@@ -1,6 +1,8 @@
 import {EventPage} from '@/components/EventPage'
 import {db} from '@/lib/db'
 
+export const dynamic = 'force-static'
+
 type Params = Promise<{id: string}>
 
 export default async function Workout({params}: {params: Params}) {

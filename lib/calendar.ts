@@ -102,18 +102,31 @@ export function getRepeatingDates(
   return dates
 }
 
-export function getUniqueMonthPaths(dates: Date[], userId: string) {
-  const uniqueMonths = new Set(
+export function getUniqueMonths(dates: Date[]) {
+  return new Set(
     dates.map(date => {
       const year = date.getFullYear()
       const month = date.getMonth() + 1
       return `${year}-${month.toString()}`
     }),
   )
+}
+
+export function getUniqueCalendarPaths(dates: Date[], userId: string) {
+  const uniqueMonths = getUniqueMonths(dates)
 
   return Array.from(uniqueMonths).map(yearMonth => {
     const [year, month] = yearMonth.split('-')
     return `/calendar/${userId}/${year}/${month}`
+  })
+}
+
+export function getUniqueUsersPaths(dates: Date[]) {
+  const uniqueMonths = getUniqueMonths(dates)
+
+  return Array.from(uniqueMonths).map(yearMonth => {
+    const [year, month] = yearMonth.split('-')
+    return `/users/${year}/${month}`
   })
 }
 

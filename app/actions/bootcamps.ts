@@ -1,5 +1,4 @@
 'use server'
-
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
 import {getRepeatingDates} from '@/lib/calendar'
@@ -9,6 +8,7 @@ import {
   UpdateBootcampAttendanceBody,
   UpdateBootcampBody,
 } from '@/@types/apiRequestTypes'
+import {revalidatePath} from 'next/cache'
 
 export async function createBootcamp(body: CreateBootcampBody) {
   const session = await auth()
@@ -26,6 +26,10 @@ export async function createBootcamp(body: CreateBootcampBody) {
     name,
     videoUrl,
   }))
+
+  // todo if /calendar is static, need to revalidate it the dates for all bootcamp users to show the new bootcamp
+
+  revalidatePath(`/bootcamps`)
 
   return db.bootcamp.createMany({data})
 }
@@ -71,6 +75,9 @@ export async function updateBootcamp(body: UpdateBootcampBody) {
     })
   }
 
+  revalidatePath(`/bootcamps/${body.id}`)
+  revalidatePath(`/bootcamps`)
+
   return bootcamp
 }
 
@@ -79,6 +86,8 @@ export async function deleteBootcamp(body: DeleteBootcampBody) {
   if (session?.user?.role !== 'admin') {
     throw new Error('Forbidden.')
   }
+
+  revalidatePath(`/bootcamps`)
 
   return db.bootcamp.update({
     where: {id: body.id},
@@ -185,6 +194,8 @@ export async function toggleBootcampAttendance(
       },
     })
   }
+
+  revalidatePath(`/bootcamps`)
 
   // todo check returned credits value
   return {OK: true, credits: res?.credits}

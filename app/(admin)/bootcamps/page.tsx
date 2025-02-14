@@ -1,15 +1,10 @@
 import {columns} from '@/features/bootcamps/summary/Columns'
 import {DataTable} from '@/features/bootcamps/summary/DataTable'
-import {auth} from '@/auth'
-import {Bootcamp} from '@/@types/apiResponseTypes'
 import {db} from '@/lib/db'
-import {redirect} from 'next/navigation'
+
+export const dynamic = 'force-static'
 
 export default async function Bootcamps() {
-  const session = await auth()
-  if (session?.user?.role !== 'admin') {
-    redirect('/')
-  }
   const bootcamps = await getBootcamps()
 
   if (!bootcamps) {
@@ -24,7 +19,7 @@ export default async function Bootcamps() {
 }
 
 async function getBootcamps() {
-  const bootcamps: Bootcamp[] = await db.bootcamp.findMany({
+  return db.bootcamp.findMany({
     select: {
       _count: {
         select: {attendees: true},
@@ -48,6 +43,4 @@ async function getBootcamps() {
       deleted: false,
     },
   })
-
-  return bootcamps
 }
