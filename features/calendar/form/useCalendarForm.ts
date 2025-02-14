@@ -62,7 +62,7 @@ export function useCalendarForm({
 
   const [form, setForm] = useState<CalendarFormState>({
     ...initialState,
-    date: `${day.year}-${padZero(day.month)}-${padZero(day.day)}`,
+    date: `${day.year}-${padZero(day.month + 1)}-${padZero(day.day)}`,
     selectedDays: new Set([day.weekDay]),
     ownerId: userId,
   })
