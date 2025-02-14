@@ -1,9 +1,11 @@
-import DateProvider from '@/app/(restricted)/users/[year]/[month]/DateProvider'
+import DateProvider from '@/app/(admin)/users/[year]/[month]/DateProvider'
 import {DateChangeButtons} from '@/components/DateChangeButtons'
 import {columns, DataTable} from '@/features/users/summary'
 import {sortByString} from '@/lib/users'
 import {User} from '@/@types/apiResponseTypes'
 import {db} from '@/lib/db'
+
+export const dynamic = 'force-static'
 
 export default async function Users(props: {
   params: Promise<{year: string; month: string}>

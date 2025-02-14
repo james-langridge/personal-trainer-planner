@@ -4,7 +4,7 @@ import {Disclosure} from '@headlessui/react'
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import {signOut} from 'next-auth/react'
+import {signOut, useSession} from 'next-auth/react'
 
 const clientNavigation = [
   {href: '/', name: 'Training planner'},
@@ -18,7 +18,9 @@ const logo = {
   height: 138,
 }
 
-export function Navbar({isAdmin}: {isAdmin: boolean}) {
+export function Navbar() {
+  const {data: session} = useSession()
+  const isAdmin = session?.user?.role === 'admin'
   const now = new Date()
   const year = now.getFullYear()
   const month = now.getMonth() + 1

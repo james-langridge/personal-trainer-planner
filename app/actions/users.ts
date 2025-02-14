@@ -3,6 +3,7 @@
 import {auth} from '@/auth'
 import {CreateUserBody, UpdateUserBody} from '@/@types/apiRequestTypes'
 import {db} from '@/lib/db'
+import {revalidatePath} from 'next/cache'
 
 export async function createUser(body: CreateUserBody) {
   const session = await auth()
@@ -10,6 +11,9 @@ export async function createUser(body: CreateUserBody) {
     throw new Error('Forbidden.')
   }
 
+  revalidatePath('/users', 'layout')
+
+  // todo return user to update client dropdown
   return db.user.create({
     data: {
       billingEmail: body.billingEmail || body.email,
@@ -27,6 +31,9 @@ export async function updateUser(body: UpdateUserBody) {
     throw new Error('Forbidden.')
   }
 
+  revalidatePath(`/user/${body.id}`)
+  revalidatePath('/users/', 'layout')
+
   return db.user.update({
     where: {
       id: body.id,
@@ -42,4 +49,17 @@ export async function updateUser(body: UpdateUserBody) {
       ...(body.type && {type: body.type}),
     },
   })
+}
+
+export async function getUserIdsAndNames(): Promise<{
+  users: {name: string; id: string}[]
+}> {
+  const users = await db.user.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  })
+
+  return {users}
 }

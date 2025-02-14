@@ -16,6 +16,7 @@ export default async function ClientSelect({
   year: number
   jsMonth: number
 }) {
+  // todo fetch this on client and keep in state, and update on create new user
   const {users} = await getUserIdsAndNames()
   // Case-insensitive sorting is not possible via a Prisma query
   // TODO: sanitise the names before saving in the DB
