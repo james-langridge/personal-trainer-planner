@@ -4,6 +4,8 @@ import Providers from '@/app/Providers'
 import {Navbar} from '@/components/Navbar'
 import {Toaster} from '@/components/toaster'
 import {AutoRefresh} from '@/app/AutoRefresh'
+import {auth} from '@/auth'
+import {redirect} from 'next/navigation'
 
 export const metadata = {
   title: 'Fit For Life Trainer',
@@ -15,6 +17,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const session = await auth()
+  if (!session) {
+    redirect('/auth/signin')
+  }
+
   return (
     <html lang="en">
       <body>

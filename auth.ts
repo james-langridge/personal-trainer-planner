@@ -56,10 +56,6 @@ export const authOptions: NextAuthConfig = {
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   callbacks: {
-    authorized: async ({auth}) => {
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth
-    },
     session({session, token}) {
       if (session.user) {
         session.user.role = token.role as Role
@@ -76,5 +72,4 @@ export const authOptions: NextAuthConfig = {
   },
 }
 
-export const {auth, handlers, signIn, signOut, ...authConfig} =
-  NextAuth(authOptions)
+export const {auth, handlers, signIn, signOut} = NextAuth(authOptions)
