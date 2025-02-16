@@ -4,6 +4,7 @@ import {monthNames} from '@/lib/constants'
 
 import {SelectUserId} from '@/features/calendar/desktop/CalendarDesktop'
 import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
+import ClientSelect from '@/features/calendar/desktop/ClientSelect'
 
 export function Header({
   dateFilter,
@@ -18,7 +19,7 @@ export function Header({
 }) {
   return (
     <div className="flex w-full flex-col">
-      {/*{isAdmin && onSelect && <ClientSelect onSelect={onSelect} />}*/}
+      {isAdmin && onSelect && <ClientSelect onSelect={onSelect} />}
       <DateChangeButtons dateFilter={dateFilter} onChange={onChange} />
     </div>
   )

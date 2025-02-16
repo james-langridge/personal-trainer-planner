@@ -101,3 +101,14 @@ export async function getUserFee({id}: UserFeeParams): Promise<UserFeeData> {
     },
   })
 }
+
+export async function getUserIdsAndNames(): Promise<
+  {name: string; id: string}[]
+> {
+  return db.user.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  })
+}

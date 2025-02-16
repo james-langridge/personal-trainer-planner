@@ -4,6 +4,7 @@ import {useQuery} from '@tanstack/react-query'
 import {
   getUserEvents,
   getUserFee,
+  getUserIdsAndNames,
   UserEventsParams,
   UserFeeParams,
 } from '@/app/api/client/users'
@@ -25,5 +26,12 @@ export function useUserFee(params: UserFeeParams) {
   return useQuery({
     queryKey: ['user-fee', params.id],
     queryFn: () => getUserFee(params),
+  })
+}
+
+export function useUserIdsAndNames() {
+  return useQuery({
+    queryKey: ['user-ids'],
+    queryFn: () => getUserIdsAndNames(),
   })
 }

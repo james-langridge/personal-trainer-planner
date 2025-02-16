@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select'
-import {SelectUserId} from '@/app/admin/calendar/page'
+import {SelectUserId} from '@/features/calendar/desktop/CalendarDesktop'
 
 export function ClientDropdown({
   users,
