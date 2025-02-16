@@ -27,12 +27,12 @@ export function getPrismaDateFilter(
   jsMonth: number,
   offset: number = 0,
 ): DateFilter {
-  const month = jsMonth + 1
-  const centerMonth = new Date(`${year}-${padZero(month)}`)
-  const startDate = new Date(centerMonth)
-  startDate.setMonth(centerMonth.getMonth() - offset)
-  const endDate = new Date(centerMonth)
-  endDate.setMonth(centerMonth.getMonth() + offset + 1)
+  if (offset % 2 !== 0) {
+    throw new Error('Offset must be an even number')
+  }
+  const monthsEachWay = offset / 2
+  const startDate = new Date(Date.UTC(year, jsMonth - monthsEachWay, 1))
+  const endDate = new Date(Date.UTC(year, jsMonth + monthsEachWay + 1, 1))
 
   return {
     gte: startDate,
@@ -42,32 +42,22 @@ export function getPrismaDateFilter(
 
 export function generateCalendarMonth(dateFilter: DateFilter): Day[] {
   const allDays: Day[] = []
-
-  const currentDate = new Date(
-    dateFilter.gte.getFullYear(),
-    dateFilter.gte.getMonth(),
-    1,
-  )
+  const currentDate = new Date(dateFilter.gte)
 
   while (currentDate < dateFilter.lt) {
     const currentYear = currentDate.getFullYear()
     const currentMonth = currentDate.getMonth()
-    const daysInMonth = getDaysInMonth(currentMonth, currentYear)
+    const currentDay = currentDate.getDate()
+    const weekDay = currentDate.getDay()
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(currentYear, currentMonth, day)
+    allDays.push({
+      day: currentDay,
+      weekDay,
+      month: currentMonth,
+      year: currentYear,
+    })
 
-      if (date >= dateFilter.gte && date < dateFilter.lt) {
-        allDays.push({
-          day,
-          weekDay: date.getDay(),
-          month: currentMonth,
-          year: currentYear,
-        })
-      }
-    }
-
-    currentDate.setMonth(currentDate.getMonth() + 1)
+    currentDate.setDate(currentDate.getDate() + 1)
   }
 
   return allDays
