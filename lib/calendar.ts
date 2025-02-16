@@ -22,36 +22,55 @@ export type DateFilter = {
   lt: Date
 }
 
-export function getPrismaDateFilter(year: number, jsMonth: number): DateFilter {
-  let dateFilter: DateFilter
-  const date = `${year}-${padZero(jsMonth + 1)}`
-  const thisMonth = new Date(date)
-  const nextMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 1)
-  dateFilter = {
-    gte: thisMonth,
-    lt: nextMonth,
+export function getPrismaDateFilter(
+  year: number,
+  jsMonth: number,
+  offset: number = 0,
+): DateFilter {
+  const month = jsMonth + 1
+  const centerMonth = new Date(`${year}-${padZero(month)}`)
+  const startDate = new Date(centerMonth)
+  startDate.setMonth(centerMonth.getMonth() - offset)
+  const endDate = new Date(centerMonth)
+  endDate.setMonth(centerMonth.getMonth() + offset + 1)
+
+  return {
+    gte: startDate,
+    lt: endDate,
   }
-  return dateFilter
 }
 
-export function generateCalendarMonth(dateFilter: DateFilter) {
-  const jsMonth = dateFilter.gte.getMonth()
-  const year = dateFilter.gte.getFullYear()
-  const daysInMonth = getDaysInMonth(jsMonth, year)
-  const monthData = []
+export function generateCalendarMonth(dateFilter: DateFilter): Day[] {
+  const allDays: Day[] = []
 
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, jsMonth, day)
-    const weekDay = date.getDay()
-    monthData.push({
-      day,
-      weekDay,
-      month: jsMonth,
-      year,
-    })
+  const currentDate = new Date(
+    dateFilter.gte.getFullYear(),
+    dateFilter.gte.getMonth(),
+    1,
+  )
+
+  while (currentDate < dateFilter.lt) {
+    const currentYear = currentDate.getFullYear()
+    const currentMonth = currentDate.getMonth()
+    const daysInMonth = getDaysInMonth(currentMonth, currentYear)
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(currentYear, currentMonth, day)
+
+      if (date >= dateFilter.gte && date < dateFilter.lt) {
+        allDays.push({
+          day,
+          weekDay: date.getDay(),
+          month: currentMonth,
+          year: currentYear,
+        })
+      }
+    }
+
+    currentDate.setMonth(currentDate.getMonth() + 1)
   }
 
-  return monthData
+  return allDays
 }
 
 function getDaysInMonth(jsMonth: number, year: number) {
@@ -211,11 +230,14 @@ export function padZero(num: number | string) {
   return String(num).padStart(2, '0')
 }
 
-export function shouldScrollToThisDay(thisDay: Day, scrollToThisDay: Day) {
+export function shouldScrollToThisDay(
+  thisDay: Day,
+  scrollToThisDay: Omit<Day, 'weekDay'>,
+) {
   const {day, month, year} = thisDay
 
   return (
-    scrollToThisDay?.month === month &&
+    scrollToThisDay.month === month &&
     scrollToThisDay.year === year &&
     scrollToThisDay.day === day
   )

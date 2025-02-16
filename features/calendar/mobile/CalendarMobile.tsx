@@ -1,30 +1,27 @@
 'use client'
 
+import React from 'react'
 import {
   generateCalendarMonth,
   getEventsToday,
   getPrismaDateFilter,
   shouldScrollToThisDay,
 } from '@/lib/calendar'
-import {useUserEvents} from '@/app/api/hooks/users'
-import {useAllBootcamps} from '@/app/api/hooks/bootcamps'
 import {DayMobile} from '@/features/calendar/mobile/DayMobile'
 import {AppointmentItemMobile} from '@/features/calendar/appointment'
 import {BootcampItemMobile} from '@/features/calendar/bootcamp'
 import {WorkoutItemMobile} from '@/features/calendar/workout'
-import React from 'react'
-import {useInView} from 'react-intersection-observer'
-import {useCalendarData} from '@/features/calendar/mobile/useCalendarData'
+import {useUserEvents} from '@/app/api/hooks/users'
+import {useAllBootcamps} from '@/app/api/hooks/bootcamps'
 
-export default async function CalendarMobile({userId}: {userId: string}) {
-  // TODO only fetch current month's events, and update on infinite scroll
+export default function CalendarMobile({userId}: {userId: string}) {
+  const scrollToRef = React.useRef<HTMLDivElement>(null)
   const now = new Date()
-  const currentJsMonth = now.getMonth()
   const currentYear = now.getFullYear()
-  const dateFilter = getPrismaDateFilter(currentYear, currentJsMonth)
-  const monthData = generateCalendarMonth(dateFilter)
+  const currentMonth = now.getMonth()
+  const dateFilter = getPrismaDateFilter(currentYear, currentMonth, 6)
 
-  const {data: user} = useUserEvents({
+  const {data: userData} = useUserEvents({
     id: userId,
     dateFilter,
   })
@@ -33,73 +30,46 @@ export default async function CalendarMobile({userId}: {userId: string}) {
     dateFilter,
   })
 
-  const {ref: topRef, inView: isTopVisible} = useInView({
-    threshold: 0,
-    rootMargin: '200px 0px',
-    delay: 500, // Add delay to prevent rapid scrolling issues
-  })
-
-  const {ref: bottomRef, inView: isBottomVisible} = useInView({
-    threshold: 0,
-    rootMargin: '200px 0px',
-  })
-
-  const {data, scrollToThisDay, isLoading} = useCalendarData({
-    initialMonthData: monthData,
-    onTopVisible: isTopVisible,
-    onBottomVisible: isBottomVisible,
-  })
-
-  const scrollToRef = React.useRef<HTMLDivElement>(null)
-  const previousScrollToDay = React.useRef(scrollToThisDay)
+  const monthData = generateCalendarMonth(dateFilter)
 
   React.useEffect(() => {
-    if (scrollToThisDay !== previousScrollToDay.current) {
-      scrollToRef.current?.scrollIntoView({
+    if (scrollToRef.current && userData && allBootcamps) {
+      scrollToRef.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'start',
+        block: 'center',
       })
-      previousScrollToDay.current = scrollToThisDay
     }
-  }, [scrollToThisDay])
+  }, [userData, allBootcamps])
 
-  if (!user) return null
-
-  const {bootcamps, appointments, workouts} = user
+  if (!userData || !allBootcamps) return null
 
   return (
     <div className="flex h-[90vh]">
       <div className="flex w-full flex-col px-5 sm:hidden">
         <div className="py-5">
-          <div ref={topRef} className="h-4" aria-live="polite">
-            {isLoading && <LoadingIndicator position="top" />}
-          </div>
-
           <div role="feed" aria-label="Calendar events">
-            {data.map(day => {
-              const appointmentsToday = appointments
-                ? getEventsToday(day, appointments)
+            {monthData.map(day => {
+              const appointmentsToday = userData?.appointments
+                ? getEventsToday(day, userData.appointments)
+                : null
+              const workoutsToday = userData?.workouts
+                ? getEventsToday(day, userData.workouts)
                 : null
               const bootcampsToday = allBootcamps
                 ? getEventsToday(day, allBootcamps)
                 : null
-              const workoutsToday = workouts
-                ? getEventsToday(day, workouts)
-                : null
+
+              const isToday = shouldScrollToThisDay(day, {
+                year: currentYear,
+                month: currentMonth,
+                day: now.getDate(),
+              })
 
               return (
                 <div
-                  ref={
-                    shouldScrollToThisDay(day, scrollToThisDay)
-                      ? scrollToRef
-                      : null
-                  }
+                  ref={isToday ? scrollToRef : null}
                   key={`${day.day}-${day.month}-${day.year}`}
-                  className={
-                    shouldScrollToThisDay(day, scrollToThisDay)
-                      ? 'scroll-mt-4'
-                      : ''
-                  }
+                  className={isToday ? 'scroll-mt-4' : ''}
                 >
                   <DayMobile dayData={day}>
                     <EventList
@@ -115,7 +85,7 @@ export default async function CalendarMobile({userId}: {userId: string}) {
                         <BootcampItemMobile
                           bootcamp={bootcamp}
                           userId={userId}
-                          userBootcamps={bootcamps}
+                          userBootcamps={userData?.bootcamps ?? []}
                         />
                       )}
                     />
@@ -131,25 +101,7 @@ export default async function CalendarMobile({userId}: {userId: string}) {
               )
             })}
           </div>
-
-          <div ref={bottomRef} className="h-4" aria-live="polite">
-            {isLoading && <LoadingIndicator position="bottom" />}
-          </div>
         </div>
-      </div>
-    </div>
-  )
-}
-
-function LoadingIndicator({position}: {position: 'top' | 'bottom'}) {
-  return (
-    <div
-      role="status"
-      aria-label={`Loading ${position === 'top' ? 'previous' : 'next'} month`}
-      className="flex items-center justify-center py-4"
-    >
-      <div className="text-center text-gray-500">
-        Loading {position === 'top' ? 'previous' : 'next'} month...
       </div>
     </div>
   )
