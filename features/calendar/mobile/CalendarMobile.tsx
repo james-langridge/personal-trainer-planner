@@ -1,42 +1,46 @@
 'use client'
 
+import React from 'react'
+import {useInfiniteQuery} from '@tanstack/react-query'
+import {useInView} from 'react-intersection-observer'
 import {
   generateCalendarMonth,
   getEventsToday,
   getPrismaDateFilter,
   shouldScrollToThisDay,
 } from '@/lib/calendar'
-import {useUserEvents} from '@/app/api/hooks/users'
-import {useAllBootcamps} from '@/app/api/hooks/bootcamps'
 import {DayMobile} from '@/features/calendar/mobile/DayMobile'
 import {AppointmentItemMobile} from '@/features/calendar/appointment'
 import {BootcampItemMobile} from '@/features/calendar/bootcamp'
 import {WorkoutItemMobile} from '@/features/calendar/workout'
-import React from 'react'
-import {useInView} from 'react-intersection-observer'
-import {useCalendarData} from '@/features/calendar/mobile/useCalendarData'
+import {getUserEvents} from '@/app/api/client/users'
+import {getAllBootcamps} from '@/app/api/client/bootcamps'
 
-export default async function CalendarMobile({userId}: {userId: string}) {
-  // TODO only fetch current month's events, and update on infinite scroll
-  const now = new Date()
-  const currentJsMonth = now.getMonth()
-  const currentYear = now.getFullYear()
-  const dateFilter = getPrismaDateFilter(currentYear, currentJsMonth)
-  const monthData = generateCalendarMonth(dateFilter)
+function getMonthFilter(pageParam: {year: number; month: number}) {
+  return getPrismaDateFilter(pageParam.year, pageParam.month)
+}
 
-  const {data: user} = useUserEvents({
-    id: userId,
-    dateFilter,
-  })
+function getNextMonth(current: {year: number; month: number}) {
+  const nextMonth = current.month + 1
+  return {
+    year: nextMonth === 12 ? current.year + 1 : current.year,
+    month: nextMonth === 12 ? 0 : nextMonth,
+  }
+}
 
-  const {data: allBootcamps} = useAllBootcamps({
-    dateFilter,
-  })
+function getPreviousMonth(current: {year: number; month: number}) {
+  const prevMonth = current.month - 1
+  return {
+    year: prevMonth === -1 ? current.year - 1 : current.year,
+    month: prevMonth === -1 ? 11 : prevMonth,
+  }
+}
 
+export default function CalendarMobile({userId}: {userId: string}) {
   const {ref: topRef, inView: isTopVisible} = useInView({
     threshold: 0,
     rootMargin: '200px 0px',
-    delay: 500, // Add delay to prevent rapid scrolling issues
+    delay: 500,
   })
 
   const {ref: bottomRef, inView: isBottomVisible} = useInView({
@@ -44,96 +48,172 @@ export default async function CalendarMobile({userId}: {userId: string}) {
     rootMargin: '200px 0px',
   })
 
-  const {data, scrollToThisDay, isLoading} = useCalendarData({
-    initialMonthData: monthData,
-    onTopVisible: isTopVisible,
-    onBottomVisible: isBottomVisible,
+  const now = new Date()
+  const initialPageParam = {
+    year: now.getFullYear(),
+    month: now.getMonth(),
+  }
+
+  const {
+    data: userEventsData,
+    fetchNextPage: fetchNextUserPage,
+    fetchPreviousPage: fetchPreviousUserPage,
+    hasNextPage: hasNextUserPage,
+    hasPreviousPage: hasPreviousUserPage,
+    isFetchingNextPage: isFetchingNextUserPage,
+    isFetchingPreviousPage: isFetchingPreviousUserPage,
+  } = useInfiniteQuery({
+    queryKey: ['user-events', userId],
+    queryFn: async ({pageParam}) => {
+      const dateFilter = getMonthFilter(pageParam)
+      const monthData = generateCalendarMonth(dateFilter)
+      const userData = await getUserEvents({
+        id: userId,
+        dateFilter,
+      })
+
+      return {
+        monthData,
+        userData,
+        pageParam,
+      }
+    },
+    initialPageParam,
+    getNextPageParam: lastPage => getNextMonth(lastPage.pageParam),
+    getPreviousPageParam: firstPage => getPreviousMonth(firstPage.pageParam),
   })
 
-  const scrollToRef = React.useRef<HTMLDivElement>(null)
-  const previousScrollToDay = React.useRef(scrollToThisDay)
+  const {
+    data: bootcampsData,
+    fetchNextPage: fetchNextBootcampsPage,
+    fetchPreviousPage: fetchPreviousBootcampsPage,
+  } = useInfiniteQuery({
+    queryKey: ['bootcamps'],
+    queryFn: async ({pageParam}) => {
+      const dateFilter = getMonthFilter(pageParam)
+      const bootcamps = await getAllBootcamps({dateFilter})
+
+      return {
+        bootcamps,
+        pageParam,
+      }
+    },
+    initialPageParam,
+    getNextPageParam: lastPage => getNextMonth(lastPage.pageParam),
+    getPreviousPageParam: firstPage => getPreviousMonth(firstPage.pageParam),
+  })
 
   React.useEffect(() => {
-    if (scrollToThisDay !== previousScrollToDay.current) {
+    if (isTopVisible && hasPreviousUserPage) {
+      fetchPreviousUserPage()
+      fetchPreviousBootcampsPage()
+    }
+  }, [
+    isTopVisible,
+    hasPreviousUserPage,
+    fetchPreviousUserPage,
+    fetchPreviousBootcampsPage,
+  ])
+
+  React.useEffect(() => {
+    if (isBottomVisible && hasNextUserPage) {
+      fetchNextUserPage()
+      fetchNextBootcampsPage()
+    }
+  }, [
+    isBottomVisible,
+    hasNextUserPage,
+    fetchNextUserPage,
+    fetchNextBootcampsPage,
+  ])
+
+  const scrollToRef = React.useRef<HTMLDivElement>(null)
+  const [hasScrolledToToday, setHasScrolledToToday] = React.useState(false)
+
+  React.useEffect(() => {
+    if (userEventsData?.pages && !hasScrolledToToday) {
+      const today = new Date()
       scrollToRef.current?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       })
-      previousScrollToDay.current = scrollToThisDay
+      setHasScrolledToToday(true)
     }
-  }, [scrollToThisDay])
+  }, [userEventsData?.pages, hasScrolledToToday])
 
-  if (!user) return null
-
-  const {bootcamps, appointments, workouts} = user
+  if (!userEventsData || !bootcampsData) return null
 
   return (
     <div className="flex h-[90vh]">
       <div className="flex w-full flex-col px-5 sm:hidden">
         <div className="py-5">
           <div ref={topRef} className="h-4" aria-live="polite">
-            {isLoading && <LoadingIndicator position="top" />}
+            {isFetchingPreviousUserPage && <LoadingIndicator position="top" />}
           </div>
 
           <div role="feed" aria-label="Calendar events">
-            {data.map(day => {
-              const appointmentsToday = appointments
-                ? getEventsToday(day, appointments)
-                : null
-              const bootcampsToday = allBootcamps
-                ? getEventsToday(day, allBootcamps)
-                : null
-              const workoutsToday = workouts
-                ? getEventsToday(day, workouts)
-                : null
+            {userEventsData.pages.map((page, pageIndex) =>
+              page.monthData.map(day => {
+                const appointmentsToday = page.userData?.appointments
+                  ? getEventsToday(day, page.userData.appointments)
+                  : null
+                const workoutsToday = page.userData?.workouts
+                  ? getEventsToday(day, page.userData.workouts)
+                  : null
+                const bootcampsToday = bootcampsData.pages[pageIndex]?.bootcamps
+                  ? getEventsToday(
+                      day,
+                      bootcampsData.pages[pageIndex].bootcamps,
+                    )
+                  : null
 
-              return (
-                <div
-                  ref={
-                    shouldScrollToThisDay(day, scrollToThisDay)
-                      ? scrollToRef
-                      : null
-                  }
-                  key={`${day.day}-${day.month}-${day.year}`}
-                  className={
-                    shouldScrollToThisDay(day, scrollToThisDay)
-                      ? 'scroll-mt-4'
-                      : ''
-                  }
-                >
-                  <DayMobile dayData={day}>
-                    <EventList
-                      events={appointmentsToday}
-                      renderItem={appointment => (
-                        <AppointmentItemMobile appointment={appointment} />
-                      )}
-                    />
+                const isToday = shouldScrollToThisDay(day, {
+                  weekDay: now.getDay(),
+                  year: now.getFullYear(),
+                  month: now.getMonth(),
+                  day: now.getDate(),
+                })
 
-                    <EventList
-                      events={bootcampsToday}
-                      renderItem={bootcamp => (
-                        <BootcampItemMobile
-                          bootcamp={bootcamp}
-                          userId={userId}
-                          userBootcamps={bootcamps}
-                        />
-                      )}
-                    />
+                return (
+                  <div
+                    ref={isToday ? scrollToRef : null}
+                    key={`${day.day}-${day.month}-${day.year}`}
+                    className={isToday ? 'scroll-mt-4' : ''}
+                  >
+                    <DayMobile dayData={day}>
+                      <EventList
+                        events={appointmentsToday}
+                        renderItem={appointment => (
+                          <AppointmentItemMobile appointment={appointment} />
+                        )}
+                      />
 
-                    <EventList
-                      events={workoutsToday}
-                      renderItem={workout => (
-                        <WorkoutItemMobile workout={workout} />
-                      )}
-                    />
-                  </DayMobile>
-                </div>
-              )
-            })}
+                      <EventList
+                        events={bootcampsToday}
+                        renderItem={bootcamp => (
+                          <BootcampItemMobile
+                            bootcamp={bootcamp}
+                            userId={userId}
+                            userBootcamps={page.userData?.bootcamps ?? []}
+                          />
+                        )}
+                      />
+
+                      <EventList
+                        events={workoutsToday}
+                        renderItem={workout => (
+                          <WorkoutItemMobile workout={workout} />
+                        )}
+                      />
+                    </DayMobile>
+                  </div>
+                )
+              }),
+            )}
           </div>
 
           <div ref={bottomRef} className="h-4" aria-live="polite">
-            {isLoading && <LoadingIndicator position="bottom" />}
+            {isFetchingNextUserPage && <LoadingIndicator position="bottom" />}
           </div>
         </div>
       </div>
