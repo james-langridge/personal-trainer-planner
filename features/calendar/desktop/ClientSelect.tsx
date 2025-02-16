@@ -1,8 +1,8 @@
 import {AddButton} from '@/components/AddButton'
 
 import {ClientDropdown} from '@/features/calendar/desktop/ClientDropdown'
-import {db} from '@/lib/db'
 import {SelectUserId} from '@/features/calendar/desktop/CalendarDesktop'
+import {useUserIdsAndNames} from '@/app/api/hooks/users'
 
 const sortByName = (
   arr: {name: string; id: string}[],
@@ -10,16 +10,12 @@ const sortByName = (
   return [...arr].sort((a, b) => a.name.localeCompare(b.name))
 }
 
-export default async function ClientSelect({
-  onSelect,
-}: {
-  onSelect: SelectUserId
-}) {
-  // todo update
-  const {users} = await getUserIdsAndNames()
+export default function ClientSelect({onSelect}: {onSelect: SelectUserId}) {
+  const {data: users} = useUserIdsAndNames()
   // Case-insensitive sorting is not possible via a Prisma query
   // TODO: sanitise the names before saving in the DB
   // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#can-i-perform-case-insensitive-sorting
+  if (!users) return null
   const sortedUsers = sortByName(users)
 
   return (
@@ -31,17 +27,4 @@ export default async function ClientSelect({
       {/*<ClientTypeSwitch toggleClientType={setClientType} />*/}
     </div>
   )
-}
-
-async function getUserIdsAndNames(): Promise<{
-  users: {name: string; id: string}[]
-}> {
-  const users = await db.user.findMany({
-    select: {
-      id: true,
-      name: true,
-    },
-  })
-
-  return {users}
 }
