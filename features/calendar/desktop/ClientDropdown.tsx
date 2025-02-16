@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Select,
   SelectContent,
@@ -7,27 +5,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select'
-import {useRouter} from 'next/navigation'
+import {SelectUserId} from '@/app/admin/calendar/page'
 
 export function ClientDropdown({
   users,
-  year,
-  jsMonth,
+  onSelect,
 }: {
   users: {name: string; id: string}[]
-  year: number
-  jsMonth: number
+  onSelect: SelectUserId
 }) {
-  const router = useRouter()
-  const onSelect = (userName: string) => {
-    const user = users.find(user => user.name === userName)
-    if (!user) return
-    const month = jsMonth + 1
-    router.push(`/calendar/${user.id}/${year}/${month}`)
-  }
-
   return (
-    <Select onValueChange={userName => onSelect(userName)}>
+    <Select onValueChange={userName => onSelect(userName, users)}>
       <SelectTrigger className="w-[180px] capitalize">
         <SelectValue placeholder="Select a client" />
       </SelectTrigger>

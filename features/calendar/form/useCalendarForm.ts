@@ -22,6 +22,7 @@ import {
   getBootcamp,
 } from '@/app/actions/bootcamps'
 import {useRouter} from 'next/navigation'
+import {useUserEvents, useUserFee} from '@/app/api/hooks/users'
 
 const initialState: CalendarFormState = {
   date: '',
@@ -40,17 +41,19 @@ export function useCalendarForm({
   day,
   closeModal,
   userId,
-  userFee,
   eventId,
   eventType,
 }: {
   day: Day
   closeModal: (e: React.SyntheticEvent) => void
   userId: string
-  userFee?: number
   eventId?: string
   eventType?: 'WORKOUT' | 'APPOINTMENT' | 'BOOTCAMP'
 }) {
+  const {data} = useUserFee({
+    id: userId,
+  })
+  const userFee = data?.fee
   const [error, setError] = useState<Error>()
   const [isLoading, setIsLoading] = useState({
     creating: false,

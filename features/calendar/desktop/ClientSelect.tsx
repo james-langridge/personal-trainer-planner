@@ -2,6 +2,7 @@ import {AddButton} from '@/components/AddButton'
 
 import {ClientDropdown} from '@/features/calendar/desktop/ClientDropdown'
 import {db} from '@/lib/db'
+import {SelectUserId} from '@/features/calendar/desktop/CalendarDesktop'
 
 const sortByName = (
   arr: {name: string; id: string}[],
@@ -10,12 +11,11 @@ const sortByName = (
 }
 
 export default async function ClientSelect({
-  year,
-  jsMonth,
+  onSelect,
 }: {
-  year: number
-  jsMonth: number
+  onSelect: SelectUserId
 }) {
+  // todo update
   const {users} = await getUserIdsAndNames()
   // Case-insensitive sorting is not possible via a Prisma query
   // TODO: sanitise the names before saving in the DB
@@ -26,7 +26,7 @@ export default async function ClientSelect({
     <div className="flex flex-col pt-5">
       <div className="mb-5 flex">
         <AddButton />
-        <ClientDropdown users={sortedUsers} year={year} jsMonth={jsMonth} />
+        <ClientDropdown onSelect={onSelect} users={sortedUsers} />
       </div>
       {/*<ClientTypeSwitch toggleClientType={setClientType} />*/}
     </div>
