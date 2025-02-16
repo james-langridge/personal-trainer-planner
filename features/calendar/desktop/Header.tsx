@@ -2,66 +2,63 @@ import {NextMonthBtn} from '@/components/NextMonthBtn'
 import {PrevMonthBtn} from '@/components/PrevMonthBtn'
 import {monthNames} from '@/lib/constants'
 
-import ClientSelect from '@/features/calendar/desktop/ClientSelect'
-import {auth} from '@/auth'
-import Link from 'next/link'
+import {SelectUserId} from '@/features/calendar/desktop/CalendarDesktop'
+import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
 
-export async function Header({
-  year,
-  jsMonth,
-  userId,
+export function Header({
+  dateFilter,
+  isAdmin,
+  onSelect,
+  onChange,
 }: {
-  year: number
-  jsMonth: number
-  userId: string
+  dateFilter: DateFilter
+  isAdmin: boolean
+  onSelect?: SelectUserId
+  onChange: (dateFilter: DateFilter) => void
 }) {
-  const session = await auth()
-  const isAdmin = session?.user?.role === 'admin'
-
   return (
     <div className="flex w-full flex-col">
-      {isAdmin && <ClientSelect year={year} jsMonth={jsMonth} />}
-      <DateChangeButtons userId={userId} year={year} jsMonth={jsMonth} />
+      {/*{isAdmin && onSelect && <ClientSelect onSelect={onSelect} />}*/}
+      <DateChangeButtons dateFilter={dateFilter} onChange={onChange} />
     </div>
   )
 }
 
 function DateChangeButtons({
-  userId,
-  jsMonth,
-  year,
+  dateFilter,
+  onChange,
 }: {
-  userId: string
-  year: number
-  jsMonth: number
+  dateFilter: DateFilter
+  onChange: (dateFilter: DateFilter) => void
 }) {
+  const jsMonth = dateFilter.gte.getMonth()
+  const year = dateFilter.gte.getFullYear()
   const monthName = monthNames[jsMonth]
-  const month = jsMonth + 1
 
   function decrementMonth() {
     if (jsMonth === 0) {
-      return `/calendar/${userId}/${year - 1}/${12}`
+      const newDateFilter = getPrismaDateFilter(year - 1, 11)
+      onChange(newDateFilter)
     } else {
-      return `/calendar/${userId}/${year}/${month - 1}`
+      const newDateFilter = getPrismaDateFilter(year, jsMonth - 1)
+      onChange(newDateFilter)
     }
   }
 
   function incrementMonth() {
     if (jsMonth === 11) {
-      return `/calendar/${userId}/${year + 1}/${1}`
+      const newDateFilter = getPrismaDateFilter(year + 1, 0)
+      onChange(newDateFilter)
     } else {
-      return `/calendar/${userId}/${year}/${month + 1}`
+      const newDateFilter = getPrismaDateFilter(year, jsMonth + 1)
+      onChange(newDateFilter)
     }
   }
 
   return (
     <div className="flex flex-row items-center py-5 text-2xl">
-      <Link href={decrementMonth()}>
-        <PrevMonthBtn />
-      </Link>
-      <Link href={incrementMonth()}>
-        <NextMonthBtn />
-      </Link>
+      <PrevMonthBtn onClick={decrementMonth} />
+      <NextMonthBtn onClick={incrementMonth} />
       <p data-testid={'heading'}>
         {monthName} {year}
       </p>

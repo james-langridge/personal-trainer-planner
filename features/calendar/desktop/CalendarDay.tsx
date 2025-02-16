@@ -16,14 +16,12 @@ export function CalendarDay({
   children,
   isAdmin,
   userId,
-  userFee,
 }: {
   day: Day
   isFirstWeek: boolean
   children: React.ReactNode
   isAdmin: boolean
   userId: string
-  userFee: number
 }) {
   const [isModalOpen, setIsOpen] = useState(false)
   const closeModal = (e: React.SyntheticEvent) => {
@@ -59,12 +57,7 @@ export function CalendarDay({
         overlayClassName="bg-[rgba(0,0,0,.4)] flex justify-center items-center absolute top-0 left-0 h-screen w-screen"
         className="w-3/4 rounded-xl bg-white p-8"
       >
-        <CalendarForm
-          day={day}
-          closeModal={closeModal}
-          userId={userId}
-          userFee={userFee}
-        />
+        <CalendarForm day={day} closeModal={closeModal} userId={userId} />
       </Modal>
       <div
         className={clsx(

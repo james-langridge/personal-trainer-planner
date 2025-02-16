@@ -17,7 +17,26 @@ function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   )
 }
 
-export function generateCalendarMonth(jsMonth: number, year: number) {
+export type DateFilter = {
+  gte: Date
+  lt: Date
+}
+
+export function getPrismaDateFilter(year: number, jsMonth: number): DateFilter {
+  let dateFilter: DateFilter
+  const date = `${year}-${padZero(jsMonth + 1)}`
+  const thisMonth = new Date(date)
+  const nextMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 1)
+  dateFilter = {
+    gte: thisMonth,
+    lt: nextMonth,
+  }
+  return dateFilter
+}
+
+export function generateCalendarMonth(dateFilter: DateFilter) {
+  const jsMonth = dateFilter.gte.getMonth()
+  const year = dateFilter.gte.getFullYear()
   const daysInMonth = getDaysInMonth(jsMonth, year)
   const monthData = []
 
