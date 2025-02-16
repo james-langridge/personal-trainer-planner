@@ -1,50 +1,46 @@
 import clsx from 'clsx'
 
-import {AppointmentItem} from '@/features/calendar/appointment'
-import {BootcampItem} from '@/features/calendar/bootcamp'
-import {WorkoutItem} from '@/features/calendar/workout'
-import {generateCalendarMonth, getEventsToday, padZero} from '@/lib/calendar'
+import {
+  Appointment,
+  Bootcamp,
+  DateFilter,
+  generateCalendarMonth,
+  getEventsToday,
+  Workout,
+} from '@/lib/calendar'
 
 import {CalendarDay, EmptyDays} from '.'
-import {auth} from '@/auth'
+import {AppoinmentsToday} from '@/features/calendar/desktop/AppoinmentsToday'
+import {WorkoutsToday} from '@/features/calendar/desktop/WorkoutsToday'
+import {BootcampsToday} from '@/features/calendar/desktop/BootcampsToday'
 import {USER_TYPE} from '@prisma/client'
-import {db} from '@/lib/db'
-import {Workout, Bootcamp, Appointment} from '@/lib/calendar'
+import {useUserEvents} from '@/app/api/hooks/users'
+import {useAllBootcamps} from '@/app/api/hooks/bootcamps'
 
-export async function Grid({
-  year,
-  jsMonth,
+export function Grid({
+  dateFilter,
   userId,
+  isAdmin,
 }: {
-  year: number
-  jsMonth: number
+  dateFilter: DateFilter
   userId: string
+  isAdmin: boolean
 }) {
-  let dateFilter: {
-    gte: Date
-    lt: Date
-  }
-  const date = `${year}-${padZero(jsMonth + 1)}`
-  const thisMonth = new Date(date)
-  const nextMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 1)
-  dateFilter = {
-    gte: thisMonth,
-    lt: nextMonth,
-  }
-  const {user} = await getUserEvents(userId, dateFilter)
-
-  if (!user) return null
-
-  const session = await auth()
-  const isAdmin = session?.user?.role === 'admin'
-  const {workouts, appointments, bootcamps} = user
-  const allBootcamps = await getAllBootcamps(dateFilter)
-  const monthData = generateCalendarMonth(jsMonth, year)
+  const monthData = generateCalendarMonth(dateFilter)
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDaysLength = firstDayOfMonth > 0 ? firstDayOfMonth - 1 : 6
   const emptyDays = Array(emptyDaysLength).fill(null)
   const totalSpaces = emptyDaysLength + monthData.length
   const rows = Math.ceil(totalSpaces / 7)
+
+  const {data} = useUserEvents({
+    id: userId,
+    dateFilter,
+  })
+
+  const {data: allBootcamps} = useAllBootcamps({
+    dateFilter,
+  })
 
   return (
     <div
@@ -58,16 +54,17 @@ export async function Grid({
     >
       <EmptyDays emptyDays={emptyDays} />
       {monthData.map((day, index) => {
-        const appointmentsToday: Appointment[] | null = appointments
-          ? getEventsToday(day, appointments)
+        const isFirstWeek = index + emptyDaysLength < 7
+
+        const appointmentsToday: Appointment[] | null = data?.appointments
+          ? getEventsToday(day, data.appointments)
+          : null
+        const workoutsToday: Workout[] | null = data?.workouts
+          ? getEventsToday(day, data.workouts)
           : null
         const bootcampsToday: Bootcamp[] | null = allBootcamps
           ? getEventsToday(day, allBootcamps)
           : null
-        const workoutsToday: Workout[] | null = workouts
-          ? getEventsToday(day, workouts)
-          : null
-        const isFirstWeek = index + emptyDaysLength < 7
 
         return (
           <CalendarDay
@@ -76,118 +73,31 @@ export async function Grid({
             key={index}
             isAdmin={isAdmin}
             userId={userId}
-            userFee={user.fee}
           >
-            {appointmentsToday &&
-              appointmentsToday.map(appointment => {
-                return (
-                  <div key={appointment.id}>
-                    {appointment && (
-                      <AppointmentItem
-                        appointment={appointment}
-                        day={day}
-                        userId={userId}
-                      />
-                    )}
-                  </div>
-                )
-              })}
-            {user.type === USER_TYPE.BOOTCAMP &&
-              bootcampsToday &&
-              bootcampsToday.map(bootcamp => {
-                return (
-                  <div key={bootcamp.id}>
-                    {bootcamp && (
-                      <BootcampItem
-                        userBootcamps={bootcamps}
-                        bootcamp={bootcamp}
-                        day={day}
-                        userId={userId}
-                      />
-                    )}
-                  </div>
-                )
-              })}
-            {workoutsToday &&
-              workoutsToday.map(workout => {
-                return (
-                  <div key={workout.id}>
-                    {workout && (
-                      <WorkoutItem
-                        workout={workout}
-                        day={day}
-                        userId={userId}
-                      />
-                    )}
-                  </div>
-                )
-              })}
+            <AppoinmentsToday
+              day={day}
+              userId={userId}
+              // dateFilter={dateFilter}
+              appointments={appointmentsToday}
+            />
+            {data?.type === USER_TYPE.BOOTCAMP && (
+              <BootcampsToday
+                day={day}
+                userId={userId}
+                // dateFilter={dateFilter}
+                allBootcamps={bootcampsToday}
+                userBootcamps={data?.bootcamps}
+              />
+            )}
+            <WorkoutsToday
+              day={day}
+              userId={userId}
+              // dateFilter={dateFilter}
+              workouts={workoutsToday}
+            />
           </CalendarDay>
         )
       })}
     </div>
   )
-}
-
-async function getUserEvents(id: string, dateFilter: {gte: Date; lt: Date}) {
-  const user = await db.user.findUnique({
-    select: {
-      appointments: {
-        select: {
-          date: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      bootcamps: {
-        select: {
-          id: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-      fee: true,
-      type: true,
-      workouts: {
-        select: {
-          date: true,
-          id: true,
-          name: true,
-          ownerId: true,
-          status: true,
-        },
-        where: {
-          deleted: false,
-          date: dateFilter,
-        },
-      },
-    },
-    where: {
-      id: id,
-    },
-  })
-
-  return {user}
-}
-
-async function getAllBootcamps(dateFilter: {gte: Date; lt: Date}) {
-  return db.bootcamp.findMany({
-    select: {
-      date: true,
-      id: true,
-      name: true,
-    },
-    where: {
-      deleted: false,
-      date: dateFilter,
-    },
-  })
 }

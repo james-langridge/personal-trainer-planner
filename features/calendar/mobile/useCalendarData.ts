@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from 'react'
 import {useRouter, useSearchParams} from 'next/navigation'
 import {Day} from '@/@types/types'
-import {generateCalendarMonth} from '@/lib/calendar'
+import {generateCalendarMonth, getPrismaDateFilter} from '@/lib/calendar'
 
 interface UseCalendarDataProps {
   initialMonthData?: Day[]
@@ -23,7 +23,8 @@ export function useCalendarData({
     if (initialMonthData?.length) {
       return initialMonthData
     }
-    return generateCalendarMonth(jsMonth, currentYear)
+    const dateFilter = getPrismaDateFilter(currentYear, jsMonth)
+    return generateCalendarMonth(dateFilter)
   })
 
   const [dateRange, setDateRange] = useState(() => {
@@ -71,7 +72,8 @@ export function useCalendarData({
         newYear = dateRange.endYear
       }
 
-      const newMonthData = generateCalendarMonth(newMonth, newYear)
+      const dateFilter = getPrismaDateFilter(newYear, newMonth)
+      const newMonthData = generateCalendarMonth(dateFilter)
 
       const params = new URLSearchParams(searchParams)
       params.set('endMonth', newMonth.toString())
@@ -107,7 +109,8 @@ export function useCalendarData({
         newYear = dateRange.startYear
       }
 
-      const prevMonthData = generateCalendarMonth(newMonth, newYear)
+      const dateFilter = getPrismaDateFilter(newYear, newMonth)
+      const prevMonthData = generateCalendarMonth(dateFilter)
 
       setScrollToThisDay(prevMonthData[prevMonthData.length - 1])
 

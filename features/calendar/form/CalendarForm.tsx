@@ -8,14 +8,12 @@ export function CalendarForm({
   day,
   closeModal,
   userId,
-  userFee,
   eventId,
   eventType,
 }: {
   day: Day
   closeModal: (e: React.SyntheticEvent) => void
   userId: string
-  userFee?: number
   eventId?: string
   eventType?: 'WORKOUT' | 'APPOINTMENT' | 'BOOTCAMP'
 }) {
@@ -35,7 +33,6 @@ export function CalendarForm({
     day,
     closeModal,
     userId,
-    userFee,
     eventId,
     eventType,
   })

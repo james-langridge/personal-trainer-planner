@@ -9,7 +9,8 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "next/core-web-vitals",
-    "prettier"
+    "prettier",
+    "plugin:@tanstack/query/recommended"
   ],
   "rules": {
     "react/prop-types": 0,
