@@ -5,6 +5,7 @@ import {
   getLongDate,
   getLongWeekday,
   getMonthName,
+  getPrismaDateFilter,
   getRepeatingDates,
   getShortWeekday,
   getWeekday,
@@ -82,32 +83,113 @@ describe('isDayTomorrow', () => {
 })
 
 describe('generateCalendarMonth', () => {
-  it('should generate correct days for January 2025', () => {
-    const month = 1
-    const year = 2025
-    const result = generateCalendarMonth(month, year)
+  it('should generate correct days for a partial month range', () => {
+    const dateFilter = {
+      gte: new Date('2025-02-15'),
+      lt: new Date('2025-03-15'),
+    }
+    const result = generateCalendarMonth(dateFilter)
 
+    // Feb 15-28 (14 days) + March 1-14 (14 days) = 28 days
     expect(result.length).toBe(28)
+
+    // Check first day (Feb 15)
     expect(result[0]).toEqual({
-      day: 1,
-      weekDay: 6,
-      month: 1,
+      day: 15,
+      weekDay: 6, // Saturday
+      month: 1, // February (0-based)
       year: 2025,
     })
+
+    // Check a middle day (Feb 28)
+    expect(result[13]).toEqual({
+      day: 28,
+      weekDay: 5, // Friday
+      month: 1, // February (0-based)
+      year: 2025,
+    })
+
+    // Check first day of next month (Mar 1)
+    expect(result[14]).toEqual({
+      day: 1,
+      weekDay: 6, // Saturday
+      month: 2, // March (0-based)
+      year: 2025,
+    })
+
+    // Check last day (March 14)
+    expect(result[27]).toEqual({
+      day: 14,
+      weekDay: 5, // Friday
+      month: 2, // March (0-based)
+      year: 2025,
+    })
+
+    // Verify that each day is consecutive
+    for (let i = 1; i < result.length; i++) {
+      const prevDay = result[i - 1]
+      const currDay = result[i]
+
+      // If it's the first of the month, skip this check
+      if (currDay.day !== 1) {
+        expect(currDay.day).toBe(prevDay.day + 1)
+      }
+
+      // Weekday should cycle 0-6
+      expect(currDay.weekDay).toBe((prevDay.weekDay + 1) % 7)
+    }
+  })
+})
+
+describe('getPrismaDateFilter', () => {
+  it('should throw error for odd offset numbers', () => {
+    expect(() => getPrismaDateFilter(2024, 6, 3)).toThrow(
+      'Offset must be an even number',
+    )
   })
 
-  it('should generate correct days for April 2025', () => {
-    const month = 4
-    const year = 2025
-    const result = generateCalendarMonth(month, year)
+  it('should handle middle of year with offset 2', () => {
+    const result = getPrismaDateFilter(2024, 5, 2) // June (0-based)
 
-    expect(result.length).toBe(31)
-    expect(result[0]).toEqual({
-      day: 1,
-      weekDay: 4,
-      month: 4,
-      year: 2025,
-    })
+    expect(result.gte.toISOString()).toEqual(
+      new Date(Date.UTC(2024, 4, 1)).toISOString(),
+    ) // May 1
+    expect(result.lt.toISOString()).toEqual(
+      new Date(Date.UTC(2024, 7, 1)).toISOString(),
+    ) // Aug 1 (to include full July)
+  })
+
+  it('should handle start of year with offset 2', () => {
+    const result = getPrismaDateFilter(2024, 0, 2) // January
+
+    expect(result.gte.toISOString()).toEqual(
+      new Date(Date.UTC(2023, 11, 1)).toISOString(),
+    ) // Dec 1, 2023
+    expect(result.lt.toISOString()).toEqual(
+      new Date(Date.UTC(2024, 2, 1)).toISOString(),
+    ) // Mar 1, 2024
+  })
+
+  it('should handle end of year with offset 2', () => {
+    const result = getPrismaDateFilter(2024, 11, 2) // December
+
+    expect(result.gte.toISOString()).toEqual(
+      new Date(Date.UTC(2024, 10, 1)).toISOString(),
+    ) // Nov 1, 2024
+    expect(result.lt.toISOString()).toEqual(
+      new Date(Date.UTC(2025, 1, 1)).toISOString(),
+    ) // Feb 1, 2025
+  })
+
+  it('should handle larger even offset (4)', () => {
+    const result = getPrismaDateFilter(2024, 6, 4) // July
+
+    expect(result.gte.toISOString()).toEqual(
+      new Date(Date.UTC(2024, 4, 1)).toISOString(),
+    ) // May 1
+    expect(result.lt.toISOString()).toEqual(
+      new Date(Date.UTC(2024, 9, 1)).toISOString(),
+    ) // Sep 1
   })
 })
 
