@@ -1,7 +1,7 @@
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
+import {getUsers} from '@/app/actions/users'
+import UsersView from '@/app/(restricted)/users/UsersView'
 import {getPrismaDateFilter} from '@/lib/calendar'
-import {getBootcamps} from '@/app/actions/bootcamps'
-import BootcampsView from '@/app/(restricted)/bootcamps/BootcampsView'
 
 export default async function Page() {
   const queryClient = new QueryClient()
@@ -13,16 +13,16 @@ export default async function Page() {
 
   await queryClient.prefetchQuery({
     queryKey: [
-      'bootcamps',
+      'users',
       dateFilter.gte.toISOString(),
       dateFilter.lt.toISOString(),
     ],
-    queryFn: () => getBootcamps({dateFilter}),
+    queryFn: () => getUsers({dateFilter}),
   })
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <BootcampsView year={currentYear} jsMonth={currentMonth} />
+      <UsersView year={currentYear} jsMonth={currentMonth} />
     </HydrationBoundary>
   )
 }

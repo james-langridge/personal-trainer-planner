@@ -4,14 +4,15 @@ import {WORKOUT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
 import {Workout} from '@/lib/calendar'
-import {updateWorkout} from '@/app/actions/workouts'
+import {useUpdateWorkout} from '@/app/api/hooks/workouts'
 
 export function useWorkoutStatus(workout: Workout) {
+  const updateWorkout = useUpdateWorkout(workout.ownerId, workout.id)
   const [status, setStatus] = useState(workout.status)
 
   const updateStatus = useCallback(
     async (status: WORKOUT_STATUS) => {
-      await updateWorkout({
+      updateWorkout.mutate({
         ownerId: workout.ownerId,
         status: status,
         id: workout.id,

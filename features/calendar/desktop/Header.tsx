@@ -25,7 +25,7 @@ export function Header({
   )
 }
 
-function DateChangeButtons({
+export function DateChangeButtons({
   dateFilter,
   onChange,
 }: {

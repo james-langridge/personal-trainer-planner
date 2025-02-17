@@ -3,6 +3,7 @@ import {Day} from '@/@types/types'
 import {EventTypeSelect, SubmitButtons, WeekdayButtonGroup} from '.'
 import {useCalendarForm} from '@/features/calendar/form/useCalendarForm'
 import Loader from '@/components/Loader'
+import {EVENT_TYPE} from '@prisma/client'
 
 export function CalendarForm({
   day,
@@ -15,7 +16,7 @@ export function CalendarForm({
   closeModal: (e: React.SyntheticEvent) => void
   userId: string
   eventId?: string
-  eventType?: 'WORKOUT' | 'APPOINTMENT' | 'BOOTCAMP'
+  eventType?: EVENT_TYPE
 }) {
   const {
     error,

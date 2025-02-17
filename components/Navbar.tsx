@@ -19,13 +19,9 @@ const logo = {
 }
 
 export function Navbar({isAdmin}: {isAdmin: boolean}) {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth() + 1
-
   const adminNavigation = [
     {href: '/', name: 'Training planner'},
-    {href: `/users/${year}/${month}`, name: 'Clients'},
+    {href: `/users`, name: 'Clients'},
     {href: '/bootcamps', name: 'Bootcamps'},
     {href: '/profile', name: 'Profile'},
   ]
