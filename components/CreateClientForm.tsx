@@ -3,7 +3,7 @@
 import {USER_TYPE} from '@prisma/client'
 import {useCallback, useEffect, useRef, useState} from 'react'
 
-import {useCreateUser} from '@/app/api/hooks/users'
+import {useCreateUser} from '@/app/hooks/users'
 
 const initialForm: {
   billingEmail: string

@@ -1,12 +1,9 @@
 import {auth} from '@/auth'
-import {
-  CalendarDesktop,
-  getAllBootcamps,
-  getUserEvents,
-} from '@/features/calendar/desktop'
+import {CalendarDesktop} from '@/features/calendar/desktop'
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
 import {getPrismaDateFilter} from '@/lib/calendar'
-import {redirect} from 'next/navigation'
+import {getUserEvents} from '@/app/actions/users'
+import {getAllBootcamps} from '@/app/actions/bootcamps'
 
 export default async function Page() {
   const queryClient = new QueryClient()
@@ -14,10 +11,6 @@ export default async function Page() {
   const userId = session?.user?.id
   const isAdmin = session?.user?.role === 'admin'
   if (!userId) return null
-
-  if (!isAdmin) {
-    redirect('/calendar/me')
-  }
 
   const now = new Date()
   const currentYear = now.getFullYear()

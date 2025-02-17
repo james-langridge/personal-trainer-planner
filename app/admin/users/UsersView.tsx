@@ -1,14 +1,14 @@
 'use client'
 
-import DateProvider from '@/app/(restricted)/users/DateProvider'
+import {sortByString} from '@/lib/users'
+import DateProvider from '@/app/admin/users/DateProvider'
+import {columns, DataTable} from '@/features/users/summary'
+import {useAllUsers} from '@/app/hooks/users'
 import {useState} from 'react'
 import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
 import {DateChangeButtons} from '@/features/calendar/desktop'
-import {useAllBootcampsFull} from '@/app/api/hooks/bootcamps'
-import {DataTable} from '@/features/bootcamps/summary/DataTable'
-import {columns} from '@/features/bootcamps/summary/Columns'
 
-export default function BootcampsView({
+export default function UsersView({
   year,
   jsMonth,
 }: {
@@ -19,7 +19,7 @@ export default function BootcampsView({
     getPrismaDateFilter(year, jsMonth),
   )
   const [date, setDate] = useState(`${year}-${jsMonth + 1}`)
-  const {data} = useAllBootcampsFull({dateFilter})
+  const {data} = useAllUsers({dateFilter})
 
   function updateDateFilter(dateFilter: DateFilter) {
     setDateFilter(dateFilter)
@@ -34,6 +34,8 @@ export default function BootcampsView({
   // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#can-i-perform-case-insensitive-sorting
   if (!data) return null
 
+  const users = sortByString('name', data)
+
   return (
     <div className="container mx-auto py-10">
       <div className="flex items-center space-x-2">
@@ -43,7 +45,7 @@ export default function BootcampsView({
         />
       </div>
       <DateProvider date={date}>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={users} />
       </DateProvider>
     </div>
   )

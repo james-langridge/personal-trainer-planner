@@ -1,7 +1,7 @@
 'use client'
 
 import Container from '@/components/Container'
-import {useGetUser} from '@/app/api/hooks/users'
+import {useGetUser} from '@/app/hooks/users'
 
 export default function ProfileView({userId}: {userId: string}) {
   const {data: user} = useGetUser(userId)

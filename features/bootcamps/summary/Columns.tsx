@@ -76,7 +76,7 @@ export const columns: ColumnDef<Bootcamp>[] = [
           <DropdownMenuContent align="end">
             {attendees?.length ? (
               attendees.map(attendee => (
-                <Link key={attendee.id} href={`/users/${attendee.id}`}>
+                <Link key={attendee.id} href={`/admin/user/${attendee.id}`}>
                   <DropdownMenuItem className="cursor-pointer">
                     <span className="capitalize">{attendee.name}</span>
                   </DropdownMenuItem>
@@ -104,7 +104,7 @@ export const columns: ColumnDef<Bootcamp>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link href={`/bootcamps/${bootcamp.id}`}>
+            <Link href={`/bootcamp/${bootcamp.id}`}>
               <DropdownMenuItem className="cursor-pointer">
                 View bootcamp
               </DropdownMenuItem>

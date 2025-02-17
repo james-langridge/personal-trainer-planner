@@ -69,7 +69,7 @@ export function Title({
 
   return (
     <Link
-      href={`/bootcamps/${bootcamp?.id}`}
+      href={`/bootcamp/${bootcamp?.id}`}
       className="my-1 block w-full rounded bg-yellow-400 text-xs font-bold text-white lg:text-base"
       data-testid={`${bootcamp?.id}`}
     >

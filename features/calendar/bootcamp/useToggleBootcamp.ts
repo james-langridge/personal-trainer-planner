@@ -4,7 +4,7 @@ import {useCallback, useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
 
 import {Bootcamp} from '@/lib/calendar'
-import {useToggleBootcampAttendance} from '@/app/api/hooks/bootcamps'
+import {useToggleBootcampAttendance} from '@/app/hooks/bootcamps'
 
 export function useToggleBootcamp(
   userBootcamps: {id: string}[],

@@ -4,10 +4,17 @@ import {Disclosure} from '@headlessui/react'
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import {signOut} from 'next-auth/react'
+import {signOut, useSession} from 'next-auth/react'
 
 const clientNavigation = [
   {href: '/', name: 'Training planner'},
+  {href: '/profile', name: 'Profile'},
+]
+
+const adminNavigation = [
+  {href: '/', name: 'Training planner'},
+  {href: `/admin/users`, name: 'Clients'},
+  {href: '/admin/bootcamps', name: 'Bootcamps'},
   {href: '/profile', name: 'Profile'},
 ]
 
@@ -18,14 +25,9 @@ const logo = {
   height: 138,
 }
 
-export function Navbar({isAdmin}: {isAdmin: boolean}) {
-  const adminNavigation = [
-    {href: '/', name: 'Training planner'},
-    {href: `/users`, name: 'Clients'},
-    {href: '/bootcamps', name: 'Bootcamps'},
-    {href: '/profile', name: 'Profile'},
-  ]
-
+export function Navbar() {
+  const {data} = useSession()
+  const isAdmin = data?.user?.role
   const navigation = isAdmin ? adminNavigation : clientNavigation
 
   return (

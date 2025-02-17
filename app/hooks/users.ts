@@ -19,8 +19,6 @@ import {
 } from '@/app/actions/users'
 import {useToast} from '@/components/use-toast'
 import {useRouter} from 'next/navigation'
-import {EVENT_TYPE} from '@prisma/client'
-import {getAppointment} from '@/app/actions/appointments'
 
 export function useUserEvents(params: UserEventsParams) {
   return useQuery({

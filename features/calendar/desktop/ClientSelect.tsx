@@ -2,7 +2,7 @@ import {AddButton} from '@/components/AddButton'
 
 import {ClientDropdown} from '@/features/calendar/desktop/ClientDropdown'
 import {SelectUserId} from '@/features/calendar/desktop/CalendarDesktop'
-import {useUserIdsAndNames} from '@/app/api/hooks/users'
+import {useUserIdsAndNames} from '@/app/hooks/users'
 
 const sortByName = (
   arr: {name: string; id: string}[],

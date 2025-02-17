@@ -4,7 +4,7 @@ import {WORKOUT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
 import {Workout} from '@/lib/calendar'
-import {useUpdateWorkout} from '@/app/api/hooks/workouts'
+import {useUpdateWorkout} from '@/app/hooks/workouts'
 
 export function useWorkoutStatus(workout: Workout) {
   const updateWorkout = useUpdateWorkout(workout.ownerId, workout.id)
