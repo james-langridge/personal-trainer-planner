@@ -2,25 +2,25 @@ import {useCallback, useEffect, useRef, useState} from 'react'
 import {CalendarFormState, Day} from '@/@types/types'
 import {getWeekday, padZero} from '@/lib/calendar'
 import {useRouter} from 'next/navigation'
-import {useUserFee} from '@/app/api/hooks/users'
+import {useUserFee} from '@/app/hooks/users'
 import {
   useCreateWorkout,
   useDeleteWorkout,
   useGetWorkout,
   useUpdateWorkout,
-} from '@/app/api/hooks/workouts'
+} from '@/app/hooks/workouts'
 import {
   useCreateBootcamp,
   useDeleteBootcamp,
   useGetBootcamp,
   useUpdateBootcamp,
-} from '@/app/api/hooks/bootcamps'
+} from '@/app/hooks/bootcamps'
 import {
   useCreateAppointment,
   useDeleteAppointment,
   useGetAppointment,
   useUpdateAppointment,
-} from '@/app/api/hooks/appointments'
+} from '@/app/hooks/appointments'
 import {EVENT_TYPE} from '@prisma/client'
 
 const initialState: CalendarFormState = {

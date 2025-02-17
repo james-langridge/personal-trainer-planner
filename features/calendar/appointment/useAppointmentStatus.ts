@@ -4,7 +4,7 @@ import {APPOINTMENT_STATUS} from '@prisma/client'
 import {useState, useEffect, useCallback} from 'react'
 
 import {Appointment} from '@/lib/calendar'
-import {useUpdateAppointment} from '@/app/api/hooks/appointments'
+import {useUpdateAppointment} from '@/app/hooks/appointments'
 
 export function useAppointmentStatus(appointment: Appointment) {
   const updateAppointment = useUpdateAppointment(

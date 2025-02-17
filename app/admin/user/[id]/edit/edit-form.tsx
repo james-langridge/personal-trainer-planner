@@ -8,7 +8,7 @@ import {useSession} from 'next-auth/react'
 import React, {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
-import {User} from '@/app/(restricted)/user/[id]/edit/page'
+import {User} from '@/app/admin/user/[id]/edit/page'
 
 import {Alert, AlertDescription, AlertTitle} from '@/components/alert'
 import {Button} from '@/components/button'
@@ -22,7 +22,7 @@ import {
 } from '@/components/form'
 import {Input} from '@/components/input'
 import {RadioGroup, RadioGroupItem} from '@/components/radio-group'
-import {useUpdateUser} from '@/app/api/hooks/users'
+import {useUpdateUser} from '@/app/hooks/users'
 
 const formSchema = z.object({
   billingEmail: z

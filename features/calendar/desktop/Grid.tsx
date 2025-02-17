@@ -10,12 +10,12 @@ import {
 } from '@/lib/calendar'
 
 import {CalendarDay, EmptyDays} from '.'
-import {AppoinmentsToday} from '@/features/calendar/desktop/AppoinmentsToday'
+import {AppointmentsToday} from '@/features/calendar/desktop/AppointmentsToday'
 import {WorkoutsToday} from '@/features/calendar/desktop/WorkoutsToday'
 import {BootcampsToday} from '@/features/calendar/desktop/BootcampsToday'
 import {USER_TYPE} from '@prisma/client'
-import {useUserEvents} from '@/app/api/hooks/users'
-import {useAllBootcamps} from '@/app/api/hooks/bootcamps'
+import {useUserEvents} from '@/app/hooks/users'
+import {useAllBootcamps} from '@/app/hooks/bootcamps'
 
 export function Grid({
   dateFilter,
@@ -73,27 +73,20 @@ export function Grid({
             isAdmin={isAdmin}
             userId={userId}
           >
-            <AppoinmentsToday
+            <AppointmentsToday
               day={day}
               userId={userId}
-              // dateFilter={dateFilter}
               appointments={appointmentsToday}
             />
             {data?.type === USER_TYPE.BOOTCAMP && (
               <BootcampsToday
                 day={day}
                 userId={userId}
-                // dateFilter={dateFilter}
                 allBootcamps={bootcampsToday}
                 userBootcamps={data?.bootcamps}
               />
             )}
-            <WorkoutsToday
-              day={day}
-              userId={userId}
-              // dateFilter={dateFilter}
-              workouts={workoutsToday}
-            />
+            <WorkoutsToday day={day} userId={userId} workouts={workoutsToday} />
           </CalendarDay>
         )
       })}

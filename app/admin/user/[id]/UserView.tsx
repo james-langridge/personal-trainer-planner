@@ -1,17 +1,13 @@
-import {columns} from '@/features/users/individual/Columns'
+'use client'
+
+import {useGetUser} from '@/app/hooks/users'
 import {DataTable} from '@/features/users/individual/DataTable'
-import {getUser} from '@/app/actions/users'
+import {columns} from '@/features/users/individual/Columns'
 
-export default async function UserDetails(props: {
-  params: Promise<{id: string}>
-}) {
-  const params = await props.params
-  const {id} = params
-  const {user} = await getUser(id)
+export default function UserView({userId}: {userId: string}) {
+  const {data: user} = useGetUser(userId)
 
-  if (!user) {
-    return null
-  }
+  if (!user) return null
 
   return (
     <div className="p-5">

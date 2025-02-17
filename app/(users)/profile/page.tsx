@@ -1,5 +1,5 @@
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
-import ProfileView from '@/app/(restricted)/profile/ProfileView'
+import ProfileView from '@/app/(users)/profile/ProfileView'
 import {auth} from '@/auth'
 import {getUser} from '@/app/actions/users'
 

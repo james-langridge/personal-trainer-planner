@@ -1,4 +1,4 @@
-import EditForm from '@/app/(restricted)/user/[id]/edit/edit-form'
+import EditForm from '@/app/admin/user/[id]/edit/edit-form'
 import {db} from '@/lib/db'
 import {USER_TYPE} from '@prisma/client'
 

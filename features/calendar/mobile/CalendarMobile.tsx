@@ -11,8 +11,8 @@ import {DayMobile} from '@/features/calendar/mobile/DayMobile'
 import {AppointmentItemMobile} from '@/features/calendar/appointment'
 import {BootcampItemMobile} from '@/features/calendar/bootcamp'
 import {WorkoutItemMobile} from '@/features/calendar/workout'
-import {useUserEvents} from '@/app/api/hooks/users'
-import {useAllBootcamps} from '@/app/api/hooks/bootcamps'
+import {useUserEvents} from '@/app/hooks/users'
+import {useAllBootcamps} from '@/app/hooks/bootcamps'
 
 export default function CalendarMobile({userId}: {userId: string}) {
   const scrollToRef = React.useRef<HTMLDivElement>(null)

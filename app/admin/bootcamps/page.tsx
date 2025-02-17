@@ -1,7 +1,7 @@
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
 import {getPrismaDateFilter} from '@/lib/calendar'
 import {getBootcamps} from '@/app/actions/bootcamps'
-import BootcampsView from '@/app/(restricted)/bootcamps/BootcampsView'
+import BootcampsView from '@/app/admin/bootcamps/BootcampsView'
 
 export default async function Page() {
   const queryClient = new QueryClient()
