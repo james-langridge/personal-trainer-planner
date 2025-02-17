@@ -1,28 +1,27 @@
-'use client'
-
 import {useCallback, useEffect, useRef, useState} from 'react'
 import {CalendarFormState, Day} from '@/@types/types'
 import {getWeekday, padZero} from '@/lib/calendar'
-import {
-  createWorkout,
-  updateWorkout,
-  deleteWorkout,
-  getWorkout,
-} from '@/app/actions/workouts'
-import {
-  createAppointment,
-  updateAppointment,
-  deleteAppointment,
-  getAppointment,
-} from '@/app/actions/appointments'
-import {
-  createBootcamp,
-  updateBootcamp,
-  deleteBootcamp,
-  getBootcamp,
-} from '@/app/actions/bootcamps'
 import {useRouter} from 'next/navigation'
-import {useUserEvents, useUserFee} from '@/app/api/hooks/users'
+import {useUserFee} from '@/app/api/hooks/users'
+import {
+  useCreateWorkout,
+  useDeleteWorkout,
+  useGetWorkout,
+  useUpdateWorkout,
+} from '@/app/api/hooks/workouts'
+import {
+  useCreateBootcamp,
+  useDeleteBootcamp,
+  useGetBootcamp,
+  useUpdateBootcamp,
+} from '@/app/api/hooks/bootcamps'
+import {
+  useCreateAppointment,
+  useDeleteAppointment,
+  useGetAppointment,
+  useUpdateAppointment,
+} from '@/app/api/hooks/appointments'
+import {EVENT_TYPE} from '@prisma/client'
 
 const initialState: CalendarFormState = {
   date: '',
@@ -48,8 +47,21 @@ export function useCalendarForm({
   closeModal: (e: React.SyntheticEvent) => void
   userId: string
   eventId?: string
-  eventType?: 'WORKOUT' | 'APPOINTMENT' | 'BOOTCAMP'
+  eventType?: EVENT_TYPE
 }) {
+  console.log({eventType})
+  const updateWorkout = useUpdateWorkout(userId, eventId)
+  const createWorkout = useCreateWorkout(userId)
+  const createAppointment = useCreateAppointment(userId)
+  const updateAppointment = useUpdateAppointment(userId, eventId)
+  const createBootcamp = useCreateBootcamp(userId)
+  const updateBootcamp = useUpdateBootcamp(userId, eventId)
+  const deleteBootcamp = useDeleteBootcamp(userId)
+  const deleteAppointment = useDeleteAppointment(userId)
+  const deleteWorkout = useDeleteWorkout(userId)
+  const {data: workout} = useGetWorkout(eventType, eventId)
+  const {data: bootcamp} = useGetBootcamp(eventType, eventId)
+  const {data: appointment} = useGetAppointment(eventType, eventId)
   const {data} = useUserFee({
     id: userId,
   })
@@ -82,12 +94,12 @@ export function useCalendarForm({
       switch (form.type) {
         case 'WORKOUT':
           if (form.id) {
-            await updateWorkout({
+            updateWorkout.mutate({
               ...form,
               date: new Date(form.date),
             })
           } else {
-            await createWorkout({
+            createWorkout.mutate({
               ...form,
               selectedDays: [...form.selectedDays],
             })
@@ -97,13 +109,13 @@ export function useCalendarForm({
         case 'APPOINTMENT':
           const fee = Math.round(parseFloat(form.fee) * 100)
           if (form.id) {
-            await updateAppointment({
+            updateAppointment.mutate({
               ...form,
               date: new Date(form.date),
               fee,
             })
           } else {
-            await createAppointment({
+            createAppointment.mutate({
               ...form,
               fee,
               selectedDays: [...form.selectedDays],
@@ -113,9 +125,9 @@ export function useCalendarForm({
 
         case 'BOOTCAMP':
           if (form.id) {
-            await updateBootcamp(form)
+            updateBootcamp.mutate(form)
           } else {
-            await createBootcamp({
+            createBootcamp.mutate({
               ...form,
               selectedDays: [...form.selectedDays],
             })
@@ -143,7 +155,7 @@ export function useCalendarForm({
 
       switch (form.type) {
         case 'WORKOUT':
-          await deleteWorkout({
+          deleteWorkout.mutate({
             deleted: true,
             ownerId: form.ownerId,
             id: form.id,
@@ -152,7 +164,7 @@ export function useCalendarForm({
           break
 
         case 'APPOINTMENT':
-          await deleteAppointment({
+          deleteAppointment.mutate({
             deleted: true,
             ownerId: form.ownerId,
             id: form.id,
@@ -161,7 +173,7 @@ export function useCalendarForm({
           break
 
         case 'BOOTCAMP':
-          await deleteBootcamp({
+          deleteBootcamp.mutate({
             deleted: true,
             id: form.id,
           })
@@ -234,13 +246,13 @@ export function useCalendarForm({
         let eventData
         switch (eventType) {
           case 'BOOTCAMP':
-            eventData = await getBootcamp(eventId)
+            eventData = bootcamp
             break
           case 'WORKOUT':
-            eventData = await getWorkout(eventId)
+            eventData = workout
             break
           case 'APPOINTMENT':
-            eventData = await getAppointment(eventId)
+            eventData = appointment
             break
         }
 
@@ -265,7 +277,7 @@ export function useCalendarForm({
     }
 
     loadEventData()
-  }, [])
+  }, [workout, bootcamp, appointment])
 
   // Focus on name input when form opens
   useEffect(() => {

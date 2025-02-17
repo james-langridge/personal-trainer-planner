@@ -10,7 +10,6 @@ import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 import {User} from '@/app/(restricted)/user/[id]/edit/page'
 
-import revalidate from '@/app/(restricted)/user/[id]/edit/actions'
 import {Alert, AlertDescription, AlertTitle} from '@/components/alert'
 import {Button} from '@/components/button'
 import {
@@ -23,9 +22,7 @@ import {
 } from '@/components/form'
 import {Input} from '@/components/input'
 import {RadioGroup, RadioGroupItem} from '@/components/radio-group'
-import {useToast} from '@/components/use-toast'
-import {getErrorMessage} from '@/lib/errors'
-import {updateUser} from '@/app/actions/users'
+import {useUpdateUser} from '@/app/api/hooks/users'
 
 const formSchema = z.object({
   billingEmail: z
@@ -63,7 +60,7 @@ const formSchema = z.object({
 })
 
 export default function EditUser({user}: {user: User}) {
-  const [error, setError] = useState('')
+  const updateUser = useUpdateUser()
   const router = useRouter()
   const {data: session, status} = useSession()
   const [isLoading, setIsLoading] = useState(false)
@@ -79,7 +76,6 @@ export default function EditUser({user}: {user: User}) {
       type: user?.type,
     },
   })
-  const {toast} = useToast()
 
   useEffect(() => {
     if (!user) {
@@ -107,36 +103,13 @@ export default function EditUser({user}: {user: User}) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    updateUser({
+    updateUser.mutate({
       ...values,
       email: values.email.toLowerCase(),
       billingEmail: values.billingEmail?.toLowerCase(),
       credits: Number(values.credits),
       fee: Math.round(parseFloat(values.fee) * 100),
     })
-      .then(() => {
-        toast({
-          description: 'Client updated successfully.',
-        })
-      })
-      .catch(error => {
-        console.error(error)
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: error.data.message,
-        })
-        setError(error.data.message)
-      })
-      .then(() => {
-        // route refresh here
-        revalidate()
-        router.back()
-      })
-      .catch(error => {
-        console.error(error)
-        setError(getErrorMessage(error))
-      })
     setIsLoading(false)
   }
 
@@ -260,11 +233,11 @@ export default function EditUser({user}: {user: User}) {
           </div>
         </form>
       </Form>
-      {error && (
+      {updateUser.isError && (
         <Alert variant="destructive">
           <ExclamationTriangleIcon className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{updateUser.error.message}</AlertDescription>
         </Alert>
       )}
     </div>

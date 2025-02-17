@@ -7,7 +7,7 @@ import React, {useContext, useState} from 'react'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
 import {User} from '@/@types/apiResponseTypes'
-import {DateContext} from '@/app/(restricted)/users/[year]/[month]/DateProvider'
+import {DateContext} from '@/app/(restricted)/users/DateProvider'
 import {
   AlertDialog,
   AlertDialogTrigger,

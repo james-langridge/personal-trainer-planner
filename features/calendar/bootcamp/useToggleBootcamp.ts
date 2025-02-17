@@ -4,13 +4,17 @@ import {useCallback, useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
 
 import {Bootcamp} from '@/lib/calendar'
-import {toggleBootcampAttendance} from '@/app/actions/bootcamps'
+import {useToggleBootcampAttendance} from '@/app/api/hooks/bootcamps'
 
 export function useToggleBootcamp(
   userBootcamps: {id: string}[],
   bootcamp: Bootcamp,
   userId: string,
 ) {
+  const toggleBootcampAttendance = useToggleBootcampAttendance(
+    userId,
+    bootcamp.id,
+  )
   const [isAttending, setIsAttending] = useState<boolean>(
     !!userBootcamps?.find(b => b.id === bootcamp.id),
   )
@@ -22,7 +26,7 @@ export function useToggleBootcamp(
     }
     setIsLoading(true)
 
-    const res = await toggleBootcampAttendance({
+    toggleBootcampAttendance.mutate({
       bootcampId: bootcamp.id,
       isAttending,
       userId,
@@ -30,7 +34,7 @@ export function useToggleBootcamp(
 
     setIsLoading(false)
 
-    return res
+    return toggleBootcampAttendance.data
   }, [])
 
   useEffect(() => {

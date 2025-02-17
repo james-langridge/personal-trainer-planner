@@ -37,7 +37,6 @@ export function Grid({
     id: userId,
     dateFilter,
   })
-
   const {data: allBootcamps} = useAllBootcamps({
     dateFilter,
   })

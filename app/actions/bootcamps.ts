@@ -9,6 +9,7 @@ import {
   UpdateBootcampAttendanceBody,
   UpdateBootcampBody,
 } from '@/@types/apiRequestTypes'
+import {Bootcamp} from '@/@types/apiResponseTypes'
 
 export async function createBootcamp(body: CreateBootcampBody) {
   const session = await auth()
@@ -188,4 +189,67 @@ export async function toggleBootcampAttendance(
 
   // todo check returned credits value
   return {OK: true, credits: res?.credits}
+}
+
+export type AllbootcampsParams = {
+  dateFilter: {
+    gte: Date
+    lt: Date
+  }
+}
+export type AllBootcampsData =
+  | {
+      id: string
+      name: string
+      date: Date
+    }[]
+  | null
+
+export async function getAllBootcamps({
+  dateFilter,
+}: AllbootcampsParams): Promise<AllBootcampsData> {
+  return db.bootcamp.findMany({
+    select: {
+      date: true,
+      id: true,
+      name: true,
+    },
+    where: {
+      deleted: false,
+      date: dateFilter,
+    },
+  })
+}
+
+export type GetUAllBootcampsParams = {dateFilter: {gte: Date; lt: Date}}
+
+export async function getBootcamps(params: GetUAllBootcampsParams) {
+  const {dateFilter} = params
+  const bootcamps: Bootcamp[] = await db.bootcamp.findMany({
+    select: {
+      _count: {
+        select: {attendees: true},
+      },
+      attendees: {
+        select: {
+          email: true,
+          id: true,
+          name: true,
+          role: true,
+          type: true,
+        },
+      },
+      date: true,
+      description: true,
+      id: true,
+      name: true,
+      videoUrl: true,
+    },
+    where: {
+      deleted: false,
+      date: dateFilter,
+    },
+  })
+
+  return bootcamps
 }

@@ -1,36 +1,23 @@
+import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
+import ProfileView from '@/app/(restricted)/profile/ProfileView'
 import {auth} from '@/auth'
-import Container from '@/components/Container'
-import {db} from '@/lib/db'
+import {getUser} from '@/app/actions/users'
 
-export default async function Profile() {
+export default async function Page() {
+  const queryClient = new QueryClient()
   const session = await auth()
-  const {user} = await getUser(session?.user?.id)
+  const userId = session?.user?.id
 
-  return (
-    <Container>
-      <section>
-        <h1 className="text-6xl font-bold leading-tight tracking-tighter md:pr-8 md:text-8xl">
-          Hello
-          {user && `, ${user?.name}`}.
-        </h1>
-      </section>
-    </Container>
-  )
-}
+  if (!userId) return null
 
-async function getUser(id?: string) {
-  if (!id) {
-    return {user: undefined}
-  }
-
-  const user = await db.user.findUnique({
-    select: {
-      name: true,
-    },
-    where: {
-      id: id,
-    },
+  await queryClient.prefetchQuery({
+    queryKey: ['user', userId],
+    queryFn: () => getUser(userId),
   })
 
-  return {user}
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ProfileView userId={userId} />
+    </HydrationBoundary>
+  )
 }

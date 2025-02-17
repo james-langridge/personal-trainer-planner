@@ -3,7 +3,7 @@
 import {USER_TYPE} from '@prisma/client'
 import {useCallback, useEffect, useRef, useState} from 'react'
 
-import {createUser} from '@/app/actions/users'
+import {useCreateUser} from '@/app/api/hooks/users'
 
 const initialForm: {
   billingEmail: string
@@ -20,6 +20,7 @@ const initialForm: {
 }
 
 export function CreateClientForm() {
+  const createUser = useCreateUser()
   const [form, setForm] = useState({...initialForm})
   const [error, setError] = useState<Error>()
   const [isLoading, setIsLoading] = useState(false)
@@ -36,7 +37,7 @@ export function CreateClientForm() {
       setIsLoading(true)
 
       try {
-        await createUser({
+        createUser.mutate({
           ...form,
           email: form.email.toLowerCase(),
           billingEmail: form.billingEmail.toLowerCase(),
