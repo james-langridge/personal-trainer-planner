@@ -40,6 +40,29 @@ export function getPrismaDateFilter(
   }
 }
 
+export function getNextMonthFilter(currentFilter: DateFilter) {
+  const {year, month} = extractYearAndMonth(currentFilter.gte)
+  if (month === 11) {
+    return getPrismaDateFilter(year + 1, 0)
+  }
+  return getPrismaDateFilter(year, month + 1)
+}
+
+export function getPreviousMonthFilter(currentFilter: DateFilter) {
+  const {year, month} = extractYearAndMonth(currentFilter.gte)
+  if (month === 0) {
+    return getPrismaDateFilter(year - 1, 11)
+  }
+  return getPrismaDateFilter(year, month - 1)
+}
+
+function extractYearAndMonth(date: Date) {
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth(),
+  }
+}
+
 export function generateCalendarMonth(dateFilter: DateFilter): Day[] {
   const allDays: Day[] = []
   const currentDate = new Date(dateFilter.gte)
@@ -61,10 +84,6 @@ export function generateCalendarMonth(dateFilter: DateFilter): Day[] {
   }
 
   return allDays
-}
-
-function getDaysInMonth(jsMonth: number, year: number) {
-  return new Date(year, jsMonth + 1, 0).getDate()
 }
 
 export function getLongDate(date: Date) {

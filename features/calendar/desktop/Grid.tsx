@@ -1,3 +1,5 @@
+'use client'
+
 import clsx from 'clsx'
 
 import {
@@ -16,6 +18,7 @@ import {BootcampsToday} from '@/features/calendar/desktop/BootcampsToday'
 import {USER_TYPE} from '@prisma/client'
 import {useUserEvents} from '@/app/hooks/users'
 import {useAllBootcamps} from '@/app/hooks/bootcamps'
+import {usePrefetchAdjacentMonths} from '@/app/hooks/usePrefetchAdjacentMonths'
 
 export function Grid({
   dateFilter,
@@ -26,6 +29,7 @@ export function Grid({
   userId: string
   isAdmin: boolean
 }) {
+  usePrefetchAdjacentMonths({userId, dateFilter})
   const monthData = generateCalendarMonth(dateFilter)
   const firstDayOfMonth = monthData[0].weekDay
   const emptyDaysLength = firstDayOfMonth > 0 ? firstDayOfMonth - 1 : 6
