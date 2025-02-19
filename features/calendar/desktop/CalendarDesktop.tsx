@@ -18,13 +18,15 @@ export function CalendarDesktop({
 }: {
   year: number
   jsMonth: number
-  userId: string
+  userId?: string
   isAdmin: boolean
 }) {
   const [dateFilter, setDateFilter] = useState<DateFilter>(
     getPrismaDateFilter(year, jsMonth),
   )
-  const [selectedUserId, setSelectedUserId] = useState<string>(userId)
+  const [selectedUserId, setSelectedUserId] = useState<string | undefined>(
+    userId,
+  )
 
   function updateSelectedUserId(
     userName: string,
@@ -49,11 +51,15 @@ export function CalendarDesktop({
           onSelect={updateSelectedUserId}
           onChange={updateDateFilter}
         />
-        <Grid
-          isAdmin={isAdmin}
-          dateFilter={dateFilter}
-          userId={selectedUserId}
-        />
+        {selectedUserId ? (
+          <Grid
+            isAdmin={isAdmin}
+            dateFilter={dateFilter}
+            userId={selectedUserId}
+          />
+        ) : (
+          <div>Select a client</div>
+        )}
       </div>
     </div>
   )
