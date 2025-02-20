@@ -40,6 +40,7 @@ export async function createAppointment(body: CreateAppointmentBody) {
 
   const appointments = await db.appointment.createMany({data})
 
+  // TODO no longer need revalidation with react query
   const pathsToRevalidate = getUniqueMonthPaths(dates, ownerId)
   pathsToRevalidate.forEach(path => {
     console.log(`Revalidating ${path}`)
