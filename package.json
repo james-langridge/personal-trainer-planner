@@ -52,6 +52,8 @@
     "@sentry/nextjs": "^8.55.0",
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-table": "^8.9.3",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
@@ -113,7 +115,7 @@
     "tsconfig-paths": "^4.1.2",
     "typescript": "^5.7.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^2.1.8",
+    "vitest": "^3.0.6",
     "whatwg-fetch": "^3.6.2"
   },
   "overrides": {

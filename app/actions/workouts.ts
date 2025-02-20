@@ -38,6 +38,7 @@ export async function createWorkout(body: CreateWorkoutBody) {
 
   const workouts = await db.workout.createMany({data})
 
+  // TODO no longer need revalidation with react query
   const pathsToRevalidate = getUniqueMonthPaths(dates, ownerId)
   pathsToRevalidate.forEach(path => {
     console.log(`Revalidating ${path}`)
