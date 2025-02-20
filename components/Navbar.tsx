@@ -27,7 +27,7 @@ const logo = {
 
 export function Navbar() {
   const {data} = useSession()
-  const isAdmin = data?.user?.role
+  const isAdmin = data?.user?.role === 'admin'
   const navigation = isAdmin ? adminNavigation : clientNavigation
 
   return (
