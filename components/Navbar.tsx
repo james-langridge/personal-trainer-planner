@@ -12,7 +12,7 @@ const clientNavigation = [
 ]
 
 const adminNavigation = [
-  {href: '/', name: 'Training planner'},
+  {href: '/admin/calendar', name: 'Training planner'},
   {href: `/admin/users`, name: 'Clients'},
   {href: '/admin/bootcamps', name: 'Bootcamps'},
   {href: '/profile', name: 'Profile'},
