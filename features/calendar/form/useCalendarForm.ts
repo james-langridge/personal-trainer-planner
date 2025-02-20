@@ -235,7 +235,7 @@ export function useCalendarForm({
       fee: formattedFee,
       ownerId: userId,
     }))
-  }, [userId, form.id])
+  }, [userFee, form.id, userId])
 
   // Effect to load existing event data
   useEffect(() => {
