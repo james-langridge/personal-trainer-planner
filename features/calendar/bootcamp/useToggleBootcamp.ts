@@ -42,6 +42,9 @@ export function useToggleBootcamp(
   }, [bootcamp.id, userBootcamps])
 
   async function toggleAttendance() {
+    toast('Please try again later. We are fixing a bug.')
+    return
+
     try {
       const res = await updateAttendee()
 
