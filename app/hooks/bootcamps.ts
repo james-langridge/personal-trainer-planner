@@ -17,7 +17,6 @@ import {
   updateBootcamp,
 } from '@/app/actions/bootcamps'
 import {EVENT_TYPE} from '@prisma/client'
-import {toast} from 'react-toastify'
 
 export function useAllBootcamps(params: AllbootcampsParams) {
   return useQuery({
@@ -90,35 +89,9 @@ export function useToggleBootcampAttendance(userId: string, eventId?: string) {
 
   return useMutation({
     mutationFn: toggleBootcampAttendance,
-    onSuccess: ({credits, OK}, {isAttending}) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ['user-events', userId]})
       queryClient.invalidateQueries({queryKey: ['bootcamp', eventId]})
-      let toastMessage
-
-      if (!OK) {
-        toast(
-          `No credits remaining! Please contact ${process.env.NEXT_PUBLIC_PT_FIRST_NAME}.`,
-        )
-        return
-      }
-
-      if (isAttending) {
-        toastMessage =
-          credits !== undefined
-            ? `Attendance cancelled. Credits remaining: ${credits}`
-            : 'Attendance cancelled.'
-      }
-
-      if (!isAttending) {
-        toastMessage =
-          credits !== undefined
-            ? `See you at the bootcamp! Credits remaining: ${credits}`
-            : 'See you at the bootcamp!'
-      }
-      toast.success(toastMessage)
-    },
-    onError: () => {
-      toast.error('Something went wrong...')
     },
   })
 }
