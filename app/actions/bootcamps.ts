@@ -136,58 +136,45 @@ export async function toggleBootcampAttendance(
     throw new Error('You must be logged in.')
   }
 
-  const {userId, bootcampId, isAttending} = body
+  const {userId, bootcampId} = body
 
-  const user = await db.user.findUnique({
-    select: {
-      credits: true,
-    },
-    where: {
-      id: userId,
-    },
+  return db.$transaction(async tx => {
+    const user = await tx.user.findUnique({
+      select: {
+        credits: true,
+        bootcamps: {
+          select: {id: true},
+          where: {id: bootcampId},
+        },
+      },
+      where: {id: userId},
+    })
+
+    if (!user) {
+      throw new Error('User not found.')
+    }
+
+    const isAttending = user.bootcamps.length > 0
+
+    if (!user.credits && !isAttending) return {OK: false}
+
+    const updatedUser = await tx.user.update({
+      where: {id: userId},
+      data: {
+        credits: isAttending ? {increment: 1} : {decrement: 1},
+        bootcamps: isAttending
+          ? {disconnect: {id: bootcampId}}
+          : {connect: {id: bootcampId}},
+      },
+      select: {credits: true},
+    })
+
+    return {
+      OK: true,
+      credits: updatedUser.credits,
+      isAttending: !isAttending,
+    }
   })
-
-  if (!user) {
-    throw new Error('User not found.')
-  }
-
-  if (!user.credits && !isAttending) return {OK: false}
-
-  let res
-
-  if (user.credits > 0 && !isAttending) {
-    res = await db.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        credits: {decrement: 1},
-        bootcamps: {
-          connect: {
-            id: bootcampId,
-          },
-        },
-      },
-    })
-  }
-
-  if (isAttending) {
-    res = await db.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        credits: {increment: 1},
-        bootcamps: {
-          disconnect: {
-            id: bootcampId,
-          },
-        },
-      },
-    })
-  }
-
-  return {OK: true, credits: res?.credits}
 }
 
 export type AllbootcampsParams = {

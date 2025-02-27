@@ -16,7 +16,7 @@ export function BootcampItem({
   day: Day
   userId: string
 }) {
-  const {isAttending, toggle, isPending} = useToggleBootcamp(
+  const {isAttending, toggle, status} = useToggleBootcamp(
     userBootcamps,
     bootcamp,
     userId,
@@ -24,7 +24,11 @@ export function BootcampItem({
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
-      <Checkbox onChange={toggle} status={isAttending} disabled={isPending} />
+      <Checkbox
+        onChange={toggle}
+        status={isAttending}
+        disabled={status === 'pending'}
+      />
       <Title bootcamp={bootcamp} day={day} userId={userId} />
     </div>
   )

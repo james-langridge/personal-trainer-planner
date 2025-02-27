@@ -69,7 +69,6 @@ export type UpdateAppointmentBody = Partial<
 
 export type UpdateBootcampAttendanceBody = {
   bootcampId: string
-  isAttending: boolean
   userId: string
 }
 

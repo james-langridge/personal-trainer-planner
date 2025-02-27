@@ -13,7 +13,7 @@ export function BootcampItemMobile({
   bootcamp: Bootcamp
   userId: string
 }) {
-  const {isAttending, toggle, isPending} = useToggleBootcamp(
+  const {isAttending, toggle, status} = useToggleBootcamp(
     userBootcamps,
     bootcamp,
     userId,
@@ -22,7 +22,7 @@ export function BootcampItemMobile({
   return (
     <div className="flex items-center gap-2 text-lg">
       <input
-        disabled={isPending}
+        disabled={status === 'pending'}
         type="checkbox"
         checked={isAttending}
         className="h-7 w-7 rounded"
