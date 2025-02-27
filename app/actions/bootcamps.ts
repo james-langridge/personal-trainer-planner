@@ -131,68 +131,63 @@ export async function getBootcamp(id: string) {
 export async function toggleBootcampAttendance(
   body: UpdateBootcampAttendanceBody,
 ) {
-  throw new Error('Please try again later. We are fixing a bug.')
-  // const session = await auth()
-  // if (!session) {
-  //   throw new Error('You must be logged in.')
-  // }
-  //
-  // const {userId, bootcampId, isAttending} = body
-  // console.log({userId, bootcampId, isAttending})
-  //
-  // const user = await db.user.findUnique({
-  //   select: {
-  //     credits: true,
-  //   },
-  //   where: {
-  //     id: userId,
-  //   },
-  // })
-  //
-  // console.log({user})
-  //
-  // if (!user) {
-  //   throw new Error('User not found.')
-  // }
-  //
-  // if (!user.credits && !isAttending) return {OK: false}
-  //
-  // let res
-  //
-  // if (user.credits > 0 && !isAttending) {
-  //   res = await db.user.update({
-  //     where: {
-  //       id: userId,
-  //     },
-  //     data: {
-  //       credits: {decrement: 1},
-  //       bootcamps: {
-  //         connect: {
-  //           id: bootcampId,
-  //         },
-  //       },
-  //     },
-  //   })
-  // }
-  //
-  // if (isAttending) {
-  //   res = await db.user.update({
-  //     where: {
-  //       id: userId,
-  //     },
-  //     data: {
-  //       credits: {increment: 1},
-  //       bootcamps: {
-  //         disconnect: {
-  //           id: bootcampId,
-  //         },
-  //       },
-  //     },
-  //   })
-  // }
-  //
-  // // todo check returned credits value
-  // return {OK: true, credits: res?.credits}
+  const session = await auth()
+  if (!session) {
+    throw new Error('You must be logged in.')
+  }
+
+  const {userId, bootcampId, isAttending} = body
+
+  const user = await db.user.findUnique({
+    select: {
+      credits: true,
+    },
+    where: {
+      id: userId,
+    },
+  })
+
+  if (!user) {
+    throw new Error('User not found.')
+  }
+
+  if (!user.credits && !isAttending) return {OK: false}
+
+  let res
+
+  if (user.credits > 0 && !isAttending) {
+    res = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        credits: {decrement: 1},
+        bootcamps: {
+          connect: {
+            id: bootcampId,
+          },
+        },
+      },
+    })
+  }
+
+  if (isAttending) {
+    res = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        credits: {increment: 1},
+        bootcamps: {
+          disconnect: {
+            id: bootcampId,
+          },
+        },
+      },
+    })
+  }
+
+  return {OK: true, credits: res?.credits}
 }
 
 export type AllbootcampsParams = {

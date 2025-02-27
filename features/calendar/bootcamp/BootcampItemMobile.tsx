@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import {Bootcamp} from '@/@types/apiResponseTypes'
 
-import {useToggleBootcamp} from '.'
+import {useToggleBootcamp} from '@/features/calendar/bootcamp/useToggleBootcamp'
 
 export function BootcampItemMobile({
   userBootcamps,
@@ -13,7 +13,7 @@ export function BootcampItemMobile({
   bootcamp: Bootcamp
   userId: string
 }) {
-  const {isAttending, isLoading, toggleAttendance} = useToggleBootcamp(
+  const {isAttending, toggle, isPending} = useToggleBootcamp(
     userBootcamps,
     bootcamp,
     userId,
@@ -22,11 +22,11 @@ export function BootcampItemMobile({
   return (
     <div className="flex items-center gap-2 text-lg">
       <input
-        disabled={isLoading}
+        disabled={isPending}
         type="checkbox"
         checked={isAttending}
         className="h-7 w-7 rounded"
-        onChange={toggleAttendance}
+        onChange={toggle}
       />
 
       <Link
