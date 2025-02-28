@@ -3,23 +3,21 @@
 ## Personal Trainer Planner
 
 A single-tenant Next.js app for personal trainers to schedule and track events,
-and manage and invoice clients. Made in collaboration with and used in
+and manage and invoice trainees. Made in collaboration with and used in
 production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
 (**PT**).
 
-> **Warning** `Client` in this context means the customer of the PT.
-
 ### Features
 
-- Shared calendar between PT and each client, editable by PT only.
+- Shared calendar between PT and each trainee, editable by PT only.
 - Three calendar event types:
-  - `Workouts`, created by PT, which clients can check as done.
+  - `Workouts`, created by PT, which trainees can check off as completed.
   - `Appointments`, with fees for billing.
-  - `Bootcamps`, which clients can check to confirm attendance.
+  - `Bootcamps`, which trainees can check to confirm attendance, if they have enough credits.
 - Appointment attendance and fee data is viewable in a monthly table.
-- Invoices can be generated and emailed to clients with a button click.
-- Mobile-friendly calendar list-view for clients with infinite scroll.
-- Custom forms via Contentful CMS, emailed to the PT when the client completes
+- Invoices can be generated and emailed to trainees with a button click.
+- Mobile-friendly calendar list-view for trainees.
+- Custom forms via Contentful CMS, emailed to the PT when the trainee completes
   them.
 
 ### Technology
@@ -32,7 +30,7 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
 - Authentication using **[Auth.js](https://authjs.dev/)**.
 - Styled using **[Tailwind CSS](https://tailwindcss.com/)**,
   **[Meraki UI](https://merakiui.com/)**, and
-  **[shadcn/ui](https://ui.shadcn.com/)** (Radix UI, TanStack Table).
+  **[shadcn/ui](https://ui.shadcn.com/)**.
 
 ### DevOps
 
