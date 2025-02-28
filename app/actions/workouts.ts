@@ -2,12 +2,11 @@
 
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
-import {getRepeatingDates, getUniqueMonthPaths} from '@/lib/calendar'
-import {revalidatePath} from 'next/cache'
+import {getRepeatingDates} from '@/lib/calendar'
 import {
   CreateWorkoutBody,
-  UpdateWorkoutBody,
   DeleteWorkoutBody,
+  UpdateWorkoutBody,
 } from '@/@types/apiRequestTypes'
 
 export async function createWorkout(body: CreateWorkoutBody) {
@@ -36,16 +35,7 @@ export async function createWorkout(body: CreateWorkoutBody) {
     videoUrl,
   }))
 
-  const workouts = await db.workout.createMany({data})
-
-  // TODO no longer need revalidation with react query
-  const pathsToRevalidate = getUniqueMonthPaths(dates, ownerId)
-  pathsToRevalidate.forEach(path => {
-    console.log(`Revalidating ${path}`)
-    revalidatePath(path)
-  })
-
-  return workouts
+  return db.workout.createMany({data})
 }
 
 export async function updateWorkout(body: UpdateWorkoutBody) {
@@ -55,7 +45,7 @@ export async function updateWorkout(body: UpdateWorkoutBody) {
     throw new Error('You must be logged in.')
   }
 
-  const workout = await db.workout.update({
+  return db.workout.update({
     where: {
       id: body.id,
     },
@@ -68,14 +58,6 @@ export async function updateWorkout(body: UpdateWorkoutBody) {
       ...(body.videoUrl !== undefined && {videoUrl: body.videoUrl}),
     },
   })
-
-  const year = body.date.getFullYear()
-  const month = body.date.getMonth() + 1
-  const path = `/calendar/${body.ownerId}/${year}/${month}`
-  console.log(`Revalidating ${path}`)
-  revalidatePath(path)
-
-  return workout
 }
 
 export async function deleteWorkout(body: DeleteWorkoutBody) {
@@ -84,7 +66,7 @@ export async function deleteWorkout(body: DeleteWorkoutBody) {
     throw new Error('Forbidden.')
   }
 
-  const workout = await db.workout.update({
+  return db.workout.update({
     where: {
       id: body.id,
     },
@@ -92,14 +74,6 @@ export async function deleteWorkout(body: DeleteWorkoutBody) {
       deleted: true,
     },
   })
-
-  const year = body.date.getFullYear()
-  const month = body.date.getMonth() + 1
-  const path = `/calendar/${body.ownerId}/${year}/${month}`
-  console.log(`Revalidating ${path}`)
-  revalidatePath(path)
-
-  return workout
 }
 
 export async function getWorkout(id: string) {
