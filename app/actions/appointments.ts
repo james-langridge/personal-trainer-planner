@@ -2,13 +2,12 @@
 
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
-import {getRepeatingDates, getUniqueMonthPaths} from '@/lib/calendar'
+import {getRepeatingDates} from '@/lib/calendar'
 import {
   CreateAppointmentBody,
   DeleteAppointmentBody,
   UpdateAppointmentBody,
 } from '@/@types/apiRequestTypes'
-import {revalidatePath} from 'next/cache'
 
 export async function createAppointment(body: CreateAppointmentBody) {
   const session = await auth()
@@ -38,16 +37,7 @@ export async function createAppointment(body: CreateAppointmentBody) {
     videoUrl,
   }))
 
-  const appointments = await db.appointment.createMany({data})
-
-  // TODO no longer need revalidation with react query
-  const pathsToRevalidate = getUniqueMonthPaths(dates, ownerId)
-  pathsToRevalidate.forEach(path => {
-    console.log(`Revalidating ${path}`)
-    revalidatePath(path)
-  })
-
-  return appointments
+  return db.appointment.createMany({data})
 }
 
 export async function updateAppointment(body: UpdateAppointmentBody) {
@@ -56,7 +46,7 @@ export async function updateAppointment(body: UpdateAppointmentBody) {
     throw new Error('Forbidden.')
   }
 
-  const appointment = await db.appointment.update({
+  return db.appointment.update({
     where: {
       id: body.id,
     },
@@ -70,14 +60,6 @@ export async function updateAppointment(body: UpdateAppointmentBody) {
       ...(body.videoUrl !== undefined && {videoUrl: body.videoUrl}),
     },
   })
-
-  const year = body.date.getFullYear()
-  const month = body.date.getMonth() + 1
-  const path = `/calendar/${body.ownerId}/${year}/${month}`
-  console.log(`Revalidating ${path}`)
-  revalidatePath(path)
-
-  return appointment
 }
 
 export async function deleteAppointment(body: DeleteAppointmentBody) {
@@ -86,7 +68,7 @@ export async function deleteAppointment(body: DeleteAppointmentBody) {
     throw new Error('Forbidden.')
   }
 
-  const appointment = await db.appointment.update({
+  return db.appointment.update({
     where: {
       id: body.id,
     },
@@ -94,14 +76,6 @@ export async function deleteAppointment(body: DeleteAppointmentBody) {
       deleted: true,
     },
   })
-
-  const year = body.date.getFullYear()
-  const month = body.date.getMonth() + 1
-  const path = `/calendar/${body.ownerId}/${year}/${month}`
-  console.log(`Revalidating ${path}`)
-  revalidatePath(path)
-
-  return appointment
 }
 
 export async function getAppointment(id: string) {
