@@ -7,13 +7,14 @@ import {Workout} from '@/@types/apiResponseTypes'
 import {useWorkoutStatus} from '.'
 
 export function WorkoutItemMobile({workout}: {workout: Workout}) {
-  const {status, toggleStatus} = useWorkoutStatus(workout)
+  const {status, workoutStatus, toggleStatus} = useWorkoutStatus(workout)
 
   return (
     <div className="flex items-center gap-2 text-lg">
       <input
+        disabled={status === 'pending'}
         type="checkbox"
-        checked={status === WORKOUT_STATUS.COMPLETED}
+        checked={workoutStatus === WORKOUT_STATUS.COMPLETED}
         className="h-7 w-7 rounded"
         onChange={toggleStatus}
       />
@@ -23,7 +24,7 @@ export function WorkoutItemMobile({workout}: {workout: Workout}) {
         className={clsx(
           'p my-1 block w-full rounded bg-emerald-400 px-2 text-white',
           {
-            'line-through': status === WORKOUT_STATUS.COMPLETED,
+            'line-through': workoutStatus === WORKOUT_STATUS.COMPLETED,
           },
         )}
       >
