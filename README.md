@@ -13,7 +13,8 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
 - Three calendar event types:
   - `Workouts`, created by PT, which trainees can check off as completed.
   - `Appointments`, with fees for billing.
-  - `Bootcamps`, which trainees can check to confirm attendance, if they have enough credits.
+  - `Bootcamps`, which trainees can check to confirm attendance, if they have
+    enough credits.
 - Appointment attendance and fee data is viewable in a monthly table.
 - Invoices can be generated and emailed to trainees with a button click.
 - Mobile-friendly calendar list-view for trainees.

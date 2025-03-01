@@ -14,11 +14,15 @@ export function WorkoutItem({
   day: Day
   userId: string
 }) {
-  const {status, toggleStatus} = useWorkoutStatus(workout)
+  const {status, workoutStatus, toggleStatus} = useWorkoutStatus(workout)
 
   return (
     <div className="ml-2 mr-1 flex items-center gap-2 text-lg">
-      <Checkbox onChange={toggleStatus} status={status} />
+      <Checkbox
+        onChange={toggleStatus}
+        status={status}
+        workoutStatus={workoutStatus}
+      />
       <Title workout={workout} day={day} userId={userId} />
     </div>
   )
