@@ -55,34 +55,15 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
 
 ### Prerequisites
 
-- You will need a PostgreSQL database.
-  - With Railway go to https://railway.app/new and click `Provision PostgreSQL`,
-    then click on the new Postgres project, and grab the `DATABASE_URL` from the
-    `Connect` tab.
-  - Assuming you have
-    [PostgreSQL installed](https://www.postgresql.org/download/), you could
-    instead create a local database for development with this command:
-    - ```sh
-      createdb mydatabase
-      ```
-    - Then you can connect to it:
-      `DATABASE_URL=postgresql://postgres:[YOUR_PASSWORD]@localhost:5432/mydatabase`
-  - Assuming you have [Docker installed](https://docs.docker.com/get-docker/),
-    you could
-    [run Postgres in a Docker container](https://hub.docker.com/_/postgres):
-    - ```sh
-      docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=mydatabase -p 5432:5432 -d postgres
-      ```
-    - Then you can connect to it:
-      `DATABASE_URL=postgresql://postgres:mysecretpassword@localhost:5432/mydatabase`
-- You will need to set up an email account to work with Auth.js. I used Gmail.
-  See the [Auth.js](https://next-auth.js.org/providers/email) docs and the
+- For the forgot-password api, and emailing invoices and forms, you will need to
+  set up an email account for use with nodemailer. See the
+  [Auth.js](https://next-auth.js.org/providers/email) docs and the
   [nodemailer docs](https://nodemailer.com/usage/using-gmail/).
-- The app uses Contentful as a CMS for the personal trainer to create forms for
-  their clients, which are emailed to the PT on completion. To use this feature
+- The app uses Contentful as a CMS for the trainer to create forms for their
+  clients, which are emailed to the trainer on completion. To use this feature
   you will need a [Contentful](https://www.contentful.com/sign-up/) account.
 
-### Installation (basic)
+### Steps
 
 1. Clone the repo
    ```sh
@@ -94,48 +75,35 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
    ```
 3. Copy the environment variable files and update the variables.
    ```sh
-   cp .env .env.local
+   cp .env.example .env
    ```
-4. Once you have a Postgres DB running somewhere, and the `DATABASE_URL` env var
-   set, run the
+4. Create a postgres db in a Docker container:
+   ```sh
+   docker run --name ptp-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ptp -p 5432:5432 -d postgres
+   ```
+5. Set the `DATABASE_URL` in your `.env` file:
+   ```
+   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ptp
+   ```
+6. Run the
    [Prisma Migrate command](https://www.prisma.io/docs/reference/api-reference/command-reference#migrate-dev):
    ```sh
    npx prisma migrate dev
    ```
-5. Change the emails in `prisma/seed.ts` so you will be able to log into the
-   app.
-6. Seed the database:
+7. Seed the database:
    ```sh
    npx prisma db seed
    ```
-7. You can check seeding the database worked with this command:
-   ```sh
-   npx prisma studio
-   ```
-   You can also edit data using this UI in the browser if needed.
 8. Start the development server:
    ```sh
    npm run dev
    ```
-9. Open up http://localhost:3000 in a browser and log in. You must have set up
-   an email account and set the environment variables before you can log in. See
-   the [Auth.js](https://next-auth.js.org/providers/email) docs and the
-   [nodemailer docs](https://nodemailer.com/usage/using-gmail/). You will be
-   admin and can create other users. The seed script added demo workouts etc to
-   your admin account.
-10. As a Next.js app, deploying to Vercel is simple: https://vercel.com/new
+9. Open up http://localhost:3000 in a browser and log in with the email and
+   password from the seed script.
 
 ## Deploy your own
 
-You should be able to clone and deploy this project on Vercel using the button
-below, provided you have completed the prerequisites above (database and email).
-
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjames-langridge%2Fpersonal-trainer-planner&env=DATABASE_URL,NEXTAUTH_SECRET,SMTP_PASSWORD,SMTP_USER,SMTP_HOST,SMTP_PORT,EMAIL_FROM,EMAIL_TO,CONTENTFUL_SPACE_ID,CONTENTFUL_ACCESS_TOKEN)
-
-Check the deployed project has all the required environment variables, as the
-button generator says there cannot be more than 10 Environment Variables per
-project, so you will need to manually add the ones from the `.env` that are
-missing.
 
 See the [Next.js deployment documentation](https://nextjs.org/docs/deployment)
 for more details.
