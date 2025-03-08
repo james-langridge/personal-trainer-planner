@@ -15,17 +15,12 @@
   },
   "scripts": {
     "backup": "./scripts/backup.sh",
-    "build": "npm run prisma:gen && next build",
+    "build": "npx prisma generate && next build",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output @types/generated/contentful.d.ts",
-    "dev": "npm run prisma:gen && next dev --turbopack",
+    "dev": "npx prisma generate && next dev --turbopack",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "next lint --fix",
-    "prisma:copy-dev": "node prisma/copyUserToDemo.js",
-    "prisma:delete-dev": "node prisma/deleteUserEvents.js",
-    "prisma:gen": "dotenv -e .env.local -- npx prisma generate",
-    "prisma:migrate-dev": "dotenv -e .env.local -- npx prisma migrate dev",
-    "prisma:studio": "dotenv -e .env.local -- npx prisma studio",
     "start": "next start",
     "test": "vitest"
   },
@@ -77,6 +72,7 @@
   },
   "devDependencies": {
     "@contentful/rich-text-types": "^16.0.2",
+    "@faker-js/faker": "^9.6.0",
     "@tailwindcss/typography": "^0.5.9",
     "@tanstack/eslint-plugin-query": "^5.66.1",
     "@testing-library/dom": "^10.4.0",
