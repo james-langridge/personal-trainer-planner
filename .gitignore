@@ -43,3 +43,10 @@ next-env.d.ts
 .env.sentry-build-plugin
 
 *.tar
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
