@@ -10,8 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: npm ci && npx playwright install --with-deps
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - run: npm ci && npx playwright install --with-deps
+      - name: Set up database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_CI }}
+        run: |
+          npx prisma migrate deploy
+          npx prisma db seed
       - name: Run tests
         run: npx playwright test
         env:
