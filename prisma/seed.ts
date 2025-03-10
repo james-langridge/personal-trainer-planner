@@ -255,139 +255,145 @@ async function main() {
     )
   }
 
-  // =========================================
-  // Create a hardcoded test user with predictable data for testing
-  // =========================================
-  console.log('🧪 Creating hardcoded test user for testing...')
+  if (process.env.CI === 'true') {
+    // =========================================
+    // Create user for CI tests
+    // =========================================
+    console.log('🧪 Creating user for CI tests...')
 
-  // Create test user with fixed credentials
-  const testUser = await db.user.create({
-    data: {
-      email: 'test@example.com',
-      name: 'Test User',
-      role: 'user',
-      password: await hash('test123', 12),
-      billingEmail: 'test-billing@example.com',
-      credits: 1,
-      fee: 1000,
-      type: USER_TYPE.BOOTCAMP,
-      emailVerified: new Date(),
-    },
-  })
-
-  // Helper to create dates in the current month
-  const getCurrentMonthDate = (day: number) => {
-    const date = new Date()
-    date.setDate(day)
-    return date
-  }
-
-  // Create hardcoded workouts for the current month
-  console.log('📆 Creating hardcoded workouts for test user...')
-  const testWorkouts = [
-    {name: 'Morning Routine', day: 5, status: WORKOUT_STATUS.COMPLETED},
-    {name: 'Strength Training', day: 10, status: WORKOUT_STATUS.COMPLETED},
-    {name: 'Cardio Session', day: 15, status: WORKOUT_STATUS.NOT_STARTED},
-    {name: 'Recovery Day', day: 20, status: WORKOUT_STATUS.NOT_STARTED},
-    {name: 'Full Body Workout', day: 25, status: WORKOUT_STATUS.NOT_STARTED},
-  ]
-
-  for (const workout of testWorkouts) {
-    await db.workout.create({
+    const testUser = await db.user.create({
       data: {
-        name: workout.name,
-        description: `Test workout: ${workout.name}`,
-        date: getCurrentMonthDate(workout.day),
-        status: workout.status,
+        email: 'test@example.com',
+        name: 'Test User',
+        role: 'user',
+        password: await hash('test123', 12),
+        billingEmail: 'test-billing@example.com',
+        credits: 1,
+        fee: 1000,
+        type: USER_TYPE.BOOTCAMP,
+        emailVerified: new Date(),
+      },
+    })
+
+    await db.session.create({
+      data: {
+        userId: testUser.id,
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+        sessionToken: faker.string.uuid(),
+      },
+    })
+
+    const getCurrentMonthDate = (day: number) => {
+      const date = new Date()
+      date.setDate(day)
+      return date
+    }
+
+    console.log('📆 Creating hardcoded workouts for test user...')
+    const testWorkouts = [
+      {name: 'Morning Routine', day: 5, status: WORKOUT_STATUS.COMPLETED},
+      {name: 'Strength Training', day: 10, status: WORKOUT_STATUS.COMPLETED},
+      {name: 'Cardio Session', day: 15, status: WORKOUT_STATUS.NOT_STARTED},
+      {name: 'Recovery Day', day: 20, status: WORKOUT_STATUS.NOT_STARTED},
+      {name: 'Full Body Workout', day: 25, status: WORKOUT_STATUS.NOT_STARTED},
+    ]
+
+    for (const workout of testWorkouts) {
+      await db.workout.create({
+        data: {
+          name: workout.name,
+          description: `Test workout: ${workout.name}`,
+          date: getCurrentMonthDate(workout.day),
+          status: workout.status,
+          ownerId: testUser.id,
+          videoUrl:
+            workout.day % 2 === 0 ? 'https://example.com/test-video.mp4' : null,
+        },
+      })
+    }
+
+    console.log('📆 Creating hardcoded appointments for test user...')
+    const testAppointments = [
+      {
+        name: 'Initial Consultation',
+        day: 3,
+        status: APPOINTMENT_STATUS.ATTENDED,
+        fee: 1500,
+      },
+      {
+        name: 'Progress Check',
+        day: 8,
+        status: APPOINTMENT_STATUS.ATTENDED,
+        fee: 1000,
+      },
+      {
+        name: 'Fitness Assessment',
+        day: 13,
+        status: APPOINTMENT_STATUS.NOT_ATTENDED,
+        fee: 2000,
+      },
+      {
+        name: 'Nutrition Planning',
+        day: 18,
+        status: APPOINTMENT_STATUS.NOT_ATTENDED,
+        fee: 1200,
+      },
+      {
+        name: 'Monthly Review',
+        day: 28,
+        status: APPOINTMENT_STATUS.NOT_ATTENDED,
+        fee: 1500,
+      },
+    ]
+
+    for (const appointment of testAppointments) {
+      await db.appointment.create({
+        data: {
+          name: appointment.name,
+          description: `Test appointment: ${appointment.name}`,
+          date: getCurrentMonthDate(appointment.day),
+          status: appointment.status,
+          ownerId: testUser.id,
+          fee: appointment.fee,
+          videoUrl:
+            appointment.day % 2 === 0
+              ? 'https://example.com/test-video.mp4'
+              : null,
+        },
+      })
+    }
+
+    console.log('📆 Creating hardcoded bootcamps for test user...')
+    const testBootcamps = [
+      {name: 'Beginner Bootcamp', day: 7},
+      {name: 'Advanced Training', day: 14},
+      {name: 'Specialized Workshop', day: 21},
+    ]
+
+    for (const bootcamp of testBootcamps) {
+      await db.bootcamp.create({
+        data: {
+          name: bootcamp.name,
+          description: `Test bootcamp: ${bootcamp.name}`,
+          date: getCurrentMonthDate(bootcamp.day),
+          videoUrl:
+            bootcamp.day % 2 === 0
+              ? 'https://example.com/test-video.mp4'
+              : null,
+        },
+      })
+    }
+
+    console.log('📆 Creating hardcoded invoice for test user...')
+    await db.invoice.create({
+      data: {
+        appointments: 3,
+        total: 4500,
+        date: getCurrentMonthDate(2),
         ownerId: testUser.id,
-        videoUrl:
-          workout.day % 2 === 0 ? 'https://example.com/test-video.mp4' : null,
       },
     })
   }
-
-  // Create hardcoded appointments for the current month
-  console.log('📆 Creating hardcoded appointments for test user...')
-  const testAppointments = [
-    {
-      name: 'Initial Consultation',
-      day: 3,
-      status: APPOINTMENT_STATUS.ATTENDED,
-      fee: 1500,
-    },
-    {
-      name: 'Progress Check',
-      day: 8,
-      status: APPOINTMENT_STATUS.ATTENDED,
-      fee: 1000,
-    },
-    {
-      name: 'Fitness Assessment',
-      day: 13,
-      status: APPOINTMENT_STATUS.NOT_ATTENDED,
-      fee: 2000,
-    },
-    {
-      name: 'Nutrition Planning',
-      day: 18,
-      status: APPOINTMENT_STATUS.NOT_ATTENDED,
-      fee: 1200,
-    },
-    {
-      name: 'Monthly Review',
-      day: 28,
-      status: APPOINTMENT_STATUS.NOT_ATTENDED,
-      fee: 1500,
-    },
-  ]
-
-  for (const appointment of testAppointments) {
-    await db.appointment.create({
-      data: {
-        name: appointment.name,
-        description: `Test appointment: ${appointment.name}`,
-        date: getCurrentMonthDate(appointment.day),
-        status: appointment.status,
-        ownerId: testUser.id,
-        fee: appointment.fee,
-        videoUrl:
-          appointment.day % 2 === 0
-            ? 'https://example.com/test-video.mp4'
-            : null,
-      },
-    })
-  }
-
-  // Create hardcoded bootcamps for the current month
-  console.log('📆 Creating hardcoded bootcamps for test user...')
-  const testBootcamps = [
-    {name: 'Beginner Bootcamp', day: 7},
-    {name: 'Advanced Training', day: 14},
-    {name: 'Specialized Workshop', day: 21},
-  ]
-
-  for (const bootcamp of testBootcamps) {
-    await db.bootcamp.create({
-      data: {
-        name: bootcamp.name,
-        description: `Test bootcamp: ${bootcamp.name}`,
-        date: getCurrentMonthDate(bootcamp.day),
-        videoUrl:
-          bootcamp.day % 2 === 0 ? 'https://example.com/test-video.mp4' : null,
-      },
-    })
-  }
-
-  // Create hardcoded invoice for test user
-  console.log('📆 Creating hardcoded invoice for test user...')
-  await db.invoice.create({
-    data: {
-      appointments: 3,
-      total: 4500,
-      date: getCurrentMonthDate(2),
-      ownerId: testUser.id,
-    },
-  })
 
   console.log('✅ Seeding completed successfully!')
 }
