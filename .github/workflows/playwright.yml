@@ -9,6 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.51.0-jammy
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
@@ -18,7 +30,7 @@ jobs:
       - run: npm ci
       - name: Set up database
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL_CI }}
+          DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
         run: |
           npx prisma migrate deploy
           npx prisma db seed
@@ -31,6 +43,7 @@ jobs:
         run: npx playwright test
         env:
           HOME: /root
+          DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
           BASE_URL: ${{ steps.waitFor200.outputs.url }}
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
