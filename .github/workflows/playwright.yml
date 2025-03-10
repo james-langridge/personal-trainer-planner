@@ -34,18 +34,27 @@ jobs:
         run: |
           npx prisma migrate deploy
           npx prisma db seed
-      - name: Waiting for 200 from the Vercel Preview
-        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
-        id: waitFor200
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 300
+
+      - name: Start server
+        run: |
+          npm run build
+          npm run start &
+          npx wait-on http://localhost:3000 -t 60000
+        env:
+          DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
+      #      - name: Waiting for 200 from the Vercel Preview
+      #        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+      #        id: waitFor200
+      #        with:
+      #          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run tests
         run: npx playwright test
         env:
           HOME: /root
           DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
-          BASE_URL: ${{ steps.waitFor200.outputs.url }}
+          BASE_URL: http://localhost:3000
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
