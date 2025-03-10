@@ -29,6 +29,8 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
 - Data persistence with **[PostgreSQL](https://www.postgresql.org/)**.
 - ORM using **[Prisma](https://www.prisma.io/)**.
 - Authentication using **[Auth.js](https://authjs.dev/)**.
+- Unit tests using **[Vitest](https://vitest.dev/)**, end-to-end tests using
+  **[Playwright](https://playwright.dev/)**
 - Styled using **[Tailwind CSS](https://tailwindcss.com/)**,
   **[Meraki UI](https://merakiui.com/)**, and
   **[shadcn/ui](https://ui.shadcn.com/)**.
