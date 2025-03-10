@@ -8,13 +8,15 @@ jobs:
       github.event_name == 'deployment_status' &&
       github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.43.0-jammy
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
-      - run: npm ci && npx playwright install --with-deps
+      - run: npm ci
       - name: Set up database
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL_CI }}
