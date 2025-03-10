@@ -26,6 +26,7 @@ jobs:
       - name: Run tests
         run: npx playwright test
         env:
+          HOME: /root
           BASE_URL: ${{ github.event.deployment_status.environment_url }}
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
