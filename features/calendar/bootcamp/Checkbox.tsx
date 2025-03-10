@@ -15,6 +15,7 @@ export function Checkbox({
       className="h-7 w-7 rounded"
       onChange={onChange}
       onClick={e => e.stopPropagation()}
+      data-testid="bootcamp-checkbox"
     />
   )
 }

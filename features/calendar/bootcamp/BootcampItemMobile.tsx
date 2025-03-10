@@ -27,6 +27,7 @@ export function BootcampItemMobile({
         checked={isAttending}
         className="h-7 w-7 rounded"
         onChange={toggle}
+        data-testid="bootcamp-checkbox"
       />
 
       <Link
