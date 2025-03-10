@@ -283,19 +283,43 @@ async function main() {
       },
     })
 
-    const getCurrentMonthDate = (day: number) => {
+    const getRelativeDate = (dayOffset: number) => {
       const date = new Date()
-      date.setDate(day)
+      date.setDate(date.getDate() + dayOffset)
       return date
     }
 
-    console.log('📆 Creating hardcoded workouts for test user...')
+    console.log('📆 Creating workouts for test user...')
     const testWorkouts = [
-      {name: 'Morning Routine', day: 5, status: WORKOUT_STATUS.COMPLETED},
-      {name: 'Strength Training', day: 10, status: WORKOUT_STATUS.COMPLETED},
-      {name: 'Cardio Session', day: 15, status: WORKOUT_STATUS.NOT_STARTED},
-      {name: 'Recovery Day', day: 20, status: WORKOUT_STATUS.NOT_STARTED},
-      {name: 'Full Body Workout', day: 25, status: WORKOUT_STATUS.NOT_STARTED},
+      // Yesterday
+      {
+        name: 'Morning Routine',
+        dayOffset: -1,
+        status: WORKOUT_STATUS.COMPLETED,
+      },
+      {
+        name: 'Evening Stretch',
+        dayOffset: -1,
+        status: WORKOUT_STATUS.COMPLETED,
+      },
+      // Today
+      {
+        name: 'Strength Training',
+        dayOffset: 0,
+        status: WORKOUT_STATUS.COMPLETED,
+      },
+      {
+        name: 'Cardio Session',
+        dayOffset: 0,
+        status: WORKOUT_STATUS.NOT_STARTED,
+      },
+      // Tomorrow
+      {name: 'Recovery Day', dayOffset: 1, status: WORKOUT_STATUS.NOT_STARTED},
+      {
+        name: 'Full Body Workout',
+        dayOffset: 1,
+        status: WORKOUT_STATUS.NOT_STARTED,
+      },
     ]
 
     for (const workout of testWorkouts) {
@@ -303,44 +327,49 @@ async function main() {
         data: {
           name: workout.name,
           description: `Test workout: ${workout.name}`,
-          date: getCurrentMonthDate(workout.day),
+          date: getRelativeDate(workout.dayOffset),
           status: workout.status,
           ownerId: testUser.id,
           videoUrl:
-            workout.day % 2 === 0 ? 'https://example.com/test-video.mp4' : null,
+            workout.dayOffset % 2 === 0
+              ? 'https://example.com/test-video.mp4'
+              : null,
         },
       })
     }
 
-    console.log('📆 Creating hardcoded appointments for test user...')
+    console.log('📆 Creating appointments for test user...')
     const testAppointments = [
+      // Yesterday
       {
         name: 'Initial Consultation',
-        day: 3,
+        dayOffset: -1,
         status: APPOINTMENT_STATUS.ATTENDED,
         fee: 1500,
       },
+      // Today
       {
         name: 'Progress Check',
-        day: 8,
+        dayOffset: 0,
         status: APPOINTMENT_STATUS.ATTENDED,
         fee: 1000,
       },
       {
         name: 'Fitness Assessment',
-        day: 13,
+        dayOffset: 0,
         status: APPOINTMENT_STATUS.NOT_ATTENDED,
         fee: 2000,
       },
+      // Tomorrow
       {
         name: 'Nutrition Planning',
-        day: 18,
+        dayOffset: 1,
         status: APPOINTMENT_STATUS.NOT_ATTENDED,
         fee: 1200,
       },
       {
         name: 'Monthly Review',
-        day: 28,
+        dayOffset: 1,
         status: APPOINTMENT_STATUS.NOT_ATTENDED,
         fee: 1500,
       },
@@ -351,23 +380,23 @@ async function main() {
         data: {
           name: appointment.name,
           description: `Test appointment: ${appointment.name}`,
-          date: getCurrentMonthDate(appointment.day),
+          date: getRelativeDate(appointment.dayOffset),
           status: appointment.status,
           ownerId: testUser.id,
           fee: appointment.fee,
           videoUrl:
-            appointment.day % 2 === 0
+            appointment.dayOffset % 2 === 0
               ? 'https://example.com/test-video.mp4'
               : null,
         },
       })
     }
 
-    console.log('📆 Creating hardcoded bootcamps for test user...')
+    console.log('📆 Creating bootcamps for test user...')
     const testBootcamps = [
-      {name: 'Beginner Bootcamp', day: 7},
-      {name: 'Advanced Training', day: 14},
-      {name: 'Specialized Workshop', day: 21},
+      {name: 'Beginner Bootcamp', dayOffset: -1}, // Yesterday
+      {name: 'Advanced Training', dayOffset: 0}, // Today
+      {name: 'Specialized Workshop', dayOffset: 1}, // Tomorrow
     ]
 
     for (const bootcamp of testBootcamps) {
@@ -375,21 +404,21 @@ async function main() {
         data: {
           name: bootcamp.name,
           description: `Test bootcamp: ${bootcamp.name}`,
-          date: getCurrentMonthDate(bootcamp.day),
+          date: getRelativeDate(bootcamp.dayOffset),
           videoUrl:
-            bootcamp.day % 2 === 0
+            bootcamp.dayOffset % 2 === 0
               ? 'https://example.com/test-video.mp4'
               : null,
         },
       })
     }
 
-    console.log('📆 Creating hardcoded invoice for test user...')
+    console.log('📆 Creating invoice for test user...')
     await db.invoice.create({
       data: {
         appointments: 3,
         total: 4500,
-        date: getCurrentMonthDate(2),
+        date: getRelativeDate(-1), // Yesterday
         ownerId: testUser.id,
       },
     })
