@@ -39,6 +39,7 @@ jobs:
         id: waitFor200
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
       - name: Run tests
         run: npx playwright test
         env:
