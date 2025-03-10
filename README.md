@@ -87,10 +87,9 @@ production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
    ```
    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ptp
    ```
-6. Run the
-   [Prisma Migrate command](https://www.prisma.io/docs/reference/api-reference/command-reference#migrate-dev):
+6. Apply the migrations:
    ```sh
-   npx prisma migrate dev
+   npx prisma migrate deploy
    ```
 7. Seed the database:
    ```sh
