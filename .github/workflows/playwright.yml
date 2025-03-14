@@ -10,6 +10,8 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.51.0-noble
       options: --user 1001
+    env:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
 
     services:
       postgres:
@@ -24,61 +26,53 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
+
       - run: npm ci
+
+      - name: Cache Next.js build
+        uses: actions/cache@v3
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
       - name: Set up database
-        env:
-          DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
         run: |
           npx prisma migrate deploy
           npx prisma db seed
-      - name: Build application
-        run: |
-          NEXT_TELEMETRY_DISABLED=1 NODE_ENV=production npm run build --no-lint
+
+      - name: Build app
+        run: npm run build --no-lint
         env:
-          DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
+          NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
+          SENTRY_DISABLE: true
           CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
           CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
 
-      - name: Debug environment information
+      - name: Start server and wait until ready
         run: |
-          echo "Node version: $(node -v)"
-          echo "NPM version: $(npm -v)"
-          echo "OS info: $(cat /etc/os-release)"
-          echo "Container info:"
-          uname -a
-
-      - name: Start application server
-        run: |
-          npm run build
           npm run start &
-          # Wait with a longer timeout and additional verification
-          echo "Waiting for server to be ready..."
-          npx wait-on -v http://localhost:3000 -t 90000
-          # Extra verification - fetch the page and check for expected content
-          curl -s http://localhost:3000 | grep -q "<html" || (echo "Server not ready" && exit 1)
+          npx wait-on http://localhost:3000 -t 60000
         env:
-          DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
-          CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
-          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          AUTH_TRUST_HOST: ${{ secrets.AUTH_TRUST_HOST }}
+          AUTH_TRUST_HOST: 1
 
       - name: Run tests
         run: npx playwright test
         env:
           HOME: /root
-          DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
           BASE_URL: http://localhost:3000
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: |
-            playwright-report/
-            test-results/
+          path: playwright-report/
           retention-days: 30
