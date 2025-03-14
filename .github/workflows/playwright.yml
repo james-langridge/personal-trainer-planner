@@ -52,6 +52,7 @@ jobs:
       - name: Build app
         run: npm run build --no-lint
         env:
+          NEXT_DISABLE_ESLINT: 1
           NEXT_TELEMETRY_DISABLED: 1
           NODE_ENV: production
           CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
