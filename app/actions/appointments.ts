@@ -3,11 +3,21 @@
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
 import {getRepeatingDates} from '@/lib/calendar'
+import {Appointment} from '@prisma/client'
 import {
-  CreateAppointmentBody,
-  DeleteAppointmentBody,
-  UpdateAppointmentBody,
-} from '@/@types/apiRequestTypes'
+  addEventToGoogleCalendar,
+  type CalendarEvent,
+  updateGoogleCalendarEvent,
+} from '@/lib/google-calendar'
+
+type CreateAppointmentBody = Pick<
+  Appointment,
+  'description' | 'fee' | 'name' | 'ownerId' | 'videoUrl'
+> & {
+  date: string
+  selectedDays: number[]
+  weeksToRepeat: number
+}
 
 export async function createAppointment(body: CreateAppointmentBody) {
   const session = await auth()
@@ -37,8 +47,32 @@ export async function createAppointment(body: CreateAppointmentBody) {
     videoUrl,
   }))
 
-  return db.appointment.createMany({data})
+  await db.appointment.createMany({data})
+
+  const eventData: CalendarEvent = {
+    title: name,
+    description: description || undefined,
+    startDate: new Date(date),
+    endDate: new Date(date),
+    isAllDay: true,
+  }
+
+  await addEventToGoogleCalendar(eventData)
 }
+
+type UpdateAppointmentBody = Partial<
+  Pick<
+    Appointment,
+    | 'deleted'
+    | 'description'
+    | 'fee'
+    | 'id'
+    | 'name'
+    | 'ownerId'
+    | 'status'
+    | 'videoUrl'
+  >
+> & {date: Date}
 
 export async function updateAppointment(body: UpdateAppointmentBody) {
   const session = await auth()
@@ -46,7 +80,7 @@ export async function updateAppointment(body: UpdateAppointmentBody) {
     throw new Error('Forbidden.')
   }
 
-  return db.appointment.update({
+  await db.appointment.update({
     where: {
       id: body.id,
     },
@@ -61,6 +95,11 @@ export async function updateAppointment(body: UpdateAppointmentBody) {
     },
   })
 }
+
+type DeleteAppointmentBody = Pick<
+  Appointment,
+  'deleted' | 'id' | 'ownerId' | 'date'
+>
 
 export async function deleteAppointment(body: DeleteAppointmentBody) {
   const session = await auth()

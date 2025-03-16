@@ -1,13 +1,4 @@
-import {Workout, Bootcamp, User, Appointment} from '@prisma/client'
-
-export type CreateAppointmentBody = Pick<
-  Appointment,
-  'description' | 'fee' | 'name' | 'ownerId' | 'videoUrl'
-> & {
-  date: string
-  selectedDays: number[]
-  weeksToRepeat: number
-}
+import {Bootcamp, User, Workout} from '@prisma/client'
 
 export type CreateBootcampBody = Pick<
   Bootcamp,
@@ -32,11 +23,6 @@ export type CreateWorkoutBody = Pick<
   weeksToRepeat: number
 }
 
-export type DeleteAppointmentBody = Pick<
-  Appointment,
-  'deleted' | 'id' | 'ownerId' | 'date'
->
-
 export type DeleteBootcampBody = Pick<Bootcamp, 'deleted' | 'id'>
 
 export type DeleteWorkoutBody = Pick<
@@ -52,20 +38,6 @@ export type InvoiceData = {
   name: string
   total: number
 }
-
-export type UpdateAppointmentBody = Partial<
-  Pick<
-    Appointment,
-    | 'deleted'
-    | 'description'
-    | 'fee'
-    | 'id'
-    | 'name'
-    | 'ownerId'
-    | 'status'
-    | 'videoUrl'
-  >
-> & {date: Date}
 
 export type UpdateBootcampAttendanceBody = {
   bootcampId: string
