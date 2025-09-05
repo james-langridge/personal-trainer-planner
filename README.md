@@ -1,115 +1,306 @@
-[![Tests](https://github.com/james-langridge/personal-trainer-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/james-langridge/personal-trainer-planner/actions/workflows/ci.yml)
+# Personal Trainer Planner
 
-## Personal Trainer Planner
+A client management and scheduling system for personal trainers built with
+Next.js 15, PostgreSQL, and TypeScript.
 
-A single-tenant Next.js app for personal trainers to schedule and track events,
-and manage and invoice trainees. Made in collaboration with and used in
-production by a real [personal trainer](https://www.fitforlifetrainer.co.uk/)
-(**PT**).
+## Architecture Overview
 
-### Features
+### Tech Stack
 
-- Shared calendar between PT and each trainee, editable by PT only.
-- Three calendar event types:
-  - `Workouts`, created by PT, which trainees can check off as completed.
-  - `Appointments`, with fees for billing.
-  - `Bootcamps`, which trainees can check to confirm attendance, if they have
-    enough credits.
-- Appointment attendance and fee data is viewable in a monthly table.
-- Invoices can be generated and emailed to trainees with a button click.
-- Mobile-friendly calendar list-view for trainees.
-- Custom forms via Contentful CMS, emailed to the PT when the trainee completes
-  them.
+- **Framework**: Next.js 15.1.3 with App Router and React 19
+- **Language**: TypeScript 5.7
+- **Database**: PostgreSQL with Prisma ORM 6.3.1
+- **Authentication**: Auth.js v5 (NextAuth) with JWT strategy and credentials
+  provider
+- **UI Components**: shadcn/ui components built on Radix UI primitives
+- **Styling**: Tailwind CSS 3.2 with custom configuration
+- **State Management**: TanStack Query (React Query) v5 for server state
+- **Forms**: React Hook Form with Zod validation
+- **CMS Integration**: Contentful for dynamic content
+- **Email**: Nodemailer for transactional emails
+- **Error Monitoring**: Sentry
+- **Testing**: Vitest for unit tests, Playwright for E2E tests
+- **Deployment**: Vercel with GitHub Actions CI/CD
 
-### Technology
+### Application Structure
 
-- Built with **[Next.js 15](https://nextjs.org/)** and
-  **[React 19](https://react.dev/)**.
-- Written in **[TypeScript](https://www.typescriptlang.org/)**.
-- Data persistence with **[PostgreSQL](https://www.postgresql.org/)**.
-- ORM using **[Prisma](https://www.prisma.io/)**.
-- Authentication using **[Auth.js](https://authjs.dev/)**.
-- Unit tests using **[Vitest](https://vitest.dev/)**, end-to-end tests using
-  **[Playwright](https://playwright.dev/)**
-- Styled using **[Tailwind CSS](https://tailwindcss.com/)**,
-  **[Meraki UI](https://merakiui.com/)**, and
-  **[shadcn/ui](https://ui.shadcn.com/)**.
+```
+├── app/                      # Next.js App Router pages and API routes
+│   ├── (users)/             # Protected routes for authenticated users
+│   │   ├── appointment/     # Individual appointment views
+│   │   ├── bootcamp/        # Group class views
+│   │   ├── calendar/        # Main calendar interface
+│   │   └── forms/          # Dynamic forms from Contentful
+│   ├── admin/              # Admin-only routes (role-based)
+│   │   ├── bootcamps/      # Bootcamp management
+│   │   ├── calendar/       # Admin calendar view
+│   │   └── users/          # User management interface
+│   ├── api/               # API routes
+│   │   └── auth/          # Authentication endpoints
+│   ├── actions/           # Server actions for data mutations
+│   └── hooks/             # Custom React hooks for data fetching
+├── features/              # Feature-based components
+│   ├── bootcamps/        # Bootcamp-specific components
+│   ├── calendar/         # Calendar components
+│   │   ├── appointment/  # Appointment event components
+│   │   ├── bootcamp/     # Bootcamp event components
+│   │   ├── desktop/      # Desktop calendar layout
+│   │   ├── mobile/       # Mobile calendar layout
+│   │   └── workout/      # Workout event components
+│   └── users/            # User management components
+├── components/           # Shared UI components (shadcn/ui)
+├── lib/                  # Core utilities and business logic
+├── prisma/              # Database schema and migrations
+├── server/              # Standalone server (if needed)
+├── e2e/                 # End-to-end tests
+└── public/              # Static assets
+```
 
-### DevOps
+## Data Model
 
-- Deployed on **[Vercel](https://vercel.com/home)**.
-- Production and staging databases on **[Railway](https://railway.app/)**.
-- Automated database backups, testing and code quality with
-  **[GitHub Actions](https://github.com/features/actions)**.
+### Core Entities
 
-### Roadmap
+The application manages three primary event types and two user types:
 
-- Migrate to multi-tenancy.
+#### Event Types
 
-### Screenshots
+1. **Appointments** (`EVENT_TYPE.APPOINTMENT`)
 
-|                                         |                                         |                                         |
-| :-------------------------------------: | :-------------------------------------: | :-------------------------------------: |
-| <img src="public/calendarTrainer1.png"> | <img src="public/calendarTrainer2.png"> | <img src="public/calendarTrainer3.png"> |
-|   <img src="public/clientsTable.png">   |   <img src="public/clientTable.png">    |  <img src="public/mobileCalendar.png">  |
+   - One-on-one training sessions
+   - Fee-based with billing tracking
+   - Attendance status tracking (ATTENDED/NOT_ATTENDED)
+   - Associated with individual users
 
-## Run it locally
+2. **Bootcamps** (`EVENT_TYPE.BOOTCAMP`)
+
+   - Group training sessions
+   - Credit-based attendance system
+   - Many-to-many relationship with users
+   - No individual fees
+
+3. **Workouts** (`EVENT_TYPE.WORKOUT`)
+   - Assigned exercise programs
+   - Status tracking (NOT_STARTED/COMPLETED)
+   - Individual user assignments
+
+#### User Types
+
+- **INDIVIDUAL**: Standard clients with per-appointment fees
+- **BOOTCAMP**: Group class participants using a credit system
+
+### Database Schema
+
+The PostgreSQL database uses Prisma ORM with the following main models:
+
+- `User`: Core user entity with authentication, billing, and type information
+- `Appointment`: Individual training sessions with fees and attendance
+- `Bootcamp`: Group sessions with attendee relationships
+- `Workout`: Exercise assignments with completion status
+- `Invoice`: Billing records aggregating appointments
+- `Account`, `Session`, `VerificationToken`: Auth.js authentication models
+
+## Authentication & Authorization
+
+### Authentication Flow
+
+1. **Credentials Provider**: Email/password authentication with bcrypt hashing
+2. **JWT Strategy**: Stateless session management with 30-day expiry
+3. **Role-Based Access**: Two roles - `user` (clients) and `admin` (trainers)
+4. **Password Reset**: Token-based reset flow via email
+
+### Protected Routes
+
+- `/admin/*`: Requires admin role
+- `/(users)/*`: Requires authentication
+- Public routes: `/auth/*`, root page
+
+## Development Setup
 
 ### Prerequisites
 
-- For the forgot-password api, and emailing invoices and forms, you will need to
-  set up an email account for use with nodemailer. See the
-  [Auth.js](https://next-auth.js.org/providers/email) docs and the
-  [nodemailer docs](https://nodemailer.com/usage/using-gmail/).
-- The app uses Contentful as a CMS for the trainer to create forms for their
-  clients, which are emailed to the trainer on completion. To use this feature
-  you will need a [Contentful](https://www.contentful.com/sign-up/) account.
+- Node.js 18+
+- PostgreSQL 14+
+- npm or yarn
 
-### Steps
+### Environment Configuration
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/james-langridge/personal-trainer-planner.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Copy the environment variable files and update the variables.
-   ```sh
-   cp .env.example .env
-   ```
-4. Create a postgres db in a Docker container:
-   ```sh
-   docker run --name ptp-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ptp -p 5432:5432 -d postgres
-   ```
-5. Set the `DATABASE_URL` in your `.env` file:
-   ```
-   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ptp
-   ```
-6. Apply the migrations:
-   ```sh
-   npx prisma migrate deploy
-   ```
-7. Seed the database:
-   ```sh
-   npx prisma db seed
-   ```
-8. Start the development server:
-   ```sh
-   npm run dev
-   ```
-9. Open up http://localhost:3000 in a browser and log in with the email and
-   password from the seed script.
+1. Copy the environment template:
 
-## Deploy your own
+```bash
+cp .env.example .env
+```
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjames-langridge%2Fpersonal-trainer-planner&env=DATABASE_URL,NEXTAUTH_SECRET,SMTP_PASSWORD,SMTP_USER,SMTP_HOST,SMTP_PORT,EMAIL_FROM,EMAIL_TO,CONTENTFUL_SPACE_ID,CONTENTFUL_ACCESS_TOKEN)
+2. Required environment variables:
 
-See the [Next.js deployment documentation](https://nextjs.org/docs/deployment)
-for more details.
+**Database:**
+
+- `DATABASE_URL`: PostgreSQL connection string
+
+**Authentication:**
+
+- `NEXTAUTH_SECRET`: Random string for JWT signing
+- `NEXTAUTH_URL`: Application URL (http://localhost:3000 for development)
+
+**Email (SMTP):**
+
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`
+- `EMAIL_FROM`: Sender email address
+
+**Contentful CMS:**
+
+- `CONTENTFUL_SPACE_ID`: Space identifier
+- `CONTENTFUL_ACCESS_TOKEN`: Content Delivery API token
+- `CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN`: Management API token
+
+**Branding:**
+
+- `PT_BRAND_NAME`: Business name
+- `NEXT_PUBLIC_PT_FIRST_NAME`: Trainer's first name for UI
+
+### Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Generate Prisma client
+npx prisma generate
+
+# Run database migrations
+npx prisma migrate deploy
+
+# Seed database (optional)
+npx prisma db seed
+
+# Start development server
+npm run dev
+```
+
+The application runs at http://localhost:3000
+
+### Database Setup
+
+For local development with Docker:
+
+```bash
+docker run --name ptp-db \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=ptp \
+  -p 5432:5432 \
+  -d postgres
+```
+
+## Development Commands
+
+```bash
+npm run dev                    # Start development server with Turbopack
+npm run build                  # Build for production
+npm run start                  # Start production server
+npm run lint                   # Run ESLint with auto-fix
+npm run format                 # Format code with Prettier
+npm run test:unit             # Run unit tests (Vitest)
+npm run test:e2e              # Run E2E tests (Playwright)
+npm test                      # Run all tests
+npx prisma migrate dev        # Create new migration
+npx prisma studio             # Open Prisma Studio GUI
+```
+
+## Key Implementation Patterns
+
+### Data Fetching
+
+1. **Server Components**: Direct database queries via Prisma in RSC
+2. **Client Components**: TanStack Query for mutations and optimistic updates
+3. **Server Actions**: Form submissions and data mutations
+4. **Prefetching**: Adjacent month calendar data prefetching
+
+### State Management
+
+- **Server State**: TanStack Query with stale-while-revalidate
+- **Form State**: React Hook Form with Zod schemas
+- **URL State**: Query parameters for calendar navigation
+
+### Calendar Implementation
+
+The calendar features responsive design with separate implementations:
+
+- **Desktop**: Full month grid view with drag interactions
+- **Mobile**: Compact week view with touch optimization
+- **Event Types**: Color-coded by type with distinct UI patterns
+
+### Billing System
+
+1. **Appointment Fees**: Tracked per appointment with attendance status
+2. **Invoice Generation**: Monthly aggregation of attended appointments
+3. **Credit System**: Pre-purchased credits for bootcamp attendance
+4. **Email Invoices**: Automated monthly billing emails
+
+## Testing Strategy
+
+### Unit Testing (Vitest)
+
+- Business logic in `/lib`
+- Component testing with React Testing Library
+- Mock external dependencies via MSW
+
+### E2E Testing (Playwright)
+
+- Critical user flows
+- Multi-browser testing (Chrome, Safari)
+- Mobile viewport testing
+- CI integration with GitHub Actions
+
+## Deployment
+
+### Production Environment
+
+- **Hosting**: Vercel with automatic deployments
+- **Database**: PostgreSQL on Railway or similar
+- **Environment**: Separate staging and production configs
+- **Monitoring**: Sentry for error tracking
+
+### CI/CD Pipeline
+
+GitHub Actions workflow:
+
+1. Runs linting and formatting checks
+2. Executes unit and E2E test suites
+3. Builds production bundle
+4. Deploys to Vercel on merge to main
+
+### Database Backups
+
+Automated backup script available:
+
+```bash
+npm run backup
+```
+
+## Performance Considerations
+
+- **Turbopack**: Fast HMR in development
+- **Server Components**: Reduced client bundle size
+- **Image Optimization**: Next.js Image component with remote patterns
+- **Code Splitting**: Automatic route-based splitting
+- **Prefetching**: Strategic data prefetching for calendar navigation
+
+## Security
+
+- **Authentication**: Secure JWT implementation with httpOnly cookies
+- **Password Storage**: bcrypt hashing with salt rounds
+- **Input Validation**: Zod schemas on all user inputs
+- **SQL Injection**: Protected via Prisma parameterized queries
+- **CORS**: Configured for production domains
+- **Environment Variables**: Sensitive data never committed to repository
+
+## Contributing
+
+1. Branch from `main`
+2. Follow existing code patterns and conventions
+3. Write tests for new features
+4. Ensure all tests pass before submitting PR
+5. Update documentation as needed
 
 ## License
 
-Distributed under the
-[MIT License](https://github.com/james-langridge/personal-trainer-planner/blob/main/LICENSE).
+MIT
