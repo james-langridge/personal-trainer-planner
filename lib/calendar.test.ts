@@ -275,9 +275,9 @@ describe('getEventsToday', () => {
     }
 
     const events = [
-      {date: '2024-01-01', id: 1},
-      {date: '2024-01-02', id: 2},
-      {date: '2024-01-01', id: 3},
+      {date: '2024-01-01', id: 1, name: 'Event 1'} as any,
+      {date: '2024-01-02', id: 2, name: 'Event 2'} as any,
+      {date: '2024-01-01', id: 3, name: 'Event 3'} as any,
     ]
 
     const result = getEventsToday(calendarDay, events)
@@ -294,8 +294,8 @@ describe('getEventsToday', () => {
     }
 
     const events = [
-      {date: '2024-01-02', id: 1},
-      {date: '2024-01-03', id: 2},
+      {date: '2024-01-02', id: 1, name: 'Event 1'} as any,
+      {date: '2024-01-03', id: 2, name: 'Event 2'} as any,
     ]
 
     const result = getEventsToday(calendarDay, events)
