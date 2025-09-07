@@ -18,6 +18,7 @@ Next.js 15, PostgreSQL, and TypeScript.
 - **Forms**: React Hook Form with Zod validation
 - **CMS Integration**: Contentful for dynamic content
 - **Email**: Nodemailer for transactional emails
+- **Calendar Integration**: Google Calendar API for appointment synchronization
 - **Error Monitoring**: Sentry
 - **Testing**: Vitest for unit tests, Playwright for E2E tests
 - **Deployment**: Vercel with GitHub Actions CI/CD
@@ -70,6 +71,7 @@ The application manages three primary event types and two user types:
    - Fee-based with billing tracking
    - Attendance status tracking (ATTENDED/NOT_ATTENDED)
    - Associated with individual users
+   - Automatic synchronization with Google Calendar
 
 2. **Bootcamps** (`EVENT_TYPE.BOOTCAMP`)
 
@@ -151,6 +153,13 @@ cp .env.example .env
 - `CONTENTFUL_SPACE_ID`: Space identifier
 - `CONTENTFUL_ACCESS_TOKEN`: Content Delivery API token
 - `CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN`: Management API token
+
+**Google Calendar (Optional):**
+
+- `GOOGLE_CALENDAR_ID`: Calendar ID for appointment sync
+- `GOOGLE_SERVICE_ACCOUNT_EMAIL`: Service account email
+- `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`: Service account private key
+- `TIME_ZONE`: Timezone for calendar events (default: Europe/London)
 
 **Branding:**
 
@@ -234,6 +243,44 @@ The calendar features responsive design with separate implementations:
 2. **Invoice Generation**: Monthly aggregation of attended appointments
 3. **Credit System**: Pre-purchased credits for bootcamp attendance
 4. **Email Invoices**: Automated monthly billing emails
+
+## Google Calendar Integration
+
+The application supports automatic synchronization of appointments with Google
+Calendar using a service account. This allows trainers to manage their schedule
+in one place while keeping their Google Calendar updated.
+
+### Features
+
+- **Automatic Sync**: Appointments are automatically added to Google Calendar
+  when created
+- **Bidirectional Updates**: Changes to appointments update the corresponding
+  Google Calendar events
+- **Soft Delete Handling**: Deleted appointments are removed from Google
+  Calendar
+- **Resilient Sync**: Database operations succeed even if Google Calendar sync
+  fails
+- **User Feedback**: Toast notifications inform users of sync status
+
+### Setup
+
+1. Create a Google Cloud project and enable the Calendar API
+2. Create a service account and download the JSON key file
+3. Share your Google Calendar with the service account email (with write
+   permissions)
+4. Add the following environment variables:
+   - `GOOGLE_CALENDAR_ID`: Your calendar ID (found in Calendar settings)
+   - `GOOGLE_SERVICE_ACCOUNT_EMAIL`: Service account email
+   - `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`: Private key from JSON file
+   - `TIME_ZONE`: Your timezone (e.g., 'Europe/London')
+
+### Implementation Details
+
+- Appointments store the Google Calendar event ID for tracking
+- Batch operations for creating multiple recurring appointments
+- Graceful error handling with user notifications
+- Manual retry capability for failed syncs (via
+  `syncAppointmentToGoogleCalendar`)
 
 ## Testing Strategy
 
