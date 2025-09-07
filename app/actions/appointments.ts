@@ -6,8 +6,10 @@ import {getRepeatingDates} from '@/lib/calendar'
 import {Appointment} from '@prisma/client'
 import {
   addEventToGoogleCalendar,
-  type CalendarEvent,
+  addMultipleEventsToGoogleCalendar,
   updateGoogleCalendarEvent,
+  deleteGoogleCalendarEvent,
+  type CalendarEvent,
 } from '@/lib/google-calendar'
 
 type CreateAppointmentBody = Pick<
@@ -19,7 +21,18 @@ type CreateAppointmentBody = Pick<
   weeksToRepeat: number
 }
 
-export async function createAppointment(body: CreateAppointmentBody) {
+export type CreateAppointmentResult = {
+  appointments: Appointment[]
+  syncStatus: {
+    success: boolean
+    message?: string
+    failedCount?: number
+  }
+}
+
+export async function createAppointment(
+  body: CreateAppointmentBody,
+): Promise<CreateAppointmentResult> {
   const session = await auth()
   if (session?.user?.role !== 'admin') {
     throw new Error('Forbidden.')
@@ -38,26 +51,84 @@ export async function createAppointment(body: CreateAppointmentBody) {
 
   const dates = getRepeatingDates(date, selectedDays, weeksToRepeat)
 
-  const data = dates.map(date => ({
-    date,
-    description,
-    fee,
-    name,
-    ownerId,
-    videoUrl,
-  }))
+  // Create appointments in database
+  const appointments = await db.$transaction(
+    dates.map(date =>
+      db.appointment.create({
+        data: {
+          date,
+          description,
+          fee,
+          name,
+          ownerId,
+          videoUrl,
+        },
+      }),
+    ),
+  )
 
-  await db.appointment.createMany({data})
-
-  const eventData: CalendarEvent = {
-    title: name,
-    description: description || undefined,
-    startDate: new Date(date),
-    endDate: new Date(date),
-    isAllDay: true,
+  // Try to sync with Google Calendar
+  let syncStatus: CreateAppointmentResult['syncStatus'] = {
+    success: true,
   }
 
-  await addEventToGoogleCalendar(eventData)
+  try {
+    const calendarEvents: CalendarEvent[] = appointments.map(appt => ({
+      title: appt.name,
+      description: appt.description || '',
+      startDate: appt.date,
+      endDate: appt.date,
+      isAllDay: true,
+    }))
+
+    const results = await addMultipleEventsToGoogleCalendar(calendarEvents)
+
+    // Update appointments with Google Calendar IDs
+    const updatePromises = []
+    let successCount = 0
+    let failedCount = 0
+
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i]
+      if (result.success && result.googleCalendarEventId) {
+        successCount++
+        updatePromises.push(
+          db.appointment.update({
+            where: {id: appointments[i].id},
+            data: {googleCalendarEventId: result.googleCalendarEventId},
+          }),
+        )
+        // Update the local appointment object
+        appointments[i].googleCalendarEventId = result.googleCalendarEventId
+      } else {
+        failedCount++
+      }
+    }
+
+    if (updatePromises.length > 0) {
+      await db.$transaction(updatePromises)
+    }
+
+    if (failedCount > 0) {
+      syncStatus = {
+        success: false,
+        message: `${failedCount} out of ${appointments.length} appointments failed to sync with Google Calendar`,
+        failedCount,
+      }
+    }
+  } catch (error) {
+    console.error('Error syncing with Google Calendar:', error)
+    syncStatus = {
+      success: false,
+      message: 'Failed to sync with Google Calendar. Appointments were saved.',
+      failedCount: appointments.length,
+    }
+  }
+
+  return {
+    appointments,
+    syncStatus,
+  }
 }
 
 type UpdateAppointmentBody = Partial<
@@ -74,13 +145,24 @@ type UpdateAppointmentBody = Partial<
   >
 > & {date: Date}
 
-export async function updateAppointment(body: UpdateAppointmentBody) {
+export type UpdateAppointmentResult = {
+  appointment: Appointment
+  syncStatus: {
+    success: boolean
+    message?: string
+  }
+}
+
+export async function updateAppointment(
+  body: UpdateAppointmentBody,
+): Promise<UpdateAppointmentResult> {
   const session = await auth()
   if (session?.user?.role !== 'admin') {
     throw new Error('Forbidden.')
   }
 
-  await db.appointment.update({
+  // Update appointment in database
+  const appointment = await db.appointment.update({
     where: {
       id: body.id,
     },
@@ -94,6 +176,50 @@ export async function updateAppointment(body: UpdateAppointmentBody) {
       ...(body.videoUrl !== undefined && {videoUrl: body.videoUrl}),
     },
   })
+
+  // Try to sync with Google Calendar
+  let syncStatus: UpdateAppointmentResult['syncStatus'] = {
+    success: true,
+  }
+
+  try {
+    const calendarEvent: CalendarEvent = {
+      title: appointment.name,
+      description: appointment.description || '',
+      startDate: appointment.date,
+      endDate: appointment.date,
+      isAllDay: true,
+    }
+
+    if (appointment.googleCalendarEventId) {
+      // Update existing Google Calendar event
+      await updateGoogleCalendarEvent(
+        appointment.googleCalendarEventId,
+        calendarEvent,
+      )
+    } else {
+      // Create new Google Calendar event if none exists
+      const googleEvent = await addEventToGoogleCalendar(calendarEvent)
+      if (googleEvent.id) {
+        await db.appointment.update({
+          where: {id: appointment.id},
+          data: {googleCalendarEventId: googleEvent.id},
+        })
+        appointment.googleCalendarEventId = googleEvent.id
+      }
+    }
+  } catch (error) {
+    console.error('Error syncing with Google Calendar:', error)
+    syncStatus = {
+      success: false,
+      message: 'Failed to sync with Google Calendar. Changes were saved.',
+    }
+  }
+
+  return {
+    appointment,
+    syncStatus,
+  }
 }
 
 type DeleteAppointmentBody = Pick<
@@ -101,13 +227,30 @@ type DeleteAppointmentBody = Pick<
   'deleted' | 'id' | 'ownerId' | 'date'
 >
 
-export async function deleteAppointment(body: DeleteAppointmentBody) {
+export type DeleteAppointmentResult = {
+  success: boolean
+  syncStatus: {
+    success: boolean
+    message?: string
+  }
+}
+
+export async function deleteAppointment(
+  body: DeleteAppointmentBody,
+): Promise<DeleteAppointmentResult> {
   const session = await auth()
   if (session?.user?.role !== 'admin') {
     throw new Error('Forbidden.')
   }
 
-  return db.appointment.update({
+  // Get the appointment to check for Google Calendar ID
+  const appointment = await db.appointment.findUnique({
+    where: {id: body.id},
+    select: {googleCalendarEventId: true},
+  })
+
+  // Soft delete in database
+  await db.appointment.update({
     where: {
       id: body.id,
     },
@@ -115,6 +258,29 @@ export async function deleteAppointment(body: DeleteAppointmentBody) {
       deleted: true,
     },
   })
+
+  // Try to delete from Google Calendar
+  let syncStatus: DeleteAppointmentResult['syncStatus'] = {
+    success: true,
+  }
+
+  if (appointment?.googleCalendarEventId) {
+    try {
+      await deleteGoogleCalendarEvent(appointment.googleCalendarEventId)
+    } catch (error) {
+      console.error('Error deleting from Google Calendar:', error)
+      syncStatus = {
+        success: false,
+        message:
+          'Failed to delete from Google Calendar. Appointment was removed from the system.',
+      }
+    }
+  }
+
+  return {
+    success: true,
+    syncStatus,
+  }
 }
 
 export async function getAppointment(id: string) {
@@ -131,4 +297,63 @@ export async function getAppointment(id: string) {
   }
 
   return appointment
+}
+
+/**
+ * Sync a single appointment to Google Calendar (for retry functionality)
+ */
+export async function syncAppointmentToGoogleCalendar(
+  appointmentId: string,
+): Promise<{success: boolean; message?: string}> {
+  const session = await auth()
+  if (session?.user?.role !== 'admin') {
+    throw new Error('Forbidden.')
+  }
+
+  try {
+    const appointment = await db.appointment.findUnique({
+      where: {id: appointmentId},
+    })
+
+    if (!appointment) {
+      throw new Error('Appointment not found')
+    }
+
+    const calendarEvent: CalendarEvent = {
+      title: appointment.name,
+      description: appointment.description || '',
+      startDate: appointment.date,
+      endDate: appointment.date,
+      isAllDay: true,
+    }
+
+    if (appointment.googleCalendarEventId) {
+      // Update existing event
+      await updateGoogleCalendarEvent(
+        appointment.googleCalendarEventId,
+        calendarEvent,
+      )
+      return {success: true, message: 'Google Calendar event updated'}
+    } else {
+      // Create new event
+      const googleEvent = await addEventToGoogleCalendar(calendarEvent)
+      if (googleEvent.id) {
+        await db.appointment.update({
+          where: {id: appointmentId},
+          data: {googleCalendarEventId: googleEvent.id},
+        })
+        return {success: true, message: 'Synced to Google Calendar'}
+      }
+      throw new Error('Failed to create Google Calendar event')
+    }
+  } catch (error) {
+    console.error('Error syncing appointment to Google Calendar:', error)
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : 'Failed to sync with Google Calendar',
+    }
+  }
 }

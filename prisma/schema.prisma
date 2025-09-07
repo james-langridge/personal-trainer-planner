@@ -17,19 +17,20 @@ enum EVENT_TYPE {
 }
 
 model Appointment {
-  createdAt   DateTime           @default(now())
-  date        DateTime
-  deleted     Boolean            @default(false)
-  description String?
-  fee         Int                @default(0)
-  id          String             @id @default(uuid())
-  name        String
-  owner       User               @relation(fields: [ownerId], references: [id])
-  ownerId     String
-  status      APPOINTMENT_STATUS @default(NOT_ATTENDED)
-  updatedAt   DateTime           @updatedAt
-  type        EVENT_TYPE         @default(APPOINTMENT)
-  videoUrl    String?
+  createdAt            DateTime           @default(now())
+  date                 DateTime
+  deleted              Boolean            @default(false)
+  description          String?
+  fee                  Int                @default(0)
+  googleCalendarEventId String?
+  id                   String             @id @default(uuid())
+  name                 String
+  owner                User               @relation(fields: [ownerId], references: [id])
+  ownerId              String
+  status               APPOINTMENT_STATUS @default(NOT_ATTENDED)
+  updatedAt            DateTime           @updatedAt
+  type                 EVENT_TYPE         @default(APPOINTMENT)
+  videoUrl             String?
 }
 
 enum APPOINTMENT_STATUS {
