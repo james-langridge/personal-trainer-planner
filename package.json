@@ -16,6 +16,7 @@
   "scripts": {
     "backup": "./scripts/backup.sh",
     "build": "npx prisma generate && next build",
+    "vercel-build": "npx prisma generate && ([ \"$VERCEL_ENV\" = \"production\" ] || npx prisma migrate deploy) && next build",
     "contentful-typescript-codegen": "contentful-typescript-codegen --output @types/generated/contentful.d.ts",
     "dev": "npx prisma generate && next dev --turbopack",
     "format": "prettier --write .",
