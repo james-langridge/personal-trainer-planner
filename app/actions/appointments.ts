@@ -67,61 +67,79 @@ export async function createAppointment(
     ),
   )
 
-  // Try to sync with Google Calendar
+  // Try to sync with Google Calendar (with timeout protection)
   let syncStatus: CreateAppointmentResult['syncStatus'] = {
     success: true,
   }
 
-  try {
-    const calendarEvents: CalendarEvent[] = appointments.map(appt => ({
-      title: appt.name,
-      description: appt.description || '',
-      startDate: appt.date,
-      endDate: appt.date,
-      isAllDay: true,
-    }))
+  // Only sync if we have Google Calendar configured
+  if (process.env.GOOGLE_CALENDAR_ID) {
+    try {
+      // Set a timeout for Google Calendar sync (8 seconds to be safe with Vercel's 10s limit)
+      const syncPromise = addMultipleEventsToGoogleCalendar(
+        appointments.map(appt => ({
+          title: appt.name,
+          description: appt.description || '',
+          startDate: appt.date,
+          endDate: appt.date,
+          isAllDay: true,
+        })),
+      )
 
-    const results = await addMultipleEventsToGoogleCalendar(calendarEvents)
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error('Google Calendar sync timeout')),
+          8000,
+        ),
+      )
 
-    // Update appointments with Google Calendar IDs
-    const updatePromises = []
-    let successCount = 0
-    let failedCount = 0
+      const results = (await Promise.race([syncPromise, timeoutPromise])) as any
 
-    for (let i = 0; i < results.length; i++) {
-      const result = results[i]
-      if (result.success && result.googleCalendarEventId) {
-        successCount++
-        updatePromises.push(
-          db.appointment.update({
-            where: {id: appointments[i].id},
-            data: {googleCalendarEventId: result.googleCalendarEventId},
-          }),
-        )
-        // Update the local appointment object
-        appointments[i].googleCalendarEventId = result.googleCalendarEventId
-      } else {
-        failedCount++
+      // Update appointments with Google Calendar IDs
+      const updatePromises = []
+      let successCount = 0
+      let failedCount = 0
+
+      for (let i = 0; i < results.length; i++) {
+        const result = results[i]
+        if (result.success && result.googleCalendarEventId) {
+          successCount++
+          updatePromises.push(
+            db.appointment.update({
+              where: {id: appointments[i].id},
+              data: {googleCalendarEventId: result.googleCalendarEventId},
+            }),
+          )
+          // Update the local appointment object
+          appointments[i].googleCalendarEventId = result.googleCalendarEventId
+        } else {
+          failedCount++
+        }
       }
-    }
 
-    if (updatePromises.length > 0) {
-      await db.$transaction(updatePromises)
-    }
+      if (updatePromises.length > 0) {
+        await db.$transaction(updatePromises)
+      }
 
-    if (failedCount > 0) {
+      if (failedCount > 0) {
+        syncStatus = {
+          success: false,
+          message: `${failedCount} out of ${appointments.length} appointments failed to sync with Google Calendar`,
+          failedCount,
+        }
+      }
+    } catch (error) {
+      console.error('Error syncing with Google Calendar:', error)
+      const isTimeout =
+        error instanceof Error &&
+        error.message === 'Google Calendar sync timeout'
       syncStatus = {
         success: false,
-        message: `${failedCount} out of ${appointments.length} appointments failed to sync with Google Calendar`,
-        failedCount,
+        message: isTimeout
+          ? 'Google Calendar sync took too long. Appointments were saved. You can retry sync later.'
+          : 'Failed to sync with Google Calendar. Appointments were saved.',
+        failedCount: appointments.length,
       }
-    }
-  } catch (error) {
-    console.error('Error syncing with Google Calendar:', error)
-    syncStatus = {
-      success: false,
-      message: 'Failed to sync with Google Calendar. Appointments were saved.',
-      failedCount: appointments.length,
     }
   }
 
