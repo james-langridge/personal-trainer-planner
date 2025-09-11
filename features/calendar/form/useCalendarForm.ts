@@ -1,6 +1,12 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
 import {CalendarFormState, Day} from '@/@types/types'
-import {getWeekday, padZero} from '@/lib/calendar'
+import {
+  getWeekday,
+  padZero,
+  extractTimeString,
+  combineDateAndTime,
+  addHours,
+} from '@/lib/calendar'
 import {useRouter} from 'next/navigation'
 import {useUserFee} from '@/app/hooks/users'
 import {
@@ -31,6 +37,8 @@ const initialState: CalendarFormState = {
   name: '',
   ownerId: '',
   selectedDays: new Set<number>(),
+  startTime: '',
+  endTime: '',
   type: 'WORKOUT',
   videoUrl: '',
   weeksToRepeat: 0,
@@ -108,16 +116,27 @@ export function useCalendarForm({
 
         case 'APPOINTMENT':
           const fee = Math.round(parseFloat(form.fee) * 100)
+          const startTime = form.startTime
+            ? combineDateAndTime(form.date, form.startTime)
+            : null
+          const endTime = form.endTime
+            ? combineDateAndTime(form.date, form.endTime)
+            : null
+
           if (form.id) {
             updateAppointment.mutate({
               ...form,
               date: new Date(form.date),
               fee,
+              startTime,
+              endTime,
             })
           } else {
             createAppointment.mutate({
               ...form,
               fee,
+              startTime,
+              endTime,
               selectedDays: [...form.selectedDays],
             })
           }
@@ -188,6 +207,21 @@ export function useCalendarForm({
       setIsLoading(prev => ({...prev, deleting: false}))
     }
   }
+
+  const handleStartTimeChange = useCallback((startTime: string) => {
+    setForm(prev => {
+      const newForm = {...prev, startTime}
+      // Auto-set end time to 1 hour after start time if start time is set and end time is empty
+      if (startTime && !prev.endTime) {
+        const startDateTime = combineDateAndTime(prev.date, startTime)
+        if (startDateTime) {
+          const endDateTime = addHours(startDateTime, 1)
+          newForm.endTime = extractTimeString(endDateTime)
+        }
+      }
+      return newForm
+    })
+  }, [])
 
   const toggleDay = useCallback(
     (weekday: number) => {
@@ -263,6 +297,8 @@ export function useCalendarForm({
             description: eventData.description || '',
             ...(eventType === 'APPOINTMENT' && {
               fee: ((eventData as any).fee / 100).toFixed(2),
+              startTime: extractTimeString((eventData as any).startTime ? new Date((eventData as any).startTime) : null),
+              endTime: extractTimeString((eventData as any).endTime ? new Date((eventData as any).endTime) : null),
             }),
             id: eventData.id,
             name: eventData.name,
@@ -288,6 +324,7 @@ export function useCalendarForm({
     error,
     form,
     handleDelete,
+    handleStartTimeChange,
     handleSubmit,
     inputRef,
     isCreating: isLoading.creating,

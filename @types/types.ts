@@ -8,6 +8,8 @@ export type CalendarFormState = {
   name: string
   ownerId: string
   selectedDays: Set<number>
+  startTime: string
+  endTime: string
   type?: EventType
   videoUrl: string | null
   weeksToRepeat: number
