@@ -297,8 +297,16 @@ export function useCalendarForm({
             description: eventData.description || '',
             ...(eventType === 'APPOINTMENT' && {
               fee: ((eventData as any).fee / 100).toFixed(2),
-              startTime: extractTimeString((eventData as any).startTime ? new Date((eventData as any).startTime) : null),
-              endTime: extractTimeString((eventData as any).endTime ? new Date((eventData as any).endTime) : null),
+              startTime: extractTimeString(
+                (eventData as any).startTime
+                  ? new Date((eventData as any).startTime)
+                  : null,
+              ),
+              endTime: extractTimeString(
+                (eventData as any).endTime
+                  ? new Date((eventData as any).endTime)
+                  : null,
+              ),
             }),
             id: eventData.id,
             name: eventData.name,

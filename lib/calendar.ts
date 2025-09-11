@@ -42,7 +42,7 @@ export function combineDateAndTime(
   try {
     const date = new Date(dateStr)
     const time = parse(timeStr, 'HH:mm', new Date())
-    
+
     return set(date, {
       hours: time.getHours(),
       minutes: time.getMinutes(),

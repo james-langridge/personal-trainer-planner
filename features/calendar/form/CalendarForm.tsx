@@ -129,7 +129,9 @@ export function CalendarForm({
           <button
             type="button"
             className="underline hover:text-gray-800 dark:hover:text-gray-200"
-            onClick={() => setForm(form => ({...form, startTime: '', endTime: ''}))}
+            onClick={() =>
+              setForm(form => ({...form, startTime: '', endTime: ''}))
+            }
           >
             Clear times (make all-day event)
           </button>
