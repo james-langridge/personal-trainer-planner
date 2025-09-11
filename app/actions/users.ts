@@ -61,6 +61,8 @@ export async function getUsers(params: GetUAllUsersParams): Promise<User[]> {
           id: true,
           name: true,
           ownerId: true,
+          startTime: true,
+          endTime: true,
           status: true,
           videoUrl: true,
         },
@@ -133,6 +135,8 @@ export type UserEventsData = {
     name: string
     date: Date
     ownerId: string
+    startTime: Date | null
+    endTime: Date | null
     status: APPOINTMENT_STATUS
   }[]
   bootcamps: {
@@ -159,6 +163,8 @@ export async function getUserEvents({
           id: true,
           name: true,
           ownerId: true,
+          startTime: true,
+          endTime: true,
           status: true,
         },
         where: {
