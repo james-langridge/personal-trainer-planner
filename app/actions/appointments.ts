@@ -17,6 +17,8 @@ type CreateAppointmentBody = Pick<
   'description' | 'fee' | 'name' | 'ownerId' | 'videoUrl'
 > & {
   date: string
+  startTime: Date | null
+  endTime: Date | null
   selectedDays: number[]
   weeksToRepeat: number
 }
@@ -47,6 +49,8 @@ export async function createAppointment(
     name,
     ownerId,
     selectedDays,
+    startTime,
+    endTime,
     videoUrl,
     weeksToRepeat,
   } = body
@@ -63,6 +67,8 @@ export async function createAppointment(
           fee,
           name,
           ownerId,
+          startTime,
+          endTime,
           videoUrl,
         },
       }),
@@ -82,9 +88,9 @@ export async function createAppointment(
         appointments.map(appt => ({
           title: appt.name,
           description: appt.description || '',
-          startDate: appt.date,
-          endDate: appt.date,
-          isAllDay: true,
+          startDate: appt.startTime || appt.date,
+          endDate: appt.endTime || appt.date,
+          isAllDay: !appt.startTime || !appt.endTime,
         })),
       )
 
@@ -156,6 +162,8 @@ type UpdateAppointmentBody = Partial<
     | 'id'
     | 'name'
     | 'ownerId'
+    | 'startTime'
+    | 'endTime'
     | 'status'
     | 'videoUrl'
   >
@@ -188,6 +196,8 @@ export async function updateAppointment(
       ...(body.deleted === true && {deleted: true}),
       ...(body.description !== undefined && {description: body.description}),
       ...(body.name !== undefined && {name: body.name}),
+      ...(body.startTime !== undefined && {startTime: body.startTime}),
+      ...(body.endTime !== undefined && {endTime: body.endTime}),
       ...(body.status !== undefined && {status: body.status}),
       ...(body.videoUrl !== undefined && {videoUrl: body.videoUrl}),
     },
@@ -202,9 +212,9 @@ export async function updateAppointment(
     const calendarEvent: CalendarEvent = {
       title: appointment.name,
       description: appointment.description || '',
-      startDate: appointment.date,
-      endDate: appointment.date,
-      isAllDay: true,
+      startDate: appointment.startTime || appointment.date,
+      endDate: appointment.endTime || appointment.date,
+      isAllDay: !appointment.startTime || !appointment.endTime,
     }
 
     if (appointment.googleCalendarEventId) {
@@ -338,9 +348,9 @@ export async function syncAppointmentToGoogleCalendar(
     const calendarEvent: CalendarEvent = {
       title: appointment.name,
       description: appointment.description || '',
-      startDate: appointment.date,
-      endDate: appointment.date,
-      isAllDay: true,
+      startDate: appointment.startTime || appointment.date,
+      endDate: appointment.endTime || appointment.date,
+      isAllDay: !appointment.startTime || !appointment.endTime,
     }
 
     if (appointment.googleCalendarEventId) {
