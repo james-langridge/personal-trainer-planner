@@ -1,7 +1,6 @@
-import {USER_TYPE} from '@prisma/client'
-
 import EditForm from '@/app/admin/user/[id]/edit/edit-form'
 import {db} from '@/lib/db'
+import {USER_TYPE} from '@prisma/client'
 
 export default async function EditUser(props: {params: Promise<{id: string}>}) {
   const params = await props.params

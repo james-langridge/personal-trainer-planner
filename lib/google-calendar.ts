@@ -1,8 +1,7 @@
 'use server'
 
-import {JWT} from 'google-auth-library'
 import {google, calendar_v3} from 'googleapis'
-
+import {JWT} from 'google-auth-library'
 import Schema$Event = calendar_v3.Schema$Event
 
 const getCalendarClient = () => {

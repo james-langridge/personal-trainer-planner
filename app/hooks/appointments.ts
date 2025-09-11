@@ -1,13 +1,11 @@
 'use client'
 
-import {EVENT_TYPE} from '@prisma/client'
 import {
   skipToken,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
-
 import {
   createAppointment,
   deleteAppointment,
@@ -15,6 +13,7 @@ import {
   syncAppointmentToGoogleCalendar,
   updateAppointment,
 } from '@/app/actions/appointments'
+import {EVENT_TYPE} from '@prisma/client'
 import {useToast} from '@/components/use-toast'
 
 export function useGetAppointment(eventType?: EVENT_TYPE, id?: string) {

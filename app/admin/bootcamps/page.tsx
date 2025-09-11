@@ -1,8 +1,7 @@
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
-
+import {getPrismaDateFilter} from '@/lib/calendar'
 import {getBootcamps} from '@/app/actions/bootcamps'
 import BootcampsView from '@/app/admin/bootcamps/BootcampsView'
-import {getPrismaDateFilter} from '@/lib/calendar'
 
 export default async function Page() {
   const queryClient = new QueryClient()
@@ -12,10 +11,13 @@ export default async function Page() {
   const currentMonth = now.getMonth()
   const dateFilter = getPrismaDateFilter(currentYear, currentMonth)
 
-  const params = {dateFilter}
   await queryClient.prefetchQuery({
-    queryKey: ['bootcamps-full', params],
-    queryFn: () => getBootcamps(params),
+    queryKey: [
+      'bootcamps',
+      dateFilter.gte.toISOString(),
+      dateFilter.lt.toISOString(),
+    ],
+    queryFn: () => getBootcamps({dateFilter}),
   })
 
   return (
