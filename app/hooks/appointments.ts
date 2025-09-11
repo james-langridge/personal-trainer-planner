@@ -34,6 +34,13 @@ export function useCreateAppointment(userId: string) {
     mutationFn: createAppointment,
     // Optimistic update
     onMutate: async newAppointmentData => {
+      // Show initial toast for large operations
+      if (newAppointmentData.selectedDays.length > 5) {
+        toast({
+          title: 'Creating appointments...',
+          description: `Creating ${newAppointmentData.selectedDays.length} appointments and syncing to Google Calendar. This may take a moment.`,
+        })
+      }
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({queryKey: ['user-events', userId]})
 
@@ -86,18 +93,27 @@ export function useCreateAppointment(userId: string) {
       queryClient.invalidateQueries({queryKey: ['user-events', userId]})
     },
     onSuccess: result => {
-      // Handle sync status
+      // Handle sync status with detailed feedback
       if (!result.syncStatus.success) {
+        const {successCount, totalCount, message} = result.syncStatus
         toast({
           variant: 'destructive',
-          title: 'Appointments saved',
+          title: 'Partial sync',
           description:
-            result.syncStatus.message ||
-            'Saved locally but Google Calendar sync failed. You can retry sync later.',
+            successCount && totalCount
+              ? `${successCount} of ${totalCount} appointments synced. ${message}`
+              : message ||
+                'Saved locally but Google Calendar sync failed. You can retry sync later.',
         })
       } else {
+        const {totalCount} = result.syncStatus
         toast({
-          description: 'Appointments created and synced to Google Calendar',
+          title: 'Success',
+          description: totalCount
+            ? `Created ${totalCount} appointment${
+                totalCount > 1 ? 's' : ''
+              } and synced to Google Calendar`
+            : 'Appointments created and synced to Google Calendar',
         })
       }
     },

@@ -91,89 +91,111 @@ export async function addMultipleEventsToGoogleCalendar(
       | {success: true; event: Schema$Event; originalEvent: CalendarEvent}
       | {success: false; error: string; originalEvent: CalendarEvent}
 
-    const promises = events.map(
-      async (event): Promise<GoogleCalendarResult> => {
-        try {
-          const calendar = getCalendarClient()
+    // Process in batches to avoid overwhelming the API
+    const BATCH_SIZE = 10 // Google Calendar API can handle 10 concurrent requests well
+    const results: GoogleCalendarResult[] = []
 
-          const googleEvent = {
-            summary: event.title,
-            description: event.description || '',
-            location: event.location || '',
-            start: event.isAllDay
-              ? {date: new Date(event.startDate).toISOString().split('T')[0]}
-              : {
-                  dateTime: new Date(event.startDate).toISOString(),
-                  timeZone: process.env.TIME_ZONE || 'Europe/London',
-                },
-            end: event.isAllDay
-              ? {date: new Date(event.endDate).toISOString().split('T')[0]}
-              : {
-                  dateTime: new Date(event.endDate).toISOString(),
-                  timeZone: process.env.TIME_ZONE || 'Europe/London',
-                },
+    for (let i = 0; i < events.length; i += BATCH_SIZE) {
+      const batch = events.slice(i, Math.min(i + BATCH_SIZE, events.length))
+
+      const batchPromises = batch.map(
+        async (event): Promise<GoogleCalendarResult> => {
+          try {
+            const calendar = getCalendarClient()
+
+            const googleEvent = {
+              summary: event.title,
+              description: event.description || '',
+              location: event.location || '',
+              start: event.isAllDay
+                ? {date: new Date(event.startDate).toISOString().split('T')[0]}
+                : {
+                    dateTime: new Date(event.startDate).toISOString(),
+                    timeZone: process.env.TIME_ZONE || 'Europe/London',
+                  },
+              end: event.isAllDay
+                ? {date: new Date(event.endDate).toISOString().split('T')[0]}
+                : {
+                    dateTime: new Date(event.endDate).toISOString(),
+                    timeZone: process.env.TIME_ZONE || 'Europe/London',
+                  },
+            }
+
+            const response = await calendar.events.insert({
+              calendarId,
+              requestBody: googleEvent,
+            })
+
+            return {success: true, event: response.data, originalEvent: event}
+          } catch (error) {
+            console.error(
+              `Error adding event "${event.title}" to Google Calendar:`,
+              error,
+            )
+            return {
+              success: false,
+              error: error instanceof Error ? error.message : 'Unknown error',
+              originalEvent: event,
+            }
           }
+        },
+      )
 
-          const response = await calendar.events.insert({
-            calendarId,
-            requestBody: googleEvent,
-          })
+      const batchResults = await Promise.allSettled(batchPromises)
 
-          return {success: true, event: response.data, originalEvent: event}
-        } catch (error) {
-          console.error(
-            `Error adding event "${event.title}" to Google Calendar:`,
-            error,
-          )
-          return {
-            success: false,
-            error: error instanceof Error ? error.message : 'Unknown error',
-            originalEvent: event,
-          }
-        }
-      },
-    )
-
-    const results = await Promise.allSettled(promises)
-
-    const processedResults = results.map((result, index) => {
-      const originalEvent = events[index]
-
-      if (result.status === 'fulfilled') {
-        if (result.value.success) {
-          return {
-            success: true,
-            event: result.value.event,
-            originalEvent,
-            googleCalendarEventId: result.value.event.id,
-          }
+      // Process batch results
+      batchResults.forEach((result, batchIndex) => {
+        if (result.status === 'fulfilled') {
+          results.push(result.value)
         } else {
-          return {
+          const event = batch[batchIndex]
+          results.push({
             success: false,
-            error: result.value.error,
-            originalEvent,
-          }
+            error:
+              result.reason instanceof Error
+                ? result.reason.message
+                : 'Unknown error',
+            originalEvent: event,
+          })
+        }
+      })
+
+      // Log progress for large batches
+      if (events.length > BATCH_SIZE) {
+        console.log(
+          `Processed ${Math.min(i + BATCH_SIZE, events.length)} of ${
+            events.length
+          } appointments`,
+        )
+      }
+    }
+
+    // Map results to include googleCalendarEventId
+    const processedResults = results.map(result => {
+      if (result.success) {
+        return {
+          success: true,
+          event: result.event,
+          originalEvent: result.originalEvent,
+          googleCalendarEventId: result.event.id,
         }
       } else {
         return {
           success: false,
-          error:
-            result.reason instanceof Error
-              ? result.reason.message
-              : 'Unknown error',
-          originalEvent,
+          error: result.error,
+          originalEvent: result.originalEvent,
         }
       }
     })
 
-    // You could also extract just the failures for logging or retries
-    // const failures = processedResults.filter(result => !result.success)
-    // if (failures.length > 0) {
-    //   console.warn(
-    //     `${failures.length} out of ${events.length} events failed to sync:`,
-    //     failures.map(f => ({title: f.originalEvent.title, error: f.error})),
-    //   )
-    // }
+    // Log summary of failures
+    const failures = processedResults.filter(result => !result.success)
+    if (failures.length > 0) {
+      console.warn(
+        `${failures.length} out of ${events.length} events failed to sync:`,
+        failures.map(f => ({title: f.originalEvent.title, error: f.error})),
+      )
+    }
 
     return processedResults
   } catch (error) {
