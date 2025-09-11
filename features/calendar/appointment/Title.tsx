@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import React, {useState} from 'react'
+import {useQueryClient} from '@tanstack/react-query'
 
 import {Appointment, formatTimeRange, formatTime12} from '@/lib/calendar'
 import {Day} from '@/@types/types'
@@ -19,12 +20,14 @@ export function Title({
   userId: string
 }) {
   const {data: session} = useSession()
+  const queryClient = useQueryClient()
   const isAdmin = session?.user?.role === 'admin'
   const [isModalOpen, setIsOpen] = useState(false)
   const [eventId, setEventId] = useState<string>()
   const closeModal = (e: React.SyntheticEvent) => {
     e.stopPropagation()
     setIsOpen(false)
+    setEventId(undefined) // Clear eventId to ensure fresh state
   }
 
   const getAppointmentDisplay = () => {
@@ -43,8 +46,13 @@ export function Title({
       return
     }
 
-    const workoutId = (event.target as HTMLElement).id
-    setEventId(workoutId)
+    const appointmentId = (event.target as HTMLElement).id
+    setEventId(appointmentId)
+
+    // Force refetch appointment data when opening modal
+    queryClient.invalidateQueries({queryKey: ['appointment', appointmentId]})
+    queryClient.refetchQueries({queryKey: ['appointment', appointmentId]})
+
     setIsOpen(true)
   }
 
