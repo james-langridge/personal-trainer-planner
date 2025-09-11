@@ -247,6 +247,8 @@ export type Appointment = {
   name: string
   date: Date
   ownerId: string
+  startTime: Date | null
+  endTime: Date | null
   status: APPOINTMENT_STATUS
 }
 

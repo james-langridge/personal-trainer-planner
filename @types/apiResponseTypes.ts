@@ -18,6 +18,8 @@ export type User = Pick<
     | 'id'
     | 'name'
     | 'ownerId'
+    | 'startTime'
+    | 'endTime'
     | 'status'
     | 'videoUrl'
   >[]
