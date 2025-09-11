@@ -25,7 +25,7 @@ export type DateFilter = {
 export function getPrismaDateFilter(
   year: number,
   jsMonth: number,
-  offset: number = 0,
+  offset = 0,
 ): DateFilter {
   if (offset % 2 !== 0) {
     throw new Error('Offset must be an even number')
