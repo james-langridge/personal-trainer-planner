@@ -1,9 +1,9 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npx prisma generate && npx prisma migrate deploy && next build"
+buildCommand = "npx prisma generate && next build"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "DATABASE_URL=$DATABASE_URL_PUBLIC npx prisma migrate deploy && npm start"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 healthcheckPath = "/api/auth/session"
