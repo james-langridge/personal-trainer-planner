@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import React, {useState} from 'react'
 
-import {Appointment} from '@/lib/calendar'
+import {Appointment, formatTimeRange, formatTime12} from '@/lib/calendar'
 import {Day} from '@/@types/types'
 import {useSession} from 'next-auth/react'
 import {CalendarForm} from '@/features/calendar/form'
@@ -25,6 +25,16 @@ export function Title({
   const closeModal = (e: React.SyntheticEvent) => {
     e.stopPropagation()
     setIsOpen(false)
+  }
+
+  const getAppointmentDisplay = () => {
+    if (appointment.startTime && appointment.endTime) {
+      const startTime = new Date(appointment.startTime)
+      const endTime = new Date(appointment.endTime)
+      const timeRange = formatTimeRange(startTime, endTime)
+      return `${appointment.name} (${timeRange})`
+    }
+    return appointment.name
   }
 
   function onClick(event: React.MouseEvent | React.KeyboardEvent) {
@@ -62,7 +72,7 @@ export function Title({
             eventType={'APPOINTMENT'}
           />
         </Modal>
-        {appointment?.name}
+        {getAppointmentDisplay()}
       </div>
     )
   }
@@ -73,7 +83,7 @@ export function Title({
       className="my-1 block w-full rounded bg-blue-400 text-xs font-bold text-white lg:text-base"
       data-testid={`${appointment?.id}`}
     >
-      {appointment?.name}
+      {getAppointmentDisplay()}
     </Link>
   )
 }
