@@ -1,12 +1,13 @@
 'use client'
 
-import DateProvider from '@/app/admin/users/DateProvider'
 import {useState} from 'react'
-import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
-import {DateChangeButtons} from '@/features/calendar/desktop'
+
+import DateProvider from '@/app/admin/users/DateProvider'
 import {useAllBootcampsFull} from '@/app/hooks/bootcamps'
-import {DataTable} from '@/features/bootcamps/summary/DataTable'
 import {columns} from '@/features/bootcamps/summary/Columns'
+import {DataTable} from '@/features/bootcamps/summary/DataTable'
+import {DateChangeButtons} from '@/features/calendar/desktop'
+import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
 
 export default function BootcampsView({
   year,

@@ -1,7 +1,8 @@
-import {Day} from '@/@types/types'
 import {APPOINTMENT_STATUS, WORKOUT_STATUS} from '@prisma/client'
 import {format, addHours as addHoursDateFns, parse, set} from 'date-fns'
 import {formatInTimeZone, toZonedTime} from 'date-fns-tz'
+
+import {Day} from '@/@types/types'
 
 /**
  * Format time as HH:mm in 24-hour format

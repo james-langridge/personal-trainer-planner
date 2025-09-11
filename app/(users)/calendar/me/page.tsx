@@ -1,14 +1,13 @@
-import {auth} from '@/auth'
-import {CalendarDesktop} from '@/features/calendar/desktop'
-
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
-import {getPrismaDateFilter} from '@/lib/calendar'
 import {headers} from 'next/headers'
-import {isMobileViewport} from '@/lib/utils'
-import CalendarMobile from '@/features/calendar/mobile/CalendarMobile'
 
 import {getAllBootcamps} from '@/app/actions/bootcamps'
 import {getUserEvents} from '@/app/actions/users'
+import {auth} from '@/auth'
+import {CalendarDesktop} from '@/features/calendar/desktop'
+import CalendarMobile from '@/features/calendar/mobile/CalendarMobile'
+import {getPrismaDateFilter} from '@/lib/calendar'
+import {isMobileViewport} from '@/lib/utils'
 
 export default async function Page() {
   const queryClient = new QueryClient()

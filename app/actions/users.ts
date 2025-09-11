@@ -1,11 +1,13 @@
 'use server'
 
-import {auth} from '@/auth'
+import {APPOINTMENT_STATUS, USER_TYPE, WORKOUT_STATUS} from '@prisma/client'
+
 import {CreateUserBody, UpdateUserBody} from '@/@types/apiRequestTypes'
-import {db} from '@/lib/db'
 import {User} from '@/@types/apiResponseTypes'
 import {GetUAllUsersParams} from '@/app/hooks/users'
-import {APPOINTMENT_STATUS, USER_TYPE, WORKOUT_STATUS} from '@prisma/client'
+import {auth} from '@/auth'
+import {db} from '@/lib/db'
+
 
 export async function createUser(body: CreateUserBody) {
   const session = await auth()
