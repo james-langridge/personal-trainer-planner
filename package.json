@@ -58,6 +58,8 @@
     "cmdk": "^1.0.4",
     "contentful": "^9.3.3",
     "contentful-management": "^10.30.0",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "dotenv-cli": "^8.0.0",
     "google-auth-library": "^9.15.1",
     "googleapis": "^146.0.0",

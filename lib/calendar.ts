@@ -1,5 +1,90 @@
 import {Day} from '@/@types/types'
 import {APPOINTMENT_STATUS, WORKOUT_STATUS} from '@prisma/client'
+import {format, addHours as addHoursDateFns, parse, set} from 'date-fns'
+import {formatInTimeZone, toZonedTime} from 'date-fns-tz'
+
+/**
+ * Format time as HH:mm in 24-hour format
+ */
+export function formatTime24(date: Date): string {
+  return format(date, 'HH:mm')
+}
+
+/**
+ * Format time as h:mm a in 12-hour format
+ */
+export function formatTime12(date: Date): string {
+  return format(date, 'h:mm a')
+}
+
+/**
+ * Format time range for display
+ */
+export function formatTimeRange(
+  startTime: Date,
+  endTime: Date,
+  use24Hour = false,
+): string {
+  const timeFormat = use24Hour ? 'HH:mm' : 'h:mm a'
+  return `${format(startTime, timeFormat)} - ${format(endTime, timeFormat)}`
+}
+
+/**
+ * Combine date and time strings into a DateTime
+ */
+export function combineDateAndTime(
+  dateStr: string,
+  timeStr: string,
+): Date | null {
+  if (!dateStr || !timeStr) return null
+
+  try {
+    const date = new Date(dateStr)
+    const time = parse(timeStr, 'HH:mm', new Date())
+    
+    return set(date, {
+      hours: time.getHours(),
+      minutes: time.getMinutes(),
+      seconds: 0,
+      milliseconds: 0,
+    })
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Add hours to a date
+ */
+export function addHours(date: Date, hours: number): Date {
+  return addHoursDateFns(date, hours)
+}
+
+/**
+ * Extract time string from DateTime in HH:mm format
+ */
+export function extractTimeString(date: Date | null): string {
+  if (!date) return ''
+  return format(date, 'HH:mm')
+}
+
+/**
+ * Format date with time in timezone
+ */
+export function formatDateTimeInTimezone(
+  date: Date,
+  timezone: string,
+  formatStr = 'yyyy-MM-dd HH:mm zzz',
+): string {
+  return formatInTimeZone(date, timezone, formatStr)
+}
+
+/**
+ * Convert date to timezone
+ */
+export function convertToTimezone(date: Date, timezone: string): Date {
+  return toZonedTime(date, timezone)
+}
 
 function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   const workoutYear = workoutDate.getFullYear()

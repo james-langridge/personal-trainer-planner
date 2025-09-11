@@ -27,6 +27,8 @@ model Appointment {
   name                 String
   owner                User               @relation(fields: [ownerId], references: [id])
   ownerId              String
+  startTime            DateTime?
+  endTime              DateTime?
   status               APPOINTMENT_STATUS @default(NOT_ATTENDED)
   updatedAt            DateTime           @updatedAt
   type                 EVENT_TYPE         @default(APPOINTMENT)
