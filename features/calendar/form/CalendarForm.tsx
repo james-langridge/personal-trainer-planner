@@ -22,6 +22,7 @@ export function CalendarForm({
     error,
     form: formData,
     handleDelete,
+    handleStartTimeChange,
     handleSubmit,
     inputRef,
     isCreating,
@@ -92,6 +93,48 @@ export function CalendarForm({
           </div>
         )}
       </div>
+
+      {formData.type === 'APPOINTMENT' && (
+        <div className="flex items-center space-x-4">
+          <div className="flex flex-1 items-center space-x-2">
+            <label htmlFor="startTime">Start:</label>
+            <input
+              id="startTime"
+              type="time"
+              className="block flex-1 rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+              value={formData.startTime}
+              onChange={e => handleStartTimeChange(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-1 items-center space-x-2">
+            <label htmlFor="endTime">End:</label>
+            <input
+              id="endTime"
+              type="time"
+              className="block flex-1 rounded-lg border bg-white p-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+              value={formData.endTime}
+              onChange={e =>
+                setForm(form => ({
+                  ...form,
+                  endTime: e.target.value,
+                }))
+              }
+            />
+          </div>
+        </div>
+      )}
+
+      {formData.type === 'APPOINTMENT' && formData.startTime && (
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          <button
+            type="button"
+            className="underline hover:text-gray-800 dark:hover:text-gray-200"
+            onClick={() => setForm(form => ({...form, startTime: '', endTime: ''}))}
+          >
+            Clear times (make all-day event)
+          </button>
+        </div>
+      )}
 
       {!formData.id && (
         <div className="flex items-center justify-between">
