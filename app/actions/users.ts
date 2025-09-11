@@ -8,7 +8,6 @@ import {GetUAllUsersParams} from '@/app/hooks/users'
 import {auth} from '@/auth'
 import {db} from '@/lib/db'
 
-
 export async function createUser(body: CreateUserBody) {
   const session = await auth()
   if (session?.user?.role !== 'admin') {
