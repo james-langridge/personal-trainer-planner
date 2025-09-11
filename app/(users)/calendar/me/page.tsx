@@ -1,14 +1,13 @@
-import {auth} from '@/auth'
-import {CalendarDesktop} from '@/features/calendar/desktop'
-
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
-import {getPrismaDateFilter} from '@/lib/calendar'
 import {headers} from 'next/headers'
-import {isMobileViewport} from '@/lib/utils'
-import CalendarMobile from '@/features/calendar/mobile/CalendarMobile'
 
 import {getAllBootcamps} from '@/app/actions/bootcamps'
 import {getUserEvents} from '@/app/actions/users'
+import {auth} from '@/auth'
+import {CalendarDesktop} from '@/features/calendar/desktop'
+import CalendarMobile from '@/features/calendar/mobile/CalendarMobile'
+import {getPrismaDateFilter} from '@/lib/calendar'
+import {isMobileViewport} from '@/lib/utils'
 
 export default async function Page() {
   const queryClient = new QueryClient()
@@ -26,22 +25,15 @@ export default async function Page() {
 
   if (!userId) return null
 
+  const userEventsParams = {id: userId, dateFilter}
   await queryClient.prefetchQuery({
-    queryKey: [
-      'user-events',
-      userId,
-      dateFilter.gte.toISOString(),
-      dateFilter.lt.toISOString(),
-    ],
-    queryFn: () => getUserEvents({id: userId, dateFilter}),
+    queryKey: ['user-events', userEventsParams],
+    queryFn: () => getUserEvents(userEventsParams),
   })
+  const bootcampsParams = {dateFilter}
   await queryClient.prefetchQuery({
-    queryKey: [
-      'bootcamps',
-      dateFilter.gte.toISOString(),
-      dateFilter.lt.toISOString(),
-    ],
-    queryFn: () => getAllBootcamps({dateFilter}),
+    queryKey: ['bootcamps', bootcampsParams],
+    queryFn: () => getAllBootcamps(bootcampsParams),
   })
 
   return (
