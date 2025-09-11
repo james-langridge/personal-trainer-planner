@@ -96,9 +96,10 @@ SENTRY_DSN=your-sentry-dsn
 4. Once complete, click on the deployment to get your URL
 
 **Note**: The deployment uses two database URLs:
+
 - `DATABASE_URL` (private) - Used by the app at runtime for better performance
-- `DATABASE_URL_PUBLIC` - Used only for migrations during deployment
-This is because Railway's private network is only available at runtime.
+- `DATABASE_URL_PUBLIC` - Used only for migrations during deployment This is
+  because Railway's private network is only available at runtime.
 
 ### 5. Custom Domain (Optional)
 

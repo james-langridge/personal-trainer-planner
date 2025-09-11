@@ -27,6 +27,8 @@ export type CreateAppointmentResult = {
     success: boolean
     message?: string
     failedCount?: number
+    totalCount?: number
+    successCount?: number
   }
 }
 
@@ -67,7 +69,7 @@ export async function createAppointment(
     ),
   )
 
-  // Try to sync with Google Calendar (with timeout protection)
+  // Try to sync with Google Calendar
   let syncStatus: CreateAppointmentResult['syncStatus'] = {
     success: true,
   }
@@ -75,8 +77,8 @@ export async function createAppointment(
   // Only sync if we have Google Calendar configured
   if (process.env.GOOGLE_CALENDAR_ID) {
     try {
-      // Set a timeout for Google Calendar sync (8 seconds to be safe with Vercel's 10s limit)
-      const syncPromise = addMultipleEventsToGoogleCalendar(
+      // No timeout needed on Railway - let it complete
+      const results = await addMultipleEventsToGoogleCalendar(
         appointments.map(appt => ({
           title: appt.name,
           description: appt.description || '',
@@ -85,15 +87,6 @@ export async function createAppointment(
           isAllDay: true,
         })),
       )
-
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error('Google Calendar sync timeout')),
-          8000,
-        ),
-      )
-
-      const results = (await Promise.race([syncPromise, timeoutPromise])) as any
 
       // Update appointments with Google Calendar IDs
       const updatePromises = []
@@ -126,18 +119,23 @@ export async function createAppointment(
           success: false,
           message: `${failedCount} out of ${appointments.length} appointments failed to sync with Google Calendar`,
           failedCount,
+          successCount,
+          totalCount: appointments.length,
+        }
+      } else {
+        syncStatus = {
+          success: true,
+          message: `Successfully synced all ${appointments.length} appointments to Google Calendar`,
+          successCount,
+          totalCount: appointments.length,
         }
       }
     } catch (error) {
       console.error('Error syncing with Google Calendar:', error)
-      const isTimeout =
-        error instanceof Error &&
-        error.message === 'Google Calendar sync timeout'
       syncStatus = {
         success: false,
-        message: isTimeout
-          ? 'Google Calendar sync took too long. Appointments were saved. You can retry sync later.'
-          : 'Failed to sync with Google Calendar. Appointments were saved.',
+        message:
+          'Failed to sync with Google Calendar. Appointments were saved.',
         failedCount: appointments.length,
       }
     }
