@@ -273,62 +273,53 @@ export function useCalendarForm({
 
   // Effect to load existing event data
   useEffect(() => {
-    const loadEventData = async () => {
-      if (!eventId || !eventType) return
+    if (!eventId || !eventType) return
 
-      try {
-        let eventData
-        switch (eventType) {
-          case 'BOOTCAMP':
-            eventData = bootcamp
-            break
-          case 'WORKOUT':
-            eventData = workout
-            break
-          case 'APPOINTMENT':
-            eventData = appointment
-            break
-        }
-
-        if (eventData) {
-          setForm(prev => ({
-            ...prev,
-            date: String(eventData.date).split('T')[0],
-            description: eventData.description || '',
-            fee:
-              eventType === 'APPOINTMENT'
-                ? ((eventData as any).fee / 100).toFixed(2)
-                : prev.fee,
-            startTime:
-              eventType === 'APPOINTMENT'
-                ? extractTimeString(
-                    (eventData as any).startTime
-                      ? new Date((eventData as any).startTime)
-                      : null,
-                  )
-                : prev.startTime,
-            endTime:
-              eventType === 'APPOINTMENT'
-                ? extractTimeString(
-                    (eventData as any).endTime
-                      ? new Date((eventData as any).endTime)
-                      : null,
-                  )
-                : prev.endTime,
-            id: eventData.id,
-            name: eventData.name,
-            ownerId: (eventData as any).ownerId || '',
-            videoUrl: eventData.videoUrl || '',
-            type: eventType,
-          }))
-        }
-      } catch (error) {
-        setError(error as Error)
-      }
+    let eventData
+    switch (eventType) {
+      case 'BOOTCAMP':
+        eventData = bootcamp
+        break
+      case 'WORKOUT':
+        eventData = workout
+        break
+      case 'APPOINTMENT':
+        eventData = appointment
+        break
     }
 
-    loadEventData()
-  }, [workout, bootcamp, appointment])
+    if (eventData) {
+      // Parse the date properly
+      const dateStr = eventData.date
+        ? new Date(eventData.date).toISOString().split('T')[0]
+        : ''
+
+      setForm({
+        ...initialState,
+        date: dateStr,
+        description: eventData.description || '',
+        fee:
+          eventType === 'APPOINTMENT'
+            ? ((eventData as any).fee / 100).toFixed(2)
+            : '0.00',
+        startTime:
+          eventType === 'APPOINTMENT' && (eventData as any).startTime
+            ? extractTimeString(new Date((eventData as any).startTime))
+            : '',
+        endTime:
+          eventType === 'APPOINTMENT' && (eventData as any).endTime
+            ? extractTimeString(new Date((eventData as any).endTime))
+            : '',
+        id: eventData.id,
+        name: eventData.name,
+        ownerId: (eventData as any).ownerId || userId,
+        videoUrl: eventData.videoUrl || '',
+        type: eventType,
+        selectedDays: new Set<number>(),
+        weeksToRepeat: 0,
+      })
+    }
+  }, [eventId, eventType, workout, bootcamp, appointment, userId])
 
   // Focus on name input when form opens
   useEffect(() => {
