@@ -291,29 +291,36 @@ export function useCalendarForm({
         }
 
         if (eventData) {
-          setForm({
-            ...form,
-            // date: String(eventData.date).split('T')[0],
+          setForm(prev => ({
+            ...prev,
+            date: String(eventData.date).split('T')[0],
             description: eventData.description || '',
-            ...(eventType === 'APPOINTMENT' && {
-              fee: ((eventData as any).fee / 100).toFixed(2),
-              startTime: extractTimeString(
-                (eventData as any).startTime
-                  ? new Date((eventData as any).startTime)
-                  : null,
-              ),
-              endTime: extractTimeString(
-                (eventData as any).endTime
-                  ? new Date((eventData as any).endTime)
-                  : null,
-              ),
-            }),
+            fee:
+              eventType === 'APPOINTMENT'
+                ? ((eventData as any).fee / 100).toFixed(2)
+                : prev.fee,
+            startTime:
+              eventType === 'APPOINTMENT'
+                ? extractTimeString(
+                    (eventData as any).startTime
+                      ? new Date((eventData as any).startTime)
+                      : null,
+                  )
+                : prev.startTime,
+            endTime:
+              eventType === 'APPOINTMENT'
+                ? extractTimeString(
+                    (eventData as any).endTime
+                      ? new Date((eventData as any).endTime)
+                      : null,
+                  )
+                : prev.endTime,
             id: eventData.id,
             name: eventData.name,
             ownerId: (eventData as any).ownerId || '',
             videoUrl: eventData.videoUrl || '',
             type: eventType,
-          })
+          }))
         }
       } catch (error) {
         setError(error as Error)
