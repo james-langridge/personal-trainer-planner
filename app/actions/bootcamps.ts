@@ -1,8 +1,5 @@
 'use server'
 
-import {auth} from '@/auth'
-import {db} from '@/lib/db'
-import {getRepeatingDates} from '@/lib/calendar'
 import {
   CreateBootcampBody,
   DeleteBootcampBody,
@@ -10,6 +7,9 @@ import {
   UpdateBootcampBody,
 } from '@/@types/apiRequestTypes'
 import {Bootcamp} from '@/@types/apiResponseTypes'
+import {auth} from '@/auth'
+import {getRepeatingDates} from '@/lib/calendar'
+import {db} from '@/lib/db'
 
 export async function createBootcamp(body: CreateBootcampBody) {
   const session = await auth()

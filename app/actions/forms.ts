@@ -1,7 +1,8 @@
 'use server'
 
-import {auth} from '@/auth'
 import nodemailer from 'nodemailer'
+
+import {auth} from '@/auth'
 
 export async function submitForm(body: Record<string, string>) {
   const session = await auth()

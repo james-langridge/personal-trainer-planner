@@ -1,5 +1,6 @@
-import {Day} from '@/@types/types'
 import {APPOINTMENT_STATUS, WORKOUT_STATUS} from '@prisma/client'
+
+import {Day} from '@/@types/types'
 
 function areDatesEqual(calendarDate: Date, workoutDate: Date) {
   const workoutYear = workoutDate.getFullYear()
@@ -25,7 +26,7 @@ export type DateFilter = {
 export function getPrismaDateFilter(
   year: number,
   jsMonth: number,
-  offset: number = 0,
+  offset = 0,
 ): DateFilter {
   if (offset % 2 !== 0) {
     throw new Error('Offset must be an even number')

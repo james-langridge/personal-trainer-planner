@@ -1,7 +1,8 @@
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
+
 import ProfileView from '@/app/(users)/profile/ProfileView'
-import {auth} from '@/auth'
 import {getUser} from '@/app/actions/users'
+import {auth} from '@/auth'
 
 export default async function Page() {
   const queryClient = new QueryClient()
