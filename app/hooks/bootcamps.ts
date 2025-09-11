@@ -1,11 +1,13 @@
 'use client'
 
+import {EVENT_TYPE} from '@prisma/client'
 import {
   skipToken,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
+
 import {
   AllbootcampsParams,
   createBootcamp,
@@ -16,7 +18,6 @@ import {
   toggleBootcampAttendance,
   updateBootcamp,
 } from '@/app/actions/bootcamps'
-import {EVENT_TYPE} from '@prisma/client'
 
 export function useAllBootcamps(params: AllbootcampsParams) {
   return useQuery({

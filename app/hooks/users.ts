@@ -6,6 +6,8 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
+import {useRouter} from 'next/navigation'
+
 import {
   createUser,
   getUser,
@@ -18,7 +20,6 @@ import {
   UserFeeParams,
 } from '@/app/actions/users'
 import {useToast} from '@/components/use-toast'
-import {useRouter} from 'next/navigation'
 
 export function useUserEvents(params: UserEventsParams) {
   return useQuery({

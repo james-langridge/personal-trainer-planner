@@ -1,8 +1,8 @@
 'use client'
 
 import {useGetUser} from '@/app/hooks/users'
-import {DataTable} from '@/features/users/individual/DataTable'
 import {columns} from '@/features/users/individual/Columns'
+import {DataTable} from '@/features/users/individual/DataTable'
 
 export default function UserView({userId}: {userId: string}) {
   const {data: user} = useGetUser(userId)

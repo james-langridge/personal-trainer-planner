@@ -1,12 +1,13 @@
 'use client'
 
-import {sortByString} from '@/lib/users'
-import DateProvider from '@/app/admin/users/DateProvider'
-import {columns, DataTable} from '@/features/users/summary'
-import {useAllUsers} from '@/app/hooks/users'
 import {useState} from 'react'
-import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
+
+import DateProvider from '@/app/admin/users/DateProvider'
+import {useAllUsers} from '@/app/hooks/users'
 import {DateChangeButtons} from '@/features/calendar/desktop'
+import {columns, DataTable} from '@/features/users/summary'
+import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
+import {sortByString} from '@/lib/users'
 
 export default function UsersView({
   year,
