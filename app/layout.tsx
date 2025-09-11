@@ -1,11 +1,10 @@
 import '../styles/globals.css'
 
-import {Analytics} from '@vercel/analytics/react'
-import {SpeedInsights} from '@vercel/speed-insights/next'
-
 import Providers from '@/app/Providers'
 import {Navbar} from '@/components/Navbar'
 import {Toaster} from '@/components/toaster'
+import {Analytics} from '@vercel/analytics/react'
+import {SpeedInsights} from '@vercel/speed-insights/next'
 
 export const metadata = {
   title: 'Fit For Life Trainer',

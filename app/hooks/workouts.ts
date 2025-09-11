@@ -1,17 +1,16 @@
-import {EVENT_TYPE} from '@prisma/client'
 import {
   skipToken,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
-
 import {
   createWorkout,
   deleteWorkout,
   getWorkout,
   updateWorkout,
 } from '@/app/actions/workouts'
+import {EVENT_TYPE} from '@prisma/client'
 
 export function useCreateWorkout(userId: string) {
   const queryClient = useQueryClient()

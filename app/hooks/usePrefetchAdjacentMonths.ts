@@ -1,13 +1,12 @@
-import {useQueryClient} from '@tanstack/react-query'
 import {useEffect} from 'react'
-
-import {getAllBootcamps} from '@/app/actions/bootcamps'
-import {getUserEvents} from '@/app/actions/users'
 import {
   DateFilter,
   getNextMonthFilter,
   getPreviousMonthFilter,
 } from '@/lib/calendar'
+import {getUserEvents} from '@/app/actions/users'
+import {getAllBootcamps} from '@/app/actions/bootcamps'
+import {useQueryClient} from '@tanstack/react-query'
 
 export function usePrefetchAdjacentMonths({
   userId,

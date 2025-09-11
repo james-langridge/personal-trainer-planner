@@ -1,10 +1,9 @@
 'use client'
 
-import {useEffect} from 'react'
-
 import {Event} from '@/@types/apiResponseTypes'
 import BackButton from '@/components/BackButton'
 import {getLongDate} from '@/lib/calendar'
+import {useEffect} from 'react'
 
 export function EventPage({event}: {event: Event}) {
   const date = getLongDate(event.date)

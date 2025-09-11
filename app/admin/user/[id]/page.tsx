@@ -1,6 +1,5 @@
-import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
-
 import {getUser} from '@/app/actions/users'
+import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query'
 import UserView from '@/app/admin/user/[id]/UserView'
 
 export default async function UserDetails(props: {

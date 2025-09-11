@@ -1,10 +1,9 @@
 'use server'
 
-import {Appointment} from '@prisma/client'
-
 import {auth} from '@/auth'
-import {getRepeatingDates} from '@/lib/calendar'
 import {db} from '@/lib/db'
+import {getRepeatingDates} from '@/lib/calendar'
+import {Appointment} from '@prisma/client'
 import {
   addEventToGoogleCalendar,
   addMultipleEventsToGoogleCalendar,

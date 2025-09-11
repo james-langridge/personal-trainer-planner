@@ -6,8 +6,6 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
-import {useRouter} from 'next/navigation'
-
 import {
   createUser,
   getUser,
@@ -20,10 +18,16 @@ import {
   UserFeeParams,
 } from '@/app/actions/users'
 import {useToast} from '@/components/use-toast'
+import {useRouter} from 'next/navigation'
 
 export function useUserEvents(params: UserEventsParams) {
   return useQuery({
-    queryKey: ['user-events', params],
+    queryKey: [
+      'user-events',
+      params.id,
+      params.dateFilter.gte.toISOString(),
+      params.dateFilter.lt.toISOString(),
+    ],
     queryFn: () => getUserEvents(params),
     refetchInterval: 1 * 60 * 1000,
   })
@@ -31,7 +35,7 @@ export function useUserEvents(params: UserEventsParams) {
 
 export function useUserFee(params: UserFeeParams) {
   return useQuery({
-    queryKey: ['user-fee', params],
+    queryKey: ['user-fee', params.id],
     queryFn: () => getUserFee(params),
   })
 }
@@ -82,7 +86,11 @@ export type GetUAllUsersParams = {dateFilter: {gte: Date; lt: Date}}
 
 export function useAllUsers(params: GetUAllUsersParams) {
   return useQuery({
-    queryKey: ['users', params],
+    queryKey: [
+      'users',
+      params.dateFilter.gte.toISOString(),
+      params.dateFilter.lt.toISOString(),
+    ],
     queryFn: () => getUsers(params),
   })
 }

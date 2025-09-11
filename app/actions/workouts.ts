@@ -1,13 +1,13 @@
 'use server'
 
+import {auth} from '@/auth'
+import {db} from '@/lib/db'
+import {getRepeatingDates} from '@/lib/calendar'
 import {
   CreateWorkoutBody,
   DeleteWorkoutBody,
   UpdateWorkoutBody,
 } from '@/@types/apiRequestTypes'
-import {auth} from '@/auth'
-import {getRepeatingDates} from '@/lib/calendar'
-import {db} from '@/lib/db'
 
 export async function createWorkout(body: CreateWorkoutBody) {
   const session = await auth()
