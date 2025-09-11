@@ -24,6 +24,8 @@ export function useGetAppointment(eventType?: EVENT_TYPE, id?: string) {
       id && eventType === EVENT_TYPE.APPOINTMENT
         ? () => getAppointment(id)
         : skipToken,
+    staleTime: 0, // Always refetch to ensure fresh data
+    gcTime: 5 * 60 * 1000, // Keep in cache for 5 minutes
   })
 }
 
@@ -138,11 +140,13 @@ export function useUpdateAppointment(userId: string, eventId?: string) {
         eventId,
       ])
 
-      // Optimistically update the appointment
+      // Optimistically update the appointment with all fields including times
       queryClient.setQueryData(['appointment', eventId], (old: any) => ({
         ...old,
         ...updatedAppointment,
         date: new Date(updatedAppointment.date),
+        startTime: updatedAppointment.startTime,
+        endTime: updatedAppointment.endTime,
       }))
 
       queryClient.setQueryData(['user-events', userId], (old: any) => {
@@ -150,7 +154,14 @@ export function useUpdateAppointment(userId: string, eventId?: string) {
         return {
           ...old,
           appointments: old.appointments.map((apt: any) =>
-            apt.id === eventId ? {...apt, ...updatedAppointment} : apt,
+            apt.id === eventId
+              ? {
+                  ...apt,
+                  ...updatedAppointment,
+                  startTime: updatedAppointment.startTime,
+                  endTime: updatedAppointment.endTime,
+                }
+              : apt,
           ),
         }
       })
@@ -170,9 +181,12 @@ export function useUpdateAppointment(userId: string, eventId?: string) {
           err instanceof Error ? err.message : 'Failed to update appointment',
       })
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({queryKey: ['user-events', userId]})
-      queryClient.invalidateQueries({queryKey: ['appointment', eventId]})
+    onSettled: async () => {
+      // Invalidate and immediately refetch to ensure fresh data
+      await queryClient.invalidateQueries({queryKey: ['user-events', userId]})
+      await queryClient.invalidateQueries({queryKey: ['appointment', eventId]})
+      // Force immediate refetch
+      await queryClient.refetchQueries({queryKey: ['appointment', eventId]})
     },
     onSuccess: result => {
       // Handle sync status
