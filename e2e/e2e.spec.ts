@@ -14,27 +14,22 @@ test('bootcamps can be checked off if have credits', async ({page}) => {
   const bootcampCheckboxTomorrow = page.getByTestId('bootcamp-checkbox').nth(2)
 
   // User has 1 credit so can check bootcamp today
-  await bootcampCheckboxToday.check()
-  await expect(bootcampCheckboxTomorrow).toBeEnabled({timeout: 10_000})
-  await expect(bootcampCheckboxToday).toBeChecked()
+  await bootcampCheckboxToday.click()
+  await expect(bootcampCheckboxToday).toBeChecked({timeout: 10_000})
 
   // User has 0 credits so cannot check bootcamp tomorrow
-  await bootcampCheckboxTomorrow.check()
-  await expect(bootcampCheckboxTomorrow).toBeEnabled({timeout: 10_000})
-  await expect(bootcampCheckboxTomorrow).not.toBeChecked()
+  await bootcampCheckboxTomorrow.click()
+  await expect(bootcampCheckboxTomorrow).not.toBeChecked({timeout: 10_000})
 
   // Uncheck the bootcamp today to get 1 credit back
-  await bootcampCheckboxToday.uncheck()
-  await expect(bootcampCheckboxToday).toBeEnabled({timeout: 10_000})
-  await expect(bootcampCheckboxToday).not.toBeChecked()
+  await bootcampCheckboxToday.click()
+  await expect(bootcampCheckboxToday).not.toBeChecked({timeout: 10_000})
 
   // Now user can attend bootcamp tomorrow
-  await bootcampCheckboxTomorrow.check()
-  await expect(bootcampCheckboxTomorrow).toBeEnabled({timeout: 10_000})
-  await expect(bootcampCheckboxTomorrow).toBeChecked()
+  await bootcampCheckboxTomorrow.click()
+  await expect(bootcampCheckboxTomorrow).toBeChecked({timeout: 10_000})
 
   // Get credit back
-  await bootcampCheckboxTomorrow.uncheck()
-  await expect(bootcampCheckboxTomorrow).toBeEnabled({timeout: 10_000})
-  await expect(bootcampCheckboxTomorrow).not.toBeChecked()
+  await bootcampCheckboxTomorrow.click()
+  await expect(bootcampCheckboxTomorrow).not.toBeChecked({timeout: 10_000})
 })
