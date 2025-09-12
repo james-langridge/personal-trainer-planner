@@ -10,13 +10,14 @@ export function Checkbox({
   workoutStatus: WORKOUT_STATUS
 }) {
   return (
-    <input
-      disabled={status === 'pending'}
-      type="checkbox"
-      checked={workoutStatus === WORKOUT_STATUS.COMPLETED}
-      className="h-7 w-7 rounded"
-      onChange={onChange}
-      onClick={e => e.stopPropagation()}
-    />
+    <div onClick={e => e.stopPropagation()} className="inline-block">
+      <input
+        disabled={status === 'pending'}
+        type="checkbox"
+        checked={workoutStatus === WORKOUT_STATUS.COMPLETED}
+        className="h-7 w-7 rounded"
+        onChange={onChange}
+      />
+    </div>
   )
 }

@@ -8,14 +8,15 @@ export function Checkbox({
   status: boolean
 }) {
   return (
-    <input
-      disabled={disabled}
-      type="checkbox"
-      checked={status}
-      className="h-7 w-7 rounded"
-      onChange={onChange}
-      onClick={e => e.stopPropagation()}
-      data-testid="bootcamp-checkbox"
-    />
+    <div onClick={e => e.stopPropagation()} className="inline-block">
+      <input
+        disabled={disabled}
+        type="checkbox"
+        checked={status}
+        className="h-7 w-7 rounded"
+        onChange={onChange}
+        data-testid="bootcamp-checkbox"
+      />
+    </div>
   )
 }
