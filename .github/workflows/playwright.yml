@@ -8,7 +8,7 @@ jobs:
   run-e2es:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.51.0-noble
+      image: mcr.microsoft.com/playwright:v1.55.0-noble
       options: --user 1001
     env:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/testdb
