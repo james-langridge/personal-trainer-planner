@@ -5,19 +5,36 @@ Next.js 15, PostgreSQL, and TypeScript.
 
 ## Quick Deploy
 
-Deploy your own instance in under 5 minutes:
+Choose your preferred deployment method:
+
+### Option 1: Railway (Easiest - 5 minutes)
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/personal-trainer-planner?referralCode=james)
 
-After clicking the button:
+Click the button above and Railway will handle everything - database,
+environment variables, and deployment.
 
-1. Sign in with GitHub
-2. Fill in the required environment variables (your business name, email
-   settings)
-3. Click "Deploy"
-4. Railway will automatically set up the database and deploy your app
+### Option 2: Docker (Deploy Anywhere - 10 minutes)
 
-For manual setup or other deployment options, see the
+Run on any server with Docker installed:
+
+```bash
+# Clone and configure
+git clone https://github.com/james-langridge/personal-trainer-planner.git
+cd personal-trainer-planner
+cp .env.docker.example .env
+# Edit .env with your settings
+
+# Start the application
+docker-compose up -d
+```
+
+The app will be available at http://localhost:3000. See
+[Docker Setup Guide](DOCKER_SETUP.md) for detailed instructions.
+
+### Option 3: Manual Setup
+
+For Vercel, self-hosting, or other platforms, see the
 [Getting Started Guide](https://personal-trainer-planner.vercel.app/getting-started).
 
 ## Architecture Overview
