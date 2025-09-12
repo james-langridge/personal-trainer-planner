@@ -28,7 +28,16 @@ export function CalendarDay({
     e.stopPropagation()
     setIsOpen(false)
   }
-  const openModal = () => {
+  const openModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Don't open modal if clicking on a checkbox
+    const target = e.target as HTMLElement
+    if (
+      target.tagName === 'INPUT' &&
+      target.getAttribute('type') === 'checkbox'
+    ) {
+      return
+    }
+
     if (!isAdmin) {
       return
     }
@@ -45,8 +54,12 @@ export function CalendarDay({
       })}
       key={day.day + day.year + day.month}
       data-testid={`${day.year}-${day.month}-${day.day}`}
-      onClick={() => openModal()}
-      onKeyDown={() => openModal()}
+      onClick={e => openModal(e)}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          setIsOpen(true)
+        }
+      }}
       role="button"
       tabIndex={0}
     >
