@@ -8,12 +8,13 @@ export function Checkbox({
   status: APPOINTMENT_STATUS
 }) {
   return (
-    <input
-      type="checkbox"
-      checked={status === APPOINTMENT_STATUS.ATTENDED}
-      className="h-7 w-7 rounded"
-      onChange={onChange}
-      onClick={e => e.stopPropagation()}
-    />
+    <div onClick={e => e.stopPropagation()} className="inline-block">
+      <input
+        type="checkbox"
+        checked={status === APPOINTMENT_STATUS.ATTENDED}
+        className="h-7 w-7 rounded"
+        onChange={onChange}
+      />
+    </div>
   )
 }
