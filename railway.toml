@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+buildCommand = "npm ci && npx prisma generate"
+
+[deploy]
+startCommand = "npx prisma migrate deploy && npm run start"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "on-failure"
+restartPolicyMaxRetries = 10
+
+[environments.production]
+NODE_ENV = "production"

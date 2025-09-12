@@ -3,6 +3,23 @@
 A client management and scheduling system for personal trainers built with
 Next.js 15, PostgreSQL, and TypeScript.
 
+## Quick Deploy
+
+Deploy your own instance in under 5 minutes:
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/personal-trainer-planner?referralCode=james)
+
+After clicking the button:
+
+1. Sign in with GitHub
+2. Fill in the required environment variables (your business name, email
+   settings)
+3. Click "Deploy"
+4. Railway will automatically set up the database and deploy your app
+
+For manual setup or other deployment options, see the
+[Getting Started Guide](https://personal-trainer-planner.vercel.app/getting-started).
+
 ## Architecture Overview
 
 ### Tech Stack
@@ -21,7 +38,7 @@ Next.js 15, PostgreSQL, and TypeScript.
 - **Calendar Integration**: Google Calendar API for appointment synchronization
 - **Error Monitoring**: Sentry
 - **Testing**: Vitest for unit tests, Playwright for E2E tests
-- **Deployment**: Vercel with GitHub Actions CI/CD
+- **Deployment**: Railway, Vercel, or any Node.js hosting platform
 
 ### Application Structure
 
