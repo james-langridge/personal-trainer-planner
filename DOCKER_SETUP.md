@@ -7,8 +7,7 @@ server, or cloud provider.
 
 - [Docker](https://docs.docker.com/get-docker/) (version 20.10+)
 - [Docker Compose](https://docs.docker.com/compose/install/) (version 2.0+)
-- A Gmail account with
-  [2-factor authentication](https://myaccount.google.com/security) enabled
+- An email account with SMTP access (Gmail, Outlook, or any email provider)
 
 ## Quick Start (5 minutes)
 
@@ -37,17 +36,52 @@ Edit `.env` and fill in your details:
 # Required settings
 PT_BRAND_NAME=Your Business Name
 NEXT_PUBLIC_PT_FIRST_NAME=YourFirstName
-SMTP_USER=your-email@gmail.com
-SMTP_PASSWORD=your-app-password  # Get from Gmail (see below)
-EMAIL_FROM=your-email@gmail.com
+
+# Email settings (see examples below)
+SMTP_HOST=smtp.gmail.com         # Your email server
+SMTP_PORT=587                    # Usually 587 or 465
+SMTP_USER=your-email@example.com # Your email address
+SMTP_PASSWORD=your-password      # Your email password
+EMAIL_FROM=your-email@example.com # Sender address
 ```
 
-#### Getting Gmail App Password:
+#### Email Provider Examples:
 
-1. Go to
-   [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-2. Create a new app password for "Personal Trainer Planner"
-3. Copy the 16-character password (remove spaces)
+**Gmail** (requires [app password](https://myaccount.google.com/apppasswords)):
+
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=yourname@gmail.com
+SMTP_PASSWORD=xxxx-xxxx-xxxx-xxxx  # 16-character app password
+```
+
+**Outlook/Hotmail**:
+
+```env
+SMTP_HOST=smtp-mail.outlook.com
+SMTP_PORT=587
+SMTP_USER=yourname@outlook.com
+SMTP_PASSWORD=your-password
+```
+
+**SendGrid** (recommended for production):
+
+```env
+SMTP_HOST=smtp.sendgrid.net
+SMTP_PORT=587
+SMTP_USER=apikey  # Literally "apikey"
+SMTP_PASSWORD=SG.xxxx  # Your API key
+```
+
+**Local Development** (with MailHog):
+
+```env
+SMTP_HOST=localhost
+SMTP_PORT=1025
+SMTP_USER=any@example.com
+SMTP_PASSWORD=any
+```
 
 ### 4. Start the Application
 

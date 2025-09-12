@@ -40,26 +40,26 @@
         },
         "SMTP_HOST": {
           "value": "smtp.gmail.com",
-          "description": "Email server host (default: Gmail)"
+          "description": "Email server host (Gmail: smtp.gmail.com, Outlook: smtp-mail.outlook.com, SendGrid: smtp.sendgrid.net)"
         },
         "SMTP_PORT": {
           "value": "587",
-          "description": "Email server port"
+          "description": "Email server port (usually 587 for TLS, 465 for SSL)"
         },
         "SMTP_USER": {
           "value": "",
           "isOptional": false,
-          "description": "Your Gmail address for sending emails"
+          "description": "Your email address or SMTP username (for SendGrid use 'apikey')"
         },
         "SMTP_PASSWORD": {
           "value": "",
           "isOptional": false,
-          "description": "Gmail app password (16 characters, no spaces)"
+          "description": "Email password, app password, or API key (Gmail requires app password)"
         },
         "EMAIL_FROM": {
           "value": "",
           "isOptional": false,
-          "description": "Email address shown as sender (usually same as SMTP_USER)"
+          "description": "Email address shown as sender"
         },
         "TIME_ZONE": {
           "value": "Europe/London",
