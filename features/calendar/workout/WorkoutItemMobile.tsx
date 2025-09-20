@@ -26,7 +26,9 @@ export function WorkoutItemMobile({
       />
 
       <Link
-        href={isAdmin ? `/admin/workout/${workout?.id}` : `/workout/${workout?.id}`}
+        href={
+          isAdmin ? `/admin/workout/${workout?.id}` : `/workout/${workout?.id}`
+        }
         className={clsx(
           'p my-1 block w-full rounded bg-emerald-400 px-2 text-white',
           {

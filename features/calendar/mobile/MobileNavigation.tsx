@@ -37,7 +37,7 @@ export function MobileNavigation({
   }
 
   return (
-    <div className="flex items-center justify-between py-3 border-b">
+    <div className="flex items-center justify-between border-b py-3">
       <h2 className="text-lg font-semibold">
         {monthName} {year}
       </h2>
