@@ -9,9 +9,11 @@ import {useWorkoutStatus} from '.'
 export function WorkoutItemMobile({
   workout,
   isAdmin = false,
+  clientName,
 }: {
   workout: Workout
   isAdmin?: boolean
+  clientName?: string
 }) {
   const {status, workoutStatus, toggleStatus} = useWorkoutStatus(workout)
 
@@ -37,8 +39,8 @@ export function WorkoutItemMobile({
         )}
       >
         {workout?.name}
-        {isAdmin && workout.owner?.name && (
-          <span className="ml-2 text-sm">({workout.owner.name})</span>
+        {isAdmin && clientName && (
+          <span className="ml-2 text-sm">({clientName})</span>
         )}
       </Link>
     </div>
