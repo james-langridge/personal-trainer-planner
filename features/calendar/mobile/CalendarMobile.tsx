@@ -91,6 +91,8 @@ export default function CalendarMobile({
                           appointment={appointment}
                           isAdmin={isAdmin}
                           clientName={clientName}
+                          day={day}
+                          userId={userId}
                         />
                       )}
                     />
@@ -103,6 +105,7 @@ export default function CalendarMobile({
                           userId={userId}
                           userBootcamps={userData?.bootcamps ?? []}
                           isAdmin={isAdmin}
+                          day={day}
                         />
                       )}
                     />
@@ -114,6 +117,8 @@ export default function CalendarMobile({
                           workout={workout}
                           isAdmin={isAdmin}
                           clientName={clientName}
+                          day={day}
+                          userId={userId}
                         />
                       )}
                     />
