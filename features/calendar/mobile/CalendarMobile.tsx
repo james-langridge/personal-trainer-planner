@@ -84,7 +84,7 @@ export default function CalendarMobile({
                     <EventList
                       events={appointmentsToday}
                       renderItem={appointment => (
-                        <AppointmentItemMobile appointment={appointment} />
+                        <AppointmentItemMobile appointment={appointment} isAdmin={isAdmin} />
                       )}
                     />
 
@@ -95,6 +95,7 @@ export default function CalendarMobile({
                           bootcamp={bootcamp}
                           userId={userId}
                           userBootcamps={userData?.bootcamps ?? []}
+                          isAdmin={isAdmin}
                         />
                       )}
                     />
@@ -102,7 +103,7 @@ export default function CalendarMobile({
                     <EventList
                       events={workoutsToday}
                       renderItem={workout => (
-                        <WorkoutItemMobile workout={workout} />
+                        <WorkoutItemMobile workout={workout} isAdmin={isAdmin} />
                       )}
                     />
                   </DayMobile>

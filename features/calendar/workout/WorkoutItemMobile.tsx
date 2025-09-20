@@ -6,7 +6,13 @@ import {Workout} from '@/@types/apiResponseTypes'
 
 import {useWorkoutStatus} from '.'
 
-export function WorkoutItemMobile({workout}: {workout: Workout}) {
+export function WorkoutItemMobile({
+  workout,
+  isAdmin = false,
+}: {
+  workout: Workout
+  isAdmin?: boolean
+}) {
   const {status, workoutStatus, toggleStatus} = useWorkoutStatus(workout)
 
   return (
@@ -20,7 +26,7 @@ export function WorkoutItemMobile({workout}: {workout: Workout}) {
       />
 
       <Link
-        href={`/workout/${workout?.id}`}
+        href={isAdmin ? `/admin/workout/${workout?.id}` : `/workout/${workout?.id}`}
         className={clsx(
           'p my-1 block w-full rounded bg-emerald-400 px-2 text-white',
           {
@@ -29,6 +35,9 @@ export function WorkoutItemMobile({workout}: {workout: Workout}) {
         )}
       >
         {workout?.name}
+        {isAdmin && workout.owner?.name && (
+          <span className="ml-2 text-sm">({workout.owner.name})</span>
+        )}
       </Link>
     </div>
   )
