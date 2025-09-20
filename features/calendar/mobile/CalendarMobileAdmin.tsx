@@ -21,6 +21,7 @@ export function CalendarMobileAdmin({
   const [selectedUserId, setSelectedUserId] = useState<string | undefined>(
     userId,
   )
+  const [selectedUserName, setSelectedUserName] = useState<string | undefined>()
 
   function updateSelectedUserId(
     userName: string,
@@ -29,6 +30,7 @@ export function CalendarMobileAdmin({
     const user = users.find(user => user.name === userName)
     if (!user) return
     setSelectedUserId(user.id)
+    setSelectedUserName(user.name)
   }
 
   function updateDateFilter(dateFilter: DateFilter) {
@@ -47,6 +49,7 @@ export function CalendarMobileAdmin({
           userId={selectedUserId}
           dateFilter={dateFilter}
           isAdmin={true}
+          clientName={selectedUserName}
         />
       ) : (
         <div className="flex h-full items-center justify-center px-5">

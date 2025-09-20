@@ -6,9 +6,11 @@ import {formatTimeRange} from '@/lib/calendar'
 export function AppointmentItemMobile({
   appointment,
   isAdmin = false,
+  clientName,
 }: {
   appointment: Appointment
   isAdmin?: boolean
+  clientName?: string
 }) {
   const getAppointmentDisplay = () => {
     let display = appointment.name
@@ -20,8 +22,8 @@ export function AppointmentItemMobile({
       display = `${appointment.name} (${timeRange})`
     }
 
-    if (isAdmin && appointment.owner?.name) {
-      display = `${appointment.owner.name}: ${display}`
+    if (isAdmin && clientName) {
+      display = `${clientName}: ${display}`
     }
 
     return display

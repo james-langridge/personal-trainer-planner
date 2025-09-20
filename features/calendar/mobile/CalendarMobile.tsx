@@ -19,10 +19,12 @@ export default function CalendarMobile({
   userId,
   dateFilter: dateFilterProp,
   isAdmin = false,
+  clientName,
 }: {
   userId: string
   dateFilter?: DateFilter
   isAdmin?: boolean
+  clientName?: string
 }) {
   const scrollToRef = React.useRef<HTMLDivElement>(null)
   const now = new Date()
@@ -88,6 +90,7 @@ export default function CalendarMobile({
                         <AppointmentItemMobile
                           appointment={appointment}
                           isAdmin={isAdmin}
+                          clientName={clientName}
                         />
                       )}
                     />
@@ -110,6 +113,7 @@ export default function CalendarMobile({
                         <WorkoutItemMobile
                           workout={workout}
                           isAdmin={isAdmin}
+                          clientName={clientName}
                         />
                       )}
                     />
