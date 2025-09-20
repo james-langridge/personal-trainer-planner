@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {
+  DateFilter,
   generateCalendarMonth,
   getEventsToday,
   getPrismaDateFilter,
@@ -14,12 +15,20 @@ import {WorkoutItemMobile} from '@/features/calendar/workout'
 import {useUserEvents} from '@/app/hooks/users'
 import {useAllBootcamps} from '@/app/hooks/bootcamps'
 
-export default function CalendarMobile({userId}: {userId: string}) {
+export default function CalendarMobile({
+  userId,
+  dateFilter: dateFilterProp,
+  isAdmin = false,
+}: {
+  userId: string
+  dateFilter?: DateFilter
+  isAdmin?: boolean
+}) {
   const scrollToRef = React.useRef<HTMLDivElement>(null)
   const now = new Date()
   const currentYear = now.getFullYear()
   const currentMonth = now.getMonth()
-  const dateFilter = getPrismaDateFilter(currentYear, currentMonth, 6)
+  const dateFilter = dateFilterProp || getPrismaDateFilter(currentYear, currentMonth, 6)
 
   const {data: userData} = useUserEvents({
     id: userId,
@@ -71,7 +80,7 @@ export default function CalendarMobile({userId}: {userId: string}) {
                   key={`${day.day}-${day.month}-${day.year}`}
                   className={isToday ? 'scroll-mt-4' : ''}
                 >
-                  <DayMobile dayData={day}>
+                  <DayMobile dayData={day} isAdmin={isAdmin} userId={userId}>
                     <EventList
                       events={appointmentsToday}
                       renderItem={appointment => (
