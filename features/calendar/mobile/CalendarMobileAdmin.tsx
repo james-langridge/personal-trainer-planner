@@ -39,10 +39,7 @@ export function CalendarMobileAdmin({
     <div className="flex h-[90vh] flex-col">
       <div className="sticky top-0 z-10 bg-white px-5 shadow-sm dark:bg-gray-900">
         <MobileClientSelect onSelect={updateSelectedUserId} />
-        <MobileNavigation
-          dateFilter={dateFilter}
-          onChange={updateDateFilter}
-        />
+        <MobileNavigation dateFilter={dateFilter} onChange={updateDateFilter} />
       </div>
 
       {selectedUserId ? (
@@ -53,7 +50,9 @@ export function CalendarMobileAdmin({
         />
       ) : (
         <div className="flex h-full items-center justify-center px-5">
-          <p className="text-gray-500">Select a client to view their calendar</p>
+          <p className="text-gray-500">
+            Select a client to view their calendar
+          </p>
         </div>
       )}
     </div>

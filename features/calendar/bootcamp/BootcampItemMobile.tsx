@@ -33,12 +33,18 @@ export function BootcampItemMobile({
       />
 
       <Link
-        href={isAdmin ? `/admin/bootcamp/${bootcamp?.id}` : `/bootcamp/${bootcamp?.id}`}
+        href={
+          isAdmin
+            ? `/admin/bootcamp/${bootcamp?.id}`
+            : `/bootcamp/${bootcamp?.id}`
+        }
         className="my-1 block w-full rounded bg-yellow-400 px-2 text-white"
       >
         {bootcamp?.name}
         {isAdmin && bootcamp.attendees && (
-          <span className="ml-2 text-sm">({bootcamp.attendees.length} attendees)</span>
+          <span className="ml-2 text-sm">
+            ({bootcamp.attendees.length} attendees)
+          </span>
         )}
       </Link>
     </div>

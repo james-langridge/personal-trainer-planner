@@ -66,7 +66,7 @@ export function DayMobile({
           isOpen={isModalOpen}
           onRequestClose={closeModal}
           overlayClassName="bg-[rgba(0,0,0,.4)] flex justify-center items-center fixed inset-0 z-50"
-          className="w-11/12 max-w-lg rounded-xl bg-white p-6 max-h-[90vh] overflow-y-auto"
+          className="max-h-[90vh] w-11/12 max-w-lg overflow-y-auto rounded-xl bg-white p-6"
         >
           <CalendarForm day={dayData} closeModal={closeModal} userId={userId} />
         </Modal>

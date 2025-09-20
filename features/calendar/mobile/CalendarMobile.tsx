@@ -28,7 +28,8 @@ export default function CalendarMobile({
   const now = new Date()
   const currentYear = now.getFullYear()
   const currentMonth = now.getMonth()
-  const dateFilter = dateFilterProp || getPrismaDateFilter(currentYear, currentMonth, 6)
+  const dateFilter =
+    dateFilterProp || getPrismaDateFilter(currentYear, currentMonth, 6)
 
   const {data: userData} = useUserEvents({
     id: userId,
@@ -84,7 +85,10 @@ export default function CalendarMobile({
                     <EventList
                       events={appointmentsToday}
                       renderItem={appointment => (
-                        <AppointmentItemMobile appointment={appointment} isAdmin={isAdmin} />
+                        <AppointmentItemMobile
+                          appointment={appointment}
+                          isAdmin={isAdmin}
+                        />
                       )}
                     />
 
@@ -103,7 +107,10 @@ export default function CalendarMobile({
                     <EventList
                       events={workoutsToday}
                       renderItem={workout => (
-                        <WorkoutItemMobile workout={workout} isAdmin={isAdmin} />
+                        <WorkoutItemMobile
+                          workout={workout}
+                          isAdmin={isAdmin}
+                        />
                       )}
                     />
                   </DayMobile>
