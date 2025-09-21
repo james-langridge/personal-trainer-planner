@@ -3,10 +3,9 @@
 import React, {useState} from 'react'
 import Link from 'next/link'
 import {Pencil} from 'lucide-react'
-import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
+import {getPrismaDateFilter} from '@/lib/calendar'
 import CalendarMobile from '@/features/calendar/mobile/CalendarMobile'
 import MobileClientSelect from '@/features/calendar/mobile/MobileClientSelect'
-import {MobileNavigation} from '@/features/calendar/mobile/MobileNavigation'
 import {Button} from '@/components/button'
 
 export function CalendarMobileAdmin({
@@ -18,9 +17,7 @@ export function CalendarMobileAdmin({
   jsMonth: number
   userId?: string
 }) {
-  const [dateFilter, setDateFilter] = useState<DateFilter>(
-    getPrismaDateFilter(year, jsMonth, 6),
-  )
+  const dateFilter = getPrismaDateFilter(year, jsMonth, 6)
   const [selectedUserId, setSelectedUserId] = useState<string | undefined>(
     userId,
   )
@@ -36,13 +33,9 @@ export function CalendarMobileAdmin({
     setSelectedUserName(user.name)
   }
 
-  function updateDateFilter(dateFilter: DateFilter) {
-    setDateFilter(dateFilter)
-  }
-
   return (
     <div className="flex h-[90vh] flex-col">
-      <div className="sticky top-0 z-10 bg-white px-5 shadow-sm dark:bg-gray-900">
+      <div className="fixed left-0 right-0 top-0 z-20 bg-white px-5 py-3 shadow-sm dark:bg-gray-900">
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <MobileClientSelect onSelect={updateSelectedUserId} />
@@ -60,23 +53,24 @@ export function CalendarMobileAdmin({
             </Link>
           )}
         </div>
-        <MobileNavigation dateFilter={dateFilter} onChange={updateDateFilter} />
       </div>
 
-      {selectedUserId ? (
-        <CalendarMobile
-          userId={selectedUserId}
-          dateFilter={dateFilter}
-          isAdmin={true}
-          clientName={selectedUserName}
-        />
-      ) : (
-        <div className="flex h-full items-center justify-center px-5">
-          <p className="text-gray-500">
-            Select a client to view their calendar
-          </p>
-        </div>
-      )}
+      <div className="mt-16">
+        {selectedUserId ? (
+          <CalendarMobile
+            userId={selectedUserId}
+            dateFilter={dateFilter}
+            isAdmin={true}
+            clientName={selectedUserName}
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center px-5">
+            <p className="text-gray-500">
+              Select a client to view their calendar
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
