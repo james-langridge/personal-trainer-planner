@@ -25,7 +25,6 @@ export function CalendarMobileAdmin({
   const [selectedUserName, setSelectedUserName] = useState<string | undefined>()
   const {data: users} = useUserIdsAndNames()
 
-  // Set the user name when we have userId from URL params
   useEffect(() => {
     if (userId && users) {
       const user = users.find(u => u.id === userId)
