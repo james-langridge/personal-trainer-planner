@@ -3,7 +3,7 @@
 import {zodResolver} from '@hookform/resolvers/zod'
 import {USER_TYPE} from '@prisma/client'
 import {ExclamationTriangleIcon} from '@radix-ui/react-icons'
-import {useRouter} from 'next/navigation'
+import {useRouter, useSearchParams} from 'next/navigation'
 import {useSession} from 'next-auth/react'
 import React, {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
@@ -62,8 +62,10 @@ const formSchema = z.object({
 export default function EditUser({user}: {user: User}) {
   const updateUser = useUpdateUser()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const {data: session, status} = useSession()
   const [isLoading, setIsLoading] = useState(false)
+  const fromCalendar = searchParams.get('from') === 'calendar'
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -103,13 +105,22 @@ export default function EditUser({user}: {user: User}) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    updateUser.mutate({
-      ...values,
-      email: values.email.toLowerCase(),
-      billingEmail: values.billingEmail?.toLowerCase(),
-      credits: Number(values.credits),
-      fee: Math.round(parseFloat(values.fee) * 100),
-    })
+    updateUser.mutate(
+      {
+        ...values,
+        email: values.email.toLowerCase(),
+        billingEmail: values.billingEmail?.toLowerCase(),
+        credits: Number(values.credits),
+        fee: Math.round(parseFloat(values.fee) * 100),
+      },
+      {
+        onSuccess: () => {
+          if (fromCalendar) {
+            router.push(`/admin/calendar?userId=${user.id}`)
+          }
+        },
+      },
+    )
     setIsLoading(false)
   }
 
@@ -224,7 +235,11 @@ export default function EditUser({user}: {user: User}) {
               variant="destructive"
               onClick={e => {
                 e.preventDefault()
-                router.back()
+                if (fromCalendar) {
+                  router.push(`/admin/calendar?userId=${user.id}`)
+                } else {
+                  router.back()
+                }
               }}
               disabled={isLoading}
             >

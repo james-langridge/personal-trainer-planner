@@ -1,12 +1,13 @@
 'use client'
 
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Link from 'next/link'
 import {Pencil} from 'lucide-react'
 import {getPrismaDateFilter} from '@/lib/calendar'
 import CalendarMobile from '@/features/calendar/mobile/CalendarMobile'
 import MobileClientSelect from '@/features/calendar/mobile/MobileClientSelect'
 import {Button} from '@/components/button'
+import {useUserIdsAndNames} from '@/app/hooks/users'
 
 export function CalendarMobileAdmin({
   year,
@@ -22,6 +23,17 @@ export function CalendarMobileAdmin({
     userId,
   )
   const [selectedUserName, setSelectedUserName] = useState<string | undefined>()
+  const {data: users} = useUserIdsAndNames()
+
+  // Set the user name when we have userId from URL params
+  useEffect(() => {
+    if (userId && users) {
+      const user = users.find(u => u.id === userId)
+      if (user) {
+        setSelectedUserName(user.name)
+      }
+    }
+  }, [userId, users])
 
   function updateSelectedUserId(
     userName: string,
@@ -38,11 +50,14 @@ export function CalendarMobileAdmin({
       <div className="fixed left-0 right-0 top-16 z-20 bg-white px-5 py-3 shadow-sm dark:bg-gray-900">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <MobileClientSelect onSelect={updateSelectedUserId} />
+            <MobileClientSelect
+              onSelect={updateSelectedUserId}
+              selectedUserName={selectedUserName}
+            />
           </div>
           <div className="ml-2 h-10 w-10">
             {selectedUserId && (
-              <Link href={`/admin/user/${selectedUserId}/edit`}>
+              <Link href={`/admin/user/${selectedUserId}/edit?from=calendar`}>
                 <Button variant="ghost" size="icon" aria-label="Edit client">
                   <Pencil className="h-4 w-4" />
                 </Button>
@@ -60,13 +75,7 @@ export function CalendarMobileAdmin({
             isAdmin={true}
             clientName={selectedUserName}
           />
-        ) : (
-          <div className="flex h-full items-center justify-center px-5">
-            <p className="text-gray-500">
-              Select a client to view their calendar
-            </p>
-          </div>
-        )}
+        ) : null}
       </div>
     </div>
   )

@@ -4,7 +4,12 @@ import {CalendarDesktop} from '@/features/calendar/desktop'
 import {CalendarMobileAdmin} from '@/features/calendar/mobile/CalendarMobileAdmin'
 import {isMobileViewport} from '@/lib/utils'
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{userId?: string}>
+}) {
+  const params = await searchParams
   const now = new Date()
   const currentYear = now.getFullYear()
   const currentMonth = now.getMonth()
@@ -14,8 +19,17 @@ export default async function Page() {
   const isMobile = isMobileViewport(userAgent)
 
   return isMobile ? (
-    <CalendarMobileAdmin year={currentYear} jsMonth={currentMonth} />
+    <CalendarMobileAdmin
+      year={currentYear}
+      jsMonth={currentMonth}
+      userId={params.userId}
+    />
   ) : (
-    <CalendarDesktop year={currentYear} jsMonth={currentMonth} isAdmin={true} />
+    <CalendarDesktop
+      year={currentYear}
+      jsMonth={currentMonth}
+      isAdmin={true}
+      userId={params.userId}
+    />
   )
 }

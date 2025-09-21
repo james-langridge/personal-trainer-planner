@@ -19,8 +19,10 @@ const sortByName = (
 
 export default function MobileClientSelect({
   onSelect,
+  selectedUserName,
 }: {
   onSelect: SelectUserId
+  selectedUserName?: string
 }) {
   const {data: users, isLoading} = useUserIdsAndNames()
 
@@ -42,7 +44,7 @@ export default function MobileClientSelect({
   return (
     <div className="flex items-center gap-2 py-3">
       <User className="h-4 w-4 text-gray-500" />
-      <Select onValueChange={handleValueChange}>
+      <Select onValueChange={handleValueChange} value={selectedUserName}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select a client" />
         </SelectTrigger>
