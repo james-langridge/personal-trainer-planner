@@ -35,27 +35,24 @@ export function CalendarMobileAdmin({
 
   return (
     <div className="flex h-[90vh] flex-col">
-      <div className="fixed left-0 right-0 top-0 z-20 bg-white px-5 py-3 shadow-sm dark:bg-gray-900">
+      <div className="fixed left-0 right-0 top-16 z-20 bg-white px-5 py-3 shadow-sm dark:bg-gray-900">
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <MobileClientSelect onSelect={updateSelectedUserId} />
           </div>
-          {selectedUserId && (
-            <Link href={`/admin/user/${selectedUserId}/edit`}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="ml-2"
-                aria-label="Edit client"
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-            </Link>
-          )}
+          <div className="ml-2 h-10 w-10">
+            {selectedUserId && (
+              <Link href={`/admin/user/${selectedUserId}/edit`}>
+                <Button variant="ghost" size="icon" aria-label="Edit client">
+                  <Pencil className="h-4 w-4" />
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="mt-16">
+      <div className="mt-20">
         {selectedUserId ? (
           <CalendarMobile
             userId={selectedUserId}

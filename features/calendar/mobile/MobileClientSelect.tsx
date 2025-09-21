@@ -22,9 +22,17 @@ export default function MobileClientSelect({
 }: {
   onSelect: SelectUserId
 }) {
-  const {data: users} = useUserIdsAndNames()
+  const {data: users, isLoading} = useUserIdsAndNames()
 
-  if (!users) return null
+  if (isLoading || !users) {
+    return (
+      <div className="flex items-center gap-2 py-3">
+        <User className="h-4 w-4 text-gray-500" />
+        <div className="h-10 w-full animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
+      </div>
+    )
+  }
+
   const sortedUsers = sortByName(users)
 
   const handleValueChange = (value: string) => {
