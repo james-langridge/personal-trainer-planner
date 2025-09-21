@@ -53,7 +53,33 @@ export default function CalendarMobile({
     }
   }, [userData, allBootcamps])
 
-  if (!userData || !allBootcamps) return null
+  if (!userData || !allBootcamps) {
+    return (
+      <div className="flex h-[90vh]">
+        <div className="flex w-full flex-col px-5 sm:hidden">
+          <div className="py-5">
+            <div className="space-y-6">
+              {[...Array(7)].map((_, index) => (
+                <div key={index}>
+                  <hr className="my-6 h-px border-none bg-gray-900 dark:bg-gray-700" />
+                  <div className="mb-2 flex justify-between text-sm">
+                    <div className="h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                  </div>
+                  <div className="space-y-3">
+                    <div className="h-10 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                    {index % 2 === 0 && (
+                      <div className="h-10 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-[90vh]">
