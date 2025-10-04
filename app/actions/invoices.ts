@@ -59,6 +59,7 @@ ${process.env.NEXT_PUBLIC_PT_FIRST_NAME}`
   try {
     await resend.emails.send({
       from: `${process.env.NEXT_PUBLIC_PT_FIRST_NAME} ${process.env.PT_SURNAME} <${process.env.EMAIL_FROM}>`,
+      replyTo: process.env.EMAIL_TO,
       to: body.email,
       subject: `${month}'s invoice from ${process.env.PT_BRAND_NAME}`,
       text: bodyString,
