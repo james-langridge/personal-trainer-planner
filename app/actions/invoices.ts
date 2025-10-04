@@ -13,6 +13,10 @@ export async function createInvoice(body: InvoiceData) {
     throw new Error('Forbidden.')
   }
 
+  // Send email first - if this fails, we don't create the invoice
+  await sendInvoice(body)
+
+  // Only create invoice if email was sent successfully
   await db.invoice.create({
     data: {
       appointments: body.appointments,
@@ -21,8 +25,6 @@ export async function createInvoice(body: InvoiceData) {
       total: body.total,
     },
   })
-
-  await sendInvoice(body)
 }
 
 function getLastDayOfMonth(dateString: string) {
@@ -46,8 +48,9 @@ const sendInvoice = async (body: InvoiceData) => {
     await transporter.verify()
   } catch (e) {
     console.error('Could not connect to gmail', e)
-
-    return
+    throw new Error(
+      'Failed to connect to email server. Please check SMTP configuration.',
+    )
   }
 
   const month = monthNames[new Date(body.date).getMonth()]
@@ -73,9 +76,8 @@ const sendInvoice = async (body: InvoiceData) => {
       subject: `${month}'s invoice from ${process.env.PT_BRAND_NAME}`,
       text: bodyString,
     })
-
-    return transporter
   } catch (e) {
-    console.error('Could not send message', e)
+    console.error('Could not send invoice email', e)
+    throw new Error('Failed to send invoice email. Please try again later.')
   }
 }
