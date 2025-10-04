@@ -162,7 +162,7 @@ export function CreateClientForm() {
       </div>
 
       <div className="relative mt-4 flex items-center">
-        <p className="rounded-l-lg border border-r-0 bg-gray-100 px-3 py-2.5 text-gray-500 rtl:rounded-l-none rtl:rounded-r-lg rtl:border-l-0 rtl:border-r dark:border-gray-700 dark:bg-gray-800">
+        <p className="rounded-l-lg border border-r-0 bg-gray-100 px-3 py-2.5 text-gray-500 dark:border-gray-700 dark:bg-gray-800 rtl:rounded-l-none rtl:rounded-r-lg rtl:border-l-0 rtl:border-r">
           Fee
         </p>
 
@@ -174,7 +174,7 @@ export function CreateClientForm() {
             }))
           }
           type="number"
-          className="block w-full rounded-lg rounded-l-none border border-gray-200 bg-white px-5 py-2.5 text-gray-700 placeholder-gray-400/70 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 rtl:rounded-l-lg rtl:rounded-r-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:border-blue-300"
+          className="block w-full rounded-lg rounded-l-none border border-gray-200 bg-white px-5 py-2.5 text-gray-700 placeholder-gray-400/70 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:border-blue-300 rtl:rounded-l-lg rtl:rounded-r-none"
           placeholder="0.00"
           value={form.fee}
         />

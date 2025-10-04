@@ -14,7 +14,7 @@ export function WeekdayButtonGroup({
 }) {
   return (
     <div className="flex flex-col">
-      <div className="flex divide-x overflow-hidden rounded-lg border bg-white rtl:flex-row-reverse dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900">
+      <div className="flex divide-x overflow-hidden rounded-lg border bg-white dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900 rtl:flex-row-reverse">
         <button
           type="button"
           onClick={() => toggleDay(1)}
