@@ -7,7 +7,7 @@ import {auth} from '@/auth'
 import {monthNames} from '@/lib/constants'
 import {db} from '@/lib/db'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY || '')
 
 export async function createInvoice(body: InvoiceData) {
   const session = await auth()
@@ -38,6 +38,10 @@ function getLastDayOfMonth(dateString: string) {
 }
 
 const sendInvoice = async (body: InvoiceData) => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is not configured')
+  }
+
   const month = monthNames[new Date(body.date).getMonth()]
   const total = new Intl.NumberFormat('en-UK', {
     style: 'currency',

@@ -4,7 +4,7 @@ import {Resend} from 'resend'
 
 import {auth} from '@/auth'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY || '')
 
 export async function submitForm(body: Record<string, string>) {
   const session = await auth()
@@ -16,15 +16,18 @@ export async function submitForm(body: Record<string, string>) {
 }
 
 const sendForm = async (body: Record<string, string>) => {
-  let bodyString = ''
-
-  for (const [key, value] of Object.entries(body)) {
-    bodyString += `${key}: ${value}\n`
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is not configured')
   }
 
   const emailTo = process.env.EMAIL_TO
   if (!emailTo) {
     throw new Error('EMAIL_TO environment variable is not configured')
+  }
+
+  let bodyString = ''
+  for (const [key, value] of Object.entries(body)) {
+    bodyString += `${key}: ${value}\n`
   }
 
   try {
