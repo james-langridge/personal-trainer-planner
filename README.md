@@ -17,7 +17,8 @@ Next.js 15, PostgreSQL, and TypeScript.
 - **State Management**: TanStack Query (React Query) v5 for server state
 - **Forms**: React Hook Form with Zod validation
 - **CMS Integration**: Contentful for dynamic content
-- **Email**: Resend for transactional emails (invoices, password resets, form submissions)
+- **Email**: Resend for transactional emails (invoices, password resets, form
+  submissions)
 - **Calendar Integration**: Google Calendar API for appointment synchronization
 - **Error Monitoring**: Sentry
 - **Testing**: Vitest for unit tests, Playwright for E2E tests
@@ -146,7 +147,8 @@ cp .env.example .env
 **Email (Resend):**
 
 - `RESEND_API_KEY`: API key from [resend.com](https://resend.com)
-- `EMAIL_FROM`: Sender email address (must use verified Resend domain, e.g., noreply@send.yourdomain.com)
+- `EMAIL_FROM`: Sender email address (must use verified Resend domain, e.g.,
+  noreply@send.yourdomain.com)
 - `EMAIL_TO`: Admin email for receiving form submissions
 
 **Contentful CMS:**
