@@ -1,9 +1,11 @@
 import {randomBytes} from 'crypto'
 
 import {NextRequest, NextResponse} from 'next/server'
-import nodemailer from 'nodemailer'
+import {Resend} from 'resend'
 
 import {db} from '@/lib/db'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,17 +22,9 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    })
-
     const resetUrl = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${resetToken}`
 
-    await transporter.sendMail({
+    await resend.emails.send({
       from: `${process.env.PT_BRAND_NAME} <${process.env.EMAIL_FROM}>`,
       to: email,
       subject: `Set Your Password for ${process.env.PT_BRAND_NAME}`,

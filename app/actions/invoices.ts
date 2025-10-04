@@ -1,11 +1,13 @@
 'use server'
 
-import nodemailer from 'nodemailer'
+import {Resend} from 'resend'
 
 import {InvoiceData} from '@/@types/apiRequestTypes'
 import {auth} from '@/auth'
 import {monthNames} from '@/lib/constants'
 import {db} from '@/lib/db'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function createInvoice(body: InvoiceData) {
   const session = await auth()
@@ -36,43 +38,24 @@ function getLastDayOfMonth(dateString: string) {
 }
 
 const sendInvoice = async (body: InvoiceData) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  })
-
-  try {
-    await transporter.verify()
-  } catch (e) {
-    console.error('Could not connect to gmail', e)
-    throw new Error(
-      'Failed to connect to email server. Please check SMTP configuration.',
-    )
-  }
-
   const month = monthNames[new Date(body.date).getMonth()]
   const total = new Intl.NumberFormat('en-UK', {
     style: 'currency',
     currency: 'GBP',
   }).format(body.total / 100)
 
-  const bodyString = `
-      Hi ${body.name.split(' ')[0]},
-      
-      We have done ${body.appointments} sessions in ${month} - total ${total}.
+  const bodyString = `Hi ${body.name.split(' ')[0]},
 
-      Many thanks,
-      --
-      ${process.env.NEXT_PUBLIC_PT_FIRST_NAME}
-      `
+We have done ${body.appointments} sessions in ${month} - total ${total}.
+
+Many thanks,
+--
+${process.env.NEXT_PUBLIC_PT_FIRST_NAME}`
 
   try {
-    await transporter.sendMail({
-      from: `${process.env.NEXT_PUBLIC_PT_FIRST_NAME} ${process.env.PT_SURNAME} ${process.env.EMAIL_FROM}`,
-      to: `${body.email}`,
+    await resend.emails.send({
+      from: `${process.env.NEXT_PUBLIC_PT_FIRST_NAME} ${process.env.PT_SURNAME} <${process.env.EMAIL_FROM}>`,
+      to: body.email,
       subject: `${month}'s invoice from ${process.env.PT_BRAND_NAME}`,
       text: bodyString,
     })
