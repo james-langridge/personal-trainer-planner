@@ -50,21 +50,21 @@ export function SendInvoiceButton({
 
   async function onClick() {
     setIsLoading(true)
-    createInvoice(invoiceData)
-      .then(() => {
-        toast({
-          description: 'The invoice has been sent.',
-        })
+    try {
+      await createInvoice(invoiceData)
+      toast({
+        description: 'The invoice has been sent.',
       })
-      .catch(error => {
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: error.message,
-        })
+      setOpen(false)
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: error instanceof Error ? error.message : 'Unknown error',
       })
-      .finally(() => setOpen(false))
-    setIsLoading(false)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
