@@ -5,10 +5,14 @@ import {Resend} from 'resend'
 
 import {db} from '@/lib/db'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY || '')
 
 export async function POST(req: NextRequest) {
   try {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY environment variable is not configured')
+    }
+
     const {email} = await req.json()
 
     const resetToken = randomBytes(32).toString('hex')
