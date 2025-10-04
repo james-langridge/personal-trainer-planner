@@ -1,8 +1,10 @@
 'use server'
 
-import nodemailer from 'nodemailer'
+import {Resend} from 'resend'
 
 import {auth} from '@/auth'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function submitForm(body: Record<string, string>) {
   const session = await auth()
@@ -14,38 +16,27 @@ export async function submitForm(body: Record<string, string>) {
 }
 
 const sendForm = async (body: Record<string, string>) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  })
-
-  try {
-    await transporter.verify()
-  } catch (e) {
-    console.error('Could not connect to gmail', e)
-
-    return
-  }
-
   let bodyString = ''
 
   for (const [key, value] of Object.entries(body)) {
     bodyString += `${key}: ${value}\n`
   }
 
+  const emailTo = process.env.EMAIL_TO
+  if (!emailTo) {
+    throw new Error('EMAIL_TO environment variable is not configured')
+  }
+
   try {
-    await transporter.sendMail({
-      from: `${body['Full name']} ${body.Email}`,
-      to: process.env.EMAIL_TO,
+    await resend.emails.send({
+      from: `${body['Full name']} <${process.env.EMAIL_FROM}>`,
+      to: emailTo,
+      replyTo: body.Email,
       subject: `Form submission from ${body.Email}`,
       text: bodyString,
     })
-
-    return transporter
   } catch (e) {
-    console.error('Could not send message', e)
+    console.error('Could not send form submission', e)
+    throw new Error('Failed to send form submission. Please try again later.')
   }
 }
