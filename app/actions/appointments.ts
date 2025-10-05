@@ -3,7 +3,11 @@
 import {Appointment} from '@prisma/client'
 
 import {auth} from '@/auth'
-import {getRepeatingDates} from '@/lib/calendar'
+import {
+  getRepeatingDates,
+  combineDateAndTime,
+  extractTimeString,
+} from '@/lib/calendar'
 import {db} from '@/lib/db'
 import {
   addEventToGoogleCalendar,
@@ -86,13 +90,25 @@ export async function createAppointment(
     try {
       // No timeout needed on Railway - let it complete
       const results = await addMultipleEventsToGoogleCalendar(
-        appointments.map(appt => ({
-          title: appt.name,
-          description: appt.description || '',
-          startDate: appt.startTime || appt.date,
-          endDate: appt.endTime || appt.date,
-          isAllDay: !appt.startTime || !appt.endTime,
-        })),
+        appointments.map(appt => {
+          // Combine date from appointment with time from form times
+          // Extract time component from the form's startTime/endTime and apply to this appointment's date
+          const dateStr = appt.date.toISOString().split('T')[0]
+          const appointmentStartDate = appt.startTime
+            ? combineDateAndTime(dateStr, extractTimeString(appt.startTime))
+            : appt.date
+          const appointmentEndDate = appt.endTime
+            ? combineDateAndTime(dateStr, extractTimeString(appt.endTime))
+            : appt.date
+
+          return {
+            title: appt.name,
+            description: appt.description || '',
+            startDate: appointmentStartDate || appt.date,
+            endDate: appointmentEndDate || appt.date,
+            isAllDay: !appt.startTime || !appt.endTime,
+          }
+        }),
       )
 
       // Update appointments with Google Calendar IDs
