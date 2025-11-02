@@ -64,8 +64,29 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  const totalSum = React.useMemo(() => {
+    const filteredRows = table.getFilteredRowModel().rows
+    const sum = filteredRows.reduce((acc, row) => {
+      const rowTotal = row.getValue('total') as number
+      return acc + rowTotal
+    }, 0)
+
+    return new Intl.NumberFormat('en-UK', {
+      style: 'currency',
+      currency: 'GBP',
+    }).format(sum / 100)
+  }, [table.getFilteredRowModel().rows])
+
   return (
     <div className="space-y-4">
+      <div className="rounded-lg border bg-card p-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-medium text-muted-foreground">
+            Total Revenue
+          </h3>
+          <p className="text-2xl font-bold">{totalSum}</p>
+        </div>
+      </div>
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
