@@ -5,7 +5,7 @@ import {useState} from 'react'
 import DateProvider from '@/app/admin/users/DateProvider'
 import {useAllUsers} from '@/app/hooks/users'
 import {DateChangeButtons} from '@/features/calendar/desktop'
-import {columns, DataTable} from '@/features/users/summary'
+import {columns, DataTable, ExportCSVDialog} from '@/features/users/summary'
 import {DateFilter, getPrismaDateFilter} from '@/lib/calendar'
 import {sortByString} from '@/lib/users'
 
@@ -39,11 +39,14 @@ export default function UsersView({
 
   return (
     <div className="container mx-auto py-10">
-      <div className="flex items-center space-x-2">
-        <DateChangeButtons
-          dateFilter={dateFilter}
-          onChange={updateDateFilter}
-        />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <DateChangeButtons
+            dateFilter={dateFilter}
+            onChange={updateDateFilter}
+          />
+        </div>
+        <ExportCSVDialog />
       </div>
       <DateProvider date={date}>
         <DataTable columns={columns} data={users} />
