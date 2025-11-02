@@ -15,7 +15,7 @@ export function calculateUKTaxYear(date: Date): {start: Date; end: Date} {
     month < 3 || (month === 3 && date.getDate() < 6) ? year - 1 : year
 
   const start = new Date(Date.UTC(taxYearStart, 3, 6)) // April 6
-  const end = new Date(Date.UTC(taxYearStart + 1, 3, 6)) // April 6 next year
+  const end = new Date(Date.UTC(taxYearStart + 1, 3, 5)) // April 5 next year
 
   return {start, end}
 }

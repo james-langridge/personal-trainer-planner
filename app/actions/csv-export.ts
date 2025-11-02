@@ -29,6 +29,11 @@ export async function exportUsersToCSV(
 
   const {startDate, endDate} = params
 
+  // For database query, we need exclusive upper bound (lt), so add 1 day to endDate
+  // User selects April 5, we query with lt April 6 to include all of April 5
+  const queryEndDate = new Date(endDate)
+  queryEndDate.setUTCDate(queryEndDate.getUTCDate() + 1)
+
   // Fetch users with their appointments and invoices in the date range
   const users: User[] = await db.user.findMany({
     select: {
@@ -49,7 +54,7 @@ export async function exportUsersToCSV(
           deleted: false,
           date: {
             gte: startDate,
-            lt: endDate,
+            lt: queryEndDate,
           },
         },
       },
@@ -65,7 +70,7 @@ export async function exportUsersToCSV(
           deleted: false,
           date: {
             gte: startDate,
-            lt: endDate,
+            lt: queryEndDate,
           },
         },
       },
@@ -82,7 +87,7 @@ export async function exportUsersToCSV(
           deleted: false,
           date: {
             gte: startDate,
-            lt: endDate,
+            lt: queryEndDate,
           },
         },
       },
@@ -103,7 +108,7 @@ export async function exportUsersToCSV(
           deleted: false,
           date: {
             gte: startDate,
-            lt: endDate,
+            lt: queryEndDate,
           },
         },
       },
