@@ -2,7 +2,10 @@
 
 import {User} from '@/@types/apiResponseTypes'
 import {auth} from '@/auth'
-import {formatUsersForCSV, generateCSVString} from '@/lib/csv-export'
+import {
+  calculateMonthlyRevenue,
+  generateMonthlyRevenueCSV,
+} from '@/lib/csv-export'
 import {db} from '@/lib/db'
 
 export type ExportUsersToCSVParams = {
@@ -12,7 +15,7 @@ export type ExportUsersToCSVParams = {
 
 export type ExportUsersToCSVResult = {
   csv: string
-  userCount: number
+  monthCount: number
 }
 
 /**
@@ -115,12 +118,12 @@ export async function exportUsersToCSV(
     },
   })
 
-  // Transform to CSV format using pure functions
-  const csvData = formatUsersForCSV(users)
-  const csv = generateCSVString(csvData)
+  // Calculate monthly revenue totals using pure functions
+  const monthlyData = calculateMonthlyRevenue(users)
+  const csv = generateMonthlyRevenueCSV(monthlyData, startDate, endDate)
 
   return {
     csv,
-    userCount: users.length,
+    monthCount: monthlyData.length,
   }
 }

@@ -43,7 +43,7 @@ function parseInputDate(dateString: string): Date {
 }
 
 /**
- * Dialog component for exporting user data to CSV with date range selection.
+ * Dialog component for exporting monthly revenue totals to CSV.
  * Defaults to current UK tax year (April 6 to April 5).
  */
 export function ExportCSVDialog() {
@@ -60,7 +60,7 @@ export function ExportCSVDialog() {
   const exportMutation = useMutation({
     mutationFn: exportUsersToCSV,
     onSuccess: data => {
-      const {csv, userCount} = data
+      const {csv, monthCount} = data
       const startDateObj = parseInputDate(startDate)
       const endDateObj = parseInputDate(endDate)
       const filename = generateCSVFilename(startDateObj, endDateObj)
@@ -79,7 +79,7 @@ export function ExportCSVDialog() {
 
       toast({
         title: 'Export successful',
-        description: `Exported ${userCount} ${userCount === 1 ? 'user' : 'users'} to ${filename}`,
+        description: `Exported ${monthCount} ${monthCount === 1 ? 'month' : 'months'} of revenue to ${filename}`,
       })
 
       setIsOpen(false)
@@ -134,9 +134,9 @@ export function ExportCSVDialog() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Export User Summary</DialogTitle>
+          <DialogTitle>Export Monthly Revenue</DialogTitle>
           <DialogDescription>
-            Export user data and revenue to CSV for a specific date range.
+            Export monthly revenue totals to CSV for tax purposes.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

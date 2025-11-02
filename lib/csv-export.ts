@@ -20,83 +20,75 @@ export function calculateUKTaxYear(date: Date): {start: Date; end: Date} {
   return {start, end}
 }
 
+type MonthlyRevenue = {
+  month: string
+  revenue: number
+}
+
 /**
- * Calculates total revenue for a user from attended appointments
+ * Calculates monthly revenue totals from user data
  */
-function calculateUserRevenue(user: User): number {
-  return user.appointments.reduce((total, appointment) => {
-    if (appointment.status === APPOINTMENT_STATUS.ATTENDED) {
-      return total + appointment.fee
+export function calculateMonthlyRevenue(users: User[]): MonthlyRevenue[] {
+  const monthlyTotals = new Map<string, number>()
+
+  // Aggregate all attended appointments by month
+  for (const user of users) {
+    for (const appointment of user.appointments) {
+      if (appointment.status === APPOINTMENT_STATUS.ATTENDED) {
+        const date = new Date(appointment.date)
+        const monthKey = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`
+
+        const currentTotal = monthlyTotals.get(monthKey) || 0
+        monthlyTotals.set(monthKey, currentTotal + appointment.fee)
+      }
     }
-    return total
-  }, 0)
-}
-
-/**
- * Formats a user record for CSV export
- */
-function formatUserForCSV(user: User): Record<string, string | number> {
-  const booked = user.appointments.length
-  const attended = user.appointments.filter(
-    appointment => appointment.status === APPOINTMENT_STATUS.ATTENDED,
-  ).length
-  const revenueInPence = calculateUserRevenue(user)
-  const revenueInPounds = revenueInPence / 100
-  const feeInPounds = user.fee / 100
-  const hasInvoice = user.invoices.length > 0
-
-  return {
-    Name: user.name,
-    Type: user.type,
-    Email: user.email,
-    'Billing Email': user.billingEmail || user.email,
-    'Fee (£)': feeInPounds.toFixed(2),
-    Credits: user.credits,
-    'Appointments Booked': booked,
-    'Appointments Attended': attended,
-    'Total Revenue (£)': revenueInPounds.toFixed(2),
-    'Invoice Sent': hasInvoice ? 'Yes' : 'No',
   }
+
+  // Convert to sorted array
+  const monthlyData = Array.from(monthlyTotals.entries())
+    .map(([monthKey, revenueInPence]) => ({
+      month: monthKey,
+      revenue: revenueInPence / 100, // Convert to pounds
+    }))
+    .sort((a, b) => a.month.localeCompare(b.month))
+
+  return monthlyData
 }
 
 /**
- * Transforms user data array into CSV rows
+ * Formats monthly revenue data as CSV string with header and total
  */
-export function formatUsersForCSV(
-  users: User[],
-): Array<Record<string, string | number>> {
-  return users.map(formatUserForCSV)
-}
-
-/**
- * Converts data rows to CSV string format
- */
-export function generateCSVString(
-  data: Array<Record<string, string | number>>,
+export function generateMonthlyRevenueCSV(
+  monthlyData: MonthlyRevenue[],
+  startDate: Date,
+  endDate: Date,
 ): string {
-  if (data.length === 0) {
-    return ''
-  }
-
-  const headers = Object.keys(data[0])
   const csvRows: string[] = []
 
-  // Add headers
-  csvRows.push(headers.join(','))
+  // Add header with date range
+  const dateRange = formatDateRangeForDisplay(startDate, endDate)
+  csvRows.push(`Revenue Summary: ${dateRange}`)
+  csvRows.push('')
 
-  // Add data rows
-  for (const row of data) {
-    const values = headers.map(header => {
-      const value = row[header]
-      // Escape values that contain commas or quotes
-      const stringValue = String(value)
-      if (stringValue.includes(',') || stringValue.includes('"')) {
-        return `"${stringValue.replace(/"/g, '""')}"`
-      }
-      return stringValue
+  // Add column headers
+  csvRows.push('Month,Revenue (£)')
+
+  // Add monthly data
+  for (const {month, revenue} of monthlyData) {
+    const [year, monthNum] = month.split('-')
+    const date = new Date(Date.UTC(parseInt(year), parseInt(monthNum) - 1, 1))
+    const monthName = date.toLocaleString('en-GB', {
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
     })
-    csvRows.push(values.join(','))
+    csvRows.push(`${monthName},${revenue.toFixed(2)}`)
   }
+
+  // Add total row
+  const total = monthlyData.reduce((sum, {revenue}) => sum + revenue, 0)
+  csvRows.push('')
+  csvRows.push(`Total,${total.toFixed(2)}`)
 
   return csvRows.join('\n')
 }
@@ -130,5 +122,5 @@ export function generateCSVFilename(startDate: Date, endDate: Date): string {
   const start = formatDateForFilename(startDate)
   const end = formatDateForFilename(endDate)
 
-  return `user-summary-${start}-to-${end}.csv`
+  return `monthly-revenue-${start}-to-${end}.csv`
 }
