@@ -240,12 +240,15 @@ The calendar features responsive design with separate implementations:
 - **Mobile**: Compact week view with touch optimization
 - **Event Types**: Color-coded by type with distinct UI patterns
 
-### Billing System
+### Billing & Revenue Reporting
 
 1. **Appointment Fees**: Tracked per appointment with attendance status
 2. **Invoice Generation**: Monthly aggregation of attended appointments
 3. **Credit System**: Pre-purchased credits for bootcamp attendance
 4. **Email Invoices**: Automated monthly billing emails
+5. **Revenue Dashboard**: Real-time total revenue calculation in user summary
+6. **CSV Export**: Monthly revenue export for tax reporting with UK tax year
+   support
 
 ## Google Calendar Integration
 
@@ -264,6 +267,8 @@ in one place while keeping their Google Calendar updated.
 - **Resilient Sync**: Database operations succeed even if Google Calendar sync
   fails
 - **User Feedback**: Toast notifications inform users of sync status
+- **Recurring Appointments**: Correctly syncs multiple appointments with their
+  individual dates and times
 
 ### Setup
 
@@ -284,6 +289,59 @@ in one place while keeping their Google Calendar updated.
 - Graceful error handling with user notifications
 - Manual retry capability for failed syncs (via
   `syncAppointmentToGoogleCalendar`)
+
+## Revenue Reporting & Tax Features
+
+The application includes comprehensive revenue tracking and reporting features
+designed for tax compliance and financial oversight.
+
+### User Summary Dashboard
+
+Located at `/admin/users`, the summary view provides:
+
+- **Real-time Revenue Totals**: Automatic calculation of total revenue from
+  filtered users
+- **Filterable Data**: Revenue updates dynamically based on table filters
+  (date range, user type, etc.)
+- **Per-User Metrics**: Individual revenue, appointments booked/attended, and
+  invoice status
+
+### CSV Export for Tax Reporting
+
+The CSV export feature allows trainers to export monthly revenue totals for tax
+purposes:
+
+- **UK Tax Year Support**: Default date range set to current UK tax year (April
+  6 - April 5)
+- **Monthly Aggregation**: Revenue grouped by month for simplified tax
+  reporting
+- **Custom Date Ranges**: Select any start and end date for reporting periods
+- **Formatted Output**: Clean CSV format with headers, monthly totals, and
+  grand total
+
+Example CSV output:
+
+```csv
+Revenue Summary: 6 Apr 2024 - 5 Apr 2025
+
+Month,Revenue (£)
+April 2024,1250.00
+May 2024,1400.00
+June 2024,1600.00
+...
+Total,15650.00
+```
+
+### Implementation
+
+Revenue calculations follow functional design principles:
+
+- **Pure Functions** (`lib/csv-export.ts`): Date calculations and CSV
+  formatting
+- **Server Actions** (`app/actions/csv-export.ts`): Admin-authorized data
+  fetching
+- **UI Components** (`features/users/summary/ExportCSVDialog.tsx`): User
+  interaction and file download
 
 ## Testing Strategy
 
