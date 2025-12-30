@@ -301,8 +301,8 @@ Located at `/admin/users`, the summary view provides:
 
 - **Real-time Revenue Totals**: Automatic calculation of total revenue from
   filtered users
-- **Filterable Data**: Revenue updates dynamically based on table filters
-  (date range, user type, etc.)
+- **Filterable Data**: Revenue updates dynamically based on table filters (date
+  range, user type, etc.)
 - **Per-User Metrics**: Individual revenue, appointments booked/attended, and
   invoice status
 
@@ -313,11 +313,10 @@ purposes:
 
 - **UK Tax Year Support**: Default date range set to current UK tax year (April
   6 - April 5)
-- **Monthly Aggregation**: Revenue grouped by month for simplified tax
-  reporting
+- **Monthly Aggregation**: Revenue grouped by month for simplified tax reporting
 - **Custom Date Ranges**: Select any start and end date for reporting periods
-- **Formatted Output**: Clean CSV format with headers, monthly totals, and
-  grand total
+- **Formatted Output**: Clean CSV format with headers, monthly totals, and grand
+  total
 
 Example CSV output:
 
@@ -336,8 +335,7 @@ Total,15650.00
 
 Revenue calculations follow functional design principles:
 
-- **Pure Functions** (`lib/csv-export.ts`): Date calculations and CSV
-  formatting
+- **Pure Functions** (`lib/csv-export.ts`): Date calculations and CSV formatting
 - **Server Actions** (`app/actions/csv-export.ts`): Admin-authorized data
   fetching
 - **UI Components** (`features/users/summary/ExportCSVDialog.tsx`): User

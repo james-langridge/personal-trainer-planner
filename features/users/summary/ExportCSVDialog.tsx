@@ -79,7 +79,9 @@ export function ExportCSVDialog() {
 
       toast({
         title: 'Export successful',
-        description: `Exported ${monthCount} ${monthCount === 1 ? 'month' : 'months'} of revenue to ${filename}`,
+        description: `Exported ${monthCount} ${
+          monthCount === 1 ? 'month' : 'months'
+        } of revenue to ${filename}`,
       })
 
       setIsOpen(false)

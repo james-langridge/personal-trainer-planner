@@ -36,7 +36,9 @@ export function calculateMonthlyRevenue(users: User[]): MonthlyRevenue[] {
     for (const appointment of user.appointments) {
       if (appointment.status === APPOINTMENT_STATUS.ATTENDED) {
         const date = new Date(appointment.date)
-        const monthKey = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`
+        const monthKey = `${date.getUTCFullYear()}-${String(
+          date.getUTCMonth() + 1,
+        ).padStart(2, '0')}`
 
         const currentTotal = monthlyTotals.get(monthKey) || 0
         monthlyTotals.set(monthKey, currentTotal + appointment.fee)
