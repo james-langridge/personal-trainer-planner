@@ -1,0 +1,125 @@
+{
+  "name": "Personal Trainer Planner",
+  "description": "Client management and scheduling system for personal trainers",
+  "services": {
+    "app": {
+      "source": {
+        "repo": "james-langridge/personal-trainer-planner"
+      },
+      "build": {
+        "builder": "NIXPACKS"
+      },
+      "deploy": {
+        "startCommand": "npx prisma migrate deploy && npm run start"
+      },
+      "envVars": {
+        "NODE_ENV": {
+          "value": "production"
+        },
+        "DATABASE_URL": {
+          "fromService": "postgres",
+          "envVarKey": "DATABASE_URL"
+        },
+        "NEXTAUTH_SECRET": {
+          "generate": "secret"
+        },
+        "NEXTAUTH_URL": {
+          "fromService": "app",
+          "envVarKey": "RAILWAY_PUBLIC_DOMAIN",
+          "prefix": "https://"
+        },
+        "PT_BRAND_NAME": {
+          "value": "",
+          "isOptional": false,
+          "description": "Your business name (e.g., 'John's Fitness Training')"
+        },
+        "NEXT_PUBLIC_PT_FIRST_NAME": {
+          "value": "",
+          "isOptional": false,
+          "description": "Your first name for display"
+        },
+        "SMTP_HOST": {
+          "value": "smtp.gmail.com",
+          "description": "Email server host (Gmail: smtp.gmail.com, Outlook: smtp-mail.outlook.com, SendGrid: smtp.sendgrid.net)"
+        },
+        "SMTP_PORT": {
+          "value": "587",
+          "description": "Email server port (usually 587 for TLS, 465 for SSL)"
+        },
+        "SMTP_USER": {
+          "value": "",
+          "isOptional": false,
+          "description": "Your email address or SMTP username (for SendGrid use 'apikey')"
+        },
+        "SMTP_PASSWORD": {
+          "value": "",
+          "isOptional": false,
+          "description": "Email password, app password, or API key (Gmail requires app password)"
+        },
+        "EMAIL_FROM": {
+          "value": "",
+          "isOptional": false,
+          "description": "Email address shown as sender"
+        },
+        "TIME_ZONE": {
+          "value": "Europe/London",
+          "description": "Your timezone for calendar events"
+        },
+        "GOOGLE_CALENDAR_ID": {
+          "value": "",
+          "isOptional": true,
+          "description": "Optional: Google Calendar ID for sync"
+        },
+        "GOOGLE_SERVICE_ACCOUNT_EMAIL": {
+          "value": "",
+          "isOptional": true,
+          "description": "Optional: Service account email for Google Calendar"
+        },
+        "GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY": {
+          "value": "",
+          "isOptional": true,
+          "description": "Optional: Service account private key (with newlines)"
+        },
+        "CONTENTFUL_SPACE_ID": {
+          "value": "",
+          "isOptional": true,
+          "description": "Optional: Contentful space ID"
+        },
+        "CONTENTFUL_ACCESS_TOKEN": {
+          "value": "",
+          "isOptional": true,
+          "description": "Optional: Contentful access token"
+        },
+        "CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN": {
+          "value": "",
+          "isOptional": true,
+          "description": "Optional: Contentful management token"
+        },
+        "SENTRY_DSN": {
+          "value": "",
+          "isOptional": true,
+          "description": "Optional: Sentry DSN for error monitoring"
+        }
+      }
+    },
+    "postgres": {
+      "image": "postgres:16",
+      "volumes": {
+        "/var/lib/postgresql/data": {
+          "size": "1Gi"
+        }
+      },
+      "envVars": {
+        "POSTGRES_DB": {
+          "value": "personal_trainer_planner"
+        },
+        "POSTGRES_USER": {
+          "value": "postgres"
+        },
+        "POSTGRES_PASSWORD": {
+          "generate": "password"
+        }
+      }
+    }
+  }
+}
